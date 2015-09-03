@@ -5,7 +5,7 @@ public class NavNode : MonoBehaviour {
 	
 	public int nodeId;
 	List<NavNode> neighborNodes = new List<NavNode>();
-	float costToHere = 0;
+	float costToHere = -1;
 	NavNode parentNode;
 	bool isStart = true;
 

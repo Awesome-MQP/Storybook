@@ -78,19 +78,25 @@ public class NavArea : MonoBehaviour {
 					Debug.Log ("Open size = " + open.Count.ToString());
 					// If the open list is empty, add the current neighbor to the open list
 					if (open.Count == 0){
-						Debug.Log("Adding neighbor to open");
+						Debug.Log("Adding neighbor " + currentNeighbor.nodeId.ToString () + " to open");
 						open.Add(currentNeighbor);
 					}
 					// Otherwise, place the node in the open list at the appropriate position according to its cost
 					else {
+						bool addedToOpen = false;
 						for (int j = 0; j < open.Count; j++){
 							if (cost < open[j].getCostToHere()){
 								open.Insert(j, currentNeighbor);
+								Debug.Log("Adding neighbor " + currentNeighbor.nodeId.ToString () + " to open");
+								addedToOpen = true;
 								break;
 							}
 						}
+						if (!addedToOpen){
+							open.Insert (open.Count, currentNeighbor);
+						}
 					}
-
+					
 					// Set the cost and parent of the current neighbor
 					currentNeighbor.setCostToHere(cost);
 					currentNeighbor.setParentNode(lowest);

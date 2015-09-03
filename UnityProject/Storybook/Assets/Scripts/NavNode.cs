@@ -26,16 +26,14 @@ public class NavNode : MonoBehaviour {
 		for(int i = 0; i < allNodes.Length; i++){
 			Vector3 currentPosition = transform.position;
 			NavNode otherNode = allNodes[i];
-			if (nodeId == 1){
-				Vector3 direction = otherNode.transform.position - currentPosition;
-				Debug.DrawRay (currentPosition, direction, Color.cyan, 10000);
-			}
+			Vector3 otherNodePosition = otherNode.transform.position;
 			// If the other node isn't this node, check to see if there is a clear path to it
 			if (otherNode != this){
-				Vector3 direction = otherNode.transform.position - currentPosition;
+				Vector3 direction = otherNodePosition - currentPosition;
+				float distance = Vector3.Distance(currentPosition, otherNodePosition);
 				Ray toOtherNodeRay = new Ray(currentPosition, direction);
 				// If nothing is hit by the raycast, add the other node to the neighbor list
-				if (!Physics.Raycast(toOtherNodeRay)){
+				if (!Physics.Raycast(toOtherNodeRay, distance)){
 					neighborNodes.Add(otherNode);
 				}
 			}

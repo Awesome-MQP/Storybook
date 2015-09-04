@@ -4,10 +4,15 @@ using System.Collections.Generic;
 public class NavNode : MonoBehaviour {
 	
 	public int nodeId;
-	List<NavNode> neighborNodes = new List<NavNode>();
-	float costToHere = -1;
-	NavNode parentNode;
-	bool isStart = true;
+
+	[SerializeField]
+	private List<NavNode> m_neighborNodes = new List<NavNode>();
+
+	[SerializeField]
+	private float m_costToHere = -1;
+
+	[SerializeField]
+	private NavNode m_parentNode;
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +25,7 @@ public class NavNode : MonoBehaviour {
 	}
 	
 	// Uses raycasting to find all of the neigboring nodes and adds them to its neighbor list
-	void findNeighbors(){
+	private void _findNeighbors(){
 		NavNode[] allNodes = FindObjectsOfType(typeof(NavNode)) as NavNode[];
 		// Iterate through all of the NavNodes
 		for(int i = 0; i < allNodes.Length; i++){
@@ -34,42 +39,42 @@ public class NavNode : MonoBehaviour {
 				Ray toOtherNodeRay = new Ray(currentPosition, direction);
 				// If nothing is hit by the raycast, add the other node to the neighbor list
 				if (!Physics.Raycast(toOtherNodeRay, distance)){
-					neighborNodes.Add(otherNode);
+					m_neighborNodes.Add(otherNode);
 				}
 			}
 		}
 	}
 
 	// Initialize the node by finding its neighbors and executing other start up code
-	public void initializeNode(){
+	public void InitializeNode(){
 		// At startup, find the neighbors of the node
-		findNeighbors();
-		Debug.Log ("Node " + nodeId.ToString () + " has " + neighborNodes.Count.ToString () + " neighbors");
-		for (int i = 0; i < neighborNodes.Count; i++){
-			Debug.Log ("Node " + nodeId.ToString() + " neighbor = " + neighborNodes[i].nodeId);
+		_findNeighbors();
+		Debug.Log ("Node " + nodeId.ToString () + " has " + m_neighborNodes.Count.ToString () + " neighbors");
+		for (int i = 0; i < m_neighborNodes.Count; i++){
+			Debug.Log ("Node " + nodeId.ToString() + " neighbor = " + m_neighborNodes[i].nodeId);
 		}
 	}
 
 	// Getter and setter for costToHere
-	public float getCostToHere(){
-		return costToHere;
+	public float GetCostToHere(){
+		return m_costToHere;
 	}
 
-	public void setCostToHere(float newCost){
-		costToHere = newCost;
+	public void SetCostToHere(float newCost){
+		m_costToHere = newCost;
 	}
 
 	// Getter and setter for parentNode
-	public NavNode getParentNode(){
-		return parentNode;
+	public NavNode GetParentNode(){
+		return m_parentNode;
 	}
 
-	public void setParentNode(NavNode newParent){
-		parentNode = newParent;
+	public void SetParentNode(NavNode newParent){
+		m_parentNode = newParent;
 	}
 
 	// Getter for neighborNodes list
-	public List<NavNode> getNeighborNodes(){
-		return neighborNodes;
+	public List<NavNode> GetNeighborNodes(){
+		return m_neighborNodes;
 	}
 }

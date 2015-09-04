@@ -48,8 +48,6 @@ public class NavNode : MonoBehaviour {
 		for (int i = 0; i < neighborNodes.Count; i++){
 			Debug.Log ("Node " + nodeId.ToString() + " neighbor = " + neighborNodes[i].nodeId);
 		}
-		NavArea navArea = FindObjectOfType(typeof(NavArea)) as NavArea;
-		navArea.addNode(this);
 	}
 
 	// Getter and setter for costToHere

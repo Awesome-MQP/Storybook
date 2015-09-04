@@ -11,11 +11,17 @@ public class NavArea : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		BoxCollider areaCollider = GetComponent(typeof(BoxCollider)) as BoxCollider;
 		Debug.Log("NavArea Starting up");
 		NavNode[] allNodes = FindObjectsOfType(typeof(NavNode)) as NavNode[];
 		// Initialize all of the nodes
 		for (int i = 0; i < allNodes.Length; i++){
-			allNodes[i].initializeNode();
+			NavNode currentNode = allNodes[i];
+			if (areaCollider.bounds.Contains(currentNode.transform.position)){
+				Debug.Log ("Adding node");
+				currentNode.initializeNode();
+				areaNodes.Add(currentNode);
+			}
 		}
 		Debug.Log("Area nodes length = " + areaNodes.Count);
 		List<NavNode> path = aStarSearch(start, dest);

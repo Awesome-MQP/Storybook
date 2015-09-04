@@ -25,12 +25,11 @@ public class NavNode : MonoBehaviour {
 	}
 	
 	// Uses raycasting to find all of the neigboring nodes and adds them to its neighbor list
-	private void _findNeighbors(){
-		NavNode[] allNodes = FindObjectsOfType(typeof(NavNode)) as NavNode[];
+	private void _findNeighbors(List<NavNode> areaNodes){
 		// Iterate through all of the NavNodes
-		for(int i = 0; i < allNodes.Length; i++){
+		for(int i = 0; i < areaNodes.Count; i++){
 			Vector3 currentPosition = transform.position;
-			NavNode otherNode = allNodes[i];
+			NavNode otherNode = areaNodes[i];
 			Vector3 otherNodePosition = otherNode.transform.position;
 			// If the other node isn't this node, check to see if there is a clear path to it
 			if (otherNode != this){
@@ -46,9 +45,9 @@ public class NavNode : MonoBehaviour {
 	}
 
 	// Initialize the node by finding its neighbors and executing other start up code
-	public void InitializeNode(){
+	public void InitializeNode(List<NavNode> areaNodes){
 		// At startup, find the neighbors of the node
-		_findNeighbors();
+		_findNeighbors(areaNodes);
 		Debug.Log ("Node " + nodeId.ToString () + " has " + m_neighborNodes.Count.ToString () + " neighbors");
 		for (int i = 0; i < m_neighborNodes.Count; i++){
 			Debug.Log ("Node " + nodeId.ToString() + " neighbor = " + m_neighborNodes[i].nodeId);

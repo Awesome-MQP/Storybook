@@ -18,13 +18,15 @@ public class NavArea : MonoBehaviour {
 		// Iterate through all the nodes
 		for (int i = 0; i < allNodes.Length; i++){
 			NavNode currentNode = allNodes[i];
-			// If the current node is in the bounds of the NavArea, initialize the node and add it to
-			// the area nodes
+			// If the current node is in the bounds of the NavArea, add it to the area nodes
 			if (areaCollider.bounds.Contains(currentNode.transform.position)){
 				Debug.Log ("Adding node");
-				currentNode.InitializeNode();
 				m_areaNodes.Add(currentNode);
 			}
+		}
+		// Iterate through all the nodes in the NavArea and intialize them
+		for (int i = 0; i < m_areaNodes.Count; i++){
+			m_areaNodes[i].InitializeNode(m_areaNodes);
 		}
 		Debug.Log("Area nodes length = " + m_areaNodes.Count);
 		List<NavNode> path = AStarSearch(start, dest);

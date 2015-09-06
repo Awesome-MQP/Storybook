@@ -40,8 +40,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4249054680f66544893e8820d6e1abe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PageColor: 0
+  ItemName: 
+  ItemColor: 0
+  ItemLevel: 0
+  BaseDrop: 0
   PageRoomType: 0
+  PagePower: 0
 --- !u!212 &21270712
 SpriteRenderer:
   m_ObjectHideFlags: 1

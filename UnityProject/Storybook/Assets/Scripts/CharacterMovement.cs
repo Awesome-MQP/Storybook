@@ -7,16 +7,16 @@ public class CharacterMovement : MonoBehaviour {
 	public float gravity = 30.0F;
 	public NavArea currentNavArea;
 	public bool isTouchControls;
-
+	
 	private Vector3 m_moveDirection = Vector3.zero;
 	private bool m_isMoving = false;
 	private List<Vector3> m_characterPath = new List<Vector3>();
 	private int m_currentPathIndex;
 	private Vector3 m_targetPosition;
-
+	
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
@@ -32,10 +32,10 @@ public class CharacterMovement : MonoBehaviour {
 		}
 		if (m_characterPath.Count > 0){
 			Vector3 currentDest = m_characterPath[m_currentPathIndex];
-			currentDest.y = 0;
+			currentDest.y = transform.position.y;
 			m_moveDirection = currentDest - transform.position;
 			Debug.Log ("Distance = " + Vector3.Distance(currentDest, transform.position).ToString ());
-			if (Vector3.Distance(currentDest, transform.position) < 1.8){
+			if (Vector3.Distance(currentDest, transform.position) < 0.1){
 				m_currentPathIndex += 1;
 				if (m_currentPathIndex == m_characterPath.Count){
 					m_characterPath = new List<Vector3>();
@@ -45,29 +45,25 @@ public class CharacterMovement : MonoBehaviour {
 			}
 		}
 		if (!isTouchControls || m_isMoving){
-			m_moveDirection = transform.TransformDirection(m_moveDirection);
+			//m_moveDirection = transform.TransformDirection(m_moveDirection);
 			m_moveDirection = m_moveDirection.normalized * speed;
 			m_moveDirection.y -= gravity * Time.deltaTime;
 			controller.Move(m_moveDirection * Time.deltaTime);
 		}
 	}
-
+	
 	private void calculateCharacterPath(){
-		Camera mainCamera = FindCamera();
+		Camera mainCamera = FindCamera(); 
 
-		// Calculate the point where the mouse hits the plane
-		RaycastHit hit;
-		if (!Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  out hit, 100))
-			return;
-
-		if (!hit.transform)
-			return;
-
-		m_targetPosition = hit.point;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Debug.DrawRay(ray.origin, ray.direction, Color.black, 10000);
+		Plane xy = new Plane(Vector3.up, new Vector3(0, 0, 0));
+		float point;
+		xy.Raycast(ray, out point);
+		m_targetPosition = ray.GetPoint (point);
 		m_targetPosition.y = transform.position.y;
 
 		Debug.Log ("Mouse position = " + m_targetPosition);
-
 
 		Vector3 direction = m_targetPosition - transform.position;
 		float distance = Vector3.Distance(transform.position, m_targetPosition);
@@ -109,7 +105,7 @@ public class CharacterMovement : MonoBehaviour {
 		}
 		m_currentPathIndex = 0;
 	}
-
+	
 	Camera FindCamera (){
 		if (GetComponent<Camera>())
 			return GetComponent<Camera>();

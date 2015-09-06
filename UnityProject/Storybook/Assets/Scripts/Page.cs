@@ -8,15 +8,13 @@ public class Page : InventoryItem {
         Standard, Shop, Curse, Sanctuary, Exit, Speed, Multiply, Teleport
     };   
     public Room PageRoomType; // RoomType
-    public int PagePower; // power level, determines effectiveness in combat
 
     // Create a new Page
-    public Page(string TheName, Genre TheColor, Room TheRoom, int ThePower)
+    public Page(string TheName, Genre TheColor, Room TheRoom)
     {
         this.ItemName = TheName;
         this.ItemColor = TheColor;
         this.PageRoomType = TheRoom;
-        this.PagePower = ThePower;
     }
 
 	// Use this for initialization

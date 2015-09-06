@@ -1,6 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
-<<<<<<< HEAD
 --- !u!1 &110582
 GameObject:
   m_ObjectHideFlags: 0
@@ -51,16 +50,10 @@ Prefab:
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 0
->>>>>>> ff5d4ac924c7346223210e2fe9158a5113343ea3
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-<<<<<<< HEAD
-  m_RootGameObject: {fileID: 110582}
-=======
-  m_RootGameObject: {fileID: 0}
->>>>>>> ff5d4ac924c7346223210e2fe9158a5113343ea3
   m_IsPrefabParent: 1

@@ -6,8 +6,7 @@ public class CharacterMovement : MonoBehaviour {
 	public float speed = 20.0F;
 	public float gravity = 30.0F;
 	public NavArea currentNavArea;
-	public bool isTouchControls;
-	
+
 	private Vector3 m_moveDirection = Vector3.zero;
 	private bool m_isMoving = false;
 	private List<Vector3> m_characterPath = new List<Vector3>();
@@ -26,11 +25,9 @@ public class CharacterMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		CharacterController controller = GetComponent<CharacterController>();
-		if (!isTouchControls){
-			m_moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		}
+		m_moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		// If it is touch controls and the mouse has been clicked, calculate the path for the character
-		if (isTouchControls && Input.GetMouseButtonDown(0)){
+		if (Input.GetMouseButtonDown(0)){
 			Debug.Log ("Calculating Path");
 			_calculateCharacterPath();
 			if (m_characterPath.Count > 0){
@@ -39,13 +36,17 @@ public class CharacterMovement : MonoBehaviour {
 		}
 		// If the character path is not empty, move to the current destination
 		if (m_characterPath.Count > 0){
+			// Save the current position to the previous positions array and increment the index
 			m_previousPositions[m_prevPositionIndex] = transform.position;
 			m_prevPositionIndex++;
 			bool hasStopped = true;
+			// If the position index has reached the length of the positions array, reset it and check to see if 
+			// all the positions in the array are the same
 			if (m_prevPositionIndex == m_previousPositions.Length){
 				m_prevPositionIndex = 0;
 				Vector3 previous;
 				previous = m_previousPositions[0];
+				// Iterate through all the previous positions to see if they are all the same
 				for (int i = 1; i < m_previousPositions.Length; i++){
 					if (previous != m_previousPositions[i]){
 						hasStopped = false;
@@ -53,6 +54,7 @@ public class CharacterMovement : MonoBehaviour {
 					previous = m_previousPositions[i];
 				}
 			}
+			// Otherwise, the character may still be moving so set hasStopped to false
 			else {
 				hasStopped = false;
 			}
@@ -60,7 +62,7 @@ public class CharacterMovement : MonoBehaviour {
 			currentDest.y = transform.position.y;
 			m_moveDirection = currentDest - transform.position;
 			Debug.Log ("Distance = " + Vector3.Distance(currentDest, transform.position).ToString ());
-			// If the character is within range of the destination, increment te path index
+			// If the character is within range of the destination or has stopped moving, increment te path index
 			if (Vector3.Distance(currentDest, transform.position) < 0.1 || hasStopped){
 				m_currentPathIndex += 1;
 				// If the character has reached the end of the path, reset the path and set isMoving to false
@@ -74,12 +76,10 @@ public class CharacterMovement : MonoBehaviour {
 			}
 		}
 		// Set the move direction based on speed, gravity and time if the character is moving or if it isn't touch controls
-		if (!isTouchControls || m_isMoving){
-			m_moveDirection = transform.TransformDirection(m_moveDirection);
-			m_moveDirection = m_moveDirection.normalized * speed;
-			m_moveDirection.y -= gravity * Time.deltaTime;
-			controller.Move(m_moveDirection * Time.deltaTime);
-		}
+		m_moveDirection = transform.TransformDirection(m_moveDirection);
+		m_moveDirection = m_moveDirection.normalized * speed;
+		m_moveDirection.y -= gravity * Time.deltaTime;
+		controller.Move(m_moveDirection * Time.deltaTime);
 	}
 
 	// Used with touch controls, calculates a path the clicked location

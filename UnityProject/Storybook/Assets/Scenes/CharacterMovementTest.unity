@@ -512,7 +512,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 465000, guid: 46e06f6333a7d5f4d933419053832086, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -23.6368694
+      value: -23.6800003
       objectReference: {fileID: 0}
     - target: {fileID: 465000, guid: 46e06f6333a7d5f4d933419053832086, type: 2}
       propertyPath: m_LocalPosition.y
@@ -540,7 +540,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 465000, guid: 46e06f6333a7d5f4d933419053832086, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 110828, guid: 46e06f6333a7d5f4d933419053832086, type: 2}
       propertyPath: m_Name
@@ -1067,7 +1067,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 496600, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -25.4500008
+      value: -24.9400005
       objectReference: {fileID: 0}
     - target: {fileID: 496600, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1095,7 +1095,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 496600, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 106658, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_Name
@@ -1108,6 +1108,10 @@ Prefab:
     - target: {fileID: 11455596, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: isTouchControls
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 13651732, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}

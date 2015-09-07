@@ -28,7 +28,6 @@ public class CharacterMovement : MonoBehaviour {
 		m_moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		// If it is touch controls and the mouse has been clicked, calculate the path for the character
 		if (Input.GetMouseButtonDown(0)){
-			Debug.Log ("Calculating Path");
 			_calculateCharacterPath();
 			if (m_characterPath.Count > 0){
 				m_isMoving = true;
@@ -61,7 +60,6 @@ public class CharacterMovement : MonoBehaviour {
 			Vector3 currentDest = m_characterPath[m_currentPathIndex];
 			currentDest.y = transform.position.y;
 			m_moveDirection = currentDest - transform.position;
-			Debug.Log ("Distance = " + Vector3.Distance(currentDest, transform.position).ToString ());
 			// If the character is within range of the destination or has stopped moving, increment te path index
 			if (Vector3.Distance(currentDest, transform.position) < 0.1 || hasStopped){
 				m_currentPathIndex += 1;
@@ -71,7 +69,6 @@ public class CharacterMovement : MonoBehaviour {
 					m_characterPath = new List<Vector3>();
 					m_previousPositions = new Vector3[10];
 					m_isMoving = false;
-					Debug.Log ("Resetting List");
 				}
 			}
 		}
@@ -95,8 +92,6 @@ public class CharacterMovement : MonoBehaviour {
 		m_targetPosition = ray.GetPoint (point);
 		m_targetPosition.y = transform.position.y;
 
-		Debug.Log ("Mouse position = " + m_targetPosition);
-
 		Vector3 direction = m_targetPosition - transform.position;
 		float distance = Vector3.Distance(transform.position, m_targetPosition);
 		Ray charToDestRay = new Ray(transform.position, direction);
@@ -109,8 +104,7 @@ public class CharacterMovement : MonoBehaviour {
 			BoxCollider wallCollider = currentWall.GetComponent(typeof(BoxCollider)) as BoxCollider;
 			if (wallCollider != null){
 				// If the clicked point is in a wall, the character can not move to here, so return
-				if (wallCollider.bounds.Contains(m_targetPosition)){
-					Debug.Log ("Can't move into wall");
+				if (wallCollider.bounds.Contains(m_targetPosition)){;
 					return;
 				}
 			}
@@ -118,7 +112,6 @@ public class CharacterMovement : MonoBehaviour {
 		// If the character can move the clicked point without hitting anything, the path will just contain the destination
 		if (!Physics.Raycast(charToDestRay, distance)){
 			m_characterPath.Add(m_targetPosition);
-			Debug.Log ("Adding target position");
 		}
 		// Otherwise, need to use A* to determine a path
 		else {
@@ -142,8 +135,6 @@ public class CharacterMovement : MonoBehaviour {
 					smallestCharacterDistance = nodeToCharacter;
 				}
 			}
-			Debug.Log ("Closest Node to character = " + closestCharacterNode.nodeId.ToString ());
-			Debug.Log ("Closest node to destination = " + closestDestNode.nodeId.ToString());
 			// Use A* to calculate a path
 			List<NavNode> characterNodePath = currentNavArea.AStarSearch(closestCharacterNode, closestDestNode);
 			if (characterNodePath.Contains(closestCharacterNode)){

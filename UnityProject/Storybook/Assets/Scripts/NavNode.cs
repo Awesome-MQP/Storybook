@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 
 public class NavNode : MonoBehaviour {
-	
-	public int nodeId;
-
 	[SerializeField]
 	private List<NavNode> m_neighborNodes = new List<NavNode>();
 
@@ -14,23 +11,16 @@ public class NavNode : MonoBehaviour {
 	[SerializeField]
 	private NavNode m_parentNode;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
-	
 	// Uses raycasting to find all of the neigboring nodes and adds them to its neighbor list
 	private void _findNeighbors(List<NavNode> areaNodes){
+
 		// Iterate through all of the NavNodes
-		for(int i = 0; i < areaNodes.Count; i++){
+		int areaCount = areaNodes.Count;
+		for(int i = 0; i < areaCount; i++){
 			Vector3 currentPosition = transform.position;
 			NavNode otherNode = areaNodes[i];
 			Vector3 otherNodePosition = otherNode.transform.position;
+
 			// If the other node isn't this node, check to see if there is a clear path to it
 			if (otherNode != this){
 				Vector3 direction = otherNodePosition - currentPosition;
@@ -48,10 +38,6 @@ public class NavNode : MonoBehaviour {
 	public void InitializeNode(List<NavNode> areaNodes){
 		// At startup, find the neighbors of the node
 		_findNeighbors(areaNodes);
-		Debug.Log ("Node " + nodeId.ToString () + " has " + m_neighborNodes.Count.ToString () + " neighbors");
-		for (int i = 0; i < m_neighborNodes.Count; i++){
-			Debug.Log ("Node " + nodeId.ToString() + " neighbor = " + m_neighborNodes[i].nodeId);
-		}
 	}
 
 	// Getter and setter for costToHere

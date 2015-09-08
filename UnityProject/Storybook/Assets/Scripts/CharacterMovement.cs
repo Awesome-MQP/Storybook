@@ -24,6 +24,7 @@ public class CharacterMovement : MonoBehaviour {
 		for (int i = 0; i < 10; i++){
 			m_previousPositions[i] = Vector3.zero;
 		}
+		FindCurrentNavArea();
 	}
 	
 	// Update is called once per frame
@@ -70,7 +71,7 @@ public class CharacterMovement : MonoBehaviour {
 			m_moveDirection = currentDest - transform.position;
 
 			// If the character is within range of the destination or has stopped moving, increment te path index
-			if (Vector3.Distance(currentDest, transform.position) < 0.1 || hasStopped){
+			if (Vector3.Distance(currentDest, transform.position) < 0.2 || hasStopped){
 				m_currentPathIndex += 1;
 
 				// If the character has reached the end of the path, reset the path and set isMoving to false
@@ -172,6 +173,21 @@ public class CharacterMovement : MonoBehaviour {
 			return GetComponent<Camera>();
 		else
 			return Camera.main;
+	}
+
+	// Finds the current NavArea that the player object is in and sets the NavArea private variable of the 
+	// character to this NavArea
+	public void FindCurrentNavArea(){
+		NavArea[] allNavAreas = FindObjectsOfType(typeof(NavArea)) as NavArea[];
+		int allNavAreaLength = allNavAreas.Length;
+		for (int i = 0; i < allNavAreaLength; i++){
+			NavArea currentNavArea = allNavAreas[i];
+			BoxCollider areaCollider = currentNavArea.GetComponent(typeof(BoxCollider)) as BoxCollider;
+			if (areaCollider.bounds.Contains(transform.position)){
+				m_currentNavArea = currentNavArea;
+				break;
+			}
+		}
 	}
 	
 }

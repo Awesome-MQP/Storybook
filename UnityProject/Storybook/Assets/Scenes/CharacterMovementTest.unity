@@ -1116,10 +1116,10 @@ Prefab:
     - target: {fileID: 11455596, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_currentNavArea
       value: 
-      objectReference: {fileID: 318037610}
+      objectReference: {fileID: 0}
     - target: {fileID: 11455596, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}
       propertyPath: m_speed
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff46460fffc38b34e85874de98f49ff4, type: 2}

@@ -6,8 +6,9 @@ using System.Reflection;
 
 public class TypeHelper
 {
+    // Type init script
     [RuntimeInitializeOnLoadMethod]
-    private static void Startup()
+    private static void _Startup()
     {
         AssemblyName[] referencAssemblyNames = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
         AssemblyName[] allAssemblyNames = new AssemblyName[referencAssemblyNames.Length + 1];
@@ -36,6 +37,11 @@ public class TypeHelper
         }
     }
 
+    /// <summary>
+    /// Search for a type by name.
+    /// </summary>
+    /// <param name="name">The full name of the type to look for.</param>
+    /// <returns>The reflected type or null if the type could not be found.</returns>
     public static Type GetType(string name)
     {
         if (oldNameLookupTable.ContainsKey(name))
@@ -47,14 +53,27 @@ public class TypeHelper
         return foundType;
     }
 
+    /// <summary>
+    /// Gets the real name of a type. This is useful if a type name may be the old type name of a type.
+    /// </summary>
+    /// <param name="name">The name to get the real name of.</param>
+    /// <returns>The real name of a type, or null if the type name does not exist.</returns>
     public static string GetRealTypeName(string name)
     {
         if (oldNameLookupTable.ContainsKey(name))
             name = oldNameLookupTable[name];
+        else if (typeLookupTable.ContainsKey(name))
+            return name;
 
-        return name;
+        return null;
     }
 
+    /// <summary>
+    /// Find a field by name in a type.
+    /// </summary>
+    /// <param name="t">The type to look in.</param>
+    /// <param name="fieldName">The field name.</param>
+    /// <returns>The reflected field info, or null if not found.</returns>
     public static FieldInfo GetField(Type t, string fieldName)
     {
         while (true)
@@ -77,11 +96,23 @@ public class TypeHelper
         }
     }
 
+    /// <summary>
+    /// Gets all fields from a type.
+    /// </summary>
+    /// <param name="t">The reflected type to get all fields from.</param>
+    /// <returns>An array of all fields in this type.</returns>
     public static FieldInfo[] GetFields(Type t)
     {
         return GetFields(t, null, false);
     }
 
+    /// <summary>
+    /// Gets all fields with an attribute in type.
+    /// </summary>
+    /// <param name="t">The reflected type to get fields from.</param>
+    /// <param name="requiredAttributeType">The required type of attribute to have on a field.</param>
+    /// <param name="inherited">Should the attribute be inherited or not.</param>
+    /// <returns>An array of all fields that matched the input rules.</returns>
     public static FieldInfo[] GetFields(Type t, Type requiredAttributeType, bool inherited)
     {
         HashSet<FieldInfo> fieldsSet = new HashSet<FieldInfo>();
@@ -93,7 +124,7 @@ public class TypeHelper
                 fieldsSet.Add(publicField);
         }
 
-        AppendPrivateFields(t, fieldsSet, requiredAttributeType, inherited);
+        _AppendPrivateFields(t, fieldsSet, requiredAttributeType, inherited);
 
         FieldInfo[] fields = new FieldInfo[fieldsSet.Count];
         int i = 0;
@@ -106,7 +137,7 @@ public class TypeHelper
         return fields;
     }
 
-    private static void AppendPrivateFields(Type t, HashSet<FieldInfo> fieldList, Type requiredAttributeType, bool inherited)
+    private static void _AppendPrivateFields(Type t, HashSet<FieldInfo> fieldList, Type requiredAttributeType, bool inherited)
     {
         while (true)
         {

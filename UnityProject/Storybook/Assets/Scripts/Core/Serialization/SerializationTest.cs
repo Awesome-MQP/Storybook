@@ -62,7 +62,7 @@ public class TestSaveObject
     [SerializeField]
     public Vector2 vector;
 
-    private static void UpgradeToVersion1(SerializedObjectNode field)
+    private static void _UpgradeToVersion1(SerializedObjectNode field)
     {
         if(field.Name == "a")
             field.Rename("d");

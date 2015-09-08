@@ -7,22 +7,22 @@ using UnityEngine.Assertions;
 
 public partial class Serializer
 {
-    private static void SerializationHandler(Array target, SerializedObjectNode targetNode)
+    private static void _SerializationHandler(Array target, SerializedObjectNode targetNode)
     {
         Assert.AreEqual(1, target.Length);
 
         int count = target.Length;
         for (int i = 0; i < count; i++)
         {
-            SerializedObjectNode node = targetNode.CreateChild("entry", null);
+            SerializedObjectNode node = targetNode.CreateChild("entry" + i);
 
             object value = target.GetValue(i);
 
-            InvokeSerializerHandler(value, node);
+            _InvokeSerializerHandler(value, node);
         }
     }
 
-    private static void DeserializationHandler(out Array output, SerializedObjectNode serializedNode, Type baseType)
+    private static void _DeserializationHandler(out Array output, SerializedObjectNode serializedNode, Type baseType)
     {
         int length = serializedNode.GetChildCount();
         Type elementType = baseType.GetElementType();
@@ -33,7 +33,7 @@ public partial class Serializer
         foreach (SerializedObjectNode serializedObjectNode in serializedNode.IterateChildren())
         {
             object element;
-            InvokeDeserializerHandler(out element, serializedObjectNode, elementType);
+            _InvokeDeserializerHandler(out element, serializedObjectNode, elementType);
 
             output.SetValue(element, i);
 
@@ -41,20 +41,20 @@ public partial class Serializer
         }
     }
 
-    private static void SerializationHandler(IList target, SerializedObjectNode targetNode)
+    private static void _SerializationHandler(IList target, SerializedObjectNode targetNode)
     {
         int count = target.Count;
         for (int i = 0; i < count; i++)
         {
-            SerializedObjectNode node = targetNode.CreateChild("entry", null);
+            SerializedObjectNode node = targetNode.CreateChild("entry" + i);
 
             object value = target[i];
 
-            InvokeSerializerHandler(value, node);
+            _InvokeSerializerHandler(value, node);
         }
     }
 
-    private static void DeserializationHandler(out IList output, SerializedObjectNode serializedNode, Type baseType)
+    private static void _DeserializationHandler(out IList output, SerializedObjectNode serializedNode, Type baseType)
     {
         Type elementType = baseType.GetElementType();
         output = Activator.CreateInstance(baseType) as IList;
@@ -64,26 +64,29 @@ public partial class Serializer
         foreach (SerializedObjectNode child in serializedNode.IterateChildren())
         {
             object element = FormatterServices.GetUninitializedObject(elementType);
-            InvokeDeserializerHandler(out element, child, elementType);
+            _InvokeDeserializerHandler(out element, child, elementType);
 
             output.Add(element);
         }
     }
 
-    private static void SerializationHandler(IDictionary target, SerializedObjectNode targetNode)
+    private static void _SerializationHandler(IDictionary target, SerializedObjectNode targetNode)
     {
+        int i = 0;
         foreach (object key in target.Keys)
         {
-            SerializedObjectNode node = targetNode.CreateChild("entry", null);
+            SerializedObjectNode node = targetNode.CreateChild("entry" + i);
             SerializedObjectNode keyNode = node.CreateChild("key");
             SerializedObjectNode valueNode = node.CreateChild("value");
 
-            InvokeSerializerHandler(key, keyNode);
-            InvokeSerializerHandler(target[key], valueNode);
+            _InvokeSerializerHandler(key, keyNode);
+            _InvokeSerializerHandler(target[key], valueNode);
+
+            i++;
         }
     }
 
-    private static void DeserializationHandler(out IDictionary output, SerializedObjectNode serializedNode, Type baseType)
+    private static void _DeserializationHandler(out IDictionary output, SerializedObjectNode serializedNode, Type baseType)
     {
         Type[] genericArgumenTypes = baseType.GetGenericArguments();
 
@@ -105,8 +108,8 @@ public partial class Serializer
             object key;
             object value;
 
-            InvokeDeserializerHandler(out key, keyNode, keyType);
-            InvokeDeserializerHandler(out value, valueNode, valueType);
+            _InvokeDeserializerHandler(out key, keyNode, keyType);
+            _InvokeDeserializerHandler(out value, valueNode, valueType);
 
             output.Add(key, value);
         }

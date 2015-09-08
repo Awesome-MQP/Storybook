@@ -6,6 +6,9 @@ using System.IO;
 using System.Xml;
 using UnityEngine.Assertions;
 
+/// <summary>
+/// A node in a serialized object hierarchy.
+/// </summary>
 public class SerializedObjectNode
 {
     /// <summary>
@@ -132,6 +135,11 @@ public class SerializedObjectNode
         return m_versionInfo.Count;
     }
 
+    /// <summary>
+    /// Get the version info for a specific class.
+    /// </summary>
+    /// <param name="classIndex">The index of the class, base classes are at lower indexes.</param>
+    /// <returns>The serialization version info for that class</returns>
     public SerializedVersionInfo GetVersionInfo(int classIndex)
     {
         Assert.IsTrue(classIndex < m_versionInfo.Count);
@@ -145,6 +153,10 @@ public class SerializedObjectNode
         return node.Value;
     }
 
+    /// <summary>
+    /// Sets the serialization version info from a type.
+    /// </summary>
+    /// <param name="type">Tye reflection type to generate our version info from.</param>
     public void SetVersionInfo(Type type)
     {
         m_versionInfo.Clear();
@@ -179,44 +191,54 @@ public class SerializedObjectNode
         }
     }
 
+    /// <summary>
+    /// Allows iteration over all version info.
+    /// </summary>
+    /// <returns>An enumerable of the version info.</returns>
     public IEnumerable<SerializedVersionInfo> IterateVersionInfo()
     {
         return m_versionInfo;
     }
 
+    /// <summary>
+    /// Allows iteration over all children.
+    /// </summary>
+    /// <returns>An enumerable of all children.</returns>
     public IEnumerable<SerializedObjectNode> IterateChildren()
     {
         return m_children.Values;
     }
 
+    /// <summary>
+    /// Gets the number of children that this node has.
+    /// </summary>
+    /// <returns>The count of the number of children this node has.</returns>
     public int GetChildCount()
     {
         return m_children.Count;
     }
 
+    /// <summary>
+    /// Creates a child node under this node.
+    /// </summary>
+    /// <param name="name">The name of the child node to create.</param>
+    /// <returns>The new child node.</returns>
     public SerializedObjectNode CreateChild(string name)
-    {
-        return CreateChild(name, null);
-    }
-
-    public SerializedObjectNode CreateChild(string name, string versionString)
     {
         XmlNode xmlChildNode = m_xmlNode.OwnerDocument.CreateElement(name);
         m_xmlNode.AppendChild(xmlChildNode);
 
-        if(!string.IsNullOrEmpty(versionString))
-        {
-            XmlAttribute versionAttribute = m_xmlNode.OwnerDocument.CreateAttribute("Version");
-            versionAttribute.Value = versionString;
-            xmlChildNode.Attributes.Append(versionAttribute);
-        }
+        SerializedObjectNode childNode = new SerializedObjectNode(xmlChildNode, this);
+        m_children.Add(name, childNode);
 
-        SerializedObjectNode chidlNode = new SerializedObjectNode(xmlChildNode, this);
-        m_children.Add(name, chidlNode);
-
-        return chidlNode;
+        return childNode;
     }
 
+    /// <summary>
+    /// Remove a child from this node.
+    /// </summary>
+    /// <param name="name">The name of the child to remove.</param>
+    /// <returns>True if the child was removed otherwise false.</returns>
     public bool RemoveChild(string name)
     {
         if (!m_children.ContainsKey(name))
@@ -230,6 +252,9 @@ public class SerializedObjectNode
         return true;
     }
 
+    /// <summary>
+    /// Remove this node from its parent.
+    /// </summary>
     public void RemoveThis()
     {
         Assert.IsNotNull(m_parentNode);
@@ -237,6 +262,10 @@ public class SerializedObjectNode
         m_parentNode.RemoveChild(Name);
     }
 
+    /// <summary>
+    /// Rename this node to a new name.
+    /// </summary>
+    /// <param name="newName">The new name of the node.</param>
     public void Rename(string newName)
     {
         XmlNode newNode = m_xmlNode.OwnerDocument.CreateElement(newName);

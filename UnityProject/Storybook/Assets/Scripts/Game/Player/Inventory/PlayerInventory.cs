@@ -4,47 +4,32 @@ using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour {
 
-    public List<InventoryItem> Inventory = new List<InventoryItem>(); // List for all equipment and active items
-    public List<Page> Pages = new List<Page>(); // List for all pages the player has
-    public const int DEFAULT_INVENTORY_SPACE = 4;
-    public const int DEFAULT_MAX_PAGES = 99;
-    public int ItemsInInventory = 0; // Current items in the player's inventory
-    public int PagesHeld = 0; // Number of pages the players has
-
-	// Use this for initialization
-	void Start () {
-        Equipment TestEquip = new Equipment("Test", InventoryItem.Genre.Blue, "Head", new List<int>() { 0, 0, 0, 0, 0, 0 });
-        Debug.Log("The number of items in the Inventory is : " + ItemsInInventory);
-        Debug.Log("The number of pages held is : " + PagesHeld);
-        this.AddToInventory(TestEquip);
-        Debug.Log("The number of items in the Inventory is : " + ItemsInInventory);
-        this.AddToInventory(TestEquip);
-        this.AddToInventory(TestEquip);
-        this.AddToInventory(TestEquip);
-        Debug.Log("The number of items in the Inventory is : " + ItemsInInventory);
-        this.AddToInventory(TestEquip);
-        this.RemoveFromInventory(TestEquip);
-        Debug.Log("The number of items in the Inventory is : " + ItemsInInventory);
-    }
-
-    // Update is called once per frame
-    void Update () {
-	
-	}
+    [SerializeField]
+    private List<InventoryItem> Inventory = new List<InventoryItem>(); // List for all equipment and active items
+                                                                       //public List<Page> Pages = new List<Page>(); // List for all pages the player has
+                                                                       // ^^^Uncomment when Pages are added back in.
+    [SerializeField]
+    private const int DEFAULT_INVENTORY_SPACE = 4;
+    [SerializeField]
+    private const int DEFAULT_MAX_PAGES = 99;
+    [SerializeField]
+    private int ItemsInInventory = 0; // Current items in the player's inventory
+    [SerializeField]
+    private int PagesHeld = 0; // Number of pages the players has
 
     // Add an item to the Inventory, but only if there is enough space
-    private void AddToInventory(InventoryItem TheItem)
+    public void AddToInventory(InventoryItem TheItem)
     {
         if (Inventory.Count < DEFAULT_INVENTORY_SPACE)
         {
             Inventory.Add(TheItem);
-            Debug.Log("Added item: " + TheItem.ItemName);
             ItemsInInventory = Inventory.Count;
+            // TODO : Notify player that the item is in their inventory
             // TODO : Code that removes the item from the room
         }
         else
         {
-            Debug.Log("Too many items in the bag already!");
+            // TODO : Notify the player that inventory is full
             // TODO : Code that drops the item on the floor (?)
         }
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class PlayerInventory : MonoBehaviour {
 
     [SerializeField]
-    private List<InventoryItem> Inventory = new List<InventoryItem>(); // List for all equipment and active items
+    private List<InventoryItem> m_Inventory = new List<InventoryItem>(); // List for all equipment and active items
                                                                        //public List<Page> Pages = new List<Page>(); // List for all pages the player has
                                                                        // ^^^Uncomment when Pages are added back in.
     [SerializeField]
@@ -13,17 +13,17 @@ public class PlayerInventory : MonoBehaviour {
     [SerializeField]
     private const int DEFAULT_MAX_PAGES = 99;
     [SerializeField]
-    private int ItemsInInventory = 0; // Current items in the player's inventory
+    private int m_ItemsInInventory = 0; // Current items in the player's inventory
     [SerializeField]
-    private int PagesHeld = 0; // Number of pages the players has
+    private int m_PagesHeld = 0; // Number of pages the players has
 
     // Add an item to the Inventory, but only if there is enough space
     public void AddToInventory(InventoryItem TheItem)
     {
-        if (Inventory.Count < DEFAULT_INVENTORY_SPACE)
+        if (m_Inventory.Count < DEFAULT_INVENTORY_SPACE)
         {
-            Inventory.Add(TheItem);
-            ItemsInInventory = Inventory.Count;
+            m_Inventory.Add(TheItem);
+            m_ItemsInInventory = m_Inventory.Count;
             // TODO : Notify player that the item is in their inventory
             // TODO : Code that removes the item from the room
         }
@@ -38,7 +38,7 @@ public class PlayerInventory : MonoBehaviour {
     // This way, only one of an item is removed if the player has more than one.
     public void RemoveFromInventory(InventoryItem TheItem)
     {
-        Inventory.Remove(TheItem);
-        ItemsInInventory = Inventory.Count;
+        m_Inventory.Remove(TheItem);
+        m_ItemsInInventory = m_Inventory.Count;
     }
 }

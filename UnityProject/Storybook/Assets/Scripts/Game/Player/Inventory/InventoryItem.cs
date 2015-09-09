@@ -2,44 +2,48 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class InventoryItem {
+public abstract class InventoryItem
+{
 
     [SerializeField]
-    private enum Genre // Enum for color values
+    private enum m_Genre // Enum for color values
     {
         None, Red, Orange, Yellow, Green, Blue, Grey
     };
 
     [SerializeField]
-    private string ItemName;
+    private string m_ItemName;
     [SerializeField]
-    private Genre ItemColor; // Item Color
+    private Genre m_ItemColor; // Item Color
     [SerializeField]
-    private int ItemLevel; // The level of the item, determines how deep in the dungeon it appears
+    private int m_ItemLevel; // The level of the item, determines how deep in the dungeon it appears
     [SerializeField]
-    private float BaseDrop; // The base drop rate of the item
+    private float m_BaseDrop; // The base drop rate of the item
 
-    // Abstract method for item usage. Configure more in-depth for child classes.
-    public void OnUse()
+    // Method for item usage. Configure more in-depth for child classes.
+    protected void OnUse()
     {
-
+        Use();
     }
 
-    // Abstract method for item dropping (from battle, chest, etc.) Configure more in-depth for child classes.
-    public void OnDrop()
+    // Method for item dropping (from battle, chest, etc.) Configure more in-depth for child classes.
+    protected void OnDrop()
     {
+        Drop();
+    }
 
+    // Method for item pickup. Configure more in-depth from the child class.
+    protected void OnPickup()
+    {
+        Pickup();
     }
 
     // Method to Use the item
-    public void Use()
-    {
-        // TODO: Remove from the inventory
-    }
+    public abstract void Use();
 
     // Method to Drop the item
-    public void Drop()
-    {
+    public abstract void Drop();
 
-    }
+    // Method to Pickup the item
+    public abstract void Pickup();
 }

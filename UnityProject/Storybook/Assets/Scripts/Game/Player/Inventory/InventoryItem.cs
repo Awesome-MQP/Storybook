@@ -14,7 +14,7 @@ public abstract class InventoryItem
     [SerializeField]
     private string m_ItemName;
     [SerializeField]
-    private Genre m_ItemColor; // Item Color
+    private m_Genre m_ItemColor; // Item Color
     [SerializeField]
     private int m_ItemLevel; // The level of the item, determines how deep in the dungeon it appears
     [SerializeField]

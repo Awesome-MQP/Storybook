@@ -114,4 +114,8 @@ public class NavArea : MonoBehaviour {
 	public void AddNode(NavNode nodeToAdd){
 		m_areaNodes.Add(nodeToAdd);
 	}
+
+	public List<NavNode> getAreaNodes(){
+		return m_areaNodes;
+	}
 }

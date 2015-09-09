@@ -6,7 +6,7 @@ public abstract class InventoryItem
 {
 
     [SerializeField]
-    private enum m_Genre // Enum for color values
+    private enum Genre // Enum for color values
     {
         None, Red, Orange, Yellow, Green, Blue, Grey
     };
@@ -14,7 +14,7 @@ public abstract class InventoryItem
     [SerializeField]
     private string m_ItemName;
     [SerializeField]
-    private m_Genre m_ItemColor; // Item Color
+    private Genre m_ItemColor; // Item Color
     [SerializeField]
     private int m_ItemLevel; // The level of the item, determines how deep in the dungeon it appears
     [SerializeField]

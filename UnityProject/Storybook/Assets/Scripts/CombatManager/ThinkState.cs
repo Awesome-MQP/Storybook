@@ -12,7 +12,7 @@ public class ThinkState : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        m_combatManager.think();
+        m_combatManager.Think();
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -30,9 +30,8 @@ public class ThinkState : StateMachineBehaviour {
 	//
 	//}
 
-    public void setCombatManager(CombatManager newCombatManager) {
+    public void SetCombatManager(CombatManager newCombatManager) {
         Debug.Log("Think state setting combat manager");
         m_combatManager = newCombatManager;
-        m_combatManager.think();
     }
 }

@@ -12,7 +12,7 @@ public class WinState : StateMachineBehaviour {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        m_combatManager.win();
+        m_combatManager.Win();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -30,7 +30,7 @@ public class WinState : StateMachineBehaviour {
     //
     //}
 
-    public void setCombatManager(CombatManager newCombatManager) {
+    public void SetCombatManager(CombatManager newCombatManager) {
         m_combatManager = newCombatManager;
     }
 }

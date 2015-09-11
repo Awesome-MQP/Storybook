@@ -3,57 +3,52 @@ using System.Collections;
 
 public class CombatManager : MonoBehaviour {
 
-    private Animator combatStateMachine;
-    private ThinkState thinkState;
-    private ExecuteState executeState;
-    private WinState winState;
-    private LoseState loseState;
+    private Animator m_combatStateMachine;
+    private ThinkState m_thinkState;
+    private ExecuteState m_executeState;
+    private WinState m_winState;
+    private LoseState m_loseState;
 
 	// Use this for initialization
 	void Start () {
-        combatStateMachine = GetComponent<Animator>() as Animator;
-        combatStateMachine.SetTrigger("StartCombat");
+        m_combatStateMachine = GetComponent<Animator>() as Animator;
+        m_combatStateMachine.SetTrigger("StartCombat");
 
         // Get the ThinkState and set the CombatManager
-        thinkState = combatStateMachine.GetBehaviour<ThinkState>() as ThinkState;
-        thinkState.setCombatManager(this);
+        m_thinkState = m_combatStateMachine.GetBehaviour<ThinkState>() as ThinkState;
+        m_thinkState.SetCombatManager(this);
 
         // Get the ExecuteState and set the CombatManager
-        executeState = combatStateMachine.GetBehaviour<ExecuteState>() as ExecuteState;
-        executeState.setCombatManager(this);
+        m_executeState = m_combatStateMachine.GetBehaviour<ExecuteState>() as ExecuteState;
+        m_executeState.SetCombatManager(this);
 
         // Get the WinState and set the CombatManager
-        winState = combatStateMachine.GetBehaviour<WinState>() as WinState;
-        winState.setCombatManager(this);
+        m_winState = m_combatStateMachine.GetBehaviour<WinState>() as WinState;
+        m_winState.SetCombatManager(this);
 
         // Get the LoseState and set the Combat Manager
-        loseState = combatStateMachine.GetBehaviour<LoseState>() as LoseState;
-        loseState.setCombatManager(this);
+        m_loseState = m_combatStateMachine.GetBehaviour<LoseState>() as LoseState;
+        m_loseState.SetCombatManager(this);
     }
-	
-	// Update is called once per frame
-	void Update () {
-       
-	}
 
-    public void think() {
+    public void Think() {
         Debug.Log("Combat Manager running think code");
-        combatStateMachine.SetTrigger("ThinkToExecute");
+        m_combatStateMachine.SetTrigger("ThinkToExecute");
     }
 
-    public void executeTurn() {
+    public void ExecuteTurn() {
         Debug.Log("Combat Manager running execute code");
-        combatStateMachine.SetTrigger("ExecuteToWin");
+        m_combatStateMachine.SetTrigger("ExecuteToWin");
     }
 
-    public void win() {
+    public void Win() {
         Debug.Log("Combat Manager running win code");
-        combatStateMachine.SetTrigger("ExitCombat");
+        m_combatStateMachine.SetTrigger("ExitCombat");
     }
 
-    public void lose() {
+    public void Lose() {
         Debug.Log("Combat Manager running lose code");
-        combatStateMachine.SetTrigger("ExitCombat");
+        m_combatStateMachine.SetTrigger("ExitCombat");
     }
 
 }

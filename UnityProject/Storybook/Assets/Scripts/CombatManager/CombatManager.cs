@@ -3,11 +3,19 @@ using System.Collections;
 
 public class CombatManager : MonoBehaviour {
 
+    [SerializeField]
+    private GameObject m_combatPawnPrefab;
+
     private Animator m_combatStateMachine;
     private ThinkState m_thinkState;
     private ExecuteState m_executeState;
     private WinState m_winState;
     private LoseState m_loseState;
+
+    private GameObject m_combatPawn;
+    private TestCombatPawn m_combatPawnScript;
+    private int m_submittedMoves = 0;
+    private int m_totalPlayers = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -29,14 +37,24 @@ public class CombatManager : MonoBehaviour {
         // Get the LoseState and set the Combat Manager
         m_loseState = m_combatStateMachine.GetBehaviour<LoseState>() as LoseState;
         m_loseState.SetCombatManager(this);
+
+        m_combatPawn = (GameObject) Instantiate(m_combatPawnPrefab);
+        m_combatPawnScript = m_combatPawn.GetComponent<TestCombatPawn>();
+        m_combatPawnScript.SetCombatManager(this);
     }
 
     public void Think() {
         Debug.Log("Combat Manager running think code");
-        m_combatStateMachine.SetTrigger("ThinkToExecute");
+        
+        // If all player moves have been submitted, execute the turn
+        if (m_submittedMoves == m_totalPlayers) {
+            Debug.Log("All player moves received");
+            m_combatStateMachine.SetTrigger("ThinkToExecute");
+        }
     }
 
     public void ExecuteTurn() {
+        m_combatPawnScript.OnAction();
         Debug.Log("Combat Manager running execute code");
         m_combatStateMachine.SetTrigger("ExecuteToWin");
     }
@@ -51,4 +69,8 @@ public class CombatManager : MonoBehaviour {
         m_combatStateMachine.SetTrigger("ExitCombat");
     }
 
+    public void SubmitPlayerMove() {
+        m_submittedMoves += 1;
+        Debug.Log("Player move received");
+    }
 }

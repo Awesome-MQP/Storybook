@@ -57,13 +57,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d635ea7bf0ab640925464effe51bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_combatPawnPrefab: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_combatPawnPrefab
+      value: 
+      objectReference: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 122720}

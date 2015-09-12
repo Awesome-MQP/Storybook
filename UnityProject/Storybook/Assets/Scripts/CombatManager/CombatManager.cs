@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CombatManager : MonoBehaviour {
 
@@ -13,9 +14,8 @@ public class CombatManager : MonoBehaviour {
     private LoseState m_loseState;
 
     private GameObject m_combatPawn;
-    private TestCombatPawn m_combatPawnScript;
     private int m_submittedMoves = 0;
-    private int m_totalPlayers = 1;
+    private List<CombatPawn> m_playerList = new List<CombatPawn>();
 
 	// Use this for initialization
 	void Start () {
@@ -39,22 +39,25 @@ public class CombatManager : MonoBehaviour {
         m_loseState.SetCombatManager(this);
 
         m_combatPawn = (GameObject) Instantiate(m_combatPawnPrefab);
-        m_combatPawnScript = m_combatPawn.GetComponent<TestCombatPawn>();
-        m_combatPawnScript.SetCombatManager(this);
+        CombatPawn combatPawnScript = m_combatPawn.GetComponent<CombatPawn>();
+        combatPawnScript.SetCombatManager(this);
+        m_playerList.Add(combatPawnScript);
     }
 
     public void Think() {
         Debug.Log("Combat Manager running think code");
         
         // If all player moves have been submitted, execute the turn
-        if (m_submittedMoves == m_totalPlayers) {
+        if (m_submittedMoves == m_playerList.Count) {
             Debug.Log("All player moves received");
             m_combatStateMachine.SetTrigger("ThinkToExecute");
         }
     }
 
     public void ExecuteTurn() {
-        m_combatPawnScript.OnAction();
+        foreach (CombatPawn pawn in m_playerList) {
+            pawn.OnAction();
+        }
         Debug.Log("Combat Manager running execute code");
         m_combatStateMachine.SetTrigger("ExecuteToWin");
     }

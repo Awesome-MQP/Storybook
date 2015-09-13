@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RoomObject {
 
-    public Door[] Doors;
+    public Door[] RoomDoors;
                          // Ordering for indices should be clockwise, starting from the north.
                          // In a standard 1x1 room, it would be like:
                          // 0 - North, 1 - East, 2 - South, 3 - West.

@@ -16,39 +16,19 @@ public class CombatManager : MonoBehaviour {
 
         // Get the ThinkState and set the CombatManager
         m_thinkState = m_combatStateMachine.GetBehaviour<ThinkState>() as ThinkState;
-        m_thinkState.SetCombatManager(this);
+        m_thinkState.CManager = this;
 
         // Get the ExecuteState and set the CombatManager
         m_executeState = m_combatStateMachine.GetBehaviour<ExecuteState>() as ExecuteState;
-        m_executeState.SetCombatManager(this);
+        m_executeState.CManager = this;
 
         // Get the WinState and set the CombatManager
         m_winState = m_combatStateMachine.GetBehaviour<WinState>() as WinState;
-        m_winState.SetCombatManager(this);
+        m_winState.CManager = this;
 
         // Get the LoseState and set the Combat Manager
         m_loseState = m_combatStateMachine.GetBehaviour<LoseState>() as LoseState;
-        m_loseState.SetCombatManager(this);
-    }
-
-    public void Think() {
-        Debug.Log("Combat Manager running think code");
-        m_combatStateMachine.SetTrigger("ThinkToExecute");
-    }
-
-    public void ExecuteTurn() {
-        Debug.Log("Combat Manager running execute code");
-        m_combatStateMachine.SetTrigger("ExecuteToWin");
-    }
-
-    public void Win() {
-        Debug.Log("Combat Manager running win code");
-        m_combatStateMachine.SetTrigger("ExitCombat");
-    }
-
-    public void Lose() {
-        Debug.Log("Combat Manager running lose code");
-        m_combatStateMachine.SetTrigger("ExitCombat");
+        m_loseState.CManager = this;
     }
 
 }

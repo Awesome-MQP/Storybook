@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class ThinkState : StateMachineBehaviour {
+public class ThinkState : CombatState {
 
     private CombatManager m_combatManager;
 
-	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("Entering think state");
-	}
-
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        m_combatManager.Think();
-	}
+	//override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    //
+	//}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -30,8 +26,8 @@ public class ThinkState : StateMachineBehaviour {
 	//
 	//}
 
-    public void SetCombatManager(CombatManager newCombatManager) {
-        Debug.Log("Think state setting combat manager");
-        m_combatManager = newCombatManager;
+    public override void ExitState()
+    {
+        StateMachine.SetTrigger("ThinkToExecute");
     }
 }

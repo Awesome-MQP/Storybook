@@ -1,19 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LoseState : StateMachineBehaviour {
+public class LoseState : CombatState {
 
     private CombatManager m_combatManager;
 
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("Entering Lose State");
-    }
-
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        m_combatManager.Lose();
-    }
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    //
+    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -30,7 +25,8 @@ public class LoseState : StateMachineBehaviour {
     //
     //}
 
-    public void SetCombatManager(CombatManager newCombatManager) {
-        m_combatManager = newCombatManager;
+    public override void ExitState()
+    {
+        StateMachine.SetTrigger("ExitCombat");
     }
 }

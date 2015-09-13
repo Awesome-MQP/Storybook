@@ -6,7 +6,7 @@ public abstract class InventoryItem
 {
 
     [SerializeField]
-    private enum m_Genre // Enum for color values
+    private enum Genre // Enum for color values
     {
         None, Red, Orange, Yellow, Green, Blue, Grey
     };

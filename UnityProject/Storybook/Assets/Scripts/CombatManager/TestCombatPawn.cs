@@ -8,17 +8,12 @@ public class TestCombatPawn : CombatPawn {
 	void Start () {
         StartCoroutine(OnThink());
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public override IEnumerator OnThink() {
         Debug.Log("Test pawn is thinking");
         yield return new WaitForSeconds(5);
         Debug.Log("Test pawn is done thinking");
-        combatManager.SubmitPlayerMove();
+        CManager.SubmitPlayerMove();
     }
 
     public override void OnAction() {

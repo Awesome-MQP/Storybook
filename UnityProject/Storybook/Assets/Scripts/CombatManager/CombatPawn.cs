@@ -3,23 +3,18 @@ using System.Collections;
 
 public abstract class CombatPawn : MonoBehaviour {
 
-    protected CombatManager combatManager;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private CombatManager m_combatManager;
 
     public abstract IEnumerator OnThink();
 
     public abstract void OnAction();
 
     public void SetCombatManager(CombatManager newCombatManager) {
-        combatManager = newCombatManager;
+        m_combatManager = newCombatManager;
+    }
+
+    public CombatManager CManager
+    {
+        get{return m_combatManager;}
     }
 }

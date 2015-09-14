@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -46,5 +47,25 @@ public class CombatManager : MonoBehaviour {
 
     public void SubmitPlayerMove() {
         m_submittedMoves += 1;
+    }
+
+    public void PageButtonPressed()
+    {
+        Debug.Log("Page button pressed");
+    }
+
+    public void ItemButtonPressed()
+    {
+        Debug.Log("Item button pressed");
+    }
+
+    public void InfoButtonPressed()
+    {
+        Debug.Log("Info button pressed");
+    }
+
+    public void RunButtonPressed()
+    {
+        Debug.Log("Run button pressed");
     }
 }

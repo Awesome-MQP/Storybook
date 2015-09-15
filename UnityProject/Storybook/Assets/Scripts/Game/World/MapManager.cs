@@ -3,25 +3,31 @@ using System.Collections;
 
 public class MapManager : MonoBehaviour {
 
-    protected const int WORLD_MAX_X_SIZE = 12;
-    protected const int WORLD_MAX_Y_SIZE = 12;
+    [SerializeField]
+    private int m_WORLD_MAX_X_SIZE = 12;
 
-    protected RoomObject[,] m_WorldGrid = new RoomObject[WORLD_MAX_X_SIZE, WORLD_MAX_Y_SIZE]; // Creates a 12x12 array to place rooms
+    [SerializeField]
+    private int m_WORLD_MAX_Y_SIZE = 12;
 
-	// Use this for initialization
-	void Start () {
-        TestMapMgr(); // run tests on map manager code once on startup.
-	}
+    [SerializeField]
+    private RoomObject[,] m_WorldGrid; // Creates a 2D array to place rooms
+
+    // Initialize
+    void Awake()
+    {
+        m_WorldGrid = new RoomObject[m_WORLD_MAX_X_SIZE, m_WORLD_MAX_Y_SIZE];
+    }
 	
     // Place a new room in the world.
     // The MapMgr is not concerned with the contents of the room, just that it can be placed.
     // 
-    protected RoomObject PlaceRoom(Location gridPosition, RoomObject theRoom) {
-        int placeX = gridPosition.getX();
-        int placeY = gridPosition.getY();
+    public RoomObject PlaceRoom(Location gridPosition, RoomObject theRoom)
+    {
+        int placeX = gridPosition.X;
+        int placeY = gridPosition.Y;
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
-        if ((placeX < 0 || placeX >= WORLD_MAX_X_SIZE) || 
-            (placeY < 0 || placeY >= WORLD_MAX_Y_SIZE)) {
+        if ((placeX < 0 || placeX >= m_WORLD_MAX_X_SIZE) || 
+            (placeY < 0 || placeY >= m_WORLD_MAX_Y_SIZE)) {
             Debug.Log("Cannot place a room at position: " + placeX + "," + placeY + ". Position is invalid.");
             return null;
         }
@@ -37,11 +43,6 @@ public class MapManager : MonoBehaviour {
         Debug.Log("Room was placed successfully at position: " + placeX + "," + placeY);
         return theRoom;
     }
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     // Tests the Map Manager code. Called once on startup.
     void TestMapMgr()

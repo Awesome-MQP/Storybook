@@ -5,14 +5,9 @@ using System.Collections.Generic;
 public class CombatManager : MonoBehaviour {
 
     [SerializeField]
-    private TestCombatPawn m_combatPawnPrefab;
+    private CombatPawn m_combatPawnPrefab;
 
-    private ThinkState m_thinkState;
-    private ExecuteState m_executeState;
-    private WinState m_winState;
-    private LoseState m_loseState;
-
-    private TestCombatPawn m_combatPawn;
+    private CombatPawn m_combatPawn;
     private int m_submittedMoves = 0;
     private List<CombatPawn> m_playerList = new List<CombatPawn>();
 
@@ -21,7 +16,7 @@ public class CombatManager : MonoBehaviour {
         Animator m_combatStateMachine = GetComponent<Animator>() as Animator;
         m_combatStateMachine.SetTrigger("StartCombat");
 
-        CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>() as CombatState[];
+        CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
         foreach (CombatState cm in allCombatStates)
         {
             cm.CManager = this;

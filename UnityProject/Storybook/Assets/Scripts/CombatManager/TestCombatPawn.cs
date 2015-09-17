@@ -10,13 +10,11 @@ public class TestCombatPawn : CombatPawn {
 	}
 
     public override IEnumerator OnThink() {
-        Debug.Log("Test pawn is thinking");
         yield return new WaitForSeconds(5);
-        Debug.Log("Test pawn is done thinking");
         CManager.SubmitPlayerMove();
     }
 
     public override void OnAction() {
-        Debug.Log("Test pawn doing action");
+        //Debug.Log("Test pawn doing action");
     }
 }

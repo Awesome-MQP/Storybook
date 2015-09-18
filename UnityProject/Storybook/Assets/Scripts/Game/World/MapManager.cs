@@ -4,18 +4,18 @@ using System.Collections;
 public class MapManager : MonoBehaviour {
 
     [SerializeField]
-    private int m_WORLD_MAX_X_SIZE = 12;
+    private int m_worldMaxXSize = 12;
 
     [SerializeField]
-    private int m_WORLD_MAX_Y_SIZE = 12;
+    private int m_worldMaxYSize = 12;
 
     [SerializeField]
-    private RoomObject[,] m_WorldGrid; // Creates a 2D array to place rooms
+    private RoomObject[,] m_worldGrid; // Creates a 2D array to place rooms
 
     // Initialize
     void Awake()
     {
-        m_WorldGrid = new RoomObject[m_WORLD_MAX_X_SIZE, m_WORLD_MAX_Y_SIZE];
+        m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
     }
 	
     // Place a new room in the world.
@@ -26,21 +26,18 @@ public class MapManager : MonoBehaviour {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
-        if ((placeX < 0 || placeX >= m_WORLD_MAX_X_SIZE) || 
-            (placeY < 0 || placeY >= m_WORLD_MAX_Y_SIZE)) {
-            Debug.Log("Cannot place a room at position: " + placeX + "," + placeY + ". Position is invalid.");
+        if ((placeX < 0 || placeX >= m_worldMaxXSize) || 
+            (placeY < 0 || placeY >= m_worldMaxYSize)) {
             return null;
         }
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
-        if(m_WorldGrid[placeX, placeY] != null) {
-            Debug.Log("Cannot place a room at position: " + placeX + "," + placeY + " A room already exists here.");
+        if(m_worldGrid[placeX, placeY] != null) {
             return null;
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
-        m_WorldGrid[placeX, placeY] = theRoom;
-        Debug.Log("Room was placed successfully at position: " + placeX + "," + placeY);
+        m_worldGrid[placeX, placeY] = theRoom;
         return theRoom;
     }
 

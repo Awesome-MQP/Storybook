@@ -28,7 +28,23 @@ public struct Location {
     }
 
     // Overloads the Subtract function to find the distance between 2 points
-    public static float operator -(Location Loc1, Location Loc2)
+    public static Location operator -(Location Loc1, Location Loc2)
+    {
+        int DiffX = Loc2.X - Loc1.X;
+        int DiffY = Loc2.Y - Loc1.Y;
+        return new Location(DiffX, DiffY);
+    }
+
+    // Overloads the Add function to find the distance between 2 points
+    public static Location operator +(Location Loc1, Location Loc2)
+    {
+        int DiffX = Loc2.X + Loc1.X;
+        int DiffY = Loc2.Y + Loc1.Y;
+        return new Location(DiffX, DiffY);
+    }
+
+    // Gets the straight line distance between 2 locations.
+    public static float distance(Location Loc1, Location Loc2)
     {
         float XminusA = Loc1.X - Loc2.X;
         float YminusB = Loc1.Y - Loc2.Y;

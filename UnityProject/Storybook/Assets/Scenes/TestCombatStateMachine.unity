@@ -295,7 +295,8 @@ Prefab:
     - target: {fileID: 11406234, guid: fc4f03f304c2e5c45931a6d02d90ff65, type: 2}
       propertyPath: m_combatPawnPrefab
       value: 
-      objectReference: {fileID: 124672, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
+      objectReference: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fc4f03f304c2e5c45931a6d02d90ff65, type: 2}
   m_IsPrefabParent: 0

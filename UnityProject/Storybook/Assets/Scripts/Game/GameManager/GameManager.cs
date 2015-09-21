@@ -17,8 +17,9 @@ public class GameManager : MonoBehaviour {
     private bool test4Done = false;
 
 	// Update is called once per frame
-	void Update () {
-        _testGameManager();
+	void Start () {
+        List<PlayerEntity> playerList = new List<PlayerEntity>();
+        StartCombat(playerList);
 	}
 
     // Starts a combat instance and sets the players for the combat manager to the list of players given to this function
@@ -29,6 +30,16 @@ public class GameManager : MonoBehaviour {
         GameObject combatInstance = (GameObject) Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
         CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
         combatManager.PlayerList = playersEnteringCombat;
+
+        // Get all the player position nodes and set it in the combat manager
+        PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
+        Debug.Log("Player positions size = " + playerPositions.Length.ToString());
+        List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
+        combatManager.PlayerPositions = playerPositionsList;
+
+        // TODO - Remove this
+        Camera.main.GetComponent<AudioListener>().enabled = false;
+
         m_combatInstances.Add(combatInstance);
     }
 
@@ -77,6 +88,14 @@ public class GameManager : MonoBehaviour {
             }
         }
         return null;
+    }
+
+    public List<PlayerEntity> GetAllPlayers()
+    {
+        PlayerEntity[] allPlayers = FindObjectsOfType(typeof(PlayerEntity)) as PlayerEntity[];
+        List<PlayerEntity> allPlayersList = new List<PlayerEntity>(allPlayers);
+        Debug.Log("Adding " + allPlayers.Length.ToString() + " players");
+        return allPlayersList;
     }
 
     private void _testGameManager()

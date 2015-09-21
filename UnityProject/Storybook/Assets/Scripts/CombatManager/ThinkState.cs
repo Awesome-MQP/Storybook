@@ -5,9 +5,14 @@ using System;
 public class ThinkState : CombatState {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-	//override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-    //
-	//}
+	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        // If all of the players have submitted their moves, exit the think state and move to execute
+        if (CManager.MovesSubmitted == CManager.PawnList.Count && CManager.MovesSubmitted > 0)
+        {
+            Debug.Log("Exiting think state");
+            ExitState();
+        }
+	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

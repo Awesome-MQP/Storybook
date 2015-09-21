@@ -44,7 +44,7 @@ public struct Location {
     }
 
     // Gets the straight line distance between 2 locations.
-    public static float distance(Location Loc1, Location Loc2)
+    public static float Distance(Location Loc1, Location Loc2)
     {
         float XminusA = Loc1.X - Loc2.X;
         float YminusB = Loc1.Y - Loc2.Y;

@@ -12,6 +12,8 @@ public class MapManager : MonoBehaviour {
     [SerializeField]
     private RoomObject[,] m_worldGrid; // Creates a 2D array to place rooms
 
+    private int m_defaultRoomSize = 50; // Default room size (in blocks in Unity editor)
+
     // Initialize
     void Awake()
     {
@@ -37,8 +39,17 @@ public class MapManager : MonoBehaviour {
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
+        theRoom.SetRoomLocation(gridPosition);
         m_worldGrid[placeX, placeY] = theRoom;
+        Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeX, m_defaultRoomSize * placeY, 0);
+        Instantiate(theRoom, roomGridLocation, new Quaternion());
         return theRoom;
+    }
+
+    // Get a room from the world
+    public RoomObject GetRoom(Location roomLoc)
+    {
+        return m_worldGrid[roomLoc.X, roomLoc.Y];
     }
 
     // Tests the Map Manager code. Called once on startup.
@@ -56,5 +67,12 @@ public class MapManager : MonoBehaviour {
         PlaceRoom(Good_1, testRoom); // try placing a room in a good location (expect pass)
         PlaceRoom(Good_2, testRoom); // try placing a room in another good location (expect pass)
         PlaceRoom(Good_1, testRoom); // try placing a room where another room has already been placed (expect fail)
+    }
+
+    void TestMapMgrPlacement()
+    {
+        Location Good_1 = new Location(5, 5);
+        Location Good_2 = new Location(5, 6);
+        GameObject aBlankRoom = GameObject.Find("TestRoom");
     }
 }

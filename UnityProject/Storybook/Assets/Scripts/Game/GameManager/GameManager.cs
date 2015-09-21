@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour {
     // Returns null if the given player is not in a combat instance
     public GameObject GetCombatForPlayer(PlayerEntity player)
     {
+        //TODO: Make a lookup table from player entity to combat manager, this could be done with a variable on PlayerEntity or list in GameManager
         for (int i = 0; i < m_combatInstances.Count; i++)
         {
             GameObject currentCombatInstance = m_combatInstances[i];

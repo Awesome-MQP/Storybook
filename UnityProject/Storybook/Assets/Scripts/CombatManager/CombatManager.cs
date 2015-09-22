@@ -32,36 +32,50 @@ public class CombatManager : MonoBehaviour {
         {
             cm.CManager = this;
         }
-        _spawnCombatPawns(1);
+
+        // Spawn and place the player pawns
+        _spawnPlayerPawns(1);
         _placePlayers();
+
+        // Spawn and place the enemy pawns
         _spawnEnemyPawns(1);
         _placeEnemies();
     }
 
-    // Called by CombatPawn when a player has submitted their move
+    /// <summary>
+    /// Called by CombatPawn when a player has submitted their move
+    /// </summary>
     public void SubmitPlayerMove() {
         m_submittedMoves += 1;
     }
 
-    // Called by enemies when they select their move
+    /// <summary>
+    /// Called by enemies when they select their move
+    /// </summary>
     public void SubmitEnemyMove()
     {
         m_submittedEnemyMoves += 1;
     }
 
-    // Called by combat pawn when its attack animation has completed
+    /// <summary>
+    /// Called by combat pawn when its attack animation has completed
+    /// </summary>
     public void PlayerFinishedMoving()
     {
         m_combatStateMachine.GetBehaviour<ExecuteState>().GetNextCombatPawn();
     }
 
-    // Called by enemy pawn when its attack animation has completed
+    /// <summary>
+    /// Called by enemy pawn when its attack animation has completed
+    /// </summary>
     public void EnemyFinishedMoving()
     {
         m_combatStateMachine.GetBehaviour<ExecuteState>().GetNextCombatPawn();
     }
 
-    // Places the players at the player points on the combat plane
+    /// <summary>
+    /// Places the players at the player points on the combat plane
+    /// </summary>
     private void _placePlayers()
     {
         for (int i = 0; i < m_playerPawnList.Count; i++)
@@ -71,7 +85,11 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
-    private void _spawnCombatPawns(int numberToSpawn)
+    /// <summary>
+    /// Spawns the given number of combat pawns to represent the players
+    /// </summary>
+    /// <param name="numberToSpawn">The number of combat pawns to create</param>
+    private void _spawnPlayerPawns(int numberToSpawn)
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
@@ -83,6 +101,9 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Places the enemy pawns at the nodes on the combat plane
+    /// </summary>
     private void _placeEnemies()
     {
         for (int i = 0; i < m_enemyList.Count; i++)
@@ -92,6 +113,10 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Spawns the given number of CombatEnemy objects
+    /// </summary>
+    /// <param name="numberToSpawn">The number of CombatEnemy objects to spawn</param>
     private void _spawnEnemyPawns(int numberToSpawn)
     {
         for (int i = 0; i < numberToSpawn; i++)
@@ -103,42 +128,63 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// The list of all the PlayerEntity in the combat
+    /// </summary>
     public List<PlayerEntity> PlayerList
     {
         get { return m_playerEntityList; }
         set { m_playerEntityList = value; }
     }
 
+    /// <summary>
+    /// The list of all the player pawns in the combat
+    /// </summary>
     public List<CombatPawn> PawnList
     {
         get { return m_playerPawnList; }
         set { m_playerPawnList = value; }
     }
 
+    /// <summary>
+    /// The list of all the enemies in the combat
+    /// </summary>
     public List<CombatEnemy> EnemyList
     {
         get { return m_enemyList; }
         set { m_enemyList = value; }
     }
 
+    /// <summary>
+    /// The list of the PlayerPositionNodes in the combat
+    /// </summary>
     public List<PlayerPositionNode> PlayerPositions
     {
         get { return m_playerPositionList; }
         set { m_playerPositionList = value; }
     }
 
+    /// <summary>
+    /// The list of EnemyPositionNodes in the combat
+    /// </summary>
     public List<EnemyPositionNode> EnemyPositions
     {
         get { return m_enemyPositionList; }
         set { m_enemyPositionList = value; }
     }
 
+    /// <summary>
+    /// The number of moves submitted by the players
+    /// </summary>
     public int MovesSubmitted
     {
         get { return m_submittedMoves; }
         set { m_submittedMoves = value; }
     }
 
+    /// <summary>
+    /// The list of all the pawns in the combat (enemies and players)
+    /// </summary>
     public List<CombatPawn> AllPawns
     {
         get { return m_allPawns; }

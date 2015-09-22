@@ -3,15 +3,20 @@ using System.Collections;
 
 public class ExecuteState : CombatState {
 
-    private int m_currentPawnIndex = 0;
-    private bool m_arePlayerMovesComplete = false;
+    private bool m_areCombatMovesComplete = false;
+    private CombatPawn m_currentCombatPawn;
+
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        base.OnStateEnter(animator, stateInfo, layerIndex);
+        GetNextCombatPawn();
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (!m_arePlayerMovesComplete)
+        if (!m_currentCombatPawn.IsActionComplete)
         {
-            CombatPawn currentPawn = CManager.PawnList[m_currentPawnIndex];
-            currentPawn.OnAction();
+            m_currentCombatPawn.OnAction();
         }
     }
 
@@ -32,21 +37,30 @@ public class ExecuteState : CombatState {
 
     public override void ExitState()
     {
-        m_currentPawnIndex = 0;
         StateMachine.SetTrigger("ExecuteToWin");
     }
 
-    // Do the action for the next pawn that is in the combat
-    // If there are no more pawns left to move, move the enemies
-    public void IncrementPawnIndex()
+    // TODO - How to handle ties with the speed values (players have priority?)
+    public void GetNextCombatPawn()
     {
-        if (m_currentPawnIndex + 1 < CManager.PawnList.Count)
+        int currentHighestSpeed = 0;
+        CombatPawn fastestCombatPawn = null;
+        foreach (CombatPawn combatPawn in CManager.AllPawns)
         {
-            m_currentPawnIndex += 1;
+            int currentSpeed = combatPawn.Speed;
+            if (currentSpeed > currentHighestSpeed && !combatPawn.IsActionComplete)
+            {
+                currentHighestSpeed = currentSpeed;
+                fastestCombatPawn = combatPawn;
+            }
+        }
+
+        if (fastestCombatPawn != null)
+        {
+            m_currentCombatPawn = fastestCombatPawn;
         }
         else
         {
-            m_arePlayerMovesComplete = true;
             ExitState();
         }
     }

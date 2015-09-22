@@ -3,9 +3,13 @@ using System.Collections;
 
 public abstract class CombatPawn : MonoBehaviour {
 
+    private int m_speed;
+
     private CombatManager m_combatManager;
 
     private bool m_isInAction = false;
+
+    private bool m_isActionComplete = false;
 
     public abstract IEnumerator OnThink();
 
@@ -24,5 +28,17 @@ public abstract class CombatPawn : MonoBehaviour {
     {
         get { return m_isInAction; }
         set { m_isInAction = value; }
+    }
+
+    public bool IsActionComplete
+    {
+        get { return m_isActionComplete; }
+        set { m_isActionComplete = value; }
+    }
+
+    public int Speed
+    {
+        get { return m_speed; }
+        set { m_speed = value; }
     }
 }

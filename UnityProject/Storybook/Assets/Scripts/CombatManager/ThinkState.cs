@@ -9,7 +9,6 @@ public class ThinkState : CombatState {
         // If all of the players have submitted their moves, exit the think state and move to execute
         if (CManager.MovesSubmitted == CManager.PawnList.Count && CManager.MovesSubmitted > 0)
         {
-            Debug.Log("Exiting think state");
             ExitState();
         }
 	}

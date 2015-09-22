@@ -33,9 +33,13 @@ public class GameManager : MonoBehaviour {
 
         // Get all the player position nodes and set it in the combat manager
         PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
-        Debug.Log("Player positions size = " + playerPositions.Length.ToString());
         List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
         combatManager.PlayerPositions = playerPositionsList;
+
+        // Get all the enemy position nodes and set it in the combat manager
+        EnemyPositionNode[] enemyPositions = combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
+        List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
+        combatManager.EnemyPositions = enemyPositionsList;
 
         // TODO - Remove this
         Camera.main.GetComponent<AudioListener>().enabled = false;

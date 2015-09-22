@@ -2,45 +2,31 @@
 using System.Collections;
 using System;
 
-public class TestCombatPawn : CombatPawn {
-
-    private PlayerPositionNode m_currentDest;
+public class TestEnemy : CombatEnemy
+{
+    private EnemyPositionNode m_currentDest;
     private float m_startTime;
     private float m_moveSpeed = 0.5F;
     private float m_destDistance;
 
-	// Use this for initialization
-	void Start () {
-        Speed = 7;
-        StartCoroutine(OnThink());
-	}
-
-    // Waits for input of a move
-    public override IEnumerator OnThink() {
-        bool hasReceivedInput = false;
-        while (!hasReceivedInput)
-        {
-            // If the space bar is pressed, submit the move to the CombatManager, and exit the OnThink() function
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                hasReceivedInput = true;
-                CManager.SubmitPlayerMove();
-            }
-            yield return null;
-        }
+    void Start()
+    {
+        Speed = 5;
+        OnThink();
     }
 
-    // Moves the CombatPawn
-    public override void OnAction() {
+    public override void OnAction()
+    {
         // If this is the first call to OnAction, figure out the position to move to
         if (!IsInAction)
         {
             m_startTime = Time.time;
             float currentFarthestDist = 0;
-            foreach(PlayerPositionNode ppn in CManager.PlayerPositions)
+            foreach (EnemyPositionNode epn in CManager.EnemyPositions)
             {
-                if (Vector3.Distance(transform.position, ppn.transform.position) > currentFarthestDist){
-                    m_currentDest = ppn;
+                if (Vector3.Distance(transform.position, epn.transform.position) > currentFarthestDist)
+                {
+                    m_currentDest = epn;
                 }
             }
             IsInAction = true;
@@ -60,7 +46,13 @@ public class TestCombatPawn : CombatPawn {
         {
             IsInAction = false;
             IsActionComplete = true;
-            CManager.PlayerFinishedMoving();
+            CManager.EnemyFinishedMoving();
         }
+    }
+
+    public override IEnumerator OnThink()
+    {
+        CManager.SubmitEnemyMove();
+        yield return null;
     }
 }

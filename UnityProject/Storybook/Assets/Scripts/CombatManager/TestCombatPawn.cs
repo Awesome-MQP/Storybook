@@ -4,15 +4,17 @@ using System;
 
 public class TestCombatPawn : CombatPawn {
 
+    private const int ATTACK_VALUE = 2;
     private PlayerPositionNode m_currentDest;
     private float m_startTime;
     private float m_moveSpeed = 0.5F;
     private float m_destDistance;
+    private CombatEnemy m_enemyToAttack;
 
 	// Use this for initialization
 	void Start () {
         Speed = 7;
-        StartCoroutine(OnThink());
+        Health = 10;
 	}
 
     // Waits for input of a move
@@ -24,7 +26,18 @@ public class TestCombatPawn : CombatPawn {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 hasReceivedInput = true;
-                CManager.SubmitPlayerMove();
+
+                // Randomly select an enemy pawn to attack
+                int enemiesInCombat = CManager.EnemyList.Count;
+                System.Random rnd = new System.Random();
+                int enemyToAttackIndex = rnd.Next(0, enemiesInCombat - 1);
+                m_enemyToAttack = CManager.EnemyList[enemyToAttackIndex];
+
+                if (!HasSubmittedMove)
+                {
+                    CManager.SubmitPlayerMove();
+                    HasSubmittedMove = true;
+                }
             }
             yield return null;
         }
@@ -58,6 +71,8 @@ public class TestCombatPawn : CombatPawn {
         // If the pawn is at its destination, notify the CombatManager that a player has finished moving
         if (Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01)
         {
+            Debug.Log("Player dealing damage to enemy");
+            m_enemyToAttack.DealDamageToPawn(ATTACK_VALUE);
             IsInAction = false;
             IsActionComplete = true;
             CManager.PlayerFinishedMoving();

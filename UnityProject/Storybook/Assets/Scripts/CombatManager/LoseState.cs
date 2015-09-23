@@ -26,5 +26,6 @@ public class LoseState : CombatState {
     public override void ExitState()
     {
         StateMachine.SetTrigger("ExitCombat");
+        CManager.EndCurrentCombat();
     }
 }

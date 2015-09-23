@@ -21,9 +21,11 @@ public class CombatManager : MonoBehaviour {
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
     private Animator m_combatStateMachine;
+    private CombatState m_currentState;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         m_combatStateMachine = GetComponent<Animator>() as Animator;
         m_combatStateMachine.SetTrigger("StartCombat");
 
@@ -40,12 +42,19 @@ public class CombatManager : MonoBehaviour {
         // Spawn and place the enemy pawns
         _spawnEnemyPawns(1);
         _placeEnemies();
+
+        // Call the OnThink function on all of the combat pawns
+        _setAllPawnsToThink();
+
+        // Default current state to think state
+        m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
     }
 
     /// <summary>
     /// Called by CombatPawn when a player has submitted their move
     /// </summary>
     public void SubmitPlayerMove() {
+        Debug.Log("Submitting player move");
         m_submittedMoves += 1;
     }
 
@@ -71,6 +80,30 @@ public class CombatManager : MonoBehaviour {
     public void EnemyFinishedMoving()
     {
         m_combatStateMachine.GetBehaviour<ExecuteState>().GetNextCombatPawn();
+    }
+
+    /// <summary>
+    /// Called when a new turn is beginning
+    /// Called by the ThinkState
+    /// </summary>
+    public void StartNewTurn()
+    {
+        Debug.Log("CombatManager starting new turn");
+        Debug.Log("Player Health = " + PlayerPawnList[0].Health);
+        Debug.Log("Enemy Health = " + EnemyList[0].Health);
+        m_submittedMoves = 0;
+        m_submittedEnemyMoves = 0;
+        ResetPawnActions();
+        _setAllPawnsToThink();
+        m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+    }
+
+    /// <summary>
+    /// Ends the current combat by calling the GameManager EndCombat function
+    /// </summary>
+    public void EndCurrentCombat()
+    {
+        FindObjectOfType<GameManager>().EndCombat(this);
     }
 
     /// <summary>
@@ -129,6 +162,29 @@ public class CombatManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Tells all the pawns in the combat to start their OnThink() functions
+    /// </summary>
+    private void _setAllPawnsToThink()
+    {
+        foreach (CombatPawn combatPawn in AllPawns)
+        {
+            combatPawn.HasSubmittedMove = false;
+            StartCoroutine(combatPawn.OnThink());
+        }
+    }
+
+    /// <summary>
+    /// Resets the IsActionComplete boolean in all of the pawns to false
+    /// </summary>
+    public void ResetPawnActions()
+    {
+        foreach (CombatPawn combatPawn in AllPawns)
+        {
+            combatPawn.IsActionComplete = false;
+        }
+    }
+
+    /// <summary>
     /// The list of all the PlayerEntity in the combat
     /// </summary>
     public List<PlayerEntity> PlayerList
@@ -140,7 +196,7 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// The list of all the player pawns in the combat
     /// </summary>
-    public List<CombatPawn> PawnList
+    public List<CombatPawn> PlayerPawnList
     {
         get { return m_playerPawnList; }
         set { m_playerPawnList = value; }
@@ -189,5 +245,14 @@ public class CombatManager : MonoBehaviour {
     {
         get { return m_allPawns; }
         set { m_allPawns = value; }
+    }
+
+    /// <summary>
+    /// The current state that the state machine is in
+    /// </summary>
+    public CombatState CurrentState
+    {
+        get { return m_currentState; }
+        set { m_currentState = value; }
     }
 }

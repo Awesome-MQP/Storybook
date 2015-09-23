@@ -8,12 +8,17 @@ public class ThinkState : CombatState {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         base.OnStateEnter(animator, stateInfo, layerIndex);
+
+        // Tell the combat manager to start a new turn
         CManager.StartNewTurn();
+
+        // Reset the ThinkToExecute trigger so that it does not immediately return to the execute state
         StateMachine.ResetTrigger("ThinkToExecute");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+
         // If all of the players have submitted their moves, exit the think state and move to execute
         if (CManager.MovesSubmitted == CManager.PlayerPawnList.Count && CManager.MovesSubmitted > 0)
         {
@@ -22,9 +27,9 @@ public class ThinkState : CombatState {
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	    
-	}
+	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+	//    
+	//}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

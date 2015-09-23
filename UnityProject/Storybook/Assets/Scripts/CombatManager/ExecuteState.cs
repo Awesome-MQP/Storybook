@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ExecuteState : CombatState {
 
-    private bool m_areCombatMovesComplete = false;
     private bool m_isTurnComplete = false;
     private CombatPawn m_currentCombatPawn;
 
@@ -11,9 +10,10 @@ public class ExecuteState : CombatState {
     {
         base.OnStateEnter(animator, stateInfo, layerIndex);
 
+        // Execute state can only be reached from think state, so need to reset the ExecuteToThink trigger
         StateMachine.ResetTrigger("ExecuteToThink");
 
-        m_areCombatMovesComplete = false;
+        // Initialize the turn complete boolean to false
         m_isTurnComplete = false;
 
         // Set the current combat pawn to the fastest pawn in the combat
@@ -47,16 +47,22 @@ public class ExecuteState : CombatState {
     public override void ExitState()
     {
         m_isTurnComplete = true;
+
+        // If all the players have been defeated, exit this state and enter the lose state
         if (_areAllPlayersDefeated())
         {
             StateMachine.SetTrigger("ExecuteToLose");
             CManager.CurrentState = StateMachine.GetBehaviour<LoseState>();
         }
+
+        // If all of the enemies are defeated, exit this state and enter the win state
         else if (_areAllEnemiesDefeated())
         {
             StateMachine.SetTrigger("ExecuteToWin");
             CManager.CurrentState = StateMachine.GetBehaviour<WinState>();
         }
+
+        // Otherwise the combat is still active, so return to the think state
         else
         {
             StateMachine.SetTrigger("ExecuteToThink");
@@ -100,6 +106,10 @@ public class ExecuteState : CombatState {
         return areAllEnemiesDefeated;
     }
 
+    /// <summary>
+    /// Checks to see if the combat is completed by checking if all the players have been defeated or all the enemies have been defeated
+    /// </summary>
+    /// <returns>True if the combat is complete, false otherwise</returns>
     private bool _isCombatComplete()
     {
         return (_areAllEnemiesDefeated() || _areAllPlayersDefeated()) ;

@@ -9,12 +9,10 @@ public abstract class CombatPawn : MonoBehaviour {
 
     private bool m_hasSubmittedMove = false;
     private bool m_isAlive = true;
+    private bool m_isInAction = false;
+    private bool m_isActionComplete = false;
 
     private CombatManager m_combatManager;
-
-    private bool m_isInAction = false;
-
-    private bool m_isActionComplete = false;
 
     public abstract IEnumerator OnThink();
 
@@ -35,6 +33,7 @@ public abstract class CombatPawn : MonoBehaviour {
     public void DealDamageToPawn(int damageAmount)
     {
         m_health -= damageAmount;
+        
         if (m_health <= 0)
         {
             m_isAlive = false;

@@ -4,7 +4,9 @@ using System;
 
 public class TestCombatPawn : CombatPawn {
 
+    // Dummy attack value for testing the combat scene scene
     private const int ATTACK_VALUE = 2;
+
     private PlayerPositionNode m_currentDest;
     private float m_startTime;
     private float m_moveSpeed = 0.5F;
@@ -71,7 +73,6 @@ public class TestCombatPawn : CombatPawn {
         // If the pawn is at its destination, notify the CombatManager that a player has finished moving
         if (Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01)
         {
-            Debug.Log("Player dealing damage to enemy");
             m_enemyToAttack.DealDamageToPawn(ATTACK_VALUE);
             IsInAction = false;
             IsActionComplete = true;

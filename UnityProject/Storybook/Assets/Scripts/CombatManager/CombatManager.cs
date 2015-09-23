@@ -26,9 +26,11 @@ public class CombatManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>() as Animator;
         m_combatStateMachine.SetTrigger("StartCombat");
 
+        // Set the combat manager of all the combat state machine states to this object
         CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
         foreach (CombatState cm in allCombatStates)
         {

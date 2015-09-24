@@ -4,17 +4,12 @@ using System.Collections.Generic;
 
 public abstract class InventoryItem
 {
-
-    [SerializeField]
-    private enum Genre // Enum for color values
-    {
-        None, Red, Orange, Yellow, Green, Blue, Grey
-    };
-
     [SerializeField]
     private string m_ItemName;
     [SerializeField]
-    private Genre m_ItemColor; // Item Color
+    private Genre m_ItemGenre; // Item Genre
+    [SerializeField]
+    private RoomFeature m_ItemFeature; // Item Feature (property of spawned room/combat effect)
     [SerializeField]
     private int m_ItemLevel; // The level of the item, determines how deep in the dungeon it appears
     [SerializeField]

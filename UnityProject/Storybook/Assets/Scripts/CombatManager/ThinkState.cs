@@ -20,7 +20,7 @@ public class ThinkState : CombatState {
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
         // If all of the players have submitted their moves, exit the think state and move to execute
-        if (CManager.MovesSubmitted == CManager.PlayerPawnList.Count && CManager.MovesSubmitted > 0)
+        if (CManager.MovesSubmitted == CManager.PlayerPawnList.Length && CManager.MovesSubmitted > 0)
         {
             ExitState();
         }
@@ -44,6 +44,6 @@ public class ThinkState : CombatState {
     public override void ExitState()
     {
         StateMachine.SetTrigger("ThinkToExecute");
-        CManager.CurrentState = StateMachine.GetBehaviour<ExecuteState>();
+        CManager.SetCurrentState(StateMachine.GetBehaviour<ExecuteState>());
     }
 }

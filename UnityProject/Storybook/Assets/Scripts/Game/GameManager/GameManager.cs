@@ -32,17 +32,17 @@ public class GameManager : MonoBehaviour {
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
         GameObject combatInstance = (GameObject) Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
         CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
-        combatManager.PlayerList = playersEnteringCombat;
+        combatManager.SetPlayerEntityList(playersEnteringCombat);
 
         // Get all the player position nodes and set it in the combat manager
         PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
         List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
-        combatManager.PlayerPositions = playerPositionsList;
+        combatManager.SetPlayerPositions(playerPositionsList);
 
         // Get all the enemy position nodes and set it in the combat manager
         EnemyPositionNode[] enemyPositions = combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
         List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
-        combatManager.EnemyPositions = enemyPositionsList;
+        combatManager.SetEnemyPositions(enemyPositionsList);
 
         // TODO - Remove this
         Camera.main.GetComponent<AudioListener>().enabled = false;
@@ -100,10 +100,9 @@ public class GameManager : MonoBehaviour {
             // Get the PlayerEntity list from the current combat instance
             GameObject currentCombatInstance = m_combatInstances[i];
             CombatManager currentCombatManager = currentCombatInstance.GetComponent<CombatManager>();
-            List<PlayerEntity> playerEntityList = currentCombatManager.PlayerList;
 
             // Iterate through all of the PlayerEntity in the combat
-            foreach (PlayerEntity pe in playerEntityList)
+            foreach (PlayerEntity pe in currentCombatManager.PlayerEntityList)
             {
                 // If the current PlayerEntity matches the given PlayerEntity, return the combat instance
                 if (pe == player)

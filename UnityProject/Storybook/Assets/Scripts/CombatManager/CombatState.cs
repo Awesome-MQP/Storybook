@@ -23,7 +23,11 @@ public abstract class CombatState : StateMachineBehaviour {
     public CombatManager CManager
     {
         get { return m_combatManager; }
-        set { m_combatManager = value; }
+    }
+
+    public void SetCombatManager(CombatManager newCombatManager)
+    {
+        m_combatManager = newCombatManager;
     }
 
     /// <summary>

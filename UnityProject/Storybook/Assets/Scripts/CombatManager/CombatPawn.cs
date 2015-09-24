@@ -16,13 +16,13 @@ public abstract class CombatPawn : MonoBehaviour {
 
     public abstract IEnumerator OnThink();
 
-    public abstract void OnAction();
+    public abstract IEnumerator OnAction();
 
     /// <summary>
     /// Setter for the pawn's CombatManager
     /// </summary>
     /// <param name="newCombatManager"></param>
-    public void SetCombatManager(CombatManager newCombatManager) {
+    public void RegisterCombatManager(CombatManager newCombatManager) {
         m_combatManager = newCombatManager;
     }
 
@@ -45,7 +45,7 @@ public abstract class CombatPawn : MonoBehaviour {
     /// </summary>
     public CombatManager CManager
     {
-        get{return m_combatManager;}
+        get{ return m_combatManager; }
     }
 
     /// <summary>
@@ -54,7 +54,11 @@ public abstract class CombatPawn : MonoBehaviour {
     public bool IsInAction
     {
         get { return m_isInAction; }
-        set { m_isInAction = value; }
+    }
+
+    public void SetIsInAction(bool newIsInAction)
+    {
+        m_isInAction = newIsInAction;
     }
 
     /// <summary>
@@ -63,7 +67,11 @@ public abstract class CombatPawn : MonoBehaviour {
     public bool IsActionComplete
     {
         get { return m_isActionComplete; }
-        set { m_isActionComplete = value; }
+    }
+
+    public void SetIsActionComplete(bool newIsActionComplete)
+    {
+        m_isActionComplete = newIsActionComplete;
     }
 
     /// <summary>
@@ -72,7 +80,11 @@ public abstract class CombatPawn : MonoBehaviour {
     public int Speed
     {
         get { return m_speed; }
-        set { m_speed = value; }
+    }
+
+    public void SetSpeed(int newSpeed)
+    {
+        m_speed = newSpeed;
     }
 
     /// <summary>
@@ -83,6 +95,11 @@ public abstract class CombatPawn : MonoBehaviour {
         get { return m_health; }
         set { m_health = value; }
     }
+
+    public void SetHealth(int newHealth)
+    {
+        m_health = newHealth;
+    }
     
     /// <summary>
     /// True if the player's health is above 0, false otherwise
@@ -90,7 +107,6 @@ public abstract class CombatPawn : MonoBehaviour {
     public bool IsAlive
     {
         get { return m_isAlive; }
-        set { m_isAlive = value; }
     }
 
     /// <summary>
@@ -99,6 +115,10 @@ public abstract class CombatPawn : MonoBehaviour {
     public bool HasSubmittedMove
     {
         get { return m_hasSubmittedMove; }
-        set { m_hasSubmittedMove = value; }
+    }
+
+    public void SetHasSubmittedMove(bool newHasSubmittedMove)
+    {
+        m_hasSubmittedMove = newHasSubmittedMove;
     }
 }

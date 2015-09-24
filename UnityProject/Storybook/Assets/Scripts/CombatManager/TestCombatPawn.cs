@@ -15,8 +15,8 @@ public class TestCombatPawn : CombatPawn {
 
 	// Use this for initialization
 	void Start () {
-        Speed = 7;
-        Health = 10;
+        SetSpeed(7);
+        SetHealth(10);
 	}
 
     // Waits for input of a move
@@ -30,7 +30,7 @@ public class TestCombatPawn : CombatPawn {
                 hasReceivedInput = true;
 
                 // Randomly select an enemy pawn to attack
-                int enemiesInCombat = CManager.EnemyList.Count;
+                int enemiesInCombat = CManager.EnemyList.Length;
                 System.Random rnd = new System.Random();
                 int enemyToAttackIndex = rnd.Next(0, enemiesInCombat - 1);
                 m_enemyToAttack = CManager.EnemyList[enemyToAttackIndex];
@@ -38,7 +38,7 @@ public class TestCombatPawn : CombatPawn {
                 if (!HasSubmittedMove)
                 {
                     CManager.SubmitPlayerMove();
-                    HasSubmittedMove = true;
+                    SetHasSubmittedMove(true);
                 }
             }
             yield return null;
@@ -46,7 +46,7 @@ public class TestCombatPawn : CombatPawn {
     }
 
     // Moves the CombatPawn
-    public override void OnAction() {
+    public override IEnumerator OnAction() {
         // If this is the first call to OnAction, figure out the position to move to
         if (!IsInAction)
         {
@@ -58,25 +58,25 @@ public class TestCombatPawn : CombatPawn {
                     m_currentDest = ppn;
                 }
             }
-            IsInAction = true;
+            SetIsInAction(true); ;
             m_destDistance = currentFarthestDist;
         }
 
-        // Lerp to the destination
-        float distCovered = (Time.time - m_startTime) * m_moveSpeed;
-        float fracJourney = distCovered / m_destDistance;
-        Vector3 lerpVector = Vector3.Lerp(transform.position, m_currentDest.transform.position, fracJourney);
-        if (!float.IsNaN(lerpVector.x) && !float.IsNaN(lerpVector.y) && !float.IsNaN(lerpVector.z))
+        while (!(Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01))
         {
-            transform.position = lerpVector;
+            // Lerp to the destination
+            float distCovered = (Time.time - m_startTime) * m_moveSpeed;
+            float fracJourney = distCovered / m_destDistance;
+            Vector3 lerpVector = Vector3.Lerp(transform.position, m_currentDest.transform.position, fracJourney);
+            if (!float.IsNaN(lerpVector.x) && !float.IsNaN(lerpVector.y) && !float.IsNaN(lerpVector.z))
+            {
+                transform.position = lerpVector;
+            }
+            yield return null;
         }
-        // If the pawn is at its destination, notify the CombatManager that a player has finished moving
-        if (Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01)
-        {
-            m_enemyToAttack.DealDamageToPawn(ATTACK_VALUE);
-            IsInAction = false;
-            IsActionComplete = true;
-            CManager.PlayerFinishedMoving();
-        }
+        m_enemyToAttack.DealDamageToPawn(ATTACK_VALUE);
+        SetIsInAction(false);
+        SetIsActionComplete(true);
+        CManager.PlayerFinishedMoving();
     }
 }

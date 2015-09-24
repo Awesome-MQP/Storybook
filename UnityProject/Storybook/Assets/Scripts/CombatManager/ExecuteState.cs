@@ -23,10 +23,10 @@ public class ExecuteState : CombatState {
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         // If the action for the current combat pawn is not complete, call OnAction on the current pawn
-        if (!m_currentCombatPawn.IsActionComplete && !m_isTurnComplete && CManager.CurrentState == this)
-        {
-            m_currentCombatPawn.OnAction();
-        }
+        //if (!m_currentCombatPawn.IsActionComplete && !m_isTurnComplete && CManager.CurrentState == this)
+        //{
+        //    m_currentCombatPawn.OnAction();
+        //}
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -52,21 +52,21 @@ public class ExecuteState : CombatState {
         if (_areAllPlayersDefeated())
         {
             StateMachine.SetTrigger("ExecuteToLose");
-            CManager.CurrentState = StateMachine.GetBehaviour<LoseState>();
+            CManager.SetCurrentState(StateMachine.GetBehaviour<LoseState>());
         }
 
         // If all of the enemies are defeated, exit this state and enter the win state
         else if (_areAllEnemiesDefeated())
         {
             StateMachine.SetTrigger("ExecuteToWin");
-            CManager.CurrentState = StateMachine.GetBehaviour<WinState>();
+            CManager.SetCurrentState(StateMachine.GetBehaviour<WinState>());
         }
 
         // Otherwise the combat is still active, so return to the think state
         else
         {
             StateMachine.SetTrigger("ExecuteToThink");
-            CManager.CurrentState = StateMachine.GetBehaviour<ThinkState>();
+            CManager.SetCurrentState(StateMachine.GetBehaviour<ThinkState>());
         }
     }
 
@@ -150,6 +150,7 @@ public class ExecuteState : CombatState {
         if (fastestCombatPawn != null)
         {
             m_currentCombatPawn = fastestCombatPawn;
+            CManager.StartCoroutine(m_currentCombatPawn.OnAction());
         }
 
         // Otherwise, all the combat pawns have done their move, so exit the execute state

@@ -16,7 +16,6 @@ public class CombatManager : MonoBehaviour {
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
     private List<CombatEnemy> m_enemyList = new List<CombatEnemy>();
-    private List<CombatPawn> m_allPawns = new List<CombatPawn>();
     private List<PlayerEntity> m_playerEntityList = new List<PlayerEntity>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
@@ -34,7 +33,7 @@ public class CombatManager : MonoBehaviour {
         CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
         foreach (CombatState cm in allCombatStates)
         {
-            cm.CManager = this;
+            cm.SetCombatManager(this);
         }
 
         // Spawn and place the player pawns
@@ -91,8 +90,8 @@ public class CombatManager : MonoBehaviour {
     public void StartNewTurn()
     {
         Debug.Log("CombatManager starting new turn");
-        Debug.Log("Player Health = " + PlayerPawnList[0].Health);
-        Debug.Log("Enemy Health = " + EnemyList[0].Health);
+        Debug.Log("Player Health = " + m_playerPawnList[0].Health);
+        Debug.Log("Enemy Health = " + m_enemyList[0].Health);
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
@@ -130,9 +129,8 @@ public class CombatManager : MonoBehaviour {
         {
             m_combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
             CombatPawn combatPawnScript = m_combatPawn.GetComponent<CombatPawn>();
-            combatPawnScript.SetCombatManager(this);
+            combatPawnScript.RegisterCombatManager(this);
             m_playerPawnList.Add(combatPawnScript);
-            m_allPawns.Add(combatPawnScript);
         }
     }
 
@@ -157,9 +155,8 @@ public class CombatManager : MonoBehaviour {
         for (int i = 0; i < numberToSpawn; i++)
         {
             CombatEnemy enemyObject = (CombatEnemy)Instantiate(m_enemyPawnPrefab, transform.position, Quaternion.identity);
-            enemyObject.SetCombatManager(this);
+            enemyObject.RegisterCombatManager(this);
             m_enemyList.Add(enemyObject);
-            m_allPawns.Add(enemyObject);
         }
     }
 
@@ -170,7 +167,7 @@ public class CombatManager : MonoBehaviour {
     {
         foreach (CombatPawn combatPawn in AllPawns)
         {
-            combatPawn.HasSubmittedMove = false;
+            combatPawn.SetHasSubmittedMove(false);
             StartCoroutine(combatPawn.OnThink());
         }
     }
@@ -182,53 +179,91 @@ public class CombatManager : MonoBehaviour {
     {
         foreach (CombatPawn combatPawn in AllPawns)
         {
-            combatPawn.IsActionComplete = false;
+            combatPawn.SetIsActionComplete(false);
         }
     }
 
     /// <summary>
     /// The list of all the PlayerEntity in the combat
     /// </summary>
-    public List<PlayerEntity> PlayerList
+    public IEnumerable<PlayerEntity> PlayerEntityList
     {
-        get { return m_playerEntityList; }
-        set { m_playerEntityList = value; }
+        get
+        {
+            foreach(PlayerEntity pe in m_playerEntityList)
+            {
+                yield return pe;
+            }    
+        }
+    }
+
+    public void SetPlayerEntityList(List<PlayerEntity> newPlayerList)
+    {
+        m_playerEntityList = newPlayerList;
     }
 
     /// <summary>
     /// The list of all the player pawns in the combat
     /// </summary>
-    public List<CombatPawn> PlayerPawnList
+    public CombatPawn[] PlayerPawnList
     {
-        get { return m_playerPawnList; }
-        set { m_playerPawnList = value; }
+        get { return m_playerPawnList.ToArray(); }
+    }
+
+    public void SetPlayerPawnList(List<CombatPawn> newPlayerPawnList)
+    {
+        m_playerPawnList = newPlayerPawnList;
     }
 
     /// <summary>
     /// The list of all the enemies in the combat
     /// </summary>
-    public List<CombatEnemy> EnemyList
+    public CombatEnemy[] EnemyList
     {
-        get { return m_enemyList; }
-        set { m_enemyList = value; }
+        get { return m_enemyList.ToArray(); }
+    }
+
+    public void SetEnemyList(List<CombatEnemy> newEnemyList)
+    {
+        m_enemyList = newEnemyList;
     }
 
     /// <summary>
     /// The list of the PlayerPositionNodes in the combat
     /// </summary>
-    public List<PlayerPositionNode> PlayerPositions
+    public IEnumerable<PlayerPositionNode> PlayerPositions
     {
-        get { return m_playerPositionList; }
-        set { m_playerPositionList = value; }
+        get
+        {
+            foreach(PlayerPositionNode ppn in m_playerPositionList)
+            {
+                yield return ppn;
+            }
+        }
+    }
+
+    public void SetPlayerPositions(List<PlayerPositionNode> newPlayerPositions)
+    {
+        m_playerPositionList = newPlayerPositions;
     }
 
     /// <summary>
     /// The list of EnemyPositionNodes in the combat
     /// </summary>
-    public List<EnemyPositionNode> EnemyPositions
+    public IEnumerable<EnemyPositionNode> EnemyPositions
     {
-        get { return m_enemyPositionList; }
-        set { m_enemyPositionList = value; }
+        get
+        {
+            foreach(EnemyPositionNode epn in m_enemyPositionList)
+            {
+                yield return epn;
+            }
+        }
+    }
+
+    public void SetEnemyPositions(List<EnemyPositionNode> newEnemyPositions)
+    {
+        m_enemyPositionList = newEnemyPositions;
     }
 
     /// <summary>
@@ -237,16 +272,24 @@ public class CombatManager : MonoBehaviour {
     public int MovesSubmitted
     {
         get { return m_submittedMoves; }
-        set { m_submittedMoves = value; }
     }
 
     /// <summary>
     /// The list of all the pawns in the combat (enemies and players)
     /// </summary>
-    public List<CombatPawn> AllPawns
+    public IEnumerable<CombatPawn> AllPawns
     {
-        get { return m_allPawns; }
-        set { m_allPawns = value; }
+        get
+        {
+            foreach (CombatPawn playerPawn in m_playerPawnList)
+            {
+                yield return playerPawn;
+            }
+            foreach (CombatPawn enemyPawn in m_enemyList)
+            {
+                yield return enemyPawn;
+            }
+        }
     }
 
     /// <summary>
@@ -255,6 +298,10 @@ public class CombatManager : MonoBehaviour {
     public CombatState CurrentState
     {
         get { return m_currentState; }
-        set { m_currentState = value; }
+    }
+
+    public void SetCurrentState(CombatState newState)
+    {
+        m_currentState = newState;
     }
 }

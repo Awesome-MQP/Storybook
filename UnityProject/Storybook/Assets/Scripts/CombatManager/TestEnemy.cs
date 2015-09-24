@@ -15,11 +15,11 @@ public class TestEnemy : CombatEnemy
 
     void Start()
     {
-        Speed = 5;
-        Health = 10;
+        SetSpeed(5);
+        SetHealth(10);
     }
 
-    public override void OnAction()
+    public override IEnumerator OnAction()
     {
         // If this is the first call to OnAction, figure out the position to move to
         if (!IsInAction)
@@ -33,32 +33,31 @@ public class TestEnemy : CombatEnemy
                     m_currentDest = epn;
                 }
             }
-            IsInAction = true;
+            SetIsInAction(true);
             m_destDistance = currentFarthestDist;
         }
 
-        // Lerp to the destination
-        float distCovered = (Time.time - m_startTime) * m_moveSpeed;
-        float fracJourney = distCovered / m_destDistance;
-        Vector3 lerpVector = Vector3.Lerp(transform.position, m_currentDest.transform.position, fracJourney);
-        if (!float.IsNaN(lerpVector.x) && !float.IsNaN(lerpVector.y) && !float.IsNaN(lerpVector.z))
-        {
-            transform.position = lerpVector;
+        while (!(Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01)) { 
+            // Lerp to the destination
+            float distCovered = (Time.time - m_startTime) * m_moveSpeed;
+            float fracJourney = distCovered / m_destDistance;
+            Vector3 lerpVector = Vector3.Lerp(transform.position, m_currentDest.transform.position, fracJourney);
+            if (!float.IsNaN(lerpVector.x) && !float.IsNaN(lerpVector.y) && !float.IsNaN(lerpVector.z))
+            {
+                transform.position = lerpVector;
+            }
+            yield return null;
         }
-        // If the pawn is at its destination, notify the CombatManager that a player has finished moving
-        if (Vector3.Distance(transform.position, m_currentDest.transform.position) < 0.01)
-        {
-            m_playerToAttack.DealDamageToPawn(ATTACK_VALUE);
-            IsInAction = false;
-            IsActionComplete = true;
-            CManager.EnemyFinishedMoving();
-        }
+        m_playerToAttack.DealDamageToPawn(ATTACK_VALUE);
+        SetIsInAction(false);
+        SetIsActionComplete(true);
+        CManager.EnemyFinishedMoving();
     }
 
     public override IEnumerator OnThink()
     {
         // Randomly select a player pawn to attack
-        int playerPawnsInCombat = CManager.PlayerPawnList.Count;
+        int playerPawnsInCombat = CManager.PlayerPawnList.Length;
         System.Random rnd = new System.Random();
         int playerPawnIndex = rnd.Next(0, playerPawnsInCombat - 1);
         m_playerToAttack = CManager.PlayerPawnList[playerPawnIndex];
@@ -67,7 +66,7 @@ public class TestEnemy : CombatEnemy
         if (!HasSubmittedMove)
         {
             CManager.SubmitEnemyMove();
-            HasSubmittedMove = true;
+            SetHasSubmittedMove(true);
         }
         yield return null;
     }

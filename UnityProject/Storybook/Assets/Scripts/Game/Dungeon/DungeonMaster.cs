@@ -20,11 +20,15 @@ public class DungeonMaster : MonoBehaviour{
 	// When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
 	void Awake () {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
-        Debug.Log("Number of room prefabs found: " + m_rooms.Length);
-        TestGetRoomPrefab();
     }
-	
-    // Gets a room prefab to place in the world based on certain input criteria.
+
+    /// <summary>
+    /// Gets a room prefab to place in the world based on certain input criteria.
+    /// </summary>
+    /// <param name="size">The specified size of the room to search for.</param>
+    /// <param name="genre">The specified Genre of the room to search for.</param>
+    /// <param name="feature">The specified Feature of the room to search for.</param>
+    /// <returns>The room if a match is found, or null if no match is found.</returns>
     RoomObject GetRoomPrefab(int size, Genre genre, RoomFeature feature)
     {
         // List of "good" rooms - ones that match the criteria passed in.
@@ -54,10 +58,8 @@ public class DungeonMaster : MonoBehaviour{
         // How many matches did we get?
         if(goodRooms.Count == 0)
         {
-            Debug.Log("No matches for room size: " + size + ", Genre: " + genre + ", Feature: " + feature);
             return null;
         }
-        Debug.Log("Found " + goodRooms.Count + " rooms with size: " + size + ", Genre: " + genre + ", Feature: " + feature + ".");
 
         // Now that we have found all potential matching rooms, choose one to place.
         int roomChooser = Random.Range(0, goodRooms.Count);
@@ -67,7 +69,9 @@ public class DungeonMaster : MonoBehaviour{
         return roomToBuild;
     }
 
-    
+    /// <summary>
+    /// Tests the GetRoomPrefab function.
+    /// </summary>
     void TestGetRoomPrefab()
     {
         GetRoomPrefab(1, Genre.SciFi, RoomFeature.Curse);

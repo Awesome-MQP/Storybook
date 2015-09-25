@@ -8,18 +8,31 @@ public abstract class CombatState : StateMachineBehaviour {
 
     public abstract void ExitState();
 
+    /// <summary>
+    /// The Animator that acts as the state machine for combat
+    /// </summary>
     public Animator StateMachine
     {
         get { return m_stateMachine; }
         set { m_stateMachine = value; }
     }
 
+    /// <summary>
+    /// The CombatManager that the CombatState is tied to
+    /// </summary>
     public CombatManager CManager
     {
         get { return m_combatManager; }
-        set { m_combatManager = value; }
     }
 
+    public void SetCombatManager(CombatManager newCombatManager)
+    {
+        m_combatManager = newCombatManager;
+    }
+
+    /// <summary>
+    /// Sets the state machine to the given animator
+    /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         StateMachine = animator;

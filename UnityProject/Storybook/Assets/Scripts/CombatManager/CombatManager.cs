@@ -54,7 +54,8 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// Called by CombatPawn when a player has submitted their move
     /// </summary>
-    public void SubmitPlayerMove() {
+    /// <param name="playerMove">The move that the player will do for the turn</param>
+    public void SubmitPlayerMove(PlayerMove playerMove) {
         Debug.Log("Submitting player move");
         m_submittedMoves += 1;
     }
@@ -62,6 +63,7 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// Called by enemies when they select their move
     /// </summary>
+    /// <param name="enemyMove">The move that the enemy will do for the turn</param>
     public void SubmitEnemyMove(EnemyMove enemyMove)
     {
         m_submittedEnemyMoves += 1;

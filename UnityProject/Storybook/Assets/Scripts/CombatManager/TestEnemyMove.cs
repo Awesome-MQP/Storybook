@@ -12,6 +12,9 @@ public class TestEnemyMove : EnemyMove {
         SetNumberOfTargets(MOVE_TARGETS);
     }
 
+    /// <summary>
+    /// Deals combat damage to all the player pawns in the target list
+    /// </summary>
     public override void DoMove()
     {
         foreach (CombatPawn combatPawn in MoveTargets)

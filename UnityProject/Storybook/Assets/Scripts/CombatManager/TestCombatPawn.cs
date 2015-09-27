@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
-public class TestCombatPawn : CombatPawn {
-
-    // Dummy attack value for testing the combat scene scene
-    private const int ATTACK_VALUE = 2;
+public class TestCombatPawn : CombatPlayer {
 
     private PlayerPositionNode m_currentDest;
     private float m_startTime;
     private float m_moveSpeed = 0.5F;
     private float m_destDistance;
-    private CombatEnemy m_enemyToAttack;
+
+    // Give the player one move for testing that is triggered when the space bar is pressed
+    private PlayerMove m_testMove;
 
 	// Use this for initialization
 	void Start () {
         SetSpeed(7);
         SetHealth(10);
+        m_testMove = new TestPageMove();
 	}
 
     // Waits for input of a move
@@ -29,15 +30,13 @@ public class TestCombatPawn : CombatPawn {
             {
                 hasReceivedInput = true;
 
-                // Randomly select an enemy pawn to attack
-                int enemiesInCombat = CManager.EnemyList.Length;
-                System.Random rnd = new System.Random();
-                int enemyToAttackIndex = rnd.Next(0, enemiesInCombat - 1);
-                m_enemyToAttack = CManager.EnemyList[enemyToAttackIndex];
-
                 if (!HasSubmittedMove)
                 {
-                    CManager.SubmitPlayerMove();
+                    // TODO - Way for player to select targets
+                    List<CombatPawn> targetList = new List<CombatPawn>(CManager.EnemyList);
+                    m_testMove.SetMoveTargets(targetList);
+                    SetMoveForTurn(m_testMove);
+                    CManager.SubmitPlayerMove(m_testMove);
                     SetHasSubmittedMove(true);
                 }
             }
@@ -74,7 +73,7 @@ public class TestCombatPawn : CombatPawn {
             }
             yield return null;
         }
-        m_enemyToAttack.DealDamageToPawn(ATTACK_VALUE);
+        MoveForTurn.DoMove();
         SetIsInAction(false);
         SetIsActionComplete(true);
         CManager.PlayerFinishedMoving();

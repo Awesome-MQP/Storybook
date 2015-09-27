@@ -9,8 +9,4 @@ public abstract class EnemyMove : CombatMove {
     /// </summary>
     private int m_moveCost;
 
-    public EnemyMove()
-    {
-
-    }
 }

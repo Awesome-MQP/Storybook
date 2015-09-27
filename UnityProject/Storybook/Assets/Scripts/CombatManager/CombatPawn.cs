@@ -14,6 +14,8 @@ public abstract class CombatPawn : MonoBehaviour {
 
     private CombatManager m_combatManager;
 
+    private CombatMove m_moveForTurn;
+
     public abstract IEnumerator OnThink();
 
     public abstract IEnumerator OnAction();
@@ -120,5 +122,18 @@ public abstract class CombatPawn : MonoBehaviour {
     public void SetHasSubmittedMove(bool newHasSubmittedMove)
     {
         m_hasSubmittedMove = newHasSubmittedMove;
+    }
+
+    /// <summary>
+    /// The move that the combat pawn is going to execute in the current turn of combat
+    /// </summary>
+    public CombatMove MoveForTurn
+    {
+        get { return m_moveForTurn; }
+    }
+
+    public void SetMoveForTurn(CombatMove newMoveForTurn)
+    {
+        m_moveForTurn = newMoveForTurn;
     }
 }

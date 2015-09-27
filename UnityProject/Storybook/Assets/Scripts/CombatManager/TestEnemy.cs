@@ -9,12 +9,13 @@ public class TestEnemy : CombatEnemy
     private float m_startTime;
     private float m_moveSpeed = 0.5F;
     private float m_destDistance;
-    private EnemyMove m_moveForTurn;
 
     void Awake()
     {
         EnemyMove testEnemyMove = new TestEnemyMove();
-        EnemyMoves.Add(testEnemyMove);
+        List<EnemyMove> enemyMoveList = new List<EnemyMove>();
+        enemyMoveList.Add(testEnemyMove);
+        SetEnemyMoves(enemyMoveList);
     }
 
     void Start()
@@ -52,7 +53,7 @@ public class TestEnemy : CombatEnemy
             }
             yield return null;
         }
-        m_moveForTurn.DoMove();
+        MoveForTurn.DoMove();
         SetIsInAction(false);
         SetIsActionComplete(true);
         CManager.EnemyFinishedMoving();
@@ -65,60 +66,11 @@ public class TestEnemy : CombatEnemy
         {
             // Randomly select a player pawn to attack
             EnemyMove moveSelected = ChooseMove();
-            m_moveForTurn = moveSelected;
+            SetMoveForTurn(moveSelected);
 
             CManager.SubmitEnemyMove(moveSelected);
             SetHasSubmittedMove(true);
         }
         yield return null;
-    }
-
-    public override EnemyMove ChooseMove()
-    {
-        // Currently just grab the first enemy move
-        EnemyMove chosenMove = EnemyMoves[0];
-        List<CombatPawn> targets = new List<CombatPawn>();
-        if (chosenMove.IsMoveAttack)
-        {
-            if (chosenMove.NumberOfTargets >= CManager.PlayerPawnList.Length)
-            {
-                targets = new List<CombatPawn>(CManager.PlayerPawnList);
-            }
-            else
-            {
-                while (targets.Count < chosenMove.NumberOfTargets)
-                {
-                    System.Random rnd = new System.Random();
-                    int playerIndex = rnd.Next(0, CManager.PlayerPawnList.Length - 1);
-                    CombatPawn selectedPlayer = CManager.PlayerPawnList[playerIndex];
-                    if (!targets.Contains(selectedPlayer))
-                    {
-                        targets.Add(selectedPlayer);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (chosenMove.NumberOfTargets >= CManager.EnemyList.Length)
-            {
-                targets = new List<CombatPawn>(CManager.EnemyList);
-            }
-            else
-            {
-                while (targets.Count < chosenMove.NumberOfTargets)
-                {
-                    System.Random rnd = new System.Random();
-                    int enemyIndex = rnd.Next(0, CManager.EnemyList.Length - 1);
-                    CombatPawn selectedEnemy = CManager.EnemyList[enemyIndex];
-                    if (!targets.Contains(selectedEnemy))
-                    {
-                        targets.Add(selectedEnemy);
-                    }
-                }
-            }
-        }
-        chosenMove.SetMoveTargets(targets);
-        return chosenMove;
     }
 }

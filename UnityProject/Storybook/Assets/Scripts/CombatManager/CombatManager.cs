@@ -62,7 +62,7 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// Called by enemies when they select their move
     /// </summary>
-    public void SubmitEnemyMove()
+    public void SubmitEnemyMove(EnemyMove enemyMove)
     {
         m_submittedEnemyMoves += 1;
     }

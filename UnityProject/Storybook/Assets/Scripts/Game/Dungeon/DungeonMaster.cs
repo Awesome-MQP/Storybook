@@ -6,11 +6,7 @@ using System.IO;
 // Dungeon Master class is the handler for all statistics, as well as handling
 // the location of all room prefabs.
 public class DungeonMaster : MonoBehaviour{
-
-    // Location of all the rooms
-    [SerializeField]
-    private DirectoryInfo m_roomFilesLocation = new DirectoryInfo("Assets/Scripts/Game/Dungeon/Rooms");
-
+    
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
     [SerializeField]

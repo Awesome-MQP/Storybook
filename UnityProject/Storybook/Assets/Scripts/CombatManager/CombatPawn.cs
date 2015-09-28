@@ -11,14 +11,14 @@ public abstract class CombatPawn : MonoBehaviour {
     private bool m_isAlive = true;
     private bool m_isInAction = false;
     private bool m_isActionComplete = false;
+    private bool m_isMoveSubmitted = false;
 
     private CombatManager m_combatManager;
 
-    private CombatMove m_moveForTurn;
+    // Defaults to null because it needs to be able to return null moves
+    private CombatMove m_moveForTurn = null;
 
-    public abstract IEnumerator OnThink();
-
-    public abstract IEnumerator OnAction();
+    public abstract void OnThink();
 
     /// <summary>
     /// Setter for the pawn's CombatManager
@@ -136,4 +136,11 @@ public abstract class CombatPawn : MonoBehaviour {
     {
         m_moveForTurn = newMoveForTurn;
     }
+
+    public void ResetMove()
+    {
+        m_moveForTurn = null;
+        m_hasSubmittedMove = false;
+    }
+
 }

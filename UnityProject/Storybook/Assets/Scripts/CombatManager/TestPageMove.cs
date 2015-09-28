@@ -17,7 +17,7 @@ public class TestPageMove : PageMove {
     /// <summary>
     /// Deals damage to all the combat pawns in the target list
     /// </summary>
-    public override void DoMove()
+    protected override void DoMoveEffect()
     {
         foreach (CombatPawn enemyPawn in MoveTargets)
         {
@@ -25,4 +25,18 @@ public class TestPageMove : PageMove {
         }
     }
 
+    public override void ExecuteMove()
+    {
+        SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
+        if (TimeSinceMoveStarted >= 0.5 && !IsMoveEffectCompleted)
+        {
+            DoMoveEffect();
+            SetIsMoveEffectCompleted(true);
+        }
+        else if (TimeSinceMoveStarted >= 1)
+        {
+            Debug.Log("Page move is complete");
+            SetIsMoveComplete(true);
+        }
+    }
 }

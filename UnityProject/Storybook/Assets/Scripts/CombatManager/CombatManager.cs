@@ -22,6 +22,8 @@ public class CombatManager : MonoBehaviour {
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
 
+    private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
+
     // Use this for initialization
     void Start()
     {
@@ -44,9 +46,6 @@ public class CombatManager : MonoBehaviour {
         _spawnEnemyPawns(1);
         _placeEnemies();
 
-        // Call the OnThink function on all of the combat pawns
-        _setAllPawnsToThink();
-
         // Default current state to think state
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
     }
@@ -67,6 +66,11 @@ public class CombatManager : MonoBehaviour {
     public void SubmitEnemyMove(EnemyMove enemyMove)
     {
         m_submittedEnemyMoves += 1;
+    }
+
+    public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
+    {
+        m_pawnToCombatMove.Add(combatPawn, moveForTurn);
     }
 
     /// <summary>
@@ -97,8 +101,8 @@ public class CombatManager : MonoBehaviour {
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
-        _setAllPawnsToThink();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+        m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
     }
 
     /// <summary>
@@ -163,18 +167,6 @@ public class CombatManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Tells all the pawns in the combat to start their OnThink() functions
-    /// </summary>
-    private void _setAllPawnsToThink()
-    {
-        foreach (CombatPawn combatPawn in AllPawns)
-        {
-            combatPawn.SetHasSubmittedMove(false);
-            StartCoroutine(combatPawn.OnThink());
-        }
-    }
-
-    /// <summary>
     /// Resets the IsActionComplete boolean in all of the pawns to false
     /// </summary>
     public void ResetPawnActions()
@@ -182,6 +174,7 @@ public class CombatManager : MonoBehaviour {
         foreach (CombatPawn combatPawn in AllPawns)
         {
             combatPawn.SetIsActionComplete(false);
+            combatPawn.ResetMove();
         }
     }
 

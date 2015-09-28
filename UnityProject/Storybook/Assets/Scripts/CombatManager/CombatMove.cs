@@ -7,7 +7,9 @@ public abstract class CombatMove {
     /// Carries out the action that the move does
     /// Ex: Attack the enemies, heal the players, etc.
     /// </summary>
-    public abstract void DoMove();
+    protected abstract void DoMoveEffect();
+
+    public abstract void ExecuteMove();
 
     /// <summary>
     /// The combat pawns that are being targeted by the move
@@ -24,6 +26,19 @@ public abstract class CombatMove {
     /// Ex: true if it is a player move that deals damage to an enemy
     /// </summary>
     private bool m_isMoveAttack;
+
+    private bool m_isMoveEffectDone = false;
+
+    private bool m_isMoveCompleted = false;
+
+    private float m_timeSinceMoveStarted = 0;
+
+    public void InitializeMove()
+    {
+        m_isMoveEffectDone = false;
+        m_isMoveCompleted = false;
+        m_timeSinceMoveStarted = 0;
+    }
 
     /// <summary>
     /// Property for the targets of the move
@@ -74,5 +89,35 @@ public abstract class CombatMove {
     public void SetNumberOfTargets(int newNumberOfTargets)
     {
         m_numberOfTargets = newNumberOfTargets;
+    }
+
+    public bool IsMoveEffectCompleted
+    {
+        get { return m_isMoveEffectDone; }
+    }
+
+    public void SetIsMoveEffectCompleted(bool newIsEffectCompleted)
+    {
+        m_isMoveEffectDone = newIsEffectCompleted;
+    }
+
+    public bool IsMoveComplete
+    {
+        get { return m_isMoveCompleted; }
+    }
+
+    public void SetIsMoveComplete(bool newIsMoveCompleted)
+    {
+        m_isMoveCompleted = newIsMoveCompleted;
+    }
+
+    public float TimeSinceMoveStarted
+    {
+        get { return m_timeSinceMoveStarted; }
+    }
+
+    public void SetTimeSinceMoveStarted(float newTimeSinceMoveStarted)
+    {
+        m_timeSinceMoveStarted = newTimeSinceMoveStarted;
     }
 }

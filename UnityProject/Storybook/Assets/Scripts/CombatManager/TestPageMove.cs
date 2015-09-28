@@ -4,13 +4,13 @@ using System;
 
 public class TestPageMove : PageMove {
 
-    private int MOVE_DAMAGE = 5;
+    private int MOVE_DAMAGE = 4;
     private int MOVE_TARGETS = 4;
     private bool IS_MOVE_ATTACK = true;
 
     public TestPageMove()
     {
-        SetIsMoveAttack(true);
+        SetIsMoveAttack(IS_MOVE_ATTACK);
         SetNumberOfTargets(MOVE_TARGETS);
     }
 

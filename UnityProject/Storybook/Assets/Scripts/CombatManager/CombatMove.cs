@@ -4,11 +4,15 @@ using System.Collections.Generic;
 public abstract class CombatMove {
 
     /// <summary>
-    /// Carries out the action that the move does
+    /// Carries out the effect that the move does
     /// Ex: Attack the enemies, heal the players, etc.
     /// </summary>
     protected abstract void DoMoveEffect();
 
+    /// <summary>
+    /// Called each frame during the execute state until the move is complete
+    /// Handles the animation for the move as well as calling DoMoveEffect 
+    /// </summary>
     public abstract void ExecuteMove();
 
     /// <summary>
@@ -33,6 +37,9 @@ public abstract class CombatMove {
 
     private float m_timeSinceMoveStarted = 0;
 
+    /// <summary>
+    /// Initializes move variables
+    /// </summary>
     public void InitializeMove()
     {
         m_isMoveEffectDone = false;
@@ -91,6 +98,9 @@ public abstract class CombatMove {
         m_numberOfTargets = newNumberOfTargets;
     }
 
+    /// <summary>
+    /// True if the effect of the move has been done, false otherwise
+    /// </summary>
     public bool IsMoveEffectCompleted
     {
         get { return m_isMoveEffectDone; }
@@ -101,6 +111,9 @@ public abstract class CombatMove {
         m_isMoveEffectDone = newIsEffectCompleted;
     }
 
+    /// <summary>
+    /// True if the move is done executing, false otherwise
+    /// </summary>
     public bool IsMoveComplete
     {
         get { return m_isMoveCompleted; }
@@ -111,6 +124,9 @@ public abstract class CombatMove {
         m_isMoveCompleted = newIsMoveCompleted;
     }
 
+    /// <summary>
+    /// The time elapsed since starting the move, used as a placeholder for actual animation code
+    /// </summary>
     public float TimeSinceMoveStarted
     {
         get { return m_timeSinceMoveStarted; }

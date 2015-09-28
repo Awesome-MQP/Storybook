@@ -22,13 +22,16 @@ public class ExecuteState : CombatState {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        // If the action for the current combat pawn is not complete, call OnAction on the current pawn
+        
         if (!m_isTurnComplete && CManager.CurrentState == this)
         {
+            // If the move for the current combat pawn is not complete, call ExecuteMove on the current pawn's move
             if (!m_currentCombatPawn.MoveForTurn.IsMoveComplete)
             {
                 m_currentCombatPawn.MoveForTurn.ExecuteMove();
             }
+
+            // If the move for the current pawn is complete, set the action complete boolean to true and get the next pawn
             else
             {
                 m_currentCombatPawn.SetIsActionComplete(true);

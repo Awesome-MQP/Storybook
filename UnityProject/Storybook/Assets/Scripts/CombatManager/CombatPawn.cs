@@ -9,9 +9,7 @@ public abstract class CombatPawn : MonoBehaviour {
 
     private bool m_hasSubmittedMove = false;
     private bool m_isAlive = true;
-    private bool m_isInAction = false;
     private bool m_isActionComplete = false;
-    private bool m_isMoveSubmitted = false;
 
     private CombatManager m_combatManager;
 
@@ -48,19 +46,6 @@ public abstract class CombatPawn : MonoBehaviour {
     public CombatManager CManager
     {
         get{ return m_combatManager; }
-    }
-
-    /// <summary>
-    /// True if the CombatPawn is currently executing its action animation, false otherwise
-    /// </summary>
-    public bool IsInAction
-    {
-        get { return m_isInAction; }
-    }
-
-    public void SetIsInAction(bool newIsInAction)
-    {
-        m_isInAction = newIsInAction;
     }
 
     /// <summary>
@@ -137,6 +122,9 @@ public abstract class CombatPawn : MonoBehaviour {
         m_moveForTurn = newMoveForTurn;
     }
 
+    /// <summary>
+    /// Resets move variables of the combat pawn
+    /// </summary>
     public void ResetMove()
     {
         m_moveForTurn = null;

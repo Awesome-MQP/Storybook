@@ -11,7 +11,6 @@ public class CombatManager : MonoBehaviour {
     [SerializeField]
     private CombatPawn m_enemyPawnPrefab;
 
-    private CombatPawn m_combatPawn;
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
@@ -133,8 +132,8 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            m_combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
-            CombatPawn combatPawnScript = m_combatPawn.GetComponent<CombatPawn>();
+            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
+            CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
             m_playerPawnList.Add(combatPawnScript);
         }

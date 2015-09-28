@@ -5,10 +5,6 @@ using System;
 
 public class TestEnemy : CombatEnemy
 {
-    private EnemyPositionNode m_currentDest;
-    private float m_startTime;
-    private float m_moveSpeed = 0.5F;
-    private float m_destDistance;
 
     void Awake()
     {

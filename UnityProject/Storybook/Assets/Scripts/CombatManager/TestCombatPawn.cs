@@ -5,12 +5,6 @@ using System;
 
 public class TestCombatPawn : CombatPlayer
 {
-
-    private PlayerPositionNode m_currentDest;
-    private float m_startTime;
-    private float m_moveSpeed = 0.5F;
-    private float m_destDistance;
-
     // Give the player one move for testing that is triggered when the space bar is pressed
     private PlayerMove m_testMove;
 

@@ -21,6 +21,9 @@ public class CharacterMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Vector3 nodePos = FindObjectOfType<NavNode>().transform.position;
+        nodePos.y += 2;
+        transform.position = nodePos;
 		for (int i = 0; i < 10; i++){
 			m_previousPositions[i] = Vector3.zero;
 		}
@@ -87,6 +90,21 @@ public class CharacterMovement : MonoBehaviour {
 		m_moveDirection = m_moveDirection.normalized * m_speed;
 		m_moveDirection.y -= m_gravity * Time.deltaTime;
 		controller.Move(m_moveDirection * Time.deltaTime);
+
+        // Check to see if the player is at a door
+        Door d = _isAtRoomDoor();
+
+        // If the player is at a door, spawn the room for the door if it has not already been spawned
+        if (d != null)
+        {
+            if (!d.IsDoorRoomSpawned)
+            {
+                Location newRoomLoc = d.RoomThroughDoorLoc;
+                MapManager mapManager = FindObjectOfType<MapManager>();
+                mapManager.PlaceRoom(newRoomLoc);
+                d.SetIsDoorRoomSpawned(true);
+            }
+        }
 	}
 
 	// Used with touch controls, calculates a path the clicked location
@@ -189,5 +207,28 @@ public class CharacterMovement : MonoBehaviour {
 			}
 		}
 	}
+
+    /// <summary>
+    /// Checks the distance between the player and all of the doors and returns a door if the player is close enough
+    /// </summary>
+    /// <returns>Returns a door object if the player is close enough to a door, returns null other wise</returns>
+    private Door _isAtRoomDoor()
+    {
+        Door[] roomDoors = FindObjectsOfType<Door>() as Door[];
+        foreach(Door d in roomDoors)
+        {
+            // Only check doors that are enabled
+            if (d.IsDoorEnabled)
+            {
+                Vector3 doorPos = d.transform.position;
+                float distanceToDoor = Vector3.Distance(doorPos, transform.position);
+                if (distanceToDoor < 2)
+                {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
 	
 }

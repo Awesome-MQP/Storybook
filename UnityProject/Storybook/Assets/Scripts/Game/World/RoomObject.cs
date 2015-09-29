@@ -2,6 +2,12 @@
 using System.Collections;
 
 public class RoomObject : MonoBehaviour{
+
+    public const int NORTH_DOOR_INDEX = 0;
+    public const int EAST_DOOR_INDEX = 1;
+    public const int SOUTH_DOOR_INDEX = 2;
+    public const int WEST_DOOR_INDEX = 3;
+
     [SerializeField]
     private Door[] m_roomDoors;
                          // Ordering for indices should be clockwise, starting from the north.
@@ -15,8 +21,8 @@ public class RoomObject : MonoBehaviour{
     private int m_roomSize;
     [SerializeField]
     private int m_roomSizeConstraint; // Can be x1, x2, x4.
-                                   // Did I handle this right? I'm not really sure what the difference is meant to be between
-                                   // room size and room size constraint.
+                                      // Did I handle this right? I'm not really sure what the difference is meant to be between
+                                      // room size and room size constraint.
 
     // Set the location of the room.
     // Should only be used once, when placing the room.
@@ -29,5 +35,13 @@ public class RoomObject : MonoBehaviour{
     public Location GetRoomLocation()
     {
         return m_roomLocation;
+    }
+
+    /// <summary>
+    /// The list of room doors
+    /// </summary>
+    public Door[] RoomDoors
+    {
+        get { return m_roomDoors; }
     }
 }

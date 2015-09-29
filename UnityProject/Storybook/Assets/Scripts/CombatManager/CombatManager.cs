@@ -11,7 +11,6 @@ public class CombatManager : MonoBehaviour {
     [SerializeField]
     private CombatPawn m_enemyPawnPrefab;
 
-    private CombatPawn m_combatPawn;
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
@@ -21,6 +20,8 @@ public class CombatManager : MonoBehaviour {
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
+
+    private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
     // Use this for initialization
     void Start()
@@ -44,9 +45,6 @@ public class CombatManager : MonoBehaviour {
         _spawnEnemyPawns(1);
         _placeEnemies();
 
-        // Call the OnThink function on all of the combat pawns
-        _setAllPawnsToThink();
-
         // Default current state to think state
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
     }
@@ -54,7 +52,8 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// Called by CombatPawn when a player has submitted their move
     /// </summary>
-    public void SubmitPlayerMove() {
+    /// <param name="playerMove">The move that the player will do for the turn</param>
+    public void SubmitPlayerMove(PlayerMove playerMove) {
         Debug.Log("Submitting player move");
         m_submittedMoves += 1;
     }
@@ -62,9 +61,15 @@ public class CombatManager : MonoBehaviour {
     /// <summary>
     /// Called by enemies when they select their move
     /// </summary>
-    public void SubmitEnemyMove()
+    /// <param name="enemyMove">The move that the enemy will do for the turn</param>
+    public void SubmitEnemyMove(EnemyMove enemyMove)
     {
         m_submittedEnemyMoves += 1;
+    }
+
+    public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
+    {
+        m_pawnToCombatMove.Add(combatPawn, moveForTurn);
     }
 
     /// <summary>
@@ -95,8 +100,8 @@ public class CombatManager : MonoBehaviour {
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
-        _setAllPawnsToThink();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+        m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
     }
 
     /// <summary>
@@ -127,8 +132,8 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            m_combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
-            CombatPawn combatPawnScript = m_combatPawn.GetComponent<CombatPawn>();
+            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
+            CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
             m_playerPawnList.Add(combatPawnScript);
         }
@@ -161,18 +166,6 @@ public class CombatManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Tells all the pawns in the combat to start their OnThink() functions
-    /// </summary>
-    private void _setAllPawnsToThink()
-    {
-        foreach (CombatPawn combatPawn in AllPawns)
-        {
-            combatPawn.SetHasSubmittedMove(false);
-            StartCoroutine(combatPawn.OnThink());
-        }
-    }
-
-    /// <summary>
     /// Resets the IsActionComplete boolean in all of the pawns to false
     /// </summary>
     public void ResetPawnActions()
@@ -180,6 +173,7 @@ public class CombatManager : MonoBehaviour {
         foreach (CombatPawn combatPawn in AllPawns)
         {
             combatPawn.SetIsActionComplete(false);
+            combatPawn.ResetMove();
         }
     }
 

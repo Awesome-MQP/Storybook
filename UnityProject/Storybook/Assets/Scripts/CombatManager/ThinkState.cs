@@ -18,9 +18,23 @@ public class ThinkState : CombatState {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        bool areAllMovesSubmitted = true;
+        foreach (CombatPawn combatPawn in CManager.AllPawns)
+        {
+            if (!combatPawn.HasSubmittedMove)
+            {
+                combatPawn.OnThink();
+                CombatMove pawnMove = combatPawn.MoveForTurn;
+                if (pawnMove != null)
+                {
+                    CManager.SubmitMove(combatPawn, pawnMove);
+                }
+                areAllMovesSubmitted = false;
+            }
+        }
 
         // If all of the players have submitted their moves, exit the think state and move to execute
-        if (CManager.MovesSubmitted == CManager.PlayerPawnList.Length && CManager.MovesSubmitted > 0)
+        if (areAllMovesSubmitted)
         {
             ExitState();
         }

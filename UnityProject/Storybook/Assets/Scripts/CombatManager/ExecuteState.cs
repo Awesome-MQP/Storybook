@@ -22,11 +22,22 @@ public class ExecuteState : CombatState {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        // If the action for the current combat pawn is not complete, call OnAction on the current pawn
-        //if (!m_currentCombatPawn.IsActionComplete && !m_isTurnComplete && CManager.CurrentState == this)
-        //{
-        //    m_currentCombatPawn.OnAction();
-        //}
+        
+        if (!m_isTurnComplete && CManager.CurrentState == this)
+        {
+            // If the move for the current combat pawn is not complete, call ExecuteMove on the current pawn's move
+            if (!m_currentCombatPawn.MoveForTurn.IsMoveComplete)
+            {
+                m_currentCombatPawn.MoveForTurn.ExecuteMove();
+            }
+
+            // If the move for the current pawn is complete, set the action complete boolean to true and get the next pawn
+            else
+            {
+                m_currentCombatPawn.SetIsActionComplete(true);
+                GetNextCombatPawn();
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -150,7 +161,6 @@ public class ExecuteState : CombatState {
         if (fastestCombatPawn != null)
         {
             m_currentCombatPawn = fastestCombatPawn;
-            CManager.StartCoroutine(m_currentCombatPawn.OnAction());
         }
 
         // Otherwise, all the combat pawns have done their move, so exit the execute state

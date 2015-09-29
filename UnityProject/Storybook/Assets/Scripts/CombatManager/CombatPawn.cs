@@ -9,14 +9,14 @@ public abstract class CombatPawn : MonoBehaviour {
 
     private bool m_hasSubmittedMove = false;
     private bool m_isAlive = true;
-    private bool m_isInAction = false;
     private bool m_isActionComplete = false;
 
     private CombatManager m_combatManager;
 
-    public abstract IEnumerator OnThink();
+    // Defaults to null because it needs to be able to return null moves
+    private CombatMove m_moveForTurn = null;
 
-    public abstract IEnumerator OnAction();
+    public abstract void OnThink();
 
     /// <summary>
     /// Setter for the pawn's CombatManager
@@ -46,19 +46,6 @@ public abstract class CombatPawn : MonoBehaviour {
     public CombatManager CManager
     {
         get{ return m_combatManager; }
-    }
-
-    /// <summary>
-    /// True if the CombatPawn is currently executing its action animation, false otherwise
-    /// </summary>
-    public bool IsInAction
-    {
-        get { return m_isInAction; }
-    }
-
-    public void SetIsInAction(bool newIsInAction)
-    {
-        m_isInAction = newIsInAction;
     }
 
     /// <summary>
@@ -121,4 +108,27 @@ public abstract class CombatPawn : MonoBehaviour {
     {
         m_hasSubmittedMove = newHasSubmittedMove;
     }
+
+    /// <summary>
+    /// The move that the combat pawn is going to execute in the current turn of combat
+    /// </summary>
+    public CombatMove MoveForTurn
+    {
+        get { return m_moveForTurn; }
+    }
+
+    public void SetMoveForTurn(CombatMove newMoveForTurn)
+    {
+        m_moveForTurn = newMoveForTurn;
+    }
+
+    /// <summary>
+    /// Resets move variables of the combat pawn
+    /// </summary>
+    public void ResetMove()
+    {
+        m_moveForTurn = null;
+        m_hasSubmittedMove = false;
+    }
+
 }

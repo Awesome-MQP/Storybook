@@ -129,7 +129,6 @@ public class CharacterMovement : MonoBehaviour {
 
 	// Used with touch controls, calculates a path the clicked location
 	private void _calculateCharacterPath(){
-		Camera mainCamera = FindCamera(); 
 
 		// Get the position of the click in the game world
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

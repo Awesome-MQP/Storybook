@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour {
 
-    [SerializeField]
-    private List<InventoryItem> m_Inventory = new List<InventoryItem>(); // List for all equipment and active items
-                                                                       //public List<Page> Pages = new List<Page>(); // List for all pages the player has
-                                                                       // ^^^Uncomment when Pages are added back in.
+    //[SerializeField]
+    //private List<InventoryItem> m_Inventory = new List<InventoryItem>(); // List for all equipment and active items
+    //^^^Uncomment when Items are added back in.
+    //[SerializeField]
+    //private List<Page> Pages = new List<Page>(); // List for all pages the player has
+    //^^^Uncomment when Pages are added back in.
     [SerializeField]
     private const int DEFAULT_INVENTORY_SPACE = 4;
     [SerializeField]
@@ -18,6 +20,7 @@ public class PlayerInventory : MonoBehaviour {
     private int m_PagesHeld = 0; // Number of pages the players has
 
     // Add an item to the Inventory, but only if there is enough space
+    /*
     public void AddToInventory(InventoryItem TheItem)
     {
         if (m_Inventory.Count < DEFAULT_INVENTORY_SPACE)
@@ -41,4 +44,6 @@ public class PlayerInventory : MonoBehaviour {
         m_Inventory.Remove(TheItem);
         m_ItemsInInventory = m_Inventory.Count;
     }
+    */
+    // ^^^ Uncomment once Items are back in.
 }

@@ -3,17 +3,13 @@ using System.Collections;
 
 public class Door : MonoBehaviour {
 
-    private bool m_isDoorEnabled;
-    private bool m_isDoorRoomSpawned;
+    [SerializeField]
+    private DoorSpawnNode m_doorNode;
+
+    private bool m_isDoorEnabled = true;
+    private bool m_isDoorRoomSpawned = false;
 
     private Location m_roomThroughDoorLoc;
-
-    void Start()
-    {
-        m_isDoorEnabled = true;
-        m_isDoorRoomSpawned = false;
-    }
-
 
     // TODO : Add implementation for passing through doors.
     //        (Requires world manager and more complete level-building stuff first.)
@@ -61,5 +57,13 @@ public class Door : MonoBehaviour {
     public bool IsDoorEnabled
     {
         get { return m_isDoorEnabled; }
+    }
+
+    /// <summary>
+    /// The door node that corresponds to this door
+    /// </summary>
+    public DoorSpawnNode DoorNode
+    {
+        get { return m_doorNode; }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections;
 
 public class RoomObject : MonoBehaviour{
 
-    public const int NORTH_DOOR_INDEX = 0;
-    public const int EAST_DOOR_INDEX = 1;
-    public const int SOUTH_DOOR_INDEX = 2;
-    public const int WEST_DOOR_INDEX = 3;
+    public readonly int NORTH_DOOR_INDEX = 0;
+    public readonly int EAST_DOOR_INDEX = 1;
+    public readonly int SOUTH_DOOR_INDEX = 2;
+    public readonly int WEST_DOOR_INDEX = 3;
 
     [SerializeField]
     private Door[] m_roomDoors;
@@ -43,5 +43,10 @@ public class RoomObject : MonoBehaviour{
     public Door[] RoomDoors
     {
         get { return m_roomDoors; }
+    }
+
+    public void SetRoomDoors(Door[] newDoorList)
+    {
+        m_roomDoors = newDoorList;
     }
 }

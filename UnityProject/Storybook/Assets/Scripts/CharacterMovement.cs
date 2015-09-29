@@ -18,6 +18,7 @@ public class CharacterMovement : MonoBehaviour {
 	private Vector3 m_targetPosition;
 	private Vector3[] m_previousPositions = new Vector3[10];
 	private int m_prevPositionIndex = 0;
+    private Location m_playerLoc;
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +29,7 @@ public class CharacterMovement : MonoBehaviour {
 			m_previousPositions[i] = Vector3.zero;
 		}
 		FindCurrentNavArea();
+        m_playerLoc = new Location(0, 0);
 	}
 	
 	// Update is called once per frame
@@ -97,12 +99,30 @@ public class CharacterMovement : MonoBehaviour {
         // If the player is at a door, spawn the room for the door if it has not already been spawned
         if (d != null)
         {
+            MapManager mapManager = FindObjectOfType<MapManager>();
             if (!d.IsDoorRoomSpawned)
             {
                 Location newRoomLoc = d.RoomThroughDoorLoc;
-                MapManager mapManager = FindObjectOfType<MapManager>();
-                mapManager.PlaceRoom(newRoomLoc);
+                RoomObject newRoom = mapManager.PlaceRoom(newRoomLoc);
                 d.SetIsDoorRoomSpawned(true);
+            }
+
+            // If the room as already been spawned, move the player to the new room
+            else
+            {             
+                // Find the door that is paired to the one being entered
+                Door exitDoor = mapManager.GetDoorPartner(m_playerLoc, d);
+                DoorSpawnNode doorNode = exitDoor.DoorNode;
+                transform.position = doorNode.transform.position;
+                m_playerLoc = d.RoomThroughDoorLoc;
+                mapManager.MoveCamera(m_playerLoc);
+
+                // Reset movement variables so the player stops moving when it enters the new room
+                m_characterPath = new List<Vector3>();
+                m_previousPositions = new Vector3[10];
+
+                // Find the nav area for the new room
+                FindCurrentNavArea();
             }
         }
 	}
@@ -214,7 +234,9 @@ public class CharacterMovement : MonoBehaviour {
     /// <returns>Returns a door object if the player is close enough to a door, returns null other wise</returns>
     private Door _isAtRoomDoor()
     {
-        Door[] roomDoors = FindObjectsOfType<Door>() as Door[];
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        RoomObject currentRoom = mapManager.GetRoom(m_playerLoc);
+        Door[] roomDoors = currentRoom.RoomDoors;
         foreach(Door d in roomDoors)
         {
             // Only check doors that are enabled
@@ -222,7 +244,7 @@ public class CharacterMovement : MonoBehaviour {
             {
                 Vector3 doorPos = d.transform.position;
                 float distanceToDoor = Vector3.Distance(doorPos, transform.position);
-                if (distanceToDoor < 2)
+                if (distanceToDoor < 1.5)
                 {
                     return d;
                 }

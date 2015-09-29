@@ -12,11 +12,11 @@ public class RoomObject : MonoBehaviour{
     [SerializeField]
     private Location m_roomLocation;
     [SerializeField]
-    private int m_roomSize;
+    private int m_roomSize; // Can be x1, x2, x4.
     [SerializeField]
-    private int m_roomSizeConstraint; // Can be x1, x2, x4.
-                                   // Did I handle this right? I'm not really sure what the difference is meant to be between
-                                   // room size and room size constraint.
+    private Genre m_roomGenre;
+    [SerializeField]
+    private RoomFeature m_roomFeature;
 
     // Set the location of the room.
     // Should only be used once, when placing the room.
@@ -29,5 +29,41 @@ public class RoomObject : MonoBehaviour{
     public Location GetRoomLocation()
     {
         return m_roomLocation;
+    }
+
+    // Set size of a room
+    public void SetRoomSize(int size)
+    {
+        m_roomSize = size;
+    }
+
+    // Get size of a room
+    public int GetRoomSize()
+    {
+        return m_roomSize;
+    }
+
+    // Set Genre of a room
+    public void SetRoomGenre(Genre genre)
+    {
+        m_roomGenre = genre;
+    }
+
+    // Get Genre of a room
+    public Genre GetRoomGenre()
+    {
+        return m_roomGenre;
+    }
+
+    // Set Feature of a room
+    public void SetRoomFeature(RoomFeature feature)
+    {
+        m_roomFeature = feature;
+    }
+
+    // Get Feature of a room
+    public RoomFeature GetRoomFeature()
+    {
+        return m_roomFeature;
     }
 }

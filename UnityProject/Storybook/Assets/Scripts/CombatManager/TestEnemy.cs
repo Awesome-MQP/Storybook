@@ -14,6 +14,7 @@ public class TestEnemy : CombatEnemy
         enemyMoveList.Add(testEnemyAttackMove);
         enemyMoveList.Add(testBoostMove);
         SetEnemyMoves(enemyMoveList);
+        _initializeManaPerTurn();
     }
 
     void Start()

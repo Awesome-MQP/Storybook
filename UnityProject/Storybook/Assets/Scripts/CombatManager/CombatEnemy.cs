@@ -14,7 +14,7 @@ public abstract class CombatEnemy : CombatPawn {
     /// The amount of points that the enemy has to spend on their move for turn
     /// </summary>
     [SerializeField]
-    private int m_startingMana;
+    private int m_currentMana;
 
     /// <summary>
     /// The amount of mana that the enemy receives at the beginning of each turn
@@ -54,6 +54,14 @@ public abstract class CombatEnemy : CombatPawn {
     /// <returns>The EnemyMove that will be used for the current turn</returns>
     public EnemyMove ChooseMove()
     {
+        EnemyMove mostExpensiveMove = _getMostExpensiveMove();
+
+        // If the enemy currently has twice as much mana as its most expensive move, use the most expensive move this turn
+        if (m_currentMana >= mostExpensiveMove.MoveCost * 2)
+        {
+            return mostExpensiveMove;
+        }
+
         bool isMoveAttack;
         
         // If the enemy only has one type of move, set the IsMoveAttack boolean according to the type of move that it has
@@ -73,12 +81,11 @@ public abstract class CombatEnemy : CombatPawn {
             isMoveAttack = _isMoveAttack();
         }
 
-        Debug.Log("IsMoveAttack = " + isMoveAttack.ToString());
         List<EnemyMove> possibleMoves = new List<EnemyMove>();
         
         foreach (EnemyMove em in EnemyMoves)
         {
-            if (isMoveAttack == em.IsMoveAttack)
+            if (isMoveAttack == em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
                 possibleMoves.Add(em);
             }
@@ -86,7 +93,7 @@ public abstract class CombatEnemy : CombatPawn {
 
         int moveIndex = enemyRNG.Next(0, possibleMoves.Count - 1);
 
-        EnemyMove chosenMove = EnemyMoves[moveIndex];
+        EnemyMove chosenMove = possibleMoves[moveIndex];
 
         // Select the targets for the move
         List<CombatPawn> targets = new List<CombatPawn>();
@@ -143,6 +150,10 @@ public abstract class CombatEnemy : CombatPawn {
             }
         }
         chosenMove.SetMoveTargets(targets);
+        Debug.Log("MANA = " + m_currentMana.ToString());
+        m_currentMana -= chosenMove.MoveCost;
+        Debug.Log("Chosen move cost = " + chosenMove.MoveCost.ToString());
+        Debug.Log("Mana after using move = " + m_currentMana.ToString());
         return chosenMove;
     }
 
@@ -158,14 +169,14 @@ public abstract class CombatEnemy : CombatPawn {
     }
 
     /// <summary>
-    /// Checks to see if the enemy only has attack moves
+    /// Checks to see if the enemy only has or can only use (due to mana) attack moves
     /// </summary>
-    /// <returns>True if the enemy only has attack moves, false otherwise</returns>
+    /// <returns>True if the enemy only has or can only use attack moves, false otherwise</returns>
     private bool _hasOnlyAttacks()
     {
         foreach (EnemyMove em in EnemyMoves)
         {
-            if (!em.IsMoveAttack)
+            if (!em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
                 return false;
             }
@@ -174,18 +185,49 @@ public abstract class CombatEnemy : CombatPawn {
     }
 
     /// <summary>
-    /// Checks to see if the enemy has only boost moves
+    /// Checks to see if the enemy has only or can only use (due to mana) boost moves
     /// </summary>
-    /// <returns>True if the enemy only has boost moves, false otherwise</returns>
+    /// <returns>True if the enemy only has or can only use boost moves, false otherwise</returns>
     private bool _hasOnlyBoosts()
     {
         foreach (EnemyMove em in EnemyMoves)
         {
-            if (em.IsMoveAttack)
+            if (em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
                 return false;
             }
         }
         return true;
+    }
+
+    private EnemyMove _getMostExpensiveMove()
+    {
+        EnemyMove currentHighest = null;
+        foreach(EnemyMove cm in EnemyMoves)
+        {
+            if (currentHighest == null || cm.MoveCost > currentHighest.MoveCost)
+            {
+                currentHighest = cm;
+            }
+        }
+        return currentHighest;
+    }
+
+    public void _initializeManaPerTurn()
+    {
+        EnemyMove leastExpensiveMove = null;
+        foreach(EnemyMove em in EnemyMoves)
+        {
+            if (leastExpensiveMove == null || em.MoveCost < leastExpensiveMove.MoveCost)
+            {
+                leastExpensiveMove = em;
+            }
+        }
+        m_manaPerTurn = leastExpensiveMove.MoveCost;
+    }
+
+    public void IncrementManaForTurn()
+    {
+        m_currentMana += m_manaPerTurn;
     }
 }

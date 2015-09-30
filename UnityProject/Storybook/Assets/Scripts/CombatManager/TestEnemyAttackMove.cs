@@ -6,11 +6,14 @@ public class TestEnemyAttackMove : EnemyMove {
 
     private int MOVE_DAMAGE = 3;
     private int MOVE_TARGETS = 4;
+    private int MOVE_COST = 2;
+    private bool IS_MOVE_ATTACK = true;
 
     public TestEnemyAttackMove()
     {
-        SetIsMoveAttack(true);
+        SetIsMoveAttack(IS_MOVE_ATTACK);
         SetNumberOfTargets(MOVE_TARGETS);
+        SetMoveCost(MOVE_COST);
     }
 
     /// <summary>
@@ -18,6 +21,7 @@ public class TestEnemyAttackMove : EnemyMove {
     /// </summary>
     protected override void DoMoveEffect()
     {
+        Debug.Log("Enemy doing attack");
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             combatPawn.DealDamageToPawn(MOVE_DAMAGE);

@@ -4,7 +4,7 @@ using System;
 
 public class TestPageMove : PageMove {
 
-    private int MOVE_DAMAGE = 4;
+    private int MOVE_DAMAGE = 1;
     private int MOVE_TARGETS = 4;
     private bool IS_MOVE_ATTACK = true;
 

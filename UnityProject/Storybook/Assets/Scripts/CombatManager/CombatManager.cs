@@ -100,6 +100,7 @@ public class CombatManager : MonoBehaviour {
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
+        _incrementEnemyMana();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
     }
@@ -174,6 +175,14 @@ public class CombatManager : MonoBehaviour {
         {
             combatPawn.SetIsActionComplete(false);
             combatPawn.ResetMove();
+        }
+    }
+
+    private void _incrementEnemyMana()
+    {
+        foreach (CombatEnemy ce in m_enemyList)
+        {
+            ce.IncrementManaForTurn();
         }
     }
 

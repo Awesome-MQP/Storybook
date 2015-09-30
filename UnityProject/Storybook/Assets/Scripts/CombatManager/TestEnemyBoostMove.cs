@@ -7,15 +7,18 @@ public class TestEnemyBoostMove : EnemyMove {
     private int MOVE_TARGETS = 4;
     private bool IS_MOVE_ATTACK = false;
     private int SPEED_INCREASE_VALUE = 2;
+    private int MOVE_COST = 3;
 
     public TestEnemyBoostMove()
     {
         SetIsMoveAttack(IS_MOVE_ATTACK);
         SetNumberOfTargets(MOVE_TARGETS);
+        SetMoveCost(MOVE_COST);
     }
 
     protected override void DoMoveEffect()
     {
+        Debug.Log("Enemy doing boost");
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             combatPawn.IncreasePawnSpeed(SPEED_INCREASE_VALUE);

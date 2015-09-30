@@ -231,7 +231,7 @@ public class MapManager : MonoBehaviour {
     public void MoveCamera(Location newCameraLoc)
     {
         RoomObject newRoom = m_worldGrid[newCameraLoc.X, newCameraLoc.Y];
-        CameraNode roomCamNode = newRoom.GetComponentInChildren<CameraNode>();
+        Transform roomCamNode = newRoom.CameraNode;
         Camera.main.transform.position = roomCamNode.transform.position;
     }
 }

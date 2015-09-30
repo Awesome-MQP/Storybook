@@ -9,6 +9,9 @@ public class RoomObject : MonoBehaviour{
     public readonly int WEST_DOOR_INDEX = 3;
 
     [SerializeField]
+    Transform m_cameraNode;
+
+    [SerializeField]
     private Door[] m_roomDoors;
                          // Ordering for indices should be clockwise, starting from the north.
                          // In a standard 1x1 room, it would be like:
@@ -84,5 +87,10 @@ public class RoomObject : MonoBehaviour{
     public RoomFeature GetRoomFeature()
     {
         return m_roomFeature;
+    }
+
+    public Transform CameraNode
+    {
+        get { return m_cameraNode; }
     }
 }

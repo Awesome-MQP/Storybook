@@ -64,10 +64,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 486300}
-  - 33: {fileID: 3389870}
-  - 135: {fileID: 13551096}
-  - 23: {fileID: 2302112}
-  - 114: {fileID: 11434432}
   m_Layer: 0
   m_Name: CameraNode
   m_TagString: Untagged
@@ -540,7 +536,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.23177195, y: 5.82559395, z: 11.214386}
+  m_LocalPosition: {x: 20.910965, y: 18.7382202, z: -.477523804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 445988}
@@ -715,30 +711,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 438262}
   m_RootOrder: 3
---- !u!23 &2302112
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110620}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!23 &2309274
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -1283,13 +1255,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 110854}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!33 &3389870
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110620}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &3396618
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1388,17 +1353,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_doorNode: {fileID: 11454364}
---- !u!114 &11434432
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f68f1c920a8ec8d4682008e78b46818a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11437608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1518,13 +1472,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b928ffc24aa0f5643937137df8f96766, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_cameraNode: {fileID: 486300}
   m_roomDoors:
   - {fileID: 11422670}
   - {fileID: 11446326}
   - {fileID: 11471078}
   - {fileID: 11438168}
   m_roomSize: 0
-  m_roomSizeConstraint: 0
+  m_roomGenre: 0
+  m_roomFeature: 0
 --- !u!114 &11491760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1583,18 +1539,6 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173882}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: .5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &13551096
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110620}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0

@@ -1,26 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using System;
+using System.Collections;
 
-public class TestEnemyMove : EnemyMove {
+public class TestEnemyBoostMove : EnemyMove {
 
     private int MOVE_DAMAGE = 3;
     private int MOVE_TARGETS = 4;
+    private bool IS_MOVE_ATTACK = false;
+    private int SPEED_INCREASE_VALUE = 2;
 
-    public TestEnemyMove()
+    public TestEnemyBoostMove()
     {
-        SetIsMoveAttack(true);
+        SetIsMoveAttack(IS_MOVE_ATTACK);
         SetNumberOfTargets(MOVE_TARGETS);
     }
 
-    /// <summary>
-    /// Deals combat damage to all the player pawns in the target list
-    /// </summary>
     protected override void DoMoveEffect()
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.DealDamageToPawn(MOVE_DAMAGE);
+            combatPawn.IncreasePawnSpeed(SPEED_INCREASE_VALUE);
         }
     }
 

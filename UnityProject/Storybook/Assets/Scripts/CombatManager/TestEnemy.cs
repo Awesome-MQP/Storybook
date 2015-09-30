@@ -8,9 +8,11 @@ public class TestEnemy : CombatEnemy
 
     void Awake()
     {
-        EnemyMove testEnemyMove = new TestEnemyMove();
+        EnemyMove testEnemyAttackMove = new TestEnemyAttackMove();
+        EnemyMove testBoostMove = new TestEnemyBoostMove();
         List<EnemyMove> enemyMoveList = new List<EnemyMove>();
-        enemyMoveList.Add(testEnemyMove);
+        enemyMoveList.Add(testEnemyAttackMove);
+        enemyMoveList.Add(testBoostMove);
         SetEnemyMoves(enemyMoveList);
     }
 

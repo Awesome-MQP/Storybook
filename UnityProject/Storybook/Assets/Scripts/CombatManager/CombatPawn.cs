@@ -41,6 +41,15 @@ public abstract class CombatPawn : MonoBehaviour {
     }
 
     /// <summary>
+    /// Increases the pawn speed by the given amount
+    /// </summary>
+    /// <param name="speedIncrease">The amount to increase the speed by</param>
+    public void IncreasePawnSpeed(int speedIncrease)
+    {
+        m_speed += speedIncrease;
+    }
+
+    /// <summary>
     /// The CombatManager that the CombatPawn is involved
     /// </summary>
     public CombatManager CManager

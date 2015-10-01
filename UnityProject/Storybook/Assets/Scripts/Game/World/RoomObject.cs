@@ -2,6 +2,15 @@
 using System.Collections;
 
 public class RoomObject : MonoBehaviour{
+
+    public readonly int NORTH_DOOR_INDEX = 0;
+    public readonly int EAST_DOOR_INDEX = 1;
+    public readonly int SOUTH_DOOR_INDEX = 2;
+    public readonly int WEST_DOOR_INDEX = 3;
+
+    [SerializeField]
+    Transform m_cameraNode;
+
     [SerializeField]
     private Door[] m_roomDoors;
                          // Ordering for indices should be clockwise, starting from the north.
@@ -29,6 +38,19 @@ public class RoomObject : MonoBehaviour{
     public Location GetRoomLocation()
     {
         return m_roomLocation;
+    }
+
+    /// <summary>
+    /// The list of room doors
+    /// </summary>
+    public Door[] RoomDoors
+    {
+        get { return m_roomDoors; }
+    }
+
+    public void SetRoomDoors(Door[] newDoorList)
+    {
+        m_roomDoors = newDoorList;
     }
 
     // Set size of a room
@@ -65,5 +87,10 @@ public class RoomObject : MonoBehaviour{
     public RoomFeature GetRoomFeature()
     {
         return m_roomFeature;
+    }
+
+    public Transform CameraNode
+    {
+        get { return m_cameraNode; }
     }
 }

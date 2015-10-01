@@ -20,6 +20,7 @@ public class TestPageMove : PageMove {
     /// </summary>
     protected override void DoMoveEffect()
     {
+        Debug.Log("Doing player move effect");
         foreach (CombatPawn enemyPawn in MoveTargets)
         {
             enemyPawn.DealDamageToPawn(MOVE_DAMAGE);

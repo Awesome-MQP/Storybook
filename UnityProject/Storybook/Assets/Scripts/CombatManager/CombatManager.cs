@@ -38,11 +38,11 @@ public class CombatManager : MonoBehaviour {
         }
 
         // Spawn and place the player pawns
-        _spawnPlayerPawns(2);
+        _spawnPlayerPawns(4);
         _placePlayers();
 
         // Spawn and place the enemy pawns
-        _spawnEnemyPawns(2);
+        _spawnEnemyPawns(4);
         _placeEnemies();
 
         // Default current state to think state
@@ -67,11 +67,14 @@ public class CombatManager : MonoBehaviour {
         m_submittedEnemyMoves += 1;
     }
 
+    /// <summary>
+    /// Submits a move for a combat pawn and adds both to the dictionary
+    /// </summary>
+    /// <param name="combatPawn">The combat pawn that is submitting the move</param>
+    /// <param name="moveForTurn">The move that is being submitted</param>
     public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
     {
         m_pawnToCombatMove.Add(combatPawn, moveForTurn);
-        Debug.Log("Adding move to dictionary");
-        Debug.Log("Dictionary length = " + m_pawnToCombatMove.Keys.Count.ToString());
     }
 
     /// <summary>

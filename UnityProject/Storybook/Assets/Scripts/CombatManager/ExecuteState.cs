@@ -161,6 +161,8 @@ public class ExecuteState : CombatState {
         if (fastestCombatPawn != null)
         {
             m_currentCombatPawn = fastestCombatPawn;
+
+            // Need to initialize the move in case the same move has been used this turn since it resets the booleans
             m_currentCombatPawn.MoveForTurn.InitializeMove();
         }
 

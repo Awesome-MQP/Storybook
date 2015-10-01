@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class CombatMove {
-
+public abstract class CombatMove : MonoBehaviour{ 
     /// <summary>
     /// Carries out the effect that the move does
     /// Ex: Attack the enemies, heal the players, etc.
@@ -18,11 +17,12 @@ public abstract class CombatMove {
     /// <summary>
     /// The combat pawns that are being targeted by the move
     /// </summary>
-    private List<CombatPawn> m_targets;
+    private List<CombatPawn> m_targets = new List<CombatPawn>();
 
     /// <summary>
     /// The maximum number of targets that the move has
     /// </summary>
+    [SerializeField]
     private int m_numberOfTargets;
 
     /// <summary>

@@ -8,24 +8,24 @@ public abstract class CombatEnemy : CombatPawn {
     /// Value is out of 100 and represents the probability of an attack move being chosen
     /// </summary>
     [SerializeField]
-    private int m_aggressionValue;
+    private int m_aggressionValue = -1;
 
     /// <summary>
     /// The amount of points that the enemy has to spend on their move for turn
     /// </summary>
     [SerializeField]
-    private int m_currentMana;
+    private int m_currentMana = -1;
 
     /// <summary>
     /// The amount of mana that the enemy receives at the beginning of each turn
     /// </summary>
     [SerializeField]
-    private int m_manaPerTurn;
-
+    private int m_manaPerTurn = -1;
 
     /// <summary>
     /// The list of moves that the enemy can use in combat
     /// </summary>
+    [SerializeField]
     private List<EnemyMove> m_enemyMoveList = new List<EnemyMove>();
 
     private System.Random enemyRNG = new System.Random();
@@ -48,11 +48,31 @@ public abstract class CombatEnemy : CombatPawn {
     }
 
     /// <summary>
-    /// Chooses a move for the enemy pawn to use in the current turn of combat
-    /// Also sets the targets of the selected move
+    /// Chooses a move for the enemy pawn to use in the current turn of combat and sets the targets of the move
     /// </summary>
     /// <returns>The EnemyMove that will be used for the current turn</returns>
-    public EnemyMove ChooseMove()
+    public EnemyMove CreateMove()
+    {
+        EnemyMove chosenMove = _chooseMove();
+        CombatPawn[] possibleTargets;
+        if (chosenMove.IsMoveAttack) {
+            possibleTargets = CManager.PlayerPawnList;
+        }
+        else
+        {
+            possibleTargets = CManager.EnemyList;
+        }
+        chosenMove.SetMoveTargets(new List<CombatPawn>());
+        chosenMove.ChooseTargets(possibleTargets);
+        m_currentMana -= chosenMove.MoveCost;
+        return chosenMove;
+    }
+
+    /// <summary>
+    /// Chooses which move to use for the turn, move chosen is determined by current mana and the aggression value of the enemy
+    /// </summary>
+    /// <returns>The EnemyMove to use for the turn</returns>
+    private EnemyMove _chooseMove()
     {
         EnemyMove mostExpensiveMove = _getMostExpensiveMove();
 
@@ -63,7 +83,7 @@ public abstract class CombatEnemy : CombatPawn {
         }
 
         bool isMoveAttack;
-        
+
         // If the enemy only has one type of move, set the IsMoveAttack boolean according to the type of move that it has
         // If the enemy only has attacks, set isMoveAttack to true
         if (_hasOnlyAttacks())
@@ -82,7 +102,7 @@ public abstract class CombatEnemy : CombatPawn {
         }
 
         List<EnemyMove> possibleMoves = new List<EnemyMove>();
-        
+
         foreach (EnemyMove em in EnemyMoves)
         {
             if (isMoveAttack == em.IsMoveAttack && em.MoveCost <= m_currentMana)
@@ -91,69 +111,19 @@ public abstract class CombatEnemy : CombatPawn {
             }
         }
 
-        int moveIndex = enemyRNG.Next(0, possibleMoves.Count - 1);
+        EnemyMove chosenMove = null;
+        EnemyMove currentMove = null;
 
-        EnemyMove chosenMove = possibleMoves[moveIndex];
-
-        // Select the targets for the move
-        List<CombatPawn> targets = new List<CombatPawn>();
-
-        // If the move is an attack, select players as the targets
-        if (chosenMove.IsMoveAttack)
+        while (chosenMove == null)
         {
-
-            // If the number of targets is equal to the number of players or greater, set the targets to all of the players
-            if (chosenMove.NumberOfTargets >= CManager.PlayerPawnList.Length)
+            int moveIndex = enemyRNG.Next(0, possibleMoves.Count - 1);
+            currentMove = possibleMoves[moveIndex];
+            int willSelectMove = enemyRNG.Next(0, 100);
+            if (willSelectMove <= currentMove.MoveFrequency * 100)
             {
-                targets = new List<CombatPawn>(CManager.PlayerPawnList);
-            }
-
-            // Otherwise, randomly choose the players that will be targeted
-            else
-            {
-                while (targets.Count < chosenMove.NumberOfTargets)
-                {
-                    System.Random rnd = new System.Random();
-                    int playerIndex = rnd.Next(0, CManager.PlayerPawnList.Length - 1);
-                    CombatPawn selectedPlayer = CManager.PlayerPawnList[playerIndex];
-                    if (!targets.Contains(selectedPlayer))
-                    {
-                        targets.Add(selectedPlayer);
-                    }
-                }
+                chosenMove = currentMove;
             }
         }
-
-        // If the move is not an attack, select other enemies as the targets
-        else
-        {
-
-            // If the number of targets is equal to the number of enemies or greater, set the targets to all the enemies 
-            if (chosenMove.NumberOfTargets >= CManager.EnemyList.Length)
-            {
-                targets = new List<CombatPawn>(CManager.EnemyList);
-            }
-
-            // Otherwise, randomly choose the enemies that will be targeted
-            else
-            {
-                while (targets.Count < chosenMove.NumberOfTargets)
-                {
-                    System.Random rnd = new System.Random();
-                    int enemyIndex = rnd.Next(0, CManager.EnemyList.Length - 1);
-                    CombatPawn selectedEnemy = CManager.EnemyList[enemyIndex];
-                    if (!targets.Contains(selectedEnemy))
-                    {
-                        targets.Add(selectedEnemy);
-                    }
-                }
-            }
-        }
-        chosenMove.SetMoveTargets(targets);
-        Debug.Log("MANA = " + m_currentMana.ToString());
-        m_currentMana -= chosenMove.MoveCost;
-        Debug.Log("Chosen move cost = " + chosenMove.MoveCost.ToString());
-        Debug.Log("Mana after using move = " + m_currentMana.ToString());
         return chosenMove;
     }
 
@@ -200,6 +170,10 @@ public abstract class CombatEnemy : CombatPawn {
         return true;
     }
 
+    /// <summary>
+    /// Searches the enemy move list for the most expensive move
+    /// </summary>
+    /// <returns>The most expensive move that the enemy has</returns>
     private EnemyMove _getMostExpensiveMove()
     {
         EnemyMove currentHighest = null;
@@ -213,21 +187,91 @@ public abstract class CombatEnemy : CombatPawn {
         return currentHighest;
     }
 
-    public void _initializeManaPerTurn()
+    /// <summary>
+    /// Searches the enemy move list for the least expensive move
+    /// </summary>
+    /// <returns>The least expensive move that the enemy has</returns>
+    private EnemyMove _getLeastExpensiveMove()
     {
         EnemyMove leastExpensiveMove = null;
-        foreach(EnemyMove em in EnemyMoves)
+        foreach (EnemyMove em in EnemyMoves)
         {
             if (leastExpensiveMove == null || em.MoveCost < leastExpensiveMove.MoveCost)
             {
                 leastExpensiveMove = em;
             }
         }
-        m_manaPerTurn = leastExpensiveMove.MoveCost;
+        return leastExpensiveMove;
     }
 
+    /// <summary>
+    /// Initializes the mana per turn for the enemy
+    /// Mana per turn defaults to 1 more than its least expensive move
+    /// </summary>
+    private void _initializeManaPerTurn()
+    {
+        EnemyMove leastExpensiveMove = _getLeastExpensiveMove();
+        m_manaPerTurn = leastExpensiveMove.MoveCost + 1;
+    }
+
+    /// <summary>
+    /// Initializes the enemy's starting mana
+    /// Defaults to twice the cost of the enemy's least expensive move
+    /// </summary>
+    private void _initializeStartingMana()
+    {
+        EnemyMove leastExpensiveMove = _getLeastExpensiveMove();
+        m_currentMana = leastExpensiveMove.MoveCost * 2;
+    }
+
+    /// <summary>
+    /// Initializes the enemy's aggression value
+    /// Defaults to 50
+    /// </summary>
+    private void _initializeAggressionValue()
+    {
+        m_aggressionValue = 50;
+    }
+
+    /// <summary>
+    /// Called when an enemy is spawned, initializes variables that have not been set in the editor to their default values
+    /// </summary>
+    public void InitializeVariables()
+    {
+        if (ManaPerTurn <= 0)
+        {
+            _initializeManaPerTurn();
+        }
+        if (CurrentMana < 0)
+        {
+            _initializeStartingMana();
+        }
+        if (AggressionValue < 0)
+        {
+            _initializeAggressionValue();
+        }
+    }
+
+    /// <summary>
+    /// Increases the enemy's mana by it's manaPerTurn value
+    /// </summary>
     public void IncrementManaForTurn()
     {
         m_currentMana += m_manaPerTurn;
+    }
+
+    public int CurrentMana
+    {
+        get { return m_currentMana; }
+    }
+
+    public int ManaPerTurn
+    {
+        get { return m_manaPerTurn; }
+    }
+
+    public int AggressionValue
+    {
+        get { return m_aggressionValue; }
     }
 }

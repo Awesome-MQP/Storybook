@@ -34,6 +34,7 @@ public class ExecuteState : CombatState {
             // If the move for the current pawn is complete, set the action complete boolean to true and get the next pawn
             else
             {
+                m_currentCombatPawn.MoveForTurn.SetIsMoveComplete(false);
                 m_currentCombatPawn.SetIsActionComplete(true);
                 GetNextCombatPawn();
             }
@@ -142,7 +143,6 @@ public class ExecuteState : CombatState {
 
         int currentHighestSpeed = 0;
         CombatPawn fastestCombatPawn = null;
-
         // Iterate through all of the CombatPawn in the CombatManager
         foreach (CombatPawn combatPawn in CManager.AllPawns)
         {
@@ -161,6 +161,7 @@ public class ExecuteState : CombatState {
         if (fastestCombatPawn != null)
         {
             m_currentCombatPawn = fastestCombatPawn;
+            m_currentCombatPawn.MoveForTurn.InitializeMove();
         }
 
         // Otherwise, all the combat pawns have done their move, so exit the execute state

@@ -11,7 +11,7 @@ public class TestCombatPawn : CombatPlayer
     // Use this for initialization
     void Start()
     {
-        SetSpeed(7);
+        SetSpeed(6);
         SetHealth(10);
         m_testMove = new TestPageMove();
     }

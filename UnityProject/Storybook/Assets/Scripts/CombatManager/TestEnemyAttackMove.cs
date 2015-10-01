@@ -4,16 +4,14 @@ using System;
 
 public class TestEnemyAttackMove : EnemyMove {
 
-    private int MOVE_DAMAGE = 3;
-    private int MOVE_TARGETS = 4;
-    private int MOVE_COST = 2;
+    [SerializeField]
+    private int m_moveDamage = 3;
+
     private bool IS_MOVE_ATTACK = true;
 
-    public TestEnemyAttackMove()
+    void Start()
     {
         SetIsMoveAttack(IS_MOVE_ATTACK);
-        SetNumberOfTargets(MOVE_TARGETS);
-        SetMoveCost(MOVE_COST);
     }
 
     /// <summary>
@@ -21,10 +19,9 @@ public class TestEnemyAttackMove : EnemyMove {
     /// </summary>
     protected override void DoMoveEffect()
     {
-        Debug.Log("Enemy doing attack");
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.DealDamageToPawn(MOVE_DAMAGE);
+            combatPawn.DealDamageToPawn(m_moveDamage);
         }
     }
 
@@ -41,6 +38,33 @@ public class TestEnemyAttackMove : EnemyMove {
             Debug.Log("Enemy move is complete");
             SetIsMoveComplete(true);
         }
+    }
+
+    public override void ChooseTargets(CombatPawn[] possibleTargets)
+    {
+        base.ChooseTargets(possibleTargets);
+        if (MoveTargets.Length > 0)
+        {
+            return;
+        }
+
+        List<CombatPawn> possibleTargetsList = new List<CombatPawn>(possibleTargets);
+        List<CombatPawn> targets = new List<CombatPawn>();
+        while (targets.Count < NumberOfTargets)
+        {
+            CombatPawn lowestHealthPawn = null;
+            for (int i = 0; i < possibleTargetsList.Count; i++)
+            {
+                CombatPawn currentPawn = possibleTargetsList[i];
+                if (lowestHealthPawn == null || currentPawn.Health < lowestHealthPawn.Health)
+                {
+                    lowestHealthPawn = currentPawn;
+                }
+            }
+            targets.Add(lowestHealthPawn);
+            possibleTargetsList.Remove(lowestHealthPawn);
+        }
+        SetMoveTargets(targets);
     }
 
 }

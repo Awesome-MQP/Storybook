@@ -5,7 +5,11 @@ public abstract class CombatPawn : MonoBehaviour {
 
     // Character stats
     private int m_speed;
+    private int m_speedBoost = 0;
     private int m_health;
+
+    [SerializeField]
+    private Genre m_genre;
 
     private bool m_hasSubmittedMove = false;
     private bool m_isAlive = true;
@@ -75,7 +79,7 @@ public abstract class CombatPawn : MonoBehaviour {
     /// </summary>
     public int Speed
     {
-        get { return m_speed; }
+        get { return m_speed + m_speedBoost; }
     }
 
     public void SetSpeed(int newSpeed)
@@ -140,4 +144,16 @@ public abstract class CombatPawn : MonoBehaviour {
         m_hasSubmittedMove = false;
     }
 
+    public Genre PawnGenre
+    {
+        get { return m_genre; }
+    }
+
+    public void DecrementBoosts()
+    {
+        if (m_speedBoost > 0)
+        {
+            m_speedBoost -= 1;
+        }
+    }
 }

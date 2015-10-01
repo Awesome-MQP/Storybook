@@ -8,13 +8,7 @@ public class TestEnemy : CombatEnemy
 
     void Awake()
     {
-        EnemyMove testEnemyAttackMove = new TestEnemyAttackMove();
-        EnemyMove testBoostMove = new TestEnemyBoostMove();
-        List<EnemyMove> enemyMoveList = new List<EnemyMove>();
-        enemyMoveList.Add(testEnemyAttackMove);
-        enemyMoveList.Add(testBoostMove);
-        SetEnemyMoves(enemyMoveList);
-        _initializeManaPerTurn();
+        InitializeVariables();
     }
 
     void Start()
@@ -26,9 +20,9 @@ public class TestEnemy : CombatEnemy
     public override void OnThink()
     {
         // Randomly select a player pawn to attack
-        EnemyMove moveSelected = ChooseMove();
-        moveSelected.InitializeMove();
+        EnemyMove moveSelected = CreateMove();
         SetMoveForTurn(moveSelected);
         SetHasSubmittedMove(true);
+        Debug.Log("Enemy submitted move");
     }
 }

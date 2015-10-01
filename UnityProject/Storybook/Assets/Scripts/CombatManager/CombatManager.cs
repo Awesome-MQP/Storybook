@@ -38,11 +38,11 @@ public class CombatManager : MonoBehaviour {
         }
 
         // Spawn and place the player pawns
-        _spawnPlayerPawns(1);
+        _spawnPlayerPawns(2);
         _placePlayers();
 
         // Spawn and place the enemy pawns
-        _spawnEnemyPawns(1);
+        _spawnEnemyPawns(2);
         _placeEnemies();
 
         // Default current state to think state
@@ -70,6 +70,8 @@ public class CombatManager : MonoBehaviour {
     public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
     {
         m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        Debug.Log("Adding move to dictionary");
+        Debug.Log("Dictionary length = " + m_pawnToCombatMove.Keys.Count.ToString());
     }
 
     /// <summary>
@@ -95,12 +97,13 @@ public class CombatManager : MonoBehaviour {
     public void StartNewTurn()
     {
         Debug.Log("CombatManager starting new turn");
-        Debug.Log("Player Health = " + m_playerPawnList[0].Health);
-        Debug.Log("Enemy Health = " + m_enemyList[0].Health);
+        Debug.Log("Player 1 Health = " + m_playerPawnList[0].Health);
+        Debug.Log("Enemy 1 Health = " + m_enemyList[0].Health);
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
         _incrementEnemyMana();
+        _decrementAllBoosts();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
     }
@@ -178,11 +181,25 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Incremenets all of the enemy pawn mana for the turn
+    /// </summary>
     private void _incrementEnemyMana()
     {
         foreach (CombatEnemy ce in m_enemyList)
         {
             ce.IncrementManaForTurn();
+        }
+    }
+
+    /// <summary>
+    /// Decrements all stat boosts of all the pawns for the turn
+    /// </summary>
+    private void _decrementAllBoosts()
+    {
+        foreach (CombatPawn combatPawn in AllPawns)
+        {
+            combatPawn.DecrementBoosts();
         }
     }
 

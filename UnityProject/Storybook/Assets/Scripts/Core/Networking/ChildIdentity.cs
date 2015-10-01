@@ -5,9 +5,15 @@ using UnityEngine.Networking;
 using UnityEditor;
 #endif
 
+/// <summary>
+/// Used to identify a child across the network, add to a prefab to have its children spawn on the network.
+/// </summary>
 [ExecuteInEditMode]
 public class ChildIdentity : MonoBehaviour
 {
+    /// <summary>
+    /// The id of the child
+    /// </summary>
     public int ChildId
     {
         get { return m_childId; }

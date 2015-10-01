@@ -5,6 +5,9 @@ using System.Reflection;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 
+/// <summary>
+/// A new network manager to use with child spawning
+/// </summary>
 public class AdvanceNetworkManager : NetworkManager
 {
     void Awake()
@@ -25,7 +28,7 @@ public class AdvanceNetworkManager : NetworkManager
         {
             message = netMsg.ReadMessage<ChildSpawnMessage>();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.LogError("Could not parse message.");
             throw;

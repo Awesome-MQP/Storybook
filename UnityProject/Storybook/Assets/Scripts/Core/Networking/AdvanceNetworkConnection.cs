@@ -3,6 +3,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Advance connection to use with child spawning
+/// </summary>
 public class AdvanceNetworkConnection : NetworkConnection
 {
     public override bool Send(short msgType, MessageBase msg)

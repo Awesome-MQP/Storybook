@@ -2,30 +2,51 @@
 using System.Collections;
 using UnityEngine.Networking;
 
+/// <summary>
+/// A new spawn message for spawning a child over the network.
+/// </summary>
 public class ChildSpawnMessage : MessageBase
 {
+    /// <summary>
+    /// THe message id for this message
+    /// </summary>
     public const short MessageId = 8000;
 
+    /// <summary>
+    /// The id for the parent to spawn under
+    /// </summary>
     public NetworkInstanceId ParentId
     {
         get { return m_parentId; }
     }
 
+    /// <summary>
+    /// The network id to assign the child
+    /// </summary>
     public NetworkInstanceId Id
     {
         get { return m_id; }
     }
 
+    /// <summary>
+    /// The id of the child to spawn
+    /// </summary>
     public int ChildId
     {
         get { return m_childId; }
     }
 
+    /// <summary>
+    /// The position to spawn the child at
+    /// </summary>
     public Vector3 Position
     {
         get { return m_position; }
     }
 
+    /// <summary>
+    /// Payload (idk it was in th eoriginal one)
+    /// </summary>
     public byte[] Payload
     {
         get { return m_payload; }

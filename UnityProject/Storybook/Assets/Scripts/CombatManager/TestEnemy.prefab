@@ -76,7 +76,7 @@ MonoBehaviour:
   m_genre: 4
   m_aggressionValue: 100
   m_currentMana: 1
-  m_manaPerTurn: 3
+  m_manaPerTurn: 2
   m_enemyMoveList:
   - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
   - {fileID: 11424512, guid: 6f1cc2ed3d3c9f149ac88d259a7fb4a9, type: 2}
@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_manaPerTurn
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_genre

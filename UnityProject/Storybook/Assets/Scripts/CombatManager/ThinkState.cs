@@ -31,6 +31,11 @@ public class ThinkState : CombatState {
                 }
                 areAllMovesSubmitted = false;
             }
+            else
+            {
+                CombatMove pawnMove = combatPawn.MoveForTurn;
+                CManager.SubmitMove(combatPawn, pawnMove);
+            }
         }
 
         // If all of the players have submitted their moves, exit the think state and move to execute

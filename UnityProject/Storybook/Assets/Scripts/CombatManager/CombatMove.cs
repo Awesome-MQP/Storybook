@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 public abstract class CombatMove : MonoBehaviour{ 
+
     /// <summary>
     /// Carries out the effect that the move does
     /// Ex: Attack the enemies, heal the players, etc.
@@ -45,6 +46,18 @@ public abstract class CombatMove : MonoBehaviour{
         m_isMoveEffectDone = false;
         m_isMoveCompleted = false;
         m_timeSinceMoveStarted = 0;
+    }
+
+    /// <summary>
+    /// Removes the given target from the target list if it is in the target list
+    /// </summary>
+    /// <param name="targetToRemove">The CombatPawn to remove from the list of targets</param>
+    public void RemoveTarget(CombatPawn targetToRemove)
+    {
+        if (m_targets.Contains(targetToRemove))
+        {
+            m_targets.Remove(targetToRemove);
+        }
     }
 
     /// <summary>

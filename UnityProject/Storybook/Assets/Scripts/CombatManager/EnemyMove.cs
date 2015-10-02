@@ -27,6 +27,12 @@ public abstract class EnemyMove : CombatMove {
             SetMoveTargets(targetList);
         }
     }
+
+    /// <summary>
+    /// Sets the IsMoveAttack for the move
+    /// Called at the beginning of each turn
+    /// </summary>
+    public abstract void InitializeIsMoveAttack();
     
     public int MoveCost
     {

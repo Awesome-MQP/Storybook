@@ -5,8 +5,8 @@ using System;
 public class TestPageMove : PageMove {
 
     [SerializeField]
-    private int MOVE_DAMAGE = 1;
-    private int MOVE_TARGETS = 4;
+    private int MOVE_DAMAGE = 2;
+    private int MOVE_TARGETS = 1;
     private bool IS_MOVE_ATTACK = true;
 
     public TestPageMove()
@@ -20,7 +20,6 @@ public class TestPageMove : PageMove {
     /// </summary>
     protected override void DoMoveEffect()
     {
-        Debug.Log("Doing player move effect");
         foreach (CombatPawn enemyPawn in MoveTargets)
         {
             enemyPawn.DealDamageToPawn(MOVE_DAMAGE);

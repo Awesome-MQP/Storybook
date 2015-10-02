@@ -9,11 +9,6 @@ public class TestEnemyAttackMove : EnemyMove {
 
     private bool IS_MOVE_ATTACK = true;
 
-    void Start()
-    {
-        SetIsMoveAttack(IS_MOVE_ATTACK);
-    }
-
     /// <summary>
     /// Deals combat damage to all the player pawns in the target list
     /// </summary>
@@ -46,6 +41,9 @@ public class TestEnemyAttackMove : EnemyMove {
     /// <param name="possibleTargets">The list of CombatPawn that are the possible targets for the move</param>
     public override void ChooseTargets(CombatPawn[] possibleTargets)
     {
+        // Reset the targets list before starting
+        SetMoveTargets(new List<CombatPawn>());
+
         base.ChooseTargets(possibleTargets);
         if (MoveTargets.Length > 0)
         {
@@ -71,4 +69,8 @@ public class TestEnemyAttackMove : EnemyMove {
         SetMoveTargets(targets);
     }
 
+    public override void InitializeIsMoveAttack()
+    {
+        SetIsMoveAttack(IS_MOVE_ATTACK);
+    }
 }

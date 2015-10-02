@@ -74,7 +74,15 @@ public class CombatManager : MonoBehaviour {
     /// <param name="moveForTurn">The move that is being submitted</param>
     public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
     {
-        m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        if (!m_pawnToCombatMove.ContainsKey(combatPawn))
+        {
+            m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        }
+        else
+        {
+            m_pawnToCombatMove.Remove(combatPawn);
+            m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        }
     }
 
     /// <summary>
@@ -207,6 +215,26 @@ public class CombatManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Removes the given player from the combat by removing them from the pawn list and the PawnToMove dictionary
+    /// </summary>
+    /// <param name="playerToRemove">The player to remove</param>
+    public void RemovePlayerFromCombat(CombatPawn playerToRemove)
+    {
+        m_playerPawnList.Remove(playerToRemove);
+        m_pawnToCombatMove.Remove(playerToRemove);
+    }
+
+    /// <summary>
+    /// Removes the given enemy from the combat by removing them from the enemy list and the PawnToMove dictionary
+    /// </summary>
+    /// <param name="enemyToRemove">The enemy to remove</param>
+    public void RemoveEnemyFromCombat(CombatEnemy enemyToRemove)
+    {
+        m_enemyList.Remove(enemyToRemove);
+        m_pawnToCombatMove.Remove(enemyToRemove);
+    }
+
+    /// <summary>
     /// The list of all the PlayerEntity in the combat
     /// </summary>
     public IEnumerable<PlayerEntity> PlayerEntityList
@@ -326,5 +354,10 @@ public class CombatManager : MonoBehaviour {
     public void SetCurrentState(CombatState newState)
     {
         m_currentState = newState;
+    }
+
+    public Dictionary<CombatPawn, CombatMove> PawnToMove
+    {
+        get { return m_pawnToCombatMove; }
     }
 }

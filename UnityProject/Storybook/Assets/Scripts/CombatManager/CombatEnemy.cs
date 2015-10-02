@@ -53,15 +53,24 @@ public abstract class CombatEnemy : CombatPawn {
     /// <returns>The EnemyMove that will be used for the current turn</returns>
     public EnemyMove CreateMove()
     {
+        // Initalize all of the IsMoveAttack booleans for all of the enemy's moves
+        foreach (EnemyMove em in m_enemyMoveList)
+        {
+            em.InitializeIsMoveAttack();
+        }
         EnemyMove chosenMove = _chooseMove();
         CombatPawn[] possibleTargets;
+
+        // If the chosen move is an attack, the possible targets are the players
         if (chosenMove.IsMoveAttack) {
             possibleTargets = CManager.PlayerPawnList;
         }
+        // Otherwise the possible targets are the enemies
         else
         {
             possibleTargets = CManager.EnemyList;
         }
+
         chosenMove.SetMoveTargets(new List<CombatPawn>());
         chosenMove.ChooseTargets(possibleTargets);
         m_currentMana -= chosenMove.MoveCost;

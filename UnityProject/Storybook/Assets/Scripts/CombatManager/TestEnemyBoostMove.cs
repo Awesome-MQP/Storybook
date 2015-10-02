@@ -10,14 +10,8 @@ public class TestEnemyBoostMove : EnemyMove {
     [SerializeField]
     private int m_speedIncreaseValue = 3;
 
-    void Start()
-    {
-        SetIsMoveAttack(IS_MOVE_ATTACK);
-    }
-
     protected override void DoMoveEffect()
     {
-        Debug.Log("Enemy doing boost");
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             combatPawn.IncreasePawnSpeed(m_speedIncreaseValue);
@@ -34,7 +28,6 @@ public class TestEnemyBoostMove : EnemyMove {
         }
         else if (TimeSinceMoveStarted >= 1)
         {
-            Debug.Log("Enemy move is complete");
             SetIsMoveComplete(true);
         }
     }
@@ -70,4 +63,8 @@ public class TestEnemyBoostMove : EnemyMove {
         SetMoveTargets(targets);
     }
 
+    public override void InitializeIsMoveAttack()
+    {
+        SetIsMoveAttack(IS_MOVE_ATTACK);
+    }
 }

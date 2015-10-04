@@ -193,7 +193,6 @@ public class ExecuteState : CombatState {
         {
             if (!pawn.IsAlive)
             {
-                Debug.Log("Player died");
                 removedList.Add(pawn);
             }
         }
@@ -216,7 +215,6 @@ public class ExecuteState : CombatState {
         {
             if (!enemy.IsAlive)
             {
-                Debug.Log("Enemy died");
                 removedList.Add(enemy);
             }
         }
@@ -250,11 +248,13 @@ public class ExecuteState : CombatState {
             {
                 if (defeatedEnemies.Contains(enemyTarget))
                 {
-                    enemyMove.ChooseTargets(CManager.EnemyList);
+                    HashSet<CombatPawn> enemyListSet = new HashSet<CombatPawn>(CManager.EnemyList);
+                    enemyMove.ChooseTargets(enemyListSet);
                 }
                 if (defeatedPlayers.Contains(enemyTarget))
                 {
-                    enemyMove.ChooseTargets(CManager.PlayerPawnList);
+                    HashSet<CombatPawn> playerListSet = new HashSet<CombatPawn>(CManager.PlayerPawnList);
+                    enemyMove.ChooseTargets(playerListSet);
                 }
             }
         }

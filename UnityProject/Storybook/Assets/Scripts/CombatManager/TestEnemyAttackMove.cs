@@ -39,7 +39,7 @@ public class TestEnemyAttackMove : EnemyMove {
     /// Chooses the targets for the move, currently chooses the pawns that have the lowest health
     /// </summary>
     /// <param name="possibleTargets">The list of CombatPawn that are the possible targets for the move</param>
-    public override void ChooseTargets(CombatPawn[] possibleTargets)
+    public override void ChooseTargets(HashSet<CombatPawn> possibleTargets)
     {
         // Reset the targets list before starting
         SetMoveTargets(new List<CombatPawn>());

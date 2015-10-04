@@ -8,41 +8,41 @@ public abstract class CombatEnemy : CombatPawn {
     /// Value is out of 100 and represents the probability of an attack move being chosen
     /// </summary>
     [SerializeField]
-    private int m_aggressionValue = -1;
+    private float m_aggressionValue = -1;
 
     /// <summary>
     /// The amount of points that the enemy has to spend on their move for turn
     /// </summary>
     [SerializeField]
-    private int m_currentMana = -1;
+    private float m_currentMana = -1;
 
     /// <summary>
     /// The amount of mana that the enemy receives at the beginning of each turn
     /// </summary>
     [SerializeField]
-    private int m_manaPerTurn = -1;
+    private float m_manaPerTurn = -1;
 
     /// <summary>
     /// The list of moves that the enemy can use in combat
     /// </summary>
     [SerializeField]
-    private List<EnemyMove> m_enemyMoveList = new List<EnemyMove>();
+    private EnemyMove[] m_enemyMoveList;
 
-    private System.Random enemyRNG = new System.Random();
+    private UnityEngine.Random enemyRNG = new UnityEngine.Random();
 
     /// <summary>
     /// Property getter for the list of enemy moves
     /// </summary>
     public EnemyMove[] EnemyMoves
     {
-        get { return m_enemyMoveList.ToArray(); }
+        get { return m_enemyMoveList; }
     }
 
     /// <summary>
     /// Setter for the list of enemy moves
     /// </summary>
     /// <param name="newEnemyMoveList">The new list of enemy moves</param>
-    public void SetEnemyMoves(List<EnemyMove> newEnemyMoveList)
+    public void SetEnemyMoves(EnemyMove[] newEnemyMoveList)
     {
         m_enemyMoveList = newEnemyMoveList;
     }
@@ -72,7 +72,8 @@ public abstract class CombatEnemy : CombatPawn {
         }
 
         chosenMove.SetMoveTargets(new List<CombatPawn>());
-        chosenMove.ChooseTargets(possibleTargets);
+        HashSet<CombatPawn> pawnHashSet = new HashSet<CombatPawn>(possibleTargets);
+        chosenMove.ChooseTargets(pawnHashSet);
         m_currentMana -= chosenMove.MoveCost;
         return chosenMove;
     }
@@ -125,9 +126,9 @@ public abstract class CombatEnemy : CombatPawn {
 
         while (chosenMove == null)
         {
-            int moveIndex = enemyRNG.Next(0, possibleMoves.Count - 1);
+            int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
             currentMove = possibleMoves[moveIndex];
-            int willSelectMove = enemyRNG.Next(0, 100);
+            int willSelectMove = UnityEngine.Random.Range(0, 100);
             if (willSelectMove <= currentMove.MoveFrequency * 100)
             {
                 chosenMove = currentMove;
@@ -143,7 +144,7 @@ public abstract class CombatEnemy : CombatPawn {
     /// <returns>True if the enemy will choose an attack, false otherwise</returns>
     private bool _isMoveAttack()
     {
-        int randomNumber = enemyRNG.Next(0, 100);
+        int randomNumber = UnityEngine.Random.Range(0, 100);
         return (randomNumber <= m_aggressionValue);
     }
 
@@ -269,17 +270,17 @@ public abstract class CombatEnemy : CombatPawn {
         m_currentMana += m_manaPerTurn;
     }
 
-    public int CurrentMana
+    public float CurrentMana
     {
         get { return m_currentMana; }
     }
 
-    public int ManaPerTurn
+    public float ManaPerTurn
     {
         get { return m_manaPerTurn; }
     }
 
-    public int AggressionValue
+    public float AggressionValue
     {
         get { return m_aggressionValue; }
     }

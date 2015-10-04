@@ -8,7 +8,7 @@ public abstract class EnemyMove : CombatMove {
     /// The better the move, the more expensive it is
     /// </summary>
     [SerializeField]
-    private int m_moveCost;
+    private float m_moveCost;
 
     [SerializeField]
     private double m_moveFrequency;
@@ -19,9 +19,9 @@ public abstract class EnemyMove : CombatMove {
     /// number of targets
     /// </summary>
     /// <param name="possibleTargets">The list of combat pawn that are the possible targets for the move</param>
-    public virtual void ChooseTargets(CombatPawn[] possibleTargets)
+    public virtual void ChooseTargets(HashSet<CombatPawn> possibleTargets)
     {
-        if (possibleTargets.Length <= NumberOfTargets)
+        if (possibleTargets.Count <= NumberOfTargets)
         {
             List<CombatPawn> targetList = new List<CombatPawn>(possibleTargets);
             SetMoveTargets(targetList);
@@ -34,7 +34,7 @@ public abstract class EnemyMove : CombatMove {
     /// </summary>
     public abstract void InitializeIsMoveAttack();
     
-    public int MoveCost
+    public float MoveCost
     {
         get { return m_moveCost; }
     }

@@ -147,7 +147,7 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
+            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, m_combatPawnPrefab.transform.rotation);
             CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
             m_playerPawnList.Add(combatPawnScript);

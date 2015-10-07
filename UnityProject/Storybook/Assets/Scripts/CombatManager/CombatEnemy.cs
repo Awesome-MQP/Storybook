@@ -28,23 +28,12 @@ public abstract class CombatEnemy : CombatPawn {
     [SerializeField]
     private EnemyMove[] m_enemyMoveList;
 
-    private UnityEngine.Random enemyRNG = new UnityEngine.Random();
-
     /// <summary>
     /// Property getter for the list of enemy moves
     /// </summary>
     public EnemyMove[] EnemyMoves
     {
         get { return m_enemyMoveList; }
-    }
-
-    /// <summary>
-    /// Setter for the list of enemy moves
-    /// </summary>
-    /// <param name="newEnemyMoveList">The new list of enemy moves</param>
-    public void SetEnemyMoves(EnemyMove[] newEnemyMoveList)
-    {
-        m_enemyMoveList = newEnemyMoveList;
     }
 
     /// <summary>

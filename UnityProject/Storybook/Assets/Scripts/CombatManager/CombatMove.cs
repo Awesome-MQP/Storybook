@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class CombatMove {
+public abstract class CombatMove : MonoBehaviour{ 
 
     /// <summary>
     /// Carries out the effect that the move does
@@ -18,11 +18,12 @@ public abstract class CombatMove {
     /// <summary>
     /// The combat pawns that are being targeted by the move
     /// </summary>
-    private List<CombatPawn> m_targets;
+    private List<CombatPawn> m_targets = new List<CombatPawn>();
 
     /// <summary>
     /// The maximum number of targets that the move has
     /// </summary>
+    [SerializeField]
     private int m_numberOfTargets;
 
     /// <summary>
@@ -45,6 +46,18 @@ public abstract class CombatMove {
         m_isMoveEffectDone = false;
         m_isMoveCompleted = false;
         m_timeSinceMoveStarted = 0;
+    }
+
+    /// <summary>
+    /// Removes the given target from the target list if it is in the target list
+    /// </summary>
+    /// <param name="targetToRemove">The CombatPawn to remove from the list of targets</param>
+    public void RemoveTarget(CombatPawn targetToRemove)
+    {
+        if (m_targets.Contains(targetToRemove))
+        {
+            m_targets.Remove(targetToRemove);
+        }
     }
 
     /// <summary>

@@ -4,8 +4,9 @@ using System;
 
 public class TestPageMove : PageMove {
 
-    private int MOVE_DAMAGE = 4;
-    private int MOVE_TARGETS = 4;
+    [SerializeField]
+    private int MOVE_DAMAGE = 2;
+    private int MOVE_TARGETS = 1;
     private bool IS_MOVE_ATTACK = true;
 
     public TestPageMove()

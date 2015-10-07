@@ -38,11 +38,11 @@ public class CombatManager : MonoBehaviour {
         }
 
         // Spawn and place the player pawns
-        _spawnPlayerPawns(1);
+        _spawnPlayerPawns(4);
         _placePlayers();
 
         // Spawn and place the enemy pawns
-        _spawnEnemyPawns(1);
+        _spawnEnemyPawns(4);
         _placeEnemies();
 
         // Default current state to think state
@@ -67,9 +67,22 @@ public class CombatManager : MonoBehaviour {
         m_submittedEnemyMoves += 1;
     }
 
+    /// <summary>
+    /// Submits a move for a combat pawn and adds both to the dictionary
+    /// </summary>
+    /// <param name="combatPawn">The combat pawn that is submitting the move</param>
+    /// <param name="moveForTurn">The move that is being submitted</param>
     public void SubmitMove(CombatPawn combatPawn, CombatMove moveForTurn)
     {
-        m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        if (!m_pawnToCombatMove.ContainsKey(combatPawn))
+        {
+            m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        }
+        else
+        {
+            m_pawnToCombatMove.Remove(combatPawn);
+            m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+        }
     }
 
     /// <summary>
@@ -95,11 +108,13 @@ public class CombatManager : MonoBehaviour {
     public void StartNewTurn()
     {
         Debug.Log("CombatManager starting new turn");
-        Debug.Log("Player Health = " + m_playerPawnList[0].Health);
-        Debug.Log("Enemy Health = " + m_enemyList[0].Health);
+        Debug.Log("Player 1 Health = " + m_playerPawnList[0].Health);
+        Debug.Log("Enemy 1 Health = " + m_enemyList[0].Health);
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();
+        _incrementEnemyMana();
+        _decrementAllBoosts();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
     }
@@ -132,7 +147,7 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, Quaternion.identity);
+            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, m_combatPawnPrefab.transform.rotation);
             CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
             m_playerPawnList.Add(combatPawnScript);
@@ -175,6 +190,48 @@ public class CombatManager : MonoBehaviour {
             combatPawn.SetIsActionComplete(false);
             combatPawn.ResetMove();
         }
+    }
+
+    /// <summary>
+    /// Incremenets all of the enemy pawn mana for the turn
+    /// </summary>
+    private void _incrementEnemyMana()
+    {
+        foreach (CombatEnemy ce in m_enemyList)
+        {
+            ce.IncrementManaForTurn();
+        }
+    }
+
+    /// <summary>
+    /// Decrements all stat boosts of all the pawns for the turn
+    /// </summary>
+    private void _decrementAllBoosts()
+    {
+        foreach (CombatPawn combatPawn in AllPawns)
+        {
+            combatPawn.DecrementBoosts();
+        }
+    }
+
+    /// <summary>
+    /// Removes the given player from the combat by removing them from the pawn list and the PawnToMove dictionary
+    /// </summary>
+    /// <param name="playerToRemove">The player to remove</param>
+    public void RemovePlayerFromCombat(CombatPawn playerToRemove)
+    {
+        m_playerPawnList.Remove(playerToRemove);
+        m_pawnToCombatMove.Remove(playerToRemove);
+    }
+
+    /// <summary>
+    /// Removes the given enemy from the combat by removing them from the enemy list and the PawnToMove dictionary
+    /// </summary>
+    /// <param name="enemyToRemove">The enemy to remove</param>
+    public void RemoveEnemyFromCombat(CombatEnemy enemyToRemove)
+    {
+        m_enemyList.Remove(enemyToRemove);
+        m_pawnToCombatMove.Remove(enemyToRemove);
     }
 
     /// <summary>
@@ -297,5 +354,10 @@ public class CombatManager : MonoBehaviour {
     public void SetCurrentState(CombatState newState)
     {
         m_currentState = newState;
+    }
+
+    public Dictionary<CombatPawn, CombatMove> PawnToMove
+    {
+        get { return m_pawnToCombatMove; }
     }
 }

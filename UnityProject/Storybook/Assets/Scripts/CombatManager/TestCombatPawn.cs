@@ -11,7 +11,7 @@ public class TestCombatPawn : CombatPlayer
     // Use this for initialization
     void Start()
     {
-        SetSpeed(7);
+        SetSpeed(6);
         SetHealth(10);
         m_testMove = new TestPageMove();
     }
@@ -24,7 +24,8 @@ public class TestCombatPawn : CombatPlayer
         {
             Debug.Log("Space bar pressed");
             // TODO - Way for player to select targets
-            List<CombatPawn> targetList = new List<CombatPawn>(CManager.EnemyList);
+            List<CombatPawn> targetList = new List<CombatPawn>();
+            targetList.Add(CManager.EnemyList[0]);
             m_testMove.SetMoveTargets(targetList);
             m_testMove.InitializeMove();
             SetMoveForTurn(m_testMove);

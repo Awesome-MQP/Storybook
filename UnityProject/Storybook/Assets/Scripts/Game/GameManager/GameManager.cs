@@ -9,6 +9,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private Vector3 m_defaultLocation;
 
+    [SerializeField]
+    private CombatPawn[] m_enemiesForCombat;
+
+    [SerializeField]
+    private int m_playersInCombat;
+
     private List<GameObject> m_combatInstances = new List<GameObject>();
     private float m_timeElapsed = 0;
     private bool test1Done = false;
@@ -33,6 +39,8 @@ public class GameManager : MonoBehaviour {
         GameObject combatInstance = (GameObject) Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
         CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
         combatManager.SetPlayerEntityList(playersEnteringCombat);
+        combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
+        combatManager.SetPlayersToSpawn(m_playersInCombat);
 
         // Get all the player position nodes and set it in the combat manager
         PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
@@ -48,6 +56,7 @@ public class GameManager : MonoBehaviour {
         Camera.main.GetComponent<AudioListener>().enabled = false;
 
         m_combatInstances.Add(combatInstance);
+        combatManager.StartCombat();
     }
 
     /// <summary>

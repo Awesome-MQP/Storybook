@@ -11,6 +11,8 @@ public class CombatManager : MonoBehaviour {
     [SerializeField]
     private CombatPawn m_enemyPawnPrefab;
 
+    private CombatPawn[] m_enemiesToSpawn;
+
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
@@ -20,11 +22,12 @@ public class CombatManager : MonoBehaviour {
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
+    private int m_playersToSpawn = 1;
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>() as Animator;
@@ -37,16 +40,19 @@ public class CombatManager : MonoBehaviour {
             cm.SetCombatManager(this);
         }
 
+        // Default current state to think state
+        m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+    }
+
+    public void StartCombat()
+    {
         // Spawn and place the player pawns
-        _spawnPlayerPawns(4);
+        _spawnPlayerPawns(m_playersToSpawn);
         _placePlayers();
 
         // Spawn and place the enemy pawns
-        _spawnEnemyPawns(4);
+        _spawnEnemyPawns();
         _placeEnemies();
-
-        // Default current state to think state
-        m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
 
         _initializeDemoUI();
     }
@@ -173,11 +179,11 @@ public class CombatManager : MonoBehaviour {
     /// Spawns the given number of CombatEnemy objects
     /// </summary>
     /// <param name="numberToSpawn">The number of CombatEnemy objects to spawn</param>
-    private void _spawnEnemyPawns(int numberToSpawn)
+    private void _spawnEnemyPawns()
     {
-        for (int i = 0; i < numberToSpawn; i++)
+        for (int i = 0; i < m_enemiesToSpawn.Length; i++)
         {
-            CombatEnemy enemyObject = (CombatEnemy)Instantiate(m_enemyPawnPrefab, transform.position, Quaternion.identity);
+            CombatEnemy enemyObject = (CombatEnemy)Instantiate(m_enemiesToSpawn[i], transform.position, Quaternion.identity);
             enemyObject.RegisterCombatManager(this);
             m_enemyList.Add(enemyObject);
         }
@@ -377,5 +383,15 @@ public class CombatManager : MonoBehaviour {
     public Dictionary<CombatPawn, CombatMove> PawnToMove
     {
         get { return m_pawnToCombatMove; }
+    }
+
+    public void SetEnemiesToSpawn(CombatPawn[] enemiesToSpawn)
+    {
+        m_enemiesToSpawn = enemiesToSpawn;
+    }
+
+    public void SetPlayersToSpawn(int playersToSpawn)
+    {
+        m_playersToSpawn = playersToSpawn;
     }
 }

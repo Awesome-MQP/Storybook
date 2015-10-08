@@ -41,6 +41,7 @@ public abstract class CombatPawn : MonoBehaviour {
         if (m_health <= 0)
         {
             m_isAlive = false;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.black);
         }
     }
 

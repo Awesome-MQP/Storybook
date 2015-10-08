@@ -39,6 +39,7 @@ public class ExecuteState : CombatState {
                 m_currentCombatPawn.MoveForTurn.SetIsMoveComplete(false);
                 currentMove.SetIsMoveComplete(false);
                 m_currentCombatPawn.SetIsActionComplete(true);
+                _changePawnColor(false);
                 GetNextCombatPawn();
             }
         }
@@ -172,6 +173,7 @@ public class ExecuteState : CombatState {
             // Need to initialize the move in case the same move has been used this turn since it resets the booleans
             CombatMove pawnMove = CManager.PawnToMove[m_currentCombatPawn];
             pawnMove.InitializeMove();
+            _changePawnColor(true);
         }
 
         // Otherwise, all the combat pawns have done their move, so exit the execute state
@@ -295,6 +297,26 @@ public class ExecuteState : CombatState {
                     }
                 }
             }
+        }
+    }
+
+    private void _changePawnColor(bool isStartingAttack)
+    {
+        Material currentPawnMaterial = m_currentCombatPawn.GetComponent<Renderer>().material;
+        if (isStartingAttack)
+        {
+            if (m_currentCombatPawn.MoveForTurn.IsMoveAttack)
+            {
+                currentPawnMaterial.SetColor("_Color", Color.red);
+            }
+            else
+            {
+                currentPawnMaterial.SetColor("_Color", Color.blue);
+            }
+        }
+        else
+        {
+            currentPawnMaterial.SetColor("_Color", Color.white);
         }
     }
 }

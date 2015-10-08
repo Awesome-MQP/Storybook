@@ -47,6 +47,8 @@ public class CombatManager : MonoBehaviour {
 
         // Default current state to think state
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+
+        _initializeDemoUI();
     }
 
     /// <summary>
@@ -124,6 +126,7 @@ public class CombatManager : MonoBehaviour {
     /// </summary>
     public void EndCurrentCombat()
     {
+        _stopDemoUI();
         FindObjectOfType<GameManager>().EndCombat(this);
     }
 
@@ -232,6 +235,21 @@ public class CombatManager : MonoBehaviour {
     {
         m_enemyList.Remove(enemyToRemove);
         m_pawnToCombatMove.Remove(enemyToRemove);
+    }
+
+    private void _initializeDemoUI()
+    {
+        CombatDemoUIHandler combatUI = FindObjectOfType<CombatDemoUIHandler>();
+        Debug.Log("Enemies = " + m_enemyList.Count);
+        combatUI.SetPlayerPawns(m_playerPawnList.ToArray());
+        combatUI.SetEnemyPawns(m_enemyList.ToArray());
+        combatUI.SetIsCombatStarted(true);
+    }
+
+    private void _stopDemoUI()
+    {
+        CombatDemoUIHandler combatUI = FindObjectOfType<CombatDemoUIHandler>();
+        combatUI.SetIsCombatStarted(false);
     }
 
     /// <summary>

@@ -149,12 +149,12 @@ public class ExecuteState : CombatState {
 
         // TODO - New targets for moves that include defeated players/enemies
 
-        int currentHighestSpeed = 0;
+        float currentHighestSpeed = 0;
         CombatPawn fastestCombatPawn = null;
         // Iterate through all of the CombatPawn in the CombatManager
         foreach (CombatPawn combatPawn in CManager.PawnToMove.Keys)
         {
-            int currentSpeed = combatPawn.Speed;
+            float currentSpeed = combatPawn.Speed;
 
             // If the speed of the current pawn is higher than the current highest speed and the current pawn has not executed
             // its move for the turn, set the fasted combat pawn to this combat pawn

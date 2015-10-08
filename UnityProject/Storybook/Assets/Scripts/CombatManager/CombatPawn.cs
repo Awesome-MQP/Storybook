@@ -4,9 +4,18 @@ using System.Collections;
 public abstract class CombatPawn : MonoBehaviour {
 
     // Character stats
-    private int m_speed;
+    [SerializeField]
+    private float m_health;
+
+    [SerializeField]
+    private float m_speed;
     private int m_speedBoost = 0;
-    private int m_health;
+
+    [SerializeField]
+    private float m_defense;
+
+    [SerializeField]
+    private float m_attack;
 
     [SerializeField]
     private Genre m_genre;
@@ -78,12 +87,12 @@ public abstract class CombatPawn : MonoBehaviour {
     /// <summary>
     /// The speed value (stat) for the combat pawn, used to determine turn order
     /// </summary>
-    public int Speed
+    public float Speed
     {
         get { return m_speed + m_speedBoost; }
     }
 
-    public void SetSpeed(int newSpeed)
+    public void SetSpeed(float newSpeed)
     {
         m_speed = newSpeed;
     }
@@ -91,13 +100,13 @@ public abstract class CombatPawn : MonoBehaviour {
     /// <summary>
     /// The HP value for the combat pawn
     /// </summary>
-    public int Health
+    public float Health
     {
         get { return m_health; }
         set { m_health = value; }
     }
 
-    public void SetHealth(int newHealth)
+    public void SetHealth(float newHealth)
     {
         m_health = newHealth;
     }

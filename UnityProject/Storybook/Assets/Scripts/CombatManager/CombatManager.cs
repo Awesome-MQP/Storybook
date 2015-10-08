@@ -23,6 +23,7 @@ public class CombatManager : MonoBehaviour {
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
     private int m_playersToSpawn = 1;
+    private CombatDemoUIHandler m_combatUI;
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
@@ -42,6 +43,8 @@ public class CombatManager : MonoBehaviour {
 
         // Default current state to think state
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+
+        m_combatUI = FindObjectOfType<CombatDemoUIHandler>();
     }
 
     public void StartCombat()
@@ -118,6 +121,7 @@ public class CombatManager : MonoBehaviour {
         Debug.Log("CombatManager starting new turn");
         Debug.Log("Player 1 Health = " + m_playerPawnList[0].Health);
         Debug.Log("Enemy 1 Health = " + m_enemyList[0].Health);
+        m_combatUI.EnableButtons();
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         ResetPawnActions();

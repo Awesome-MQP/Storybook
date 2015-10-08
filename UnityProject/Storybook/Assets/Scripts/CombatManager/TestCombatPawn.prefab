@@ -85,7 +85,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52bf73ce1e2879245ba525084b35e65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_health: 10
+  m_speed: 7
+  m_defense: 1
+  m_attack: 1
   m_genre: 0
+  m_playerHand:
+  - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
+  - {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -93,6 +100,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_playerHand.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Mesh
       value: 
@@ -125,6 +136,32 @@ Prefab:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_health
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_speed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_defense
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_attack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_playerHand.Array.data[0]
+      value: 
+      objectReference: {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_playerHand.Array.data[1]
+      value: 
+      objectReference: {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124672}

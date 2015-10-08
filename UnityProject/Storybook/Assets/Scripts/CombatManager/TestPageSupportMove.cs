@@ -1,28 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
-public class TestPageMove : PageMove {
+public class TestPageSupportMove : PageMove {
 
     [SerializeField]
-    private int MOVE_DAMAGE = 3;
-    private int MOVE_TARGETS = 1;
-    private bool IS_MOVE_ATTACK = true;
+    private int m_speedIncrease = 3;
 
-    public TestPageMove()
-    {
+    private const bool IS_MOVE_ATTACK = false;
+
+    // Use this for initialization
+    void Start () {
         SetIsMoveAttack(IS_MOVE_ATTACK);
-        SetNumberOfTargets(MOVE_TARGETS);
     }
 
     /// <summary>
-    /// Deals damage to all the combat pawns in the target list
+    /// Increases the speed stat of all pawns in the target list
     /// </summary>
     protected override void DoMoveEffect()
     {
-        foreach (CombatPawn enemyPawn in MoveTargets)
+        foreach (CombatPawn playerPawn in MoveTargets)
         {
-            enemyPawn.DealDamageToPawn(MOVE_DAMAGE);
+            playerPawn.IncreasePawnSpeed(m_speedIncrease);
         }
     }
 

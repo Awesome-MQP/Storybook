@@ -9,7 +9,7 @@ public class TestPageAttackMove : PageMove {
 
     private const bool IS_MOVE_ATTACK = true;
 
-    void Start()
+    void Awake()
     {
         SetIsMoveAttack(IS_MOVE_ATTACK);
     }
@@ -38,5 +38,10 @@ public class TestPageAttackMove : PageMove {
             Debug.Log("Page move is complete");
             SetIsMoveComplete(true);
         }
+    }
+
+    public override void InitializeIsMoveAttack()
+    {
+        SetIsMoveAttack(IS_MOVE_ATTACK);
     }
 }

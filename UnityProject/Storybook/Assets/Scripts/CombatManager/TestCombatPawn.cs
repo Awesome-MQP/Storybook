@@ -19,9 +19,11 @@ public class TestCombatPawn : CombatPlayer
         // TODO - Change back to player hitting space bar to select the first move
         if (combatUI.IsMoveChosen)
         {
-            Debug.Log("Space bar pressed");
+            Debug.Log("Player move submitted");
             List<CombatPawn> targetList = new List<CombatPawn>();
             PlayerMove chosenMove = PlayerHand[combatUI.ChosenIndex];
+            Debug.Log(chosenMove.NumberOfTargets);
+            chosenMove.InitializeIsMoveAttack();
             if (chosenMove.IsMoveAttack)
             {
                 targetList.Add(CManager.EnemyList[0]);

@@ -24,4 +24,5 @@ public abstract class PlayerMove : CombatMove {
         SetMoveTargets(newMoveTargets);
     }
 
+    public abstract void InitializeIsMoveAttack();
 }

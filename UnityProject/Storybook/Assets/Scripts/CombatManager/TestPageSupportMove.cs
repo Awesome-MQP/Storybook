@@ -9,7 +9,8 @@ public class TestPageSupportMove : PageMove {
     private const bool IS_MOVE_ATTACK = false;
 
     // Use this for initialization
-    void Start () {
+    void Awake ()
+    {
         SetIsMoveAttack(IS_MOVE_ATTACK);
     }
 
@@ -38,4 +39,9 @@ public class TestPageSupportMove : PageMove {
             SetIsMoveComplete(true);
         }
     }
+
+    public override void InitializeIsMoveAttack()
+    {
+        SetIsMoveAttack(IS_MOVE_ATTACK);
+}
 }

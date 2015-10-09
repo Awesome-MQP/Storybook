@@ -102,6 +102,7 @@ public class CombatDemoUIHandler : MonoBehaviour {
     public void OnAttackPressed()
     {
         DisableButtons();
+        Debug.Log("Attack pressed");
         m_chosenPageIndex = 0;
         m_isMoveChosen = true;
     }

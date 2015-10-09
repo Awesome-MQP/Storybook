@@ -4,9 +4,24 @@ using System.Collections;
 public abstract class CombatPawn : MonoBehaviour {
 
     // Character stats
-    private int m_speed;
-    private int m_speedBoost = 0;
-    private int m_health;
+    [SerializeField]
+    private float m_health;
+    private float m_healthMod = 0;
+
+    [SerializeField]
+    private float m_speed;
+    private float m_speedBoost = 0;
+    private float m_speedMod = 0; 
+
+    [SerializeField]
+    private float m_defense;
+    private float m_defenseBoost = 0;
+    private float m_defenseMod = 0;
+
+    [SerializeField]
+    private float m_attack;
+    private float m_attackBoost = 0;
+    private float m_attackMod = 0;
 
     [SerializeField]
     private Genre m_genre;
@@ -41,6 +56,8 @@ public abstract class CombatPawn : MonoBehaviour {
         if (m_health <= 0)
         {
             m_isAlive = false;
+            // TODO - Remove from master
+            GetComponent<Renderer>().material.SetColor("_Color", Color.black);
         }
     }
 
@@ -77,12 +94,12 @@ public abstract class CombatPawn : MonoBehaviour {
     /// <summary>
     /// The speed value (stat) for the combat pawn, used to determine turn order
     /// </summary>
-    public int Speed
+    public float Speed
     {
         get { return m_speed + m_speedBoost; }
     }
 
-    public void SetSpeed(int newSpeed)
+    public void SetSpeed(float newSpeed)
     {
         m_speed = newSpeed;
     }
@@ -90,13 +107,13 @@ public abstract class CombatPawn : MonoBehaviour {
     /// <summary>
     /// The HP value for the combat pawn
     /// </summary>
-    public int Health
+    public float Health
     {
         get { return m_health; }
         set { m_health = value; }
     }
 
-    public void SetHealth(int newHealth)
+    public void SetHealth(float newHealth)
     {
         m_health = newHealth;
     }

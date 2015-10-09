@@ -13,8 +13,7 @@ public class TestEnemy : CombatEnemy
 
     void Start()
     {
-        SetSpeed(5);
-        SetHealth(10);
+
     }
 
     public override void OnThink()

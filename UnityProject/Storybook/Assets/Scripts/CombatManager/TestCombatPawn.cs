@@ -6,30 +6,16 @@ using System;
 public class TestCombatPawn : CombatPlayer
 {
 
-    CombatDemoUIHandler combatUI;
-
-    void Start()
-    {
-        combatUI = FindObjectOfType<CombatDemoUIHandler>();
-    }
-
     // Waits for input of a move
     public override void OnThink()
     {
         // TODO - Change back to player hitting space bar to select the first move
-        if (combatUI.IsMoveChosen)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Space bar pressed");
             List<CombatPawn> targetList = new List<CombatPawn>();
-            PlayerMove chosenMove = PlayerHand[combatUI.ChosenIndex];
-            if (chosenMove.IsMoveAttack)
-            {
-                targetList.Add(CManager.EnemyList[0]);
-            }
-            else
-            {
-                targetList = new List<CombatPawn>(CManager.PlayerPawnList);
-            }
+            targetList.Add(CManager.EnemyList[0]);
+            PlayerMove chosenMove = PlayerHand[0];
             chosenMove.SetMoveTargets(targetList);
             chosenMove.InitializeMove();
             SetMoveForTurn(chosenMove);

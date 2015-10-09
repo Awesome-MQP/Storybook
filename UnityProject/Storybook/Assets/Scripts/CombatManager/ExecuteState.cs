@@ -300,6 +300,7 @@ public class ExecuteState : CombatState {
         }
     }
 
+    // TODO - Remove from master
     private void _changePawnColor(bool isStartingAttack)
     {
         Material currentPawnMaterial = m_currentCombatPawn.GetComponent<Renderer>().material;

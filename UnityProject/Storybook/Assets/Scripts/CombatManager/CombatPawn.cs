@@ -6,16 +6,22 @@ public abstract class CombatPawn : MonoBehaviour {
     // Character stats
     [SerializeField]
     private float m_health;
+    private float m_healthMod = 0;
 
     [SerializeField]
     private float m_speed;
-    private int m_speedBoost = 0;
+    private float m_speedBoost = 0;
+    private float m_speedMod = 0; 
 
     [SerializeField]
     private float m_defense;
+    private float m_defenseBoost = 0;
+    private float m_defenseMod = 0;
 
     [SerializeField]
     private float m_attack;
+    private float m_attackBoost = 0;
+    private float m_attackMod = 0;
 
     [SerializeField]
     private Genre m_genre;
@@ -50,6 +56,7 @@ public abstract class CombatPawn : MonoBehaviour {
         if (m_health <= 0)
         {
             m_isAlive = false;
+            // TODO - Remove from master
             GetComponent<Renderer>().material.SetColor("_Color", Color.black);
         }
     }

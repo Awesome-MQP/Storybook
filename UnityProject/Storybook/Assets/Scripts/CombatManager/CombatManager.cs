@@ -247,6 +247,7 @@ public class CombatManager : MonoBehaviour {
         m_pawnToCombatMove.Remove(enemyToRemove);
     }
 
+    // TODO - Remove from master
     private void _initializeDemoUI()
     {
         CombatDemoUIHandler combatUI = FindObjectOfType<CombatDemoUIHandler>();
@@ -389,11 +390,19 @@ public class CombatManager : MonoBehaviour {
         get { return m_pawnToCombatMove; }
     }
 
+    /// <summary>
+    /// The list of the enemy pawns to spawn in the combat
+    /// </summary>
+    /// <param name="enemiesToSpawn">The list of enemies that will be spawned</param>
     public void SetEnemiesToSpawn(CombatPawn[] enemiesToSpawn)
     {
         m_enemiesToSpawn = enemiesToSpawn;
     }
 
+    /// <summary>
+    /// The number of players that will be placed in the combat
+    /// </summary>
+    /// <param name="playersToSpawn">The new value for the number of players to place in the combat</param>
     public void SetPlayersToSpawn(int playersToSpawn)
     {
         m_playersToSpawn = playersToSpawn;

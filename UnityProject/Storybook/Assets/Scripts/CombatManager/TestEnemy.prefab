@@ -162,6 +162,11 @@ Prefab:
       propertyPath: m_attack
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11424512, guid: 6f1cc2ed3d3c9f149ac88d259a7fb4a9,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 167344}

@@ -27,6 +27,12 @@ public abstract class CombatMove : MonoBehaviour{
     private int m_numberOfTargets;
 
     /// <summary>
+    /// The genre of the move
+    /// </summary>
+    [SerializeField]
+    private Genre m_moveGenre;
+
+    /// <summary>
     /// True if the move targets the pawns of the opposing side, false if it effects pawns of the same side
     /// Ex: true if it is a player move that deals damage to an enemy
     /// </summary>

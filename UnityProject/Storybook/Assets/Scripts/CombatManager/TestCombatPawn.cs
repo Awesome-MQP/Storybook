@@ -16,11 +16,10 @@ public class TestCombatPawn : CombatPlayer
     // Waits for input of a move
     public override void OnThink()
     {
-        // If the space bar is pressed, submit the move to the CombatManager, and exit the OnThink() function
+        // TODO - Change back to player hitting space bar to select the first move
         if (combatUI.IsMoveChosen)
         {
             Debug.Log("Space bar pressed");
-            // TODO - Way for player to select targets
             List<CombatPawn> targetList = new List<CombatPawn>();
             PlayerMove chosenMove = PlayerHand[combatUI.ChosenIndex];
             if (chosenMove.IsMoveAttack)

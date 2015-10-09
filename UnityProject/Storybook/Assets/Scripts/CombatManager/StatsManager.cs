@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StatsManager : MonoBehaviour {
+public static class StatsManager {
 
-    private float m_positiveSTABBonus = 1f;
-    private float m_neutralSTABBonus = 0.5f;
-    private float m_negativeSTABBonus = 0.3f;
-    private float m_positiveTypeMatchBonus = 1f;
-    private float m_neutralTypeMatchBonus = 0.5f;
-    private float m_negativeTypeMatchBonus = 0.25f;
+    private static float m_positiveSTABBonus = 1f;
+    private static float m_neutralSTABBonus = 0.5f;
+    private static float m_negativeSTABBonus = 0.3f;
+    private static float m_positiveTypeMatchBonus = 1f;
+    private static float m_neutralTypeMatchBonus = 0.5f;
+    private static float m_negativeTypeMatchBonus = 0.25f;
 
     /// <summary>
     /// Does damage calculation. This version of the formula reflects the design change from late A-term.
@@ -23,7 +23,7 @@ public class StatsManager : MonoBehaviour {
     /// <param name="defenderDefMod">The modifier to the defender's Def based on the pages in their hand.</param>
     /// <param name="defenderDefBoost">Modifier for the defender's Def based on boosts from combat.</param>
     /// <returns></returns>
-    int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float attackerStrBase, float attackerStrBoost, float attackerStrMod,
+    static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float attackerStrBase, float attackerStrBoost, float attackerStrMod,
                    float defenderDefBase, float defenderDefMod, float defenderDefBoost)
     {
         float totalAttack = attackerStrBase + attackerStrBoost + attackerStrMod;
@@ -45,7 +45,7 @@ public class StatsManager : MonoBehaviour {
     /// <param name="ofPlayer">The Genre of the player.</param>
     /// <param name="ofAttack">The Genre of the weapon held by that player</param>
     /// <returns>Some bonus/penalty based on the inputs.</returns>
-    float GetSameTypeBonus(Genre ofPlayer, Genre ofAttack)
+    static float GetSameTypeBonus(Genre ofPlayer, Genre ofAttack)
     {
         switch (ofPlayer)
         {
@@ -95,7 +95,7 @@ public class StatsManager : MonoBehaviour {
     /// <param name="ofPlayer"></param>
     /// <param name="ofTarget"></param>
     /// <returns></returns>
-    float GetTypeAdvantageBonus(Genre ofPlayerAttack, Genre ofTarget)
+    static float GetTypeAdvantageBonus(Genre ofPlayerAttack, Genre ofTarget)
     {
         switch (ofPlayerAttack)
         {

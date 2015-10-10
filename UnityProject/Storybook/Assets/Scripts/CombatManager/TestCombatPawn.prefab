@@ -88,8 +88,8 @@ MonoBehaviour:
   m_health: 10
   m_speed: 7
   m_defense: 1
-  m_attack: 1
-  m_genre: 0
+  m_attack: 6
+  m_genre: 2
   m_playerHand:
   - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
   - {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
@@ -150,7 +150,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_playerHand.Array.data[0]
@@ -162,6 +162,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_genre
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124672}

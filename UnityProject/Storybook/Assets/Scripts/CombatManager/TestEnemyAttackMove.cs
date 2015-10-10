@@ -16,7 +16,8 @@ public class TestEnemyAttackMove : EnemyMove {
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.DealDamageToPawn(m_moveDamage);
+            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveOwner.Attack, combatPawn.Defense);
+            combatPawn.DealDamageToPawn(moveDamage);
         }
     }
 

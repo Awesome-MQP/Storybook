@@ -30,7 +30,6 @@ GameObject:
   - 65: {fileID: 6590782}
   - 23: {fileID: 2351322}
   - 114: {fileID: 11421474}
-  - 114: {fileID: 11420814}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -138,17 +137,6 @@ MonoBehaviour:
     i15: 198
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &11420814
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 198298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e4bc32da9b849b4fb0abca7b1e8881f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11421474
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3659bfc861f1ff242b0382144c5255f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childId: 226650856
+  m_childId: 0
 --- !u!114 &11445684
 MonoBehaviour:
   m_ObjectHideFlags: 1

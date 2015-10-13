@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class MapManager : MonoBehaviour {
+public class MapManager : NetworkBehaviour {
 
     [SerializeField]
     private int m_worldMaxXSize = 12;
@@ -17,8 +19,8 @@ public class MapManager : MonoBehaviour {
 
     private int m_defaultRoomSize = 20; // Default room size (in blocks in Unity editor)
 
-    // Initialize
-    void Awake()
+    [ServerCallback]
+    public override void OnStartServer()
     {
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
         Location startingRoomLoc = new Location(0, 0);
@@ -28,29 +30,29 @@ public class MapManager : MonoBehaviour {
     // Place a new room in the world.
     // The MapMgr is not concerned with the contents of the room, just that it can be placed.
     // 
-    public RoomObject PlaceRoom(Location gridPosition)
+    public void PlaceRoom(Location gridPosition)
     {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
         if ((placeX < 0 || placeX >= m_worldMaxXSize) || 
             (placeY < 0 || placeY >= m_worldMaxYSize)) {
-            return null;
+            return;
         }
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
         if(m_worldGrid[placeX, placeY] != null) {
-            return null;
+            return;
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
         Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
         RoomObject room = (RoomObject) Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
         room.SetRoomLocation(gridPosition);
-        _determineDoorPlacement(gridPosition, room);
-        _checkDoorRooms(gridPosition, room);
+        room = _determineDoorPlacement(gridPosition, room);
+        room = _checkDoorRooms(gridPosition, room);
         m_worldGrid[placeX, placeY] = room;
-        return room;
+        NetworkServer.Spawn(room.gameObject);
     }
 
     // Get a room from the world

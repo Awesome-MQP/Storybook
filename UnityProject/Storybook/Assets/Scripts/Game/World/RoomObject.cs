@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class RoomObject : MonoBehaviour{
+public class RoomObject : NetworkBehaviour {
 
     public readonly int NORTH_DOOR_INDEX = 0;
     public readonly int EAST_DOOR_INDEX = 1;
@@ -19,6 +20,7 @@ public class RoomObject : MonoBehaviour{
                          // In a larger room, it would probably be more like 0-N, 1-N, 2-E, 3-S, 4-S, and so on.
                          // If a door does not exist here, just use "null"
     [SerializeField]
+    [SyncVar]
     private Location m_roomLocation;
     [SerializeField]
     private int m_roomSize; // Can be x1, x2, x4.

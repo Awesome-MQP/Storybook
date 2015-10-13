@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class Door : MonoBehaviour {
+public class Door : NetworkBehaviour {
 
     [SerializeField]
     private DoorSpawnNode m_doorNode;
 
+    [SyncVar]
     private bool m_isDoorEnabled = true;
+
+    [SyncVar]
     private bool m_isDoorRoomSpawned = false;
 
+    [SyncVar]
     private Location m_roomThroughDoorLoc;
 
     // TODO : Add implementation for passing through doors.

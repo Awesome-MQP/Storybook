@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Core.Serialization;
 
 public class SerializationTest : MonoBehaviour
 {

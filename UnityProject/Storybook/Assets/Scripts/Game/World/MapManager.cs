@@ -21,8 +21,6 @@ public class MapManager : MonoBehaviour {
     void Awake()
     {
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
-        Location startingRoomLoc = new Location(0, 0);
-        PlaceRoom(startingRoomLoc);
     }
 	
     // Place a new room in the world.

@@ -78,7 +78,7 @@ MonoBehaviour:
   m_defense: 1
   m_attack: 1
   m_genre: 4
-  m_aggressionValue: 50
+  m_aggressionValue: 100
   m_currentMana: 1
   m_manaPerTurn: 2
   m_enemyMoveList:
@@ -122,7 +122,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_aggressionValue
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_currentMana

@@ -34,4 +34,6 @@ MonoBehaviour:
   - SelectHostPlayer
   - SendOutHostId
   - CreateNewRoom
+  - MoveToRoomAtLoc
+  - PlacePlayer
   DisableAutoOpenWizard: 1

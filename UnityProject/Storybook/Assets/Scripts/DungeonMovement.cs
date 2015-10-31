@@ -17,7 +17,7 @@ public class DungeonMovement : Photon.PunBehaviour {
         m_mapManager = FindObjectOfType<MapManager>();
         m_currentLoc = new Location(0, 0);
         m_currentRoom = m_mapManager.PlaceRoom(m_currentLoc);
-        PlacePlayer();
+        m_scenePhotonView.RPC("PlacePlayer", PhotonTargets.All);
     }
 
     void OnGUI()
@@ -147,6 +147,11 @@ public class DungeonMovement : Photon.PunBehaviour {
         PlacePlayer();
     }
 
+    /// <summary>
+    /// Moves the players to the room at the given coordinates in the room grid
+    /// </summary>
+    /// <param name="roomLocX">The X coordinate of the room to move to</param>
+    /// <param name="roomLocY">The Y coordinate of the room to move to</param>
     [PunRPC]
     private void MoveToRoomAtLoc(int roomLocX, int roomLocY)
     {
@@ -158,9 +163,14 @@ public class DungeonMovement : Photon.PunBehaviour {
         PlacePlayer();
     }
 
+    /// <summary>
+    /// Places the player at the corresponding player node in the current room
+    /// </summary>
+    [PunRPC]
     private void PlacePlayer()
     {
         Vector3 playerLoc = Vector3.zero;
+        // Place the player at the corresponding player node in the room
         if (PhotonNetwork.player.ID == 1)
         {
             playerLoc = m_currentRoom.Player1Node.position;
@@ -178,10 +188,12 @@ public class DungeonMovement : Photon.PunBehaviour {
             playerLoc = m_currentRoom.Player4Node.position;
         }
 
+        // If the player pawn has not been created, instantiate it
         if (m_playerPawn == null)
         {
             m_playerPawn = PhotonNetwork.Instantiate("PlayerCharacter", playerLoc, Quaternion.identity, 0);
         }
+        // Otherwise, just move the existing pawn
         else
         {
             m_playerPawn.transform.position = playerLoc;

@@ -27,6 +27,18 @@ public class RoomObject : MonoBehaviour{
     [SerializeField]
     private RoomFeature m_roomFeature;
 
+    [SerializeField]
+    private Transform m_player1Pos;
+
+    [SerializeField]
+    private Transform m_player2Pos;
+
+    [SerializeField]
+    private Transform m_player3Pos;
+
+    [SerializeField]
+    private Transform m_player4Pos;
+
     // Set the location of the room.
     // Should only be used once, when placing the room.
     public void SetRoomLocation(Location loc)
@@ -92,5 +104,25 @@ public class RoomObject : MonoBehaviour{
     public Transform CameraNode
     {
         get { return m_cameraNode; }
+    }
+
+    public Transform Player1Node
+    {
+        get { return m_player1Pos; }
+    }
+
+    public Transform Player2Node
+    {
+        get { return m_player2Pos; }
+    }
+
+    public Transform Player3Node
+    {
+        get { return m_player3Pos; }
+    }
+
+    public Transform Player4Node
+    {
+        get { return m_player4Pos; }
     }
 }

@@ -36,4 +36,8 @@ MonoBehaviour:
   - CreateNewRoom
   - MoveToRoomAtLoc
   - PlacePlayer
+  - MovePlayers
+  - MovePlayer
+  - StopPlayer
+  - SetNewRoomLoc
   DisableAutoOpenWizard: 1

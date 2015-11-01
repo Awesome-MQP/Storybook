@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DungeonMovement : Photon.PunBehaviour {
 
@@ -8,7 +9,8 @@ public class DungeonMovement : Photon.PunBehaviour {
     private MapManager m_mapManager;
     private RoomObject m_currentRoom;
     private Location m_currentLoc;
-    private GameObject m_playerPawn;
+    private Location m_newRoomLoc;
+    private GameObject m_playerPawn = null;
 
     // Use this for initialization
     void Start () {
@@ -18,6 +20,15 @@ public class DungeonMovement : Photon.PunBehaviour {
         m_currentLoc = new Location(0, 0);
         m_currentRoom = m_mapManager.PlaceRoom(m_currentLoc);
         m_scenePhotonView.RPC("PlacePlayer", PhotonTargets.All);
+    }
+
+    void Update()
+    {
+        if (m_playerPawn != null && m_playerPawn.GetComponent<CharacterAnimator>().IsAtDestination)
+        {
+            m_scenePhotonView.RPC("StopPlayer", PhotonTargets.All);
+            m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
+        }
     }
 
     void OnGUI()
@@ -33,78 +44,62 @@ public class DungeonMovement : Photon.PunBehaviour {
             // Only allow the player to select a door if the door is enabled for the current room 
             if (northDoor.IsDoorEnabled && GUILayout.Button("Move Up"))
             {
-                Debug.Log("Moving up");
-                Location newRoomLoc = new Location(m_currentLoc.X + 1, m_currentLoc.Y);
+                m_newRoomLoc = new Location(m_currentLoc.X + 1, m_currentLoc.Y);
+                m_scenePhotonView.RPC("SetNewRoomLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
 
                 // If the selected door's room has not been spawned, create the room
                 if (!northDoor.IsDoorRoomSpawned)
                 {
-                    Debug.Log("North door room not spawned");
-                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
+                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
                     northDoor.SetIsDoorRoomSpawned(true);
                 }
                 // Otherwise just move to the room
-                else
-                {
-                    m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
-                }
+                m_scenePhotonView.RPC("MovePlayer", PhotonTargets.All, northDoor.transform.position);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
             if (westDoor.IsDoorEnabled && GUILayout.Button("Move Left"))
             {
-                Debug.Log("Moving left");
-                Location newRoomLoc = new Location(m_currentLoc.X, m_currentLoc.Y - 1);
+                m_newRoomLoc = new Location(m_currentLoc.X, m_currentLoc.Y - 1);
+                m_scenePhotonView.RPC("SetNewRoomLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
 
                 // If the selected door's room has not been spawned, create the room
                 if (!westDoor.IsDoorRoomSpawned)
                 {
-                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
+                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
                     westDoor.SetIsDoorRoomSpawned(true);
                 }
-                // Otherwise just move to the room
-                else
-                {
-                    m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
-                }
+                m_scenePhotonView.RPC("MovePlayer", PhotonTargets.All, westDoor.transform.position);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
             if (eastDoor.IsDoorEnabled && GUILayout.Button("Move Right"))
             {
-                Debug.Log("Moving right");
-                Location newRoomLoc = new Location(m_currentLoc.X, m_currentLoc.Y + 1);
+                m_newRoomLoc = new Location(m_currentLoc.X, m_currentLoc.Y + 1);
+                m_scenePhotonView.RPC("SetNewRoomLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
 
                 // If the selected door's room has not been spawned, create the room
                 if (!eastDoor.IsDoorRoomSpawned)
                 {
-                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
+                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
                     eastDoor.SetIsDoorRoomSpawned(true);
                 }
-                // Otherwise just move to the room
-                else
-                {
-                    m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
-                }
+                m_scenePhotonView.RPC("MovePlayer", PhotonTargets.All, eastDoor.transform.position);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
             if (southDoor.IsDoorEnabled && GUILayout.Button("Move Down"))
             {
-                Debug.Log("Moving down");
-                Location newRoomLoc = new Location(m_currentLoc.X - 1, m_currentLoc.Y);
+                m_newRoomLoc = new Location(m_currentLoc.X - 1, m_currentLoc.Y);
+                m_scenePhotonView.RPC("SetNewRoomLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
 
                 // If the selected door's room has not been spawned, create the room
                 if (!southDoor.IsDoorRoomSpawned)
                 {
-                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
+                    m_scenePhotonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
                     southDoor.SetIsDoorRoomSpawned(true);
                 }
-                // Otherwise just move to the room
-                else
-                {
-                    m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, newRoomLoc.X, newRoomLoc.Y);
-                }
+                m_scenePhotonView.RPC("MovePlayer", PhotonTargets.All, southDoor.transform.position);
             }
         }
     }
@@ -118,7 +113,6 @@ public class DungeonMovement : Photon.PunBehaviour {
     {
         m_hostPlayerId = UnityEngine.Random.Range(1, PhotonNetwork.playerList.Length);
         m_scenePhotonView.RPC("SendOutHostId", PhotonTargets.Others, m_hostPlayerId);
-        Debug.Log("Host player = " + m_hostPlayerId);
     }
 
     /// <summary>
@@ -140,11 +134,8 @@ public class DungeonMovement : Photon.PunBehaviour {
     private void CreateNewRoom(int newRoomLocX, int newRoomLocY)
     {
         Location newRoomLoc = new Location(newRoomLocX, newRoomLocY);
-        m_currentRoom = m_mapManager.PlaceRoom(newRoomLoc);
-        m_currentLoc = newRoomLoc;
-        Transform roomCamNode = m_currentRoom.CameraNode;
-        Camera.main.transform.position = roomCamNode.transform.position;
-        PlacePlayer();
+        m_mapManager.PlaceRoom(newRoomLoc);
+        m_newRoomLoc = newRoomLoc;
     }
 
     /// <summary>
@@ -198,5 +189,23 @@ public class DungeonMovement : Photon.PunBehaviour {
         {
             m_playerPawn.transform.position = playerLoc;
         }
+    }
+
+    [PunRPC]
+    private void MovePlayer(Vector3 targetLocation)
+    {
+        m_playerPawn.GetComponent<CharacterAnimator>().SetDestination(targetLocation);
+    }
+
+    [PunRPC]
+    private void StopPlayer()
+    {
+        m_playerPawn.GetComponent<CharacterAnimator>().StopMoving();
+    }
+
+    [PunRPC]
+    private void SetNewRoomLoc(int locX, int locY)
+    {
+        m_newRoomLoc = new Location(locX, locY);
     }
 }

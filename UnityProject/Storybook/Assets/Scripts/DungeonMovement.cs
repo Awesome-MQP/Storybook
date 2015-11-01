@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class DungeonMovement : Photon.PunBehaviour {
 
+    [SerializeField]
+    private GameObject m_characterPrefab;
+
     private int m_hostPlayerId;
     private static PhotonView m_scenePhotonView;
     private MapManager m_mapManager;
@@ -11,6 +14,7 @@ public class DungeonMovement : Photon.PunBehaviour {
     private Location m_currentLoc;
     private Location m_newRoomLoc;
     private GameObject m_playerPawn = null;
+    private List<GameObject> m_playerPawns = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
@@ -24,7 +28,7 @@ public class DungeonMovement : Photon.PunBehaviour {
 
     void Update()
     {
-        if (m_playerPawn != null && m_playerPawn.GetComponent<CharacterAnimator>().IsAtDestination)
+        if (m_playerPawns.Count > 0 && m_playerPawns[0].GetComponent<CharacterAnimator>().IsAtDestination)
         {
             m_scenePhotonView.RPC("StopPlayer", PhotonTargets.All);
             m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
@@ -160,47 +164,57 @@ public class DungeonMovement : Photon.PunBehaviour {
     [PunRPC]
     private void PlacePlayer()
     {
-        Vector3 playerLoc = Vector3.zero;
-        // Place the player at the corresponding player node in the room
-        if (PhotonNetwork.player.ID == 1)
+        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
         {
-            playerLoc = m_currentRoom.Player1Node.position;
-        }
-        else if (PhotonNetwork.player.ID == 2)
-        {
-            playerLoc = m_currentRoom.Player2Node.position;
-        }
-        else if (PhotonNetwork.player.ID == 3)
-        {
-            playerLoc = m_currentRoom.Player3Node.position;
-        }
-        else if (PhotonNetwork.player.ID == 4)
-        {
-            playerLoc = m_currentRoom.Player4Node.position;
-        }
+            Vector3 playerLoc = Vector3.zero;
+            // Place the player at the corresponding player node in the room
+            if (i == 0)
+            {
+                playerLoc = m_currentRoom.Player1Node.position;
+            }
+            else if (i == 1)
+            {
+                playerLoc = m_currentRoom.Player2Node.position;
+            }
+            else if (i == 2)
+            {
+                playerLoc = m_currentRoom.Player3Node.position;
+            }
+            else if (i == 3)
+            {
+                playerLoc = m_currentRoom.Player4Node.position;
+            }
 
-        // If the player pawn has not been created, instantiate it
-        if (m_playerPawn == null)
-        {
-            m_playerPawn = PhotonNetwork.Instantiate("PlayerCharacter", playerLoc, Quaternion.identity, 0);
-        }
-        // Otherwise, just move the existing pawn
-        else
-        {
-            m_playerPawn.transform.position = playerLoc;
+            // If the player pawn has not been created, instantiate it
+            if (m_playerPawns.Count <= i)
+            {
+                GameObject pawn = (GameObject) Instantiate(m_characterPrefab, playerLoc, Quaternion.identity);
+                m_playerPawns.Add(pawn);
+            }
+            // Otherwise, just move the existing pawn
+            else
+            {
+                m_playerPawns[i].transform.position = playerLoc;
+            }
         }
     }
 
     [PunRPC]
     private void MovePlayer(Vector3 targetLocation)
     {
-        m_playerPawn.GetComponent<CharacterAnimator>().SetDestination(targetLocation);
+        foreach (GameObject pawn in m_playerPawns)
+        {
+            pawn.GetComponent<CharacterAnimator>().SetDestination(targetLocation);
+        }
     }
 
     [PunRPC]
     private void StopPlayer()
     {
-        m_playerPawn.GetComponent<CharacterAnimator>().StopMoving();
+        foreach (GameObject pawn in m_playerPawns)
+        {
+            pawn.GetComponent<CharacterAnimator>().StopMoving();
+        }
     }
 
     [PunRPC]

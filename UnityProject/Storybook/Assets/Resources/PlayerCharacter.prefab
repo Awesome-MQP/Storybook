@@ -11,8 +11,9 @@ GameObject:
   - 33: {fileID: 3376798}
   - 136: {fileID: 13651732}
   - 23: {fileID: 2371966}
-  - 143: {fileID: 14333354}
-  - 114: {fileID: 11455596}
+  - 114: {fileID: 11457882}
+  - 114: {fileID: 11488724}
+  - 143: {fileID: 14324112}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 106658}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11455596
+--- !u!114 &11457882
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -71,11 +72,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 106658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c98c1cf29fb89a9418e3c87ecc85624c, type: 3}
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  gravity: 30
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 496600}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &11488724
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 106658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e6653b575a1db46abad53bd10f1afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: .5
+  m_targetDistance: .150000006
 --- !u!136 &13651732
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -89,7 +115,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!143 &14333354
+--- !u!143 &14324112
 CharacterController:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -112,7 +138,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: synchronization
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 496600}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 106658}

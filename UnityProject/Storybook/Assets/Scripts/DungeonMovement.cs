@@ -28,6 +28,7 @@ public class DungeonMovement : Photon.PunBehaviour {
 
     void Update()
     {
+        // If a pawn is at the destination, stop all pawns from moving and move all players to the new room
         if (m_playerPawns.Count > 0 && m_playerPawns[0].GetComponent<CharacterAnimator>().IsAtDestination)
         {
             m_scenePhotonView.RPC("StopPlayer", PhotonTargets.All);
@@ -199,6 +200,10 @@ public class DungeonMovement : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sets a destination for all of the player pawns
+    /// </summary>
+    /// <param name="targetLocation"></param>
     [PunRPC]
     private void MovePlayer(Vector3 targetLocation)
     {
@@ -208,6 +213,9 @@ public class DungeonMovement : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Stops all the player pawns from moving
+    /// </summary>
     [PunRPC]
     private void StopPlayer()
     {
@@ -217,6 +225,11 @@ public class DungeonMovement : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sets the newRoomLoc variable to the given location on all clients
+    /// </summary>
+    /// <param name="locX">The X coordinate of the new location</param>
+    /// <param name="locY">The Y coordinate of the new location</param>
     [PunRPC]
     private void SetNewRoomLoc(int locX, int locY)
     {

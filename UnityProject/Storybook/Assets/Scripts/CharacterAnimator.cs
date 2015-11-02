@@ -28,11 +28,18 @@ public class CharacterAnimator : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// True if the character has reached the destination it was moving to, false otherwise
+    /// </summary>
     public bool IsAtDestination
     {
         get { return m_isAtDestination; }
     }
 
+    /// <summary>
+    /// Sets the destination of the character to the given destination and sets variables so that it will start moving
+    /// </summary>
+    /// <param name="newDest">The new destination</param>
     public void SetDestination(Vector3 newDest)
     {
         m_destination = newDest;
@@ -41,6 +48,9 @@ public class CharacterAnimator : MonoBehaviour {
         m_startTime = Time.time;
     }
 
+    /// <summary>
+    /// Stops the character from moving by setting boolean variables
+    /// </summary>
     public void StopMoving()
     {
         m_isMoving = false;

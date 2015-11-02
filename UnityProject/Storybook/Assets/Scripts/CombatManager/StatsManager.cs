@@ -16,24 +16,17 @@ public static class StatsManager {
     /// <param name="attackerGenre">The Genre of the attacker.</param>
     /// <param name="defenderGenre">The Genre of the defender.</param>
     /// <param name="attackerMoveGenre">The Genre of the attacker's move.</param>
-    /// <param name="attackerStrBase">The base Str stat of the attacker.</param>
-    /// <param name="attackerStrBoost">The modifier to the attacker's Str based on boosts from combat.</param>
-    /// <param name="attackerStrMod">Modifier for the attacker's Str based on the pages in their hand.</param>
-    /// <param name="defenderDefBase">The base Def stat of the defender.</param>
-    /// <param name="defenderDefMod">The modifier to the defender's Def based on the pages in their hand.</param>
-    /// <param name="defenderDefBoost">Modifier for the defender's Def based on boosts from combat.</param>
+    /// <param name="attackerStr">The base Str stat of the attacker.</param>
+    /// <param name="defenderDef">The base Def stat of the defender.</param>
     /// <returns></returns>
-    public static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float attackerStrBase, float attackerStrBoost, float attackerStrMod,
-                   float defenderDefBase, float defenderDefMod, float defenderDefBoost)
+    public static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float attackerStr, float defenderDef)
     {
-        float totalAttack = attackerStrBase + attackerStrBoost + attackerStrMod;
-        float totalDef = defenderDefBase + defenderDefBoost + defenderDefMod;
         float sameTypeMoveBonus = GetSameTypeBonus(attackerGenre, attackerMoveGenre);
         float typeAdvantageBonus = GetTypeAdvantageBonus(attackerMoveGenre, defenderGenre);
 
-        float totalDmg = totalAttack * (sameTypeMoveBonus * typeAdvantageBonus) - totalDef;
+        float totalDmg = attackerStr * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
 
-        if (totalDef < 0)
+        if (totalDmg < 0)
         { return 0; }
         else
         { return Mathf.FloorToInt(totalDmg); }

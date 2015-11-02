@@ -21,7 +21,8 @@ public class TestPageAttackMove : PageMove {
     {
         foreach (CombatPawn enemyPawn in MoveTargets)
         {
-            enemyPawn.DealDamageToPawn(m_moveDamage);
+            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, enemyPawn.PawnGenre, MoveGenre, MoveOwner.Attack, enemyPawn.Defense);
+            enemyPawn.DealDamageToPawn(moveDamage);
         }
     }
 

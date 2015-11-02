@@ -171,4 +171,14 @@ public abstract class CombatPawn : MonoBehaviour {
             m_speedBoost -= 1;
         }
     }
+
+    public float Attack
+    {
+        get { return m_attack + m_attackBoost + m_attackMod; }
+    }
+
+    public float Defense
+    {
+        get { return m_defense + m_defenseBoost + m_defenseMod; }
+    }
 }

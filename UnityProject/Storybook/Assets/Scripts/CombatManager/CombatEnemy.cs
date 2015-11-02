@@ -36,6 +36,14 @@ public abstract class CombatEnemy : CombatPawn {
         get { return m_enemyMoveList; }
     }
 
+    protected void Awake()
+    {
+        foreach (CombatMove move in EnemyMoves)
+        {
+            move.SetMoveOwner(this);
+        }
+    }
+
     /// <summary>
     /// Chooses a move for the enemy pawn to use in the current turn of combat and sets the targets of the move
     /// </summary>

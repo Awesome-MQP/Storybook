@@ -16,6 +16,7 @@ public class TestCombatPawn : CombatPlayer
             List<CombatPawn> targetList = new List<CombatPawn>();
             targetList.Add(CManager.EnemyList[0]);
             PlayerMove chosenMove = PlayerHand[0];
+            chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
             chosenMove.InitializeMove();
             SetMoveForTurn(chosenMove);

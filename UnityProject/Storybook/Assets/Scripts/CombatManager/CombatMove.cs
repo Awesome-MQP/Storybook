@@ -44,6 +44,8 @@ public abstract class CombatMove : MonoBehaviour{
 
     private float m_timeSinceMoveStarted = 0;
 
+    private CombatPawn m_moveOwner;
+
     /// <summary>
     /// Initializes move variables
     /// </summary>
@@ -154,5 +156,20 @@ public abstract class CombatMove : MonoBehaviour{
     public void SetTimeSinceMoveStarted(float newTimeSinceMoveStarted)
     {
         m_timeSinceMoveStarted = newTimeSinceMoveStarted;
+    }
+
+    public void SetMoveOwner(CombatPawn moveOwner)
+    {
+        m_moveOwner = moveOwner;
+    }
+
+    public CombatPawn MoveOwner
+    {
+        get { return m_moveOwner; }
+    }
+
+    public Genre MoveGenre
+    {
+        get { return m_moveGenre; }
     }
 }

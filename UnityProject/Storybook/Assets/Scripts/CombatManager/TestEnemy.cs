@@ -8,12 +8,8 @@ public class TestEnemy : CombatEnemy
 
     void Awake()
     {
+        base.Awake();
         InitializeVariables();
-    }
-
-    void Start()
-    {
-
     }
 
     public override void OnThink()

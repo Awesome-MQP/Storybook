@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CombatManager : MonoBehaviour {
+public class CombatManager : Photon.PunBehaviour {
 
     [SerializeField]
     private CombatPawn m_combatPawnPrefab;
@@ -26,6 +26,8 @@ public class CombatManager : MonoBehaviour {
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
+    private static PhotonView m_scenePhotonView;
+
     // Use this for initialization
     void Awake()
     {
@@ -42,6 +44,15 @@ public class CombatManager : MonoBehaviour {
 
         // Default current state to think state
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+    }
+
+    void Start()
+    {
+        m_scenePhotonView = this.GetComponent<PhotonView>();
+        if (PhotonNetwork.isMasterClient)
+        {
+            PhotonNetwork.Instantiate("CombatNetworker", Vector3.zero, Quaternion.identity, 0);
+        }
     }
 
     public void StartCombat()
@@ -156,6 +167,7 @@ public class CombatManager : MonoBehaviour {
             CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, m_combatPawnPrefab.transform.rotation);
             CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
+            combatPawnScript.SetPlayerId(i + 1);
             m_playerPawnList.Add(combatPawnScript);
         }
     }
@@ -182,6 +194,7 @@ public class CombatManager : MonoBehaviour {
         {
             CombatEnemy enemyObject = (CombatEnemy)Instantiate(m_enemiesToSpawn[i], transform.position, Quaternion.identity);
             enemyObject.RegisterCombatManager(this);
+            enemyObject.SetPlayerId(i + 1);
             m_enemyList.Add(enemyObject);
         }
     }

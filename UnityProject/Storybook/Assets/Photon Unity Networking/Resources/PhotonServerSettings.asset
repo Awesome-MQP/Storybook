@@ -40,4 +40,6 @@ MonoBehaviour:
   - MovePlayer
   - StopPlayer
   - SetNewRoomLoc
+  - StartCombat
+  - SendMoveOverNetwork
   DisableAutoOpenWizard: 1

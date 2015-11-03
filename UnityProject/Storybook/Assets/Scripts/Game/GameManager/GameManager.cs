@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Photon.PunBehaviour
+{
 
     [SerializeField]
     private GameObject m_combatInstancePrefab;
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private int m_playersInCombat;
 
+    [SerializeField]
+    private PlayerMove[] m_allPlayerMoves;
+
     private List<GameObject> m_combatInstances = new List<GameObject>();
     private float m_timeElapsed = 0;
     private bool test1Done = false;
@@ -22,11 +26,12 @@ public class GameManager : MonoBehaviour {
     private bool test3Done = false;
     private bool test4Done = false;
 
-	// Update is called once per frame
-	void Start () {
+    // Update is called once per frame
+    void Start()
+    {
         List<PlayerEntity> playerList = new List<PlayerEntity>();
         StartCombat(playerList);
-	}
+    }
 
     /// <summary>
     /// Starts a combat instance and sets the players for the combat manager to the list of players given to this function
@@ -36,11 +41,11 @@ public class GameManager : MonoBehaviour {
     {
         Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
-        GameObject combatInstance = (GameObject) Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
+        GameObject combatInstance = (GameObject)Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
         CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
         combatManager.SetPlayerEntityList(playersEnteringCombat);
         combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
-        combatManager.SetPlayersToSpawn(m_playersInCombat);
+        combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
 
         // Get all the player position nodes and set it in the combat manager
         PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
@@ -166,5 +171,10 @@ public class GameManager : MonoBehaviour {
             EndAllCombat();
             test4Done = true;
         }
+    }
+
+    public PlayerMove[] AllPlayerMoves
+    {
+        get { return m_allPlayerMoves; }
     }
 }

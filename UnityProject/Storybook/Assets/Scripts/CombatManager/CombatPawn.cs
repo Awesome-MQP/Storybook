@@ -35,6 +35,8 @@ public abstract class CombatPawn : MonoBehaviour {
     // Defaults to null because it needs to be able to return null moves
     private CombatMove m_moveForTurn = null;
 
+    private int m_playerId;
+
     public abstract void OnThink();
 
     /// <summary>
@@ -180,5 +182,15 @@ public abstract class CombatPawn : MonoBehaviour {
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
+    }
+
+    public int PlayerId
+    {
+        get { return m_playerId; }
+    }
+
+    public void SetPlayerId(int newPlayerId)
+    {
+        m_playerId = newPlayerId;
     }
 }

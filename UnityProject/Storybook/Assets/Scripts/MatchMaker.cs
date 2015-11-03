@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MatchMaker : Photon.PunBehaviour {
+public class MatchMaker : Photon.PunBehaviour
+{
 
     private bool isFirst = false;
     private static PhotonView ScenePhotonView;
@@ -18,6 +19,10 @@ public class MatchMaker : Photon.PunBehaviour {
         if (isFirst && GUILayout.Button("Start Game"))
         {
             ScenePhotonView.RPC("StartGame", PhotonTargets.All);
+        }
+        if (isFirst && GUILayout.Button("Start Combat"))
+        {
+            ScenePhotonView.RPC("StartCombat", PhotonTargets.All);
         }
     }
 
@@ -64,5 +69,14 @@ public class MatchMaker : Photon.PunBehaviour {
     private void StartGame()
     {
         Application.LoadLevel("TestRoomPlacement");
+    }
+
+    /// <summary>
+    /// Loads the DemoCombatScene for all players
+    /// </summary>
+    [PunRPC]
+    private void StartCombat()
+    {
+        Application.LoadLevel("DemoCombatScene");
     }
 }

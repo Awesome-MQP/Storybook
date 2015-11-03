@@ -11,6 +11,8 @@ public class ExecuteState : CombatState {
     {
         base.OnStateEnter(animator, stateInfo, layerIndex);
 
+        Debug.Log("Entering Execute State");
+
         // Execute state can only be reached from think state, so need to reset the ExecuteToThink trigger
         StateMachine.ResetTrigger("ExecuteToThink");
 

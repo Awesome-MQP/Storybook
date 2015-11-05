@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// The representation of the real world player and there stats.
 /// </summary>
-public class PlayerEntity : NetworkBehaviour
+public class PlayerEntity : Photon.MonoBehaviour
 {
     public string Name
     {
@@ -19,7 +19,7 @@ public class PlayerEntity : NetworkBehaviour
         get { return m_hitPoints; }
         set
         {
-            if (hasAuthority)
+            if (PhotonNetwork.isMasterClient)
                 m_hitPoints = value;
         }
     }
@@ -29,7 +29,7 @@ public class PlayerEntity : NetworkBehaviour
         get { return m_maxHitPoints; }
         set
         {
-            if (hasAuthority)
+            if (PhotonNetwork.isMasterClient)
                 m_maxHitPoints = value;
         }
     }
@@ -39,7 +39,7 @@ public class PlayerEntity : NetworkBehaviour
         get { return m_attack; }
         set
         {
-            if(hasAuthority)
+            if(PhotonNetwork.isMasterClient)
                 m_attack = value;
         }
     }
@@ -49,7 +49,7 @@ public class PlayerEntity : NetworkBehaviour
         get { return m_defense; }
         set
         {
-            if (hasAuthority)
+            if (PhotonNetwork.isMasterClient)
                 m_defense = value;
         }
     }
@@ -59,18 +59,8 @@ public class PlayerEntity : NetworkBehaviour
         get { return m_speed; }
         set
         {
-            if(hasAuthority)
+            if(PhotonNetwork.isMasterClient)
                 m_speed = value;
-        }
-    }
-
-    public int Luck
-    {
-        get { return m_luck; }
-        set
-        {
-            if(hasAuthority)
-                m_luck = value;
         }
     }
 
@@ -86,7 +76,7 @@ public class PlayerEntity : NetworkBehaviour
     /// <param name="newName"></param>
     public void Rename(string newName)
     {
-        if(hasAuthority || isLocalPlayer)
+        if(PhotonNetwork.isMasterClient || PhotonNetwork.isNonMasterClientInRoom) // isLocalPlayer)
             CmdInternalRenameServer(newName);
     }
 

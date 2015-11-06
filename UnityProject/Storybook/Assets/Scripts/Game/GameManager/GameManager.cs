@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Photon.PunBehaviour {
 
     [SerializeField]
     private GameObject m_combatInstancePrefab;
@@ -25,7 +25,12 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Start () {
         List<PlayerEntity> playerList = new List<PlayerEntity>();
-        StartCombat(playerList);
+        Camera.main.GetComponent<AudioListener>().enabled = false;
+        if (PhotonNetwork.isMasterClient)
+        {
+            StartCombat(playerList);
+        }
+        //_testNetworkedAnimator();
 	}
 
     /// <summary>
@@ -36,11 +41,11 @@ public class GameManager : MonoBehaviour {
     {
         Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
-        GameObject combatInstance = (GameObject) Instantiate(m_combatInstancePrefab, combatPosition, Quaternion.identity);
+        GameObject combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
         CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
         combatManager.SetPlayerEntityList(playersEnteringCombat);
         combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
-        combatManager.SetPlayersToSpawn(m_playersInCombat);
+        combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
 
         // Get all the player position nodes and set it in the combat manager
         PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
@@ -53,7 +58,6 @@ public class GameManager : MonoBehaviour {
         combatManager.SetEnemyPositions(enemyPositionsList);
 
         // TODO - Remove this
-        Camera.main.GetComponent<AudioListener>().enabled = false;
 
         m_combatInstances.Add(combatInstance);
         combatManager.StartCombat();
@@ -74,9 +78,15 @@ public class GameManager : MonoBehaviour {
             // If the CombatManager of the current combat matches the given CombatManager, destroy the combat instance
             if (currentCombatManager == cm)
             {
-                Destroy(currentCombatInstance);
+                PhotonNetwork.Destroy(currentCombatInstance);
                 break;
             }
+        }
+
+        CombatPawn[] allPawns = FindObjectsOfType<CombatPawn>();
+        for (int i = 0; i < allPawns.Length; i++)
+        {
+            PhotonNetwork.Destroy(allPawns[i].GetComponent<PhotonView>());
         }
     }
 
@@ -165,6 +175,15 @@ public class GameManager : MonoBehaviour {
         {
             EndAllCombat();
             test4Done = true;
+        }
+    }
+
+    private void _testNetworkedAnimator()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            GameObject animatorObject = PhotonNetwork.Instantiate("CombatAnimator", Vector3.zero, Quaternion.identity, 0);
+            Animator animator = animatorObject.GetComponent<Animator>();
         }
     }
 }

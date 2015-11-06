@@ -3,9 +3,30 @@ using System.Collections;
 
 public class LoseState : CombatState {
 
+    private GameObject m_netLoseStateObject = null;
+    private NetLoseState m_netLoseState;
+    private bool m_isExiting = false;
+
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        base.OnStateEnter(animator, stateInfo, layerIndex);
+        m_isExiting = false;
+        if (PhotonNetwork.isMasterClient)
+        {
+            m_netLoseStateObject = PhotonNetwork.Instantiate("NetLoseState", Vector3.zero, Quaternion.identity, 0);
+            m_netLoseState = m_netLoseStateObject.GetComponent<NetLoseState>();
+        }
+    }
+
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        ExitState();
+        if (PhotonNetwork.isMasterClient)
+        {
+            if (m_netLoseState.ExitCombat && !m_isExiting)
+            {
+                ExitState();
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -25,7 +46,13 @@ public class LoseState : CombatState {
 
     public override void ExitState()
     {
-        StateMachine.SetTrigger("ExitCombat");
+        if (m_netLoseStateObject != null)
+        {
+            PhotonNetwork.Destroy(m_netLoseStateObject);
+        }
+        m_isExiting = true;
+        ResetBools();
+        StateMachine.SetBool("ExitCombat", true);
         CManager.EndCurrentCombat();
     }
 }

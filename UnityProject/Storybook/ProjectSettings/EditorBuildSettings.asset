@@ -15,3 +15,5 @@ EditorBuildSettings:
     path: Assets/Scenes/GameLobby.unity
   - enabled: 1
     path: Assets/Scenes/TestRoomPlacement.unity
+  - enabled: 1
+    path: Assets/Scenes/DemoCombatScene.unity

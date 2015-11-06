@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CombatManager : MonoBehaviour {
+public class CombatManager : Photon.PunBehaviour {
 
     [SerializeField]
     private CombatPawn m_combatPawnPrefab;
@@ -26,12 +26,17 @@ public class CombatManager : MonoBehaviour {
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
-    // Use this for initialization
     void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
+    // Use this for initialization
+    void Start()
     {
         // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>() as Animator;
-        m_combatStateMachine.SetTrigger("StartCombat");
+        m_combatStateMachine.SetBool("StartToThink", true);
 
         // Set the combat manager of all the combat state machine states to this object
         CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
@@ -46,13 +51,16 @@ public class CombatManager : MonoBehaviour {
 
     public void StartCombat()
     {
-        // Spawn and place the player pawns
-        _spawnPlayerPawns(m_playersToSpawn);
-        _placePlayers();
+        if (PhotonNetwork.isMasterClient)
+        {
+            // Spawn and place the player pawns
+            _spawnPlayerPawns(m_playersToSpawn);
+            _placePlayers();
 
-        // Spawn and place the enemy pawns
-        _spawnEnemyPawns();
-        _placeEnemies();
+            // Spawn and place the enemy pawns
+            _spawnEnemyPawns();
+            _placeEnemies();
+        }
     }
 
     /// <summary>
@@ -89,22 +97,6 @@ public class CombatManager : MonoBehaviour {
             m_pawnToCombatMove.Remove(combatPawn);
             m_pawnToCombatMove.Add(combatPawn, moveForTurn);
         }
-    }
-
-    /// <summary>
-    /// Called by combat pawn when its attack animation has completed
-    /// </summary>
-    public void PlayerFinishedMoving()
-    {
-        m_combatStateMachine.GetBehaviour<ExecuteState>().GetNextCombatPawn();
-    }
-
-    /// <summary>
-    /// Called by enemy pawn when its attack animation has completed
-    /// </summary>
-    public void EnemyFinishedMoving()
-    {
-        m_combatStateMachine.GetBehaviour<ExecuteState>().GetNextCombatPawn();
     }
 
     /// <summary>
@@ -153,9 +145,11 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < numberToSpawn; i++)
         {
-            CombatPawn combatPawn = (CombatPawn)Instantiate(m_combatPawnPrefab, transform.position, m_combatPawnPrefab.transform.rotation);
+            GameObject combatPawn = PhotonNetwork.Instantiate("TestCombatPawn", transform.position, m_combatPawnPrefab.transform.rotation, 0);
             CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
+            combatPawnScript.SetPawnId(i + 1);
+            Debug.Log("Adding pawn to list");
             m_playerPawnList.Add(combatPawnScript);
         }
     }
@@ -180,9 +174,11 @@ public class CombatManager : MonoBehaviour {
     {
         for (int i = 0; i < m_enemiesToSpawn.Length; i++)
         {
-            CombatEnemy enemyObject = (CombatEnemy)Instantiate(m_enemiesToSpawn[i], transform.position, Quaternion.identity);
-            enemyObject.RegisterCombatManager(this);
-            m_enemyList.Add(enemyObject);
+            GameObject enemyObject = PhotonNetwork.Instantiate(m_enemiesToSpawn[i].name, transform.position, Quaternion.identity, 0);
+            CombatEnemy combatEnemy = enemyObject.GetComponent<CombatEnemy>();
+            combatEnemy.RegisterCombatManager(this);
+            combatEnemy.SetPawnId(i + 1);
+            m_enemyList.Add(combatEnemy);
         }
     }
 

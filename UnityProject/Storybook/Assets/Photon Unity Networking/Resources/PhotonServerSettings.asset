@@ -40,4 +40,11 @@ MonoBehaviour:
   - MovePlayer
   - StopPlayer
   - SetNewRoomLoc
+  - StartCombat
+  - SendPawnIdRPC
+  - SendMoveOverNetwork
+  - SendEnemyMoveOverNetwork
+  - SendPlayerMoveOverNetwork
+  - DestroyState
+  - DeleteCombatRPC
   DisableAutoOpenWizard: 1

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public abstract class CombatPawn : MonoBehaviour {
+public abstract class CombatPawn : Photon.PunBehaviour {
 
     // Character stats
     [SerializeField]
@@ -35,7 +36,18 @@ public abstract class CombatPawn : MonoBehaviour {
     // Defaults to null because it needs to be able to return null moves
     private CombatMove m_moveForTurn = null;
 
+    private int m_pawnId;
+
+    private static PhotonView m_scenePhotonView = null;
+
     public abstract void OnThink();
+
+    void Start()
+    {
+        DontDestroyOnLoad(this);
+        m_combatManager = FindObjectOfType<CombatManager>();
+        m_scenePhotonView = GetComponent<PhotonView>();
+    }
 
     /// <summary>
     /// Setter for the pawn's CombatManager
@@ -180,5 +192,34 @@ public abstract class CombatPawn : MonoBehaviour {
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
+    }
+
+    public int PawnId
+    {
+        get { return m_pawnId; }
+    }
+
+    public void SetPawnId(int newPawnId)
+    {
+        m_pawnId = newPawnId;
+    }
+
+    public PhotonView ScenePhotonView
+    {
+        get { return m_scenePhotonView;  }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(PawnId);
+        }
+        else
+        {
+            // Network player, receive data
+            m_pawnId = (int) stream.ReceiveNext();
+        }
     }
 }

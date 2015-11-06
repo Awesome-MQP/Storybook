@@ -12,6 +12,7 @@ GameObject:
   - 65: {fileID: 6524908}
   - 23: {fileID: 2381902}
   - 114: {fileID: 11474058}
+  - 114: {fileID: 11493674}
   m_Layer: 0
   m_Name: TestCombatPawn
   m_TagString: Untagged
@@ -88,11 +89,37 @@ MonoBehaviour:
   m_health: 10
   m_speed: 7
   m_defense: 1
-  m_attack: 6
+  m_attack: 40
   m_genre: 2
   m_playerHand:
   - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
   - {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
+--- !u!114 &11493674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 474266}
+  - {fileID: 11474058}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -102,6 +129,10 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_playerHand.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
@@ -150,7 +181,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 6
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_playerHand.Array.data[0]
@@ -166,6 +197,18 @@ Prefab:
       propertyPath: m_genre
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: synchronization
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 474266}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
+      objectReference: {fileID: 11474058}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124672}

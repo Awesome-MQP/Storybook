@@ -36,6 +36,7 @@ public abstract class CombatMove : MonoBehaviour{
     /// True if the move targets the pawns of the opposing side, false if it effects pawns of the same side
     /// Ex: true if it is a player move that deals damage to an enemy
     /// </summary>
+    [SerializeField]
     private bool m_isMoveAttack;
 
     private bool m_isMoveEffectDone = false;

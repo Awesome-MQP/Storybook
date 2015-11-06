@@ -38,9 +38,19 @@ public abstract class CombatEnemy : CombatPawn {
 
     protected void Awake()
     {
+        InitializeVariables();
         foreach (CombatMove move in EnemyMoves)
         {
             move.SetMoveOwner(this);
+        }
+
+        if (!PhotonNetwork.isMasterClient)
+        {
+            CombatManager combatManager = FindObjectOfType<CombatManager>();
+            CombatEnemy[] enemyPawns = combatManager.EnemyList;
+            List<CombatEnemy> enemyPawnsList = new List<CombatEnemy>(enemyPawns);
+            enemyPawnsList.Add(this);
+            combatManager.SetEnemyList(enemyPawnsList);
         }
     }
 

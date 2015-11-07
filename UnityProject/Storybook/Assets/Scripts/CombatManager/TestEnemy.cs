@@ -8,29 +8,32 @@ public class TestEnemy : CombatEnemy
 
     public override void OnThink()
     {
-        PhotonView m_scenePhontonView = GetComponent<PhotonView>();
-        // Randomly select a player pawn to attack
-        EnemyMove moveSelected = CreateMove();
-        SetMoveForTurn(moveSelected);
-        SetHasSubmittedMove(true);
-        Debug.Log("Enemy submitted move");
+        if (PhotonNetwork.isMasterClient)
+        {
+            PhotonView m_scenePhontonView = GetComponent<PhotonView>();
+            // Randomly select a player pawn to attack
+            EnemyMove moveSelected = CreateMove();
+            SetMoveForTurn(moveSelected);
+            SetHasSubmittedMove(true);
+            Debug.Log("Enemy submitted move");
 
-        int[] targetIds = new int[4];
-        for (int i = 0; i < moveSelected.MoveTargets.Length; i++)
-        {
-            CombatPawn target = moveSelected.MoveTargets[i];
-            targetIds[i] = target.PawnId;
-        }
-        int moveIndex;
-        for (moveIndex = 0; moveIndex < EnemyMoves.Length; moveIndex++)
-        {
-            if (EnemyMoves[moveIndex] == moveSelected)
+            int[] targetIds = new int[4];
+            for (int i = 0; i < moveSelected.MoveTargets.Length; i++)
             {
-                break;
+                CombatPawn target = moveSelected.MoveTargets[i];
+                targetIds[i] = target.PawnId;
             }
-        }
+            int moveIndex;
+            for (moveIndex = 0; moveIndex < EnemyMoves.Length; moveIndex++)
+            {
+                if (EnemyMoves[moveIndex] == moveSelected)
+                {
+                    break;
+                }
+            }
 
-        m_scenePhontonView.RPC("SendEnemyMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, moveIndex);
+            m_scenePhontonView.RPC("SendEnemyMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, moveIndex);
+        }
     }
 
     [PunRPC]
@@ -48,6 +51,7 @@ public class TestEnemy : CombatEnemy
         }
         else
         {
+            Debug.Log("Enemy move is not an attack");
             possibleTargetList = CManager.PlayerPawnList;
         }
         foreach (CombatPawn pawn in possibleTargetList)

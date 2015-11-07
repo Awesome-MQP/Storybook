@@ -89,7 +89,7 @@ MonoBehaviour:
   m_health: 10
   m_speed: 7
   m_defense: 1
-  m_attack: 40
+  m_attack: 1
   m_genre: 2
   m_playerHand:
   - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
@@ -181,7 +181,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 40
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_playerHand.Array.data[0]

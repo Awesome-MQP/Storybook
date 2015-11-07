@@ -9,6 +9,8 @@ public class NetExecuteState : NetworkState {
     private bool m_executeToThink = false;
     private bool m_executeToWin = false;
     private bool m_executeToLose = false;
+    private int m_playersReady = 0;
+    private bool m_isClientReady = false;
 
     void Awake()
     {
@@ -47,6 +49,11 @@ public class NetExecuteState : NetworkState {
                 m_currentCombatPawn.SetIsActionComplete(true);
                 GetNextCombatPawn();
             }
+        }
+
+        if (m_playersReady == PhotonNetwork.playerList.Length)
+        {
+            StopExecute();
         }
     }
 
@@ -102,10 +109,16 @@ public class NetExecuteState : NetworkState {
     /// </summary>
     public void GetNextCombatPawn()
     {
+        PhotonView sceneView = GetComponent<PhotonView>();
+
         // If the combat has been completed (one side completely defeated, then exit the state)
         if (_isCombatComplete())
         {
-            StopExecute();
+            Debug.Log("Combat is complete");
+            m_isClientReady = true;
+            sceneView.RPC("IncrementPlayersReady", PhotonTargets.All);
+            m_isTurnComplete = true;
+            return;
         }
 
         // Handle any pawns that have been defeated by the previous move's effect
@@ -142,7 +155,10 @@ public class NetExecuteState : NetworkState {
         // Otherwise, all the combat pawns have done their move, so exit the execute state
         else
         {
-            StopExecute();
+            Debug.Log("Combat is also complete");
+            sceneView.RPC("IncrementPlayersReady", PhotonTargets.All);
+            m_isClientReady = true;
+            m_isTurnComplete = true;
         }
     }
 
@@ -267,6 +283,8 @@ public class NetExecuteState : NetworkState {
     {
         m_isTurnComplete = true;
 
+        Debug.Log("Stopping execution");
+
         // If all the players have been defeated, exit this state and enter the lose state
         if (_areAllPlayersDefeated())
         {
@@ -276,6 +294,7 @@ public class NetExecuteState : NetworkState {
         // If all of the enemies are defeated, exit this state and enter the win state
         else if (_areAllEnemiesDefeated())
         {
+            Debug.Log("NetExecute going to win");
             m_executeToWin = true;
         }
 
@@ -285,9 +304,9 @@ public class NetExecuteState : NetworkState {
             Debug.Log("Net Execute going to think");
             m_executeToThink = true;
         }
-        if (!PhotonNetwork.isMasterClient)
+        if (PhotonNetwork.isMasterClient)
         {
-            GetComponent<PhotonView>().RPC("DestroyState", PhotonTargets.MasterClient);
+            PhotonNetwork.Destroy(GetComponent<PhotonView>());
         }
     }
 
@@ -310,5 +329,11 @@ public class NetExecuteState : NetworkState {
     public bool ExecuteToThink
     {
         get { return m_executeToThink; }
+    }
+
+    [PunRPC]
+    private void IncrementPlayersReady()
+    {
+        m_playersReady += 1;
     }
 }

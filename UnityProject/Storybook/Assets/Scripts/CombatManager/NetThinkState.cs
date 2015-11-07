@@ -5,6 +5,8 @@ public class NetThinkState : NetworkState {
 
     private bool m_goToExecuteState = false;
     private bool m_hasCombatManager = false;
+    private int m_playersReady = 0;
+    private bool m_isClientReady = false;
 
     // Use this for initialization
     void Start () {
@@ -41,7 +43,13 @@ public class NetThinkState : NetworkState {
         }
 
         // If all of the players have submitted their moves, exit the think state and move to execute
-        if (areAllMovesSubmitted)
+        if (areAllMovesSubmitted && !m_isClientReady)
+        {
+            GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
+            m_isClientReady = true;
+        }
+
+        if (m_playersReady == PhotonNetwork.playerList.Length)
         {
             m_goToExecuteState = true;
         }
@@ -50,5 +58,11 @@ public class NetThinkState : NetworkState {
     public bool GoToExecuteState
     {
         get { return m_goToExecuteState; }
+    }
+
+    [PunRPC]
+    private void IncrementPlayersReady()
+    {
+        m_playersReady += 1;
     }
 }

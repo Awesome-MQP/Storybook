@@ -47,4 +47,5 @@ MonoBehaviour:
   - SendPlayerMoveOverNetwork
   - DestroyState
   - DeleteCombatRPC
+  - IncrementPlayersReady
   DisableAutoOpenWizard: 1

@@ -46,6 +46,7 @@ public class LoseState : CombatState {
 
     public override void ExitState()
     {
+        m_netLoseState.DeleteCombat();
         if (m_netLoseStateObject != null)
         {
             PhotonNetwork.Destroy(m_netLoseStateObject);

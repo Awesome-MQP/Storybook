@@ -4,7 +4,8 @@ using System.Collections;
 public class NetWinState : NetworkState {
 
     private bool m_exitCombat = false;
-
+    private bool m_isClientReady = false;
+    private int m_playersReady = 0;
     private int m_trigger = 0;
 
     void Awake()
@@ -14,8 +15,16 @@ public class NetWinState : NetworkState {
 
     void Update()
     {
-        m_trigger += 1;
-        if (m_trigger > 250)
+        if (!m_isClientReady)
+        {
+            m_trigger += 1;
+            if (m_trigger > 250)
+            {
+                m_isClientReady = true;
+                GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
+            }
+        }
+        if (m_playersReady == PhotonNetwork.playerList.Length)
         {
             m_exitCombat = true;
         }
@@ -29,6 +38,12 @@ public class NetWinState : NetworkState {
     public void DeleteCombat()
     {
         CManager.EndCurrentCombat();
+    }
+
+    [PunRPC]
+    private void IncrementPlayersReady()
+    {
+        m_playersReady += 1;
     }
 
 }

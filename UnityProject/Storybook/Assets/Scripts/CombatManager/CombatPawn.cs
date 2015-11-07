@@ -213,12 +213,12 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     {
         if (stream.isWriting)
         {
-            // We own this player: send the others our data
+            // Send the pawnId to the other clients
             stream.SendNext(PawnId);
         }
         else
         {
-            // Network player, receive data
+            // Receive the pawnId
             m_pawnId = (int) stream.ReceiveNext();
         }
     }

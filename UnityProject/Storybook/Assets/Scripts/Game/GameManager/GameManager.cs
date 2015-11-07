@@ -26,11 +26,12 @@ public class GameManager : Photon.PunBehaviour {
 	void Start () {
         List<PlayerEntity> playerList = new List<PlayerEntity>();
         Camera.main.GetComponent<AudioListener>().enabled = false;
+
+        // Only call StartCombat on the master client
         if (PhotonNetwork.isMasterClient)
         {
             StartCombat(playerList);
         }
-        //_testNetworkedAnimator();
 	}
 
     /// <summary>
@@ -56,8 +57,6 @@ public class GameManager : Photon.PunBehaviour {
         EnemyPositionNode[] enemyPositions = combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
         List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
         combatManager.SetEnemyPositions(enemyPositionsList);
-
-        // TODO - Remove this
 
         m_combatInstances.Add(combatInstance);
         combatManager.StartCombat();

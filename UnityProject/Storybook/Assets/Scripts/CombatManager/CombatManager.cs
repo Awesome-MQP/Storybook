@@ -110,7 +110,6 @@ public class CombatManager : Photon.PunBehaviour {
         Debug.Log("Enemy 1 Health = " + m_enemyList[0].Health);
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
-        ResetPawnActions();
         _incrementEnemyMana();
         _decrementAllBoosts();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();

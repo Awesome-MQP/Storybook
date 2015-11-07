@@ -17,6 +17,9 @@ public abstract class CombatPlayer : CombatPawn {
 
     void Awake()
     {
+
+        // If it is not the master client, need to add this player to the player pawn list in the combat manager
+        // The master client adds the player pawn to its combat manager when it spawns the pawns
         if (!PhotonNetwork.isMasterClient)
         {
             CombatManager combatManager = FindObjectOfType<CombatManager>();

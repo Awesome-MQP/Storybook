@@ -11,6 +11,8 @@ public class LoseState : CombatState {
     {
         base.OnStateEnter(animator, stateInfo, layerIndex);
         m_isExiting = false;
+
+        // If it is the master client, instantiate the NetLoseState to all players
         if (PhotonNetwork.isMasterClient)
         {
             m_netLoseStateObject = PhotonNetwork.Instantiate("NetLoseState", Vector3.zero, Quaternion.identity, 0);
@@ -47,6 +49,8 @@ public class LoseState : CombatState {
     public override void ExitState()
     {
         m_netLoseState.DeleteCombat();
+
+        // Destroy the NetLoseState when exiting and end the combat
         if (m_netLoseStateObject != null)
         {
             PhotonNetwork.Destroy(m_netLoseStateObject);
@@ -54,6 +58,5 @@ public class LoseState : CombatState {
         m_isExiting = true;
         ResetBools();
         StateMachine.SetBool("ExitCombat", true);
-        CManager.EndCurrentCombat();
     }
 }

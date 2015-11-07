@@ -20,6 +20,7 @@ public class ThinkState : CombatState {
 
         StateMachine.SetBool("ExecuteToThink", false);
 
+        // If it is the master client, instantiate a NetThinkState for all players to receive
         if (PhotonNetwork.isMasterClient)
         {
             m_netThinkStateObject = PhotonNetwork.Instantiate("NetThinkState", Vector3.zero, Quaternion.identity, 0);
@@ -30,6 +31,7 @@ public class ThinkState : CombatState {
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
  
+        // If it is the master client and the NetThinkState exit boolean is true, exit the think state
         if (PhotonNetwork.isMasterClient && !m_isExiting)
         {
             if (m_netThinkState.GoToExecuteState)
@@ -57,6 +59,8 @@ public class ThinkState : CombatState {
     public override void ExitState()
     {
         m_isExiting = true;
+
+        // Delete the NetThinkState
         if (m_netThinkStateObject != null)
         {
             PhotonNetwork.Destroy(m_netThinkStateObject);
@@ -65,6 +69,5 @@ public class ThinkState : CombatState {
         m_netThinkState = null;
         Debug.Log("Exiting Think State");
         StateMachine.SetBool("ThinkToExecute", true);
-        //CManager.SetCurrentState(StateMachine.GetBehaviour<ExecuteState>());
     }
 }

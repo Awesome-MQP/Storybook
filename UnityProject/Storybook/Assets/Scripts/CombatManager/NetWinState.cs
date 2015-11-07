@@ -24,7 +24,7 @@ public class NetWinState : NetworkState {
                 GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
             }
         }
-        if (m_playersReady == PhotonNetwork.playerList.Length)
+        if (m_playersReady >= PhotonNetwork.playerList.Length)
         {
             m_exitCombat = true;
         }
@@ -35,11 +35,15 @@ public class NetWinState : NetworkState {
         get { return m_exitCombat; }
     }
 
+    // Ends the current combat
     public void DeleteCombat()
     {
         CManager.EndCurrentCombat();
     }
 
+    /// <summary>
+    /// Increments the number of players ready on all clients
+    /// </summary>
     [PunRPC]
     private void IncrementPlayersReady()
     {

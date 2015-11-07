@@ -36,6 +36,12 @@ public class TestEnemy : CombatEnemy
         }
     }
 
+    /// <summary>
+    /// Sends the chosen enemy move to the enemy pawns on the other clients
+    /// </summary>
+    /// <param name="playerId">The id of the pawn whose move is being sent</param>
+    /// <param name="targetIds">The pawn ids of the targets of the move</param>
+    /// <param name="moveIndex">The index of the move in the enemy's move pool</param>
     [PunRPC]
     private void SendEnemyMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
@@ -45,15 +51,22 @@ public class TestEnemy : CombatEnemy
 
         // Determine the targets of the move based on the list of target ids
         CombatPawn[] possibleTargetList = null;
+
+        // If the move is an attack, the players are the possible targets
         if (chosenMove.IsMoveAttack)
         {
-            possibleTargetList = CManager.EnemyList;
+            Debug.Log("Enemy move is an attack");
+            possibleTargetList = CManager.PlayerPawnList;
         }
+
+        // If the move is a support move, the other enemies are the possible targets
         else
         {
             Debug.Log("Enemy move is not an attack");
-            possibleTargetList = CManager.PlayerPawnList;
+            possibleTargetList = CManager.EnemyList;
         }
+
+        // Iterate through the pawns in the possibleTargetList and find the targets
         foreach (CombatPawn pawn in possibleTargetList)
         {
             if (targetIds.Contains(pawn.PawnId))

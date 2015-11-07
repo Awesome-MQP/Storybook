@@ -9,7 +9,7 @@ public class TestCombatPawn : CombatPlayer
     // Waits for input of a move
     public override void OnThink()
     {
-        // TODO - Change back to player hitting space bar to select the first move
+        // If the player hits the space bar and this pawn is the client's, submit a move
         if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.player.ID == PawnId)
         {
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();
@@ -36,6 +36,12 @@ public class TestCombatPawn : CombatPlayer
         }
     }
 
+    /// <summary>
+    /// Sends the player move over network to the corresponding pawn in all clients
+    /// </summary>
+    /// <param name="playerId">The PawnID of the player submitting the move</param>
+    /// <param name="targetIds">The PawnID of the targets of the selected move</param>
+    /// <param name="moveIndex">The index of the move in the player's hand of moves</param>
     [PunRPC]
     private void SendPlayerMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
@@ -45,16 +51,22 @@ public class TestCombatPawn : CombatPlayer
 
         // Determine the targets of the move based on the list of target ids
         CombatPawn[] possibleTargetList = null;
+
+        // If the move is an attack, the possible targets are the enemy list
         if (chosenMove.IsMoveAttack)
         {
             Debug.Log("Move is an attack");
             possibleTargetList = CManager.EnemyList;
         }
+
+        // If the move is a support move, the possible targets are the player list
         else
         {
             Debug.Log("Move is not an attack");
             possibleTargetList = CManager.PlayerPawnList;
         }
+
+        // Iterate through the possible targets and find the targets based on the targetIds
         foreach (CombatPawn pawn in possibleTargetList)
         {
             if (targetIds.Contains(pawn.PawnId))

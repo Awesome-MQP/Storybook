@@ -51,8 +51,9 @@ public class NetExecuteState : NetworkState {
             }
         }
 
-        if (m_playersReady == PhotonNetwork.playerList.Length)
+        if (m_playersReady >= PhotonNetwork.playerList.Length)
         {
+            _resetAllPawns();
             StopExecute();
         }
     }
@@ -304,16 +305,15 @@ public class NetExecuteState : NetworkState {
             Debug.Log("Net Execute going to think");
             m_executeToThink = true;
         }
-        if (PhotonNetwork.isMasterClient)
-        {
-            PhotonNetwork.Destroy(GetComponent<PhotonView>());
-        }
     }
 
-    [PunRPC]
-    private void DestroyState()
+    private void _resetAllPawns()
     {
-        PhotonNetwork.Destroy(GetComponent<PhotonView>());
+        foreach (CombatPawn pawn in CManager.AllPawns)
+        {
+            pawn.ResetMove();
+            pawn.SetIsActionComplete(false);
+        }
     }
 
     public bool ExecuteToWin

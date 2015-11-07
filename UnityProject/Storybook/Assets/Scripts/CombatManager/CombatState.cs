@@ -38,6 +38,9 @@ public abstract class CombatState : StateMachineBehaviour {
         StateMachine = animator;
     }
 
+    /// <summary>
+    /// Resets all of the bools that are used to transition from state to state to false
+    /// </summary>
     protected void ResetBools()
     {
         m_stateMachine.SetBool("StartToThink", false);

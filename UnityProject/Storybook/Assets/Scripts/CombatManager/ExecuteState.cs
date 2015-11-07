@@ -19,6 +19,7 @@ public class ExecuteState : CombatState
         Debug.Log("Entering execute state");
         base.OnStateEnter(animator, stateInfo, layerIndex);
 
+        // If is the master client, instantiate a NetExecuteState to all clients upon entering
         if (PhotonNetwork.isMasterClient)
         {
             m_netExecuteStateObject = PhotonNetwork.Instantiate("NetExecuteState", Vector3.zero, Quaternion.identity, 0);
@@ -32,18 +33,23 @@ public class ExecuteState : CombatState
 
         if (PhotonNetwork.isMasterClient && !m_isExiting)
         {
+            // If the NetExecuteState execute to win boolean is true, transition to the win state
             if (m_netExecuteState.ExecuteToWin)
             {
                 ExitState();
                 StateMachine.SetBool("ExecuteToWin", true);
                 CManager.SetCurrentState(StateMachine.GetBehaviour<WinState>());
             }
+
+            // If the NetExecuteState execute to lose boolean is true, transition to the lose state
             else if (m_netExecuteState.ExecuteToLose)
             {
                 ExitState();
                 StateMachine.SetBool("ExecuteToLose", true);
                 CManager.SetCurrentState(StateMachine.GetBehaviour<LoseState>());
             }
+
+            // If the NetExecuteState execute to think boolean is true, transition to the think state
             else if (m_netExecuteState.ExecuteToThink)
             {
                 ExitState();
@@ -72,12 +78,12 @@ public class ExecuteState : CombatState
     public override void ExitState()
     {
         m_isExiting = true;
-        /*
+
         if (m_netExecuteStateObject != null)
         {
             PhotonNetwork.Destroy(m_netExecuteStateObject);
         }
-        */
+        
         m_netExecuteStateObject = null;
         m_netExecuteState = null;
     }

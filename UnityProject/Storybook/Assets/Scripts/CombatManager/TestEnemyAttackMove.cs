@@ -9,6 +9,11 @@ public class TestEnemyAttackMove : EnemyMove {
 
     private bool IS_MOVE_ATTACK = true;
 
+    void Start()
+    {
+        SetIsMoveAttack(IS_MOVE_ATTACK);
+    }
+
     /// <summary>
     /// Deals combat damage to all the player pawns in the target list
     /// </summary>

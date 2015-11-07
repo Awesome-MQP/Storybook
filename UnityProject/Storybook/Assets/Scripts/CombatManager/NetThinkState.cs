@@ -23,6 +23,8 @@ public class NetThinkState : NetworkState {
     void Update () {
 
         bool areAllMovesSubmitted = true;
+
+        // Iterate through all of the pawns in the combat and submit their move to the combat manager if they have chosen one
         foreach (CombatPawn combatPawn in CManager.AllPawns)
         {
             if (!combatPawn.HasSubmittedMove)
@@ -42,24 +44,32 @@ public class NetThinkState : NetworkState {
             }
         }
 
-        // If all of the players have submitted their moves, exit the think state and move to execute
+        // If all moves are submitted, then this client is ready so increment the players ready value
         if (areAllMovesSubmitted && !m_isClientReady)
         {
+            Debug.Log("This client is ready");
             GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
             m_isClientReady = true;
         }
 
-        if (m_playersReady == PhotonNetwork.playerList.Length)
+        // Go to the execute state if all players are ready
+        if (m_playersReady >= PhotonNetwork.playerList.Length)
         {
             m_goToExecuteState = true;
         }
     }
 
+    /// <summary>
+    /// True if all players are ready to move to the execute state
+    /// </summary>
     public bool GoToExecuteState
     {
         get { return m_goToExecuteState; }
     }
 
+    /// <summary>
+    /// Increments the number of players ready on all clients
+    /// </summary>
     [PunRPC]
     private void IncrementPlayersReady()
     {

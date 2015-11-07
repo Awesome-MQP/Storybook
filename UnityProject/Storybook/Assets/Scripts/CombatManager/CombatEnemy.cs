@@ -44,6 +44,8 @@ public abstract class CombatEnemy : CombatPawn {
             move.SetMoveOwner(this);
         }
 
+        // If it is not the master client, need to add the enemy to the enemy list in CombatManager
+        // Master client does this when it spawns the pawns, so it does not need to do it here
         if (!PhotonNetwork.isMasterClient)
         {
             CombatManager combatManager = FindObjectOfType<CombatManager>();

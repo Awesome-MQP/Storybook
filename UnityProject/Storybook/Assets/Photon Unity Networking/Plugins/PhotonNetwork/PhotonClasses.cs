@@ -23,9 +23,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using ExitGames.Client.Photon;
 using UnityEngine;
-
+using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
@@ -368,6 +370,16 @@ public interface IPunCallbacks
     /// And the client has to be connected to the Master Server, which is providing the info about lobbies.
     /// </remarks>
     void OnLobbyStatisticsUpdate();
+
+    void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info);
+
+    void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info);
+
+    void OnSerializeUnreliable(PhotonStream stream, PhotonMessageInfo info);
+
+    void OnDeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info);
+
+    bool IsRelevantTo(PhotonPlayer player);
 }
 
 /// <summary>
@@ -464,6 +476,83 @@ namespace Photon
     // the documentation for the interface methods becomes inherited when Doxygen builds it.
     public class PunBehaviour : Photon.MonoBehaviour, IPunCallbacks
     {
+        protected virtual void Awake()
+        {
+            PropertyInfo[] properties =
+                GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                PropertyInfo propertyInfo = properties[i];
+                bool isSyncProperty = propertyInfo.IsDefined(typeof (SyncProperty), true);
+                bool hasGetAndSet = propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null;
+
+                if (isSyncProperty && hasGetAndSet)
+                {
+                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof (SyncProperty), true)[0] as SyncProperty;
+
+                    if (syncProperty.IsReliable)
+                    {
+                        m_propertiesByName.Add(propertyInfo.Name, propertyInfo);
+                        m_propertiesByNumber.Add(i, propertyInfo);
+                        m_propertyNumbersByName.Add(propertyInfo.Name, i);
+                        m_propertiesBySetter.Add(propertyInfo.GetSetMethod(true), propertyInfo);
+                    }
+                    else
+                    {
+                        m_unreliableProperties.Add(propertyInfo);
+                    }
+                }
+            }
+        }
+
+        protected uint GetBitMask(int bit)
+        {
+            return (uint) (0x1 << bit);
+        }
+
+        protected bool GetDirtyBit(int bit)
+        {
+            uint bitMask = GetBitMask(bit);
+            return (m_dirtyBits & bitMask) != 0;
+        }
+
+        protected void SetDirtyBit(bool value, int bit)
+        {
+            m_dirtyBits |= (uint)(value ? 1 : 0) << bit;
+        }
+
+        protected void SetDirtyBit(bool value, string propertyName)
+        {
+            int bit;
+            if (!m_propertyNumbersByName.TryGetValue(propertyName, out bit))
+                return;
+
+            SetDirtyBit(value, bit);
+        }
+
+        protected void ClearDirtyBits()
+        {
+            m_dirtyBits = 0;
+        }
+
+        protected void PropertyChanged()
+        {
+            if(!photonView.isMine)
+                return;
+
+            StackTrace stackTrace = new StackTrace();
+            MethodBase setter = stackTrace.GetFrame(1).GetMethod();
+
+            PropertyInfo property;
+            m_propertiesBySetter.TryGetValue(setter, out property);
+
+            if (property == null)
+                return;
+
+            SetDirtyBit(true, property.Name);
+        }
+
         /// <summary>
         /// Called when the initial connection got established but before you can use the server. OnJoinedLobby() or OnConnectedToMaster() are called when PUN is ready.
         /// </summary>
@@ -809,6 +898,67 @@ namespace Photon
         public virtual void OnLobbyStatisticsUpdate()
         {
         }
+
+        public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info)
+        {
+            PhotonView view = gameObject.GetPhotonView();
+
+            stream.SendNext(view.HasSpawned ? m_dirtyBits : uint.MaxValue);
+
+            for (int i = 0; i < m_propertiesByNumber.Count; i++)
+            {
+                if(!GetDirtyBit(i))
+                    continue;
+
+                PropertyInfo propertyInfo = m_propertiesByNumber[i];
+                stream.SendNext(propertyInfo.GetValue(this, null));
+            }
+
+            ClearDirtyBits();
+        }
+
+        public virtual void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info)
+        {
+            m_dirtyBits = (uint)stream.ReceiveNext();
+
+            for (int i = 0; i < m_propertiesByNumber.Count; i++)
+            {
+                if (!GetDirtyBit(i))
+                    continue;
+
+                PropertyInfo propertyInfo = m_propertiesByNumber[i];
+                propertyInfo.SetValue(this, stream.ReceiveNext(), null);
+            }
+        }
+
+        public virtual void OnSerializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
+        {
+            foreach (PropertyInfo property in m_unreliableProperties)
+            {
+                stream.SendNext(property.GetValue(this, null));
+            }
+        }
+
+        public virtual void OnDeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
+        {
+            foreach (PropertyInfo property in m_unreliableProperties)
+            {
+                property.SetValue(this, stream.ReceiveNext(), null);
+            }
+        }
+
+        public virtual bool IsRelevantTo(PhotonPlayer player)
+        {
+            return true;
+        }
+
+        private Dictionary<string, PropertyInfo> m_propertiesByName = new Dictionary<string, PropertyInfo>();
+        private Dictionary<int, PropertyInfo> m_propertiesByNumber = new Dictionary<int, PropertyInfo>();
+        private Dictionary<string, int> m_propertyNumbersByName = new Dictionary<string, int>(); 
+        private Dictionary<MethodBase, PropertyInfo> m_propertiesBySetter = new Dictionary<MethodBase, PropertyInfo>(); 
+        private uint m_dirtyBits;
+
+        private List<PropertyInfo> m_unreliableProperties = new List<PropertyInfo>(); 
     }
 }
 
@@ -1043,7 +1193,7 @@ internal class PunEvent
 {
     public const byte RPC = 200;
     public const byte SendSerialize = 201;
-    public const byte Instantiation = 202;
+    public const byte Create = 202;
     public const byte CloseConnection = 203;
     public const byte Destroy = 204;
     public const byte RemoveCachedRPCs = 205;
@@ -1053,6 +1203,8 @@ internal class PunEvent
     public const byte OwnershipRequest = 209;
     public const byte OwnershipTransfer = 210;
     public const byte VacantViewIds = 211;
+    public const byte SpawnObject = 212;
+    public const byte DespawnObject = 213;
 }
 
 /// <summary>

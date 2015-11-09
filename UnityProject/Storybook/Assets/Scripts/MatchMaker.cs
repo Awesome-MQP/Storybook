@@ -19,6 +19,10 @@ public class MatchMaker : Photon.PunBehaviour {
         {
             ScenePhotonView.RPC("StartGame", PhotonTargets.All);
         }
+        if (isFirst && GUILayout.Button("Start Combat"))
+        {
+            ScenePhotonView.RPC("StartCombat", PhotonTargets.All);
+        }
     }
 
     /// <summary>
@@ -64,5 +68,14 @@ public class MatchMaker : Photon.PunBehaviour {
     private void StartGame()
     {
         Application.LoadLevel("TestRoomPlacement");
+    }
+
+    /// <summary>
+    /// Loads the DemoCombatScene for all players
+    /// </summary>
+    [PunRPC]
+    private void StartCombat()
+    {
+        Application.LoadLevel("DemoCombatScene");
     }
 }

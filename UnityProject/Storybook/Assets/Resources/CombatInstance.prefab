@@ -123,6 +123,8 @@ GameObject:
   - 4: {fileID: 489930}
   - 95: {fileID: 9550440}
   - 114: {fileID: 11483406}
+  - 114: {fileID: 11420734}
+  - 114: {fileID: 11411404}
   m_Layer: 0
   m_Name: CombatInstance
   m_TagString: Untagged
@@ -782,6 +784,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52794f674101047b168a9d5ec64d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11411404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 9
+    SynchronizeType: 1
+    Name: ThinkToExecute
+  - Type: 9
+    SynchronizeType: 1
+    Name: ExecuteToThink
+  - Type: 9
+    SynchronizeType: 1
+    Name: ExecuteToLose
+  - Type: 9
+    SynchronizeType: 1
+    Name: ExecuteToWin
+  - Type: 9
+    SynchronizeType: 1
+    Name: StartCombat
+  - Type: 9
+    SynchronizeType: 1
+    Name: ExitCombat
+  - Type: 3
+    SynchronizeType: 0
+    Name: TestInt
+  - Type: 4
+    SynchronizeType: 1
+    Name: StartToThink
+  m_SynchronizeLayers:
+  - SynchronizeType: 1
+    LayerIndex: 0
 --- !u!114 &11415344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -793,6 +836,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41b93741e5965445861106fb371bbcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11420734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11411404}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &11430830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -989,6 +1057,46 @@ Prefab:
       value: 
       objectReference: {fileID: 11487484, guid: e0fa81d364840e04cb1312e5604dc30d,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: synchronization
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 11411404}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[5].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[4].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeParameters.Array.data[7].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 154568}

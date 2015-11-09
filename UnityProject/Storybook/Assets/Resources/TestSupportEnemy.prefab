@@ -1,42 +1,43 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &173818
+--- !u!1 &124914
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 415704}
-  - 33: {fileID: 3344742}
-  - 136: {fileID: 13672296}
-  - 23: {fileID: 2393424}
-  - 114: {fileID: 11480760}
+  - 4: {fileID: 418698}
+  - 33: {fileID: 3367530}
+  - 136: {fileID: 13637372}
+  - 23: {fileID: 2303408}
+  - 114: {fileID: 11489222}
+  - 114: {fileID: 11461214}
   m_Layer: 0
-  m_Name: TestAttackEnemy
+  m_Name: TestSupportEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &415704
+--- !u!4 &418698
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173818}
+  m_GameObject: {fileID: 124914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 266.303833, y: 226.369904, z: -396.462097}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2393424
+--- !u!23 &2303408
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173818}
+  m_GameObject: {fileID: 124914}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -55,19 +56,45 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3344742
+--- !u!33 &3367530
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173818}
+  m_GameObject: {fileID: 124914}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11480760
+--- !u!114 &11461214
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173818}
+  m_GameObject: {fileID: 124914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 418698}
+  - {fileID: 11489222}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &11489222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124914}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
@@ -76,20 +103,20 @@ MonoBehaviour:
   m_health: 10
   m_speed: 5
   m_defense: 1
-  m_attack: 15
+  m_attack: 1
   m_genre: 4
-  m_aggressionValue: 100
+  m_aggressionValue: 0
   m_currentMana: 1
   m_manaPerTurn: 2
   m_enemyMoveList:
   - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
   - {fileID: 11424512, guid: 6f1cc2ed3d3c9f149ac88d259a7fb4a9, type: 2}
---- !u!136 &13672296
+--- !u!136 &13637372
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173818}
+  m_GameObject: {fileID: 124914}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -105,6 +132,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_health
       value: 10
       objectReference: {fileID: 0}
@@ -118,13 +149,21 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
-      propertyPath: m_aggressionValue
-      value: 100
+      propertyPath: synchronization
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 418698}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
+      objectReference: {fileID: 11489222}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 173818}
+  m_RootGameObject: {fileID: 124914}
   m_IsPrefabParent: 1

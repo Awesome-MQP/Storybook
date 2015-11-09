@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
+using Photon;
 
 /// <summary>
 /// The representation of the real world player and there stats.

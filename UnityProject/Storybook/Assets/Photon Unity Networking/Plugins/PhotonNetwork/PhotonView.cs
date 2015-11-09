@@ -306,6 +306,14 @@ public class PhotonView : Photon.MonoBehaviour
         this.didAwake = true;
     }
 
+    protected internal void Start()
+    {
+        if (isMine && !isRuntimeInstantiated)
+        {
+            PhotonNetwork.Spawn(this);
+        }
+    }
+
     internal bool DoesExistOnPlayer(PhotonPlayer player)
     {
         return isMine && !isSceneView && existsOn.Contains(player);

@@ -3053,9 +3053,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelNumber);
-
-        networkingPeer.LevelLoadOperation = operation;
+        Application.LoadLevel(levelNumber);
     }
 
     /// <summary>Wraps loading a level to pause the network mesage-queue. Optionally syncs the loaded level in a room.</summary>
@@ -3081,9 +3079,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelName);
-
-        networkingPeer.LevelLoadOperation = operation;
+        Application.LoadLevel(levelName);
     }
 
 

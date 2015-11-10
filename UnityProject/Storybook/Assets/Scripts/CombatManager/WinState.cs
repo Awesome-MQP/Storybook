@@ -3,9 +3,35 @@ using System.Collections;
 
 public class WinState : CombatState {
 
+    private GameObject m_netWinStateObject = null;
+    private NetWinState m_netWinState;
+    private bool m_isExiting = false;
+
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        base.OnStateEnter(animator, stateInfo, layerIndex);
+        m_isExiting = false;
+
+        // If it is the master client, instantiate a NetWinState for the other clients to receive
+        if (PhotonNetwork.isMasterClient)
+        {
+            m_netWinStateObject = PhotonNetwork.Instantiate("NetWinState", Vector3.zero, Quaternion.identity, 0);
+            m_netWinState = m_netWinStateObject.GetComponent<NetWinState>();
+        }
+    }
+
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        ExitState();
+        Debug.Log("Win state update");
+        
+        // If it is the master client and the NetWinState says to exit the combat, call ExitState()
+        if (PhotonNetwork.isMasterClient)
+        {
+            if (m_netWinState.ExitCombat && !m_isExiting)
+            {
+                ExitState();
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -25,7 +51,17 @@ public class WinState : CombatState {
 
     public override void ExitState()
     {
-        StateMachine.SetTrigger("ExitCombat");
-        CManager.EndCurrentCombat();
+
+        // Delete the current combat
+        m_netWinState.DeleteCombat();
+
+        // Delete the NetWinState from all clients
+        if (m_netWinStateObject != null)
+        {
+            PhotonNetwork.Destroy(m_netWinStateObject);
+        }
+        m_isExiting = true;
+        ResetBools();
+        StateMachine.SetBool("ExitCombat", true);
     }
 }

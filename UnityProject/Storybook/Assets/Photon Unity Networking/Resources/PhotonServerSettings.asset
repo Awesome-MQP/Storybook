@@ -41,4 +41,13 @@ MonoBehaviour:
   - StopPlayer
   - SetNewRoomLoc
   - CmdInternalRenameServer
+=======
+  - StartCombat
+  - SendPawnIdRPC
+  - SendMoveOverNetwork
+  - SendEnemyMoveOverNetwork
+  - SendPlayerMoveOverNetwork
+  - DestroyState
+  - DeleteCombatRPC
+  - IncrementPlayersReady
   DisableAutoOpenWizard: 1

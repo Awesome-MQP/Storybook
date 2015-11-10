@@ -41,6 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_numberOfTargets: 1
   m_moveGenre: 2
+  m_isMoveAttack: 1
   m_moveDamage: 10
 --- !u!1001 &100100000
 Prefab:
@@ -56,6 +57,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_moveDamage
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_isMoveAttack
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -194,6 +194,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
     }
 
+    public AsyncOperation LevelLoadOperation
+    {
+        get { return levelLoadOperation; }
+        set { levelLoadOperation = value; }
+    }
+
     public bool hasSwitchedMC = false;
 
     private HashSet<int> allowedReceivingGroups = new HashSet<int>();
@@ -222,6 +228,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     private Dictionary<Type, List<MethodInfo>> monoRPCMethodsCache = new Dictionary<Type, List<MethodInfo>>();
 
     private readonly Dictionary<string, int> rpcShortcuts;  // lookup "table" for the index (shortcut) of an RPC name
+
+    private AsyncOperation levelLoadOperation;
 
 
     // TODO: CAS must be implemented for OfflineMode
@@ -3369,6 +3377,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             if (PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
                 Debug.Log("New level loaded. Removed " + removeKeys.Count + " scene view IDs from last level.");
+        }
+
+        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
+        {
+            PhotonView view = pair.Value;
+            if (!view.HasSpawned && !view.isRuntimeInstantiated)
+                PhotonNetwork.Spawn(view);
         }
     }
 

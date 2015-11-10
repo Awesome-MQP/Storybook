@@ -14,117 +14,152 @@ public class PlayerEntity : Photon.MonoBehaviour
     {
         get { return m_name; }
     }
-
+    
+    //[SyncProperty]
     public Genre PlayerGenre
     {
         get { return m_playerGenre; }
         set
         {
-            if(PhotonNetwork.isMasterClient)
+            if(gameObject.GetPhotonView().isMine)
             {
                 m_playerGenre = value;
+                //OnPropertyChanged();
+            }
+            else
+            {
+                // Can do something here if we're not the owner, but I'm not sure what we can do at the moment.
             }
         }
     }
 
+    //[SyncProperty]
     public int HitPointsMod
     {
         get { return m_hitPointsMod; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
             {
                 m_hitPointsMod = value;
+                //OnPropertyChanged();
             }
         }
     }
 
+    //[SyncProperty]
     public int HitPoints
     {
         get { return m_hitPoints; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
+            {
                 m_hitPoints = value;
+                //OnPropertyChanged();
+            }
         }
     }
 
+    //[SyncProperty]
     public int MaxHitPoints
     {
         get { return m_maxHitPoints; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
+            {
                 m_maxHitPoints = value;
+                //OnPropertyChanged();
+            }
         }
     }
-    
+
+    //[SyncProperty]   
     public int AttackMod
     {
         get { return m_attackMod; }
         set
         {
-            if(PhotonNetwork.isMasterClient)
+            if(gameObject.GetPhotonView().isMine)
             {
                 m_attackMod = value;
+                //OnPropertyChanged();
             }
         }
     }
 
+    //[SyncProperty]
     public int Attack
     {
         get { return m_attack; }
         set
         {
-            if(PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
+            {
                 m_attack = value;
+                //OnPropertyChanged();
+            }
         }
     }
 
+    //[SyncProperty]
     public int DefenseMod
     {
         get { return m_defenseMod; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
             {
                 m_defenseMod = value;
+                //OnPropertyChanged();
             }
         }
     }
 
+    //[SyncProperty]
     public int Defense
     {
         get { return m_defense; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
+            {
                 m_defense = value;
+                //OnPropertyChanged();
+            }
         }
     }
 
+    //[SyncProperty]
     public int SpeedMod
     {
         get { return m_speedMod; }
         set
         {
-            if (PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
             {
                 m_speedMod = value;
+                //OnPropertyChanged();
             }
         }
     }
 
+    //[SyncProperty]
     public int Speed
     {
         get { return m_speed; }
         set
         {
-            if(PhotonNetwork.isMasterClient)
+            if (gameObject.GetPhotonView().isMine)
+            {
                 m_speed = value;
+                //OnPropertyChanged();
+            }
         }
     }
 
+    //[SyncProperty]
     public PlayerInventory Inventory
     {
         get { return m_playerInventory; }
@@ -137,14 +172,17 @@ public class PlayerEntity : Photon.MonoBehaviour
     /// <param name="newName"></param>
     public void Rename(string newName)
     {
-        if(PhotonNetwork.isMasterClient || PhotonNetwork.isNonMasterClientInRoom) // isLocalPlayer)
+        if (gameObject.GetPhotonView().isMine)//PhotonNetwork.isNonMasterClientInRoom) // isLocalPlayer)
+        {
             CmdInternalRenameServer(newName);
+        }
     }
 
     [PunRPC]
     private void CmdInternalRenameServer(string newName)
     {
         m_name = newName;
+        //OnPropertyChanged();
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

@@ -40,4 +40,5 @@ MonoBehaviour:
   - MovePlayer
   - StopPlayer
   - SetNewRoomLoc
+  - CmdInternalRenameServer
   DisableAutoOpenWizard: 1

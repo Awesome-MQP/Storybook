@@ -2279,14 +2279,6 @@ public static class PhotonNetwork
         Spawn(view, otherPlayers);
     }
 
-    public static void Despawn(PhotonView view)
-    {
-        if(!view.isMine)
-            return;
-
-
-    }
-
     public static void Spawn(PhotonView view, PhotonPlayer target)
     {
         Spawn(view, new []{target});
@@ -2388,8 +2380,6 @@ public static class PhotonNetwork
             Spawn(root, players);
             return;
         }
-
-        view.RebuildRelevance();
 
         List<PhotonPlayer> relevantPlayerList = new List<PhotonPlayer>(players);
         for (int i = 0; i < players.Length; i++)

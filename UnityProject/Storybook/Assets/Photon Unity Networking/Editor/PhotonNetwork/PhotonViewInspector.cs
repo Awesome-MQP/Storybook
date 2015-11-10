@@ -94,14 +94,14 @@ public class PhotonViewInspector : Editor
 
 
         // ViewSynchronization (reliability)
-        if (!m_Target.shouldSync)
+        if (m_Target.synchronization == ViewSynchronization.Off)
         {
             GUI.color = Color.grey;
         }
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("shouldSync"), new GUIContent("Should Sync? "));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("synchronization"), new GUIContent("Observe option:"));
 
-        if (m_Target.shouldSync &&
+        if (m_Target.synchronization != ViewSynchronization.Off &&
             m_Target.ObservedComponents.FindAll(item => item != null).Count == 0)
         {
             GUILayout.BeginVertical(GUI.skin.box);
@@ -223,11 +223,11 @@ public class PhotonViewInspector : Editor
         {
             if (m_Target.observed == null)
             {
-                m_Target.shouldSync = true; // if we didn't observe anything yet. use unreliable on change as default
+                m_Target.synchronization = ViewSynchronization.UnreliableOnChange; // if we didn't observe anything yet. use unreliable on change as default
             }
             if (componenValue == null)
             {
-                m_Target.shouldSync = false;
+                m_Target.synchronization = ViewSynchronization.Off;
             }
 
             m_Target.observed = componenValue;
@@ -322,16 +322,16 @@ public class PhotonViewInspector : Editor
 
         bool isObservedComponentsEmpty = m_Target.ObservedComponents.FindAll(item => item != null).Count == 0;
 
-        if (wasObservedComponentsEmpty == true && isObservedComponentsEmpty == false && !m_Target.shouldSync)
+        if (wasObservedComponentsEmpty == true && isObservedComponentsEmpty == false && m_Target.synchronization == ViewSynchronization.Off)
         {
-            m_Target.shouldSync = true;
+            m_Target.synchronization = ViewSynchronization.UnreliableOnChange;
             EditorUtility.SetDirty(m_Target);
             serializedObject.Update();
         }
 
         if (wasObservedComponentsEmpty == false && isObservedComponentsEmpty == true)
         {
-            m_Target.shouldSync = false;
+            m_Target.synchronization = ViewSynchronization.Off;
             EditorUtility.SetDirty(m_Target);
             serializedObject.Update();
         }

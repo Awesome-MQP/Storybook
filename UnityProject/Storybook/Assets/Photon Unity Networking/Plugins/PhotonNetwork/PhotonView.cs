@@ -12,7 +12,6 @@ using System;
 using UnityEngine;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Linq;
 using ExitGames.Client.Photon;
 
 #if UNITY_EDITOR
@@ -85,11 +84,6 @@ public class PhotonView : Photon.MonoBehaviour
         set { this.prefixBackup = value; }
     }
 
-    public PhotonPlayer[] RelevantPlayers
-    {
-        get { return trueRelevance.ToArray(); }
-    }
-
     // this field is serialized by unity. that means it is copied when instantiating a persistent obj into the scene
     public int prefixBackup = -1;
 
@@ -124,7 +118,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     public Component observed;
 
-    public bool shouldSync = true;
+    public ViewSynchronization synchronization;
 
     public OnSerializeTransform onSerializeTransformOption = OnSerializeTransform.PositionAndRotation;
 
@@ -242,30 +236,6 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public bool HasSpawned
-    {
-        get { return hasSpawned; }
-    }
-
-    public PhotonView ParentView
-    {
-        get { return parentView; }
-    }
-
-    public int ControllerId
-    {
-        get { return controllerId; }
-        set
-        {
-            if (isMine)
-            {
-                //TODO: Send controller change event
-            }
-
-            controllerId = value;
-        }
-    }
-
     protected internal bool didAwake;
 
     [SerializeField]
@@ -278,17 +248,9 @@ public class PhotonView : Photon.MonoBehaviour
 
     private bool failedToFindOnSerialize;
 
-    internal void Spawn()
-    {
-        hasSpawned = true;
-        gameObject.SetActive(true);
-    }
-
     /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
     protected internal void Awake()
     {
-        BuildParent();
-
         if (this.viewID != 0)
         {
             // registration might be too late when some script (on this GO) searches this view BUT GetPhotonView() can search ALL in that case
@@ -296,46 +258,7 @@ public class PhotonView : Photon.MonoBehaviour
             this.instantiationDataField = PhotonNetwork.networkingPeer.FetchInstantiationData(this.instantiationId);
         }
 
-        gameObject.SetActive(false);
-
-        if (!isSceneView)
-        {
-            
-        }
-
         this.didAwake = true;
-    }
-
-    internal bool DoesExistOnPlayer(PhotonPlayer player)
-    {
-        return isMine && !isSceneView && existsOn.Contains(player);
-    }
-
-    internal bool ShouldExistOnPlayer(PhotonPlayer player)
-    {
-        return isMine && IsRelevantTo(player);
-    }
-
-    internal bool ShouldCreateOnPlayer(PhotonPlayer player)
-    {
-        return isMine && !isSceneView && ShouldExistOnPlayer(player) && !DoesExistOnPlayer(player);
-    }
-
-    /// <summary>
-    /// Registers this object to exist on a player
-    /// </summary>
-    /// <param name="player">The player to exist on</param>
-    internal void RegisterToPlayer(PhotonPlayer player)
-    {
-        if (isMine && IsRelevantTo(player))
-        {
-            existsOn.Add(player);
-        }
-    }
-
-    internal void UnregisterToPlayer(PhotonPlayer player)
-    {
-        existsOn.Remove(player);
     }
 
     /// <summary>
@@ -393,126 +316,33 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public void SerializeReliable(PhotonMessageInfo info)
+    public void SerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        PhotonStream stream = new PhotonStream(true, null);
-
-        SerializeComponent(this.observed, stream, info, true);
+        SerializeComponent(this.observed, stream, info);
 
         if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                SerializeComponent(this.ObservedComponents[i], stream, info, true);
+                SerializeComponent(this.ObservedComponents[i], stream, info);
             }
         }
-
-        object[] data = stream.ToArray();
-
-        reliableSerializedData[(byte) 0] = viewID;
-        reliableSerializedData[(byte) 1] = data;
     }
 
-    public void DeserializeReliable(PhotonStream stream, PhotonMessageInfo info)
+    public void DeserializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        DeserializeComponent(this.observed, stream, info, true);
+        DeserializeComponent(this.observed, stream, info);
 
         if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                DeserializeComponent(this.ObservedComponents[i], stream, info, true);
+                DeserializeComponent(this.ObservedComponents[i], stream, info);
             }
         }
     }
 
-    public void SerializeUnreliable(PhotonMessageInfo info)
-    {
-        PhotonStream stream = new PhotonStream(true, null);
-
-        SerializeComponent(this.observed, stream, info, false);
-
-        if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
-        {
-            for (int i = 0; i < this.ObservedComponents.Count; ++i)
-            {
-                SerializeComponent(this.ObservedComponents[i], stream, info, false);
-            }
-        }
-
-        object[] data = stream.ToArray();
-
-        reliableSerializedData[(byte)0] = viewID;
-        reliableSerializedData[(byte)1] = info.timestamp;
-        reliableSerializedData[(byte)2] = data;
-    }
-
-    public void DeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
-    {
-        DeserializeComponent(this.observed, stream, info, false);
-
-        if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
-        {
-            for (int i = 0; i < this.ObservedComponents.Count; ++i)
-            {
-                DeserializeComponent(this.ObservedComponents[i], stream, info, false);
-            }
-        }
-    }
-
-    public bool CheckRelevance(PhotonPlayer player)
-    {
-        return trueRelevance.Contains(player);
-    }
-
-    public bool WasRelevant(PhotonPlayer player)
-    {
-        return wasRelevantTo.Contains(player);
-    }
-
-    public void RebuildRelevance()
-    {
-        if (parentView == null)
-        {
-            InternalBuildRelevance();
-        }
-        else
-        {
-            parentView.RebuildRelevance();
-        }
-    }
-
-    public void BuildRelevance()
-    {
-        InternalBuildRelevance();
-    }
-
-    private void InternalBuildRelevance()
-    {
-        wasRelevantTo = new HashSet<PhotonPlayer>(trueRelevance);
-
-        relevantTo.Clear();
-
-        PhotonPlayer[] otherPlayers = PhotonNetwork.otherPlayers;
-        foreach (PhotonPlayer player in otherPlayers)
-        {
-            if (IsRelevantTo(player))
-                relevantTo.Add(player);
-        }
-
-        trueRelevance = new HashSet<PhotonPlayer>(relevantTo);
-        if (parentView != null && parentView != this)
-            trueRelevance.IntersectWith(parentView.trueRelevance);
-
-        PhotonView[] childrenViews = GetComponentsInChildren<PhotonView>();
-        foreach (PhotonView view in childrenViews)
-        {
-            if(view != this)
-                view.InternalBuildRelevance();
-        }
-    }
-
-    protected internal void DeserializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
+    protected internal void DeserializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info)
     {
         if (component == null)
         {
@@ -522,7 +352,7 @@ public class PhotonView : Photon.MonoBehaviour
         // Use incoming data according to observed type
         if (component is MonoBehaviour)
         {
-            ExecuteComponentOnDeserialize(component, stream, info, isReliable);
+            ExecuteComponentOnSerialize(component, stream, info);
         }
         else if (component is Transform)
         {
@@ -592,7 +422,7 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    protected internal void SerializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
+    protected internal void SerializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info)
     {
         if (component == null)
         {
@@ -601,7 +431,7 @@ public class PhotonView : Photon.MonoBehaviour
 
         if (component is MonoBehaviour)
         {
-            ExecuteComponentOnSerialize(component, stream, info, isReliable);
+            ExecuteComponentOnSerialize(component, stream, info);
         }
         else if (component is Transform)
         {
@@ -671,14 +501,14 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    protected internal void ExecuteComponentOnSerialize(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
+    protected internal void ExecuteComponentOnSerialize(Component component, PhotonStream stream, PhotonMessageInfo info)
     {
         if (component != null)
         {
             if (this.m_OnSerializeMethodInfos.ContainsKey(component) == false)
             {
                 MethodInfo newMethod = null;
-                bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnSerializeReliable" : "OnSerializeUnreliable", out newMethod);
+                bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, PhotonNetworkingMessage.OnPhotonSerializeView.ToString(), out newMethod);
 
                 if (foundMethod == false)
                 {
@@ -692,31 +522,6 @@ public class PhotonView : Photon.MonoBehaviour
             if (this.m_OnSerializeMethodInfos[component] != null)
             {
                 this.m_OnSerializeMethodInfos[component].Invoke(component, new object[] {stream, info});
-            }
-        }
-    }
-
-    protected internal void ExecuteComponentOnDeserialize(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
-    {
-        if (component != null)
-        {
-            if (this.m_OnSerializeMethodInfos.ContainsKey(component) == false)
-            {
-                MethodInfo newMethod = null;
-                bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnDeserializeReliable" : "OnDeserializeUnreliable", out newMethod);
-
-                if (foundMethod == false)
-                {
-                    Debug.LogError("The observed monobehaviour (" + component.name + ") of this PhotonView does not implement a deserializing method!");
-                    newMethod = null;
-                }
-
-                this.m_OnSerializeMethodInfos.Add(component, newMethod);
-            }
-
-            if (this.m_OnSerializeMethodInfos[component] != null)
-            {
-                this.m_OnSerializeMethodInfos[component].Invoke(component, new object[] { stream, info });
             }
         }
     }
@@ -812,25 +617,6 @@ public class PhotonView : Photon.MonoBehaviour
         PhotonNetwork.RPC(this, methodName, targetPlayer, false, parameters);
     }
 
-    public virtual bool IsRelevantTo(PhotonPlayer targetPlayer)
-    {
-        foreach (Component component in ObservedComponents)
-        {
-            MethodInfo method = component.GetType()
-                .GetMethod("IsRelevantTo", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
-                    new[] {typeof (PhotonPlayer)}, null);
-
-            if(method == null)
-                continue;
-
-            bool isRelevant = (bool)method.Invoke(component, new object[] {targetPlayer});
-            if (!isRelevant)
-                return false;
-        }
-
-        return true;
-    }
-
     /// <summary>
     /// Call a RPC method of this GameObject on remote clients of this room (or on all, inclunding this client).
     /// </summary>
@@ -855,16 +641,6 @@ public class PhotonView : Photon.MonoBehaviour
         PhotonNetwork.RPC(this, methodName, targetPlayer, encrypt, parameters);
     }
 
-    private void OnTransformParentChanged()
-    {
-        BuildParent();
-    }
-
-    private void BuildParent()
-    {
-        parentView = transform.parent ? transform.parent.GetComponentInParent<PhotonView>() : null;
-    }
-
     public static PhotonView Get(Component component)
     {
         return component.GetComponent<PhotonView>();
@@ -884,21 +660,4 @@ public class PhotonView : Photon.MonoBehaviour
     {
         return string.Format("View ({3}){0} on {1} {2}", this.viewID, (this.gameObject != null) ? this.gameObject.name : "GO==null", (this.isSceneView) ? "(scene)" : string.Empty, this.prefix);
     }
-
-    private HashSet<PhotonPlayer> relevantTo = new HashSet<PhotonPlayer>();
-    private HashSet<PhotonPlayer> trueRelevance = new HashSet<PhotonPlayer>(); 
-    private HashSet<PhotonPlayer> wasRelevantTo = new HashSet<PhotonPlayer>();
-
-    private int buildId;
-    private bool hasSpawned;
-
-    internal Hashtable reliableSerializedData = new Hashtable();
-    internal Hashtable unreliableSerializedData = new Hashtable();
-    public string prefabName;
-
-    private PhotonView parentView;
-
-    private HashSet<PhotonPlayer> existsOn = new HashSet<PhotonPlayer>();
-
-    private int controllerId;
 }

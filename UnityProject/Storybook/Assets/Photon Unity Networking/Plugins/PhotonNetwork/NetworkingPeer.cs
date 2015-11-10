@@ -974,7 +974,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         switch (operationResponse.OperationCode)
         {
             case OperationCode.CreateGame:
-                OnCreateRoom();
+                SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
                 break;
             case OperationCode.JoinGame:
             case OperationCode.JoinRandomGame:
@@ -1897,19 +1897,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     this.UpdatedActorList(actorsInRoom);
 
                     // joinWithCreateOnDemand can turn an OpJoin into creating the room. Then actorNumber is 1 and callback: OnCreatedRoom()
-                    if ((this.mLastJoinType == JoinType.JoinOrCreateOnDemand) && this.mLocalActor.ID == 1)
+                    if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
                     {
-                        OnCreateRoom();
+                        SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
                     }
                     SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom); //Always send OnJoinedRoom
 
                 }
                 else
                 {
-                    foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
-                    {
-                        PhotonNetwork.Spawn(pair.Value, mActors[actorNr]);
-                    }
                     SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, this.mActors[actorNr]);
                 }
                 break;
@@ -1956,17 +1952,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
                 for (short s = initialDataIndex; s < serializeData.Count; s++)
                 {
-                    if (photonEvent.Code == PunEvent.SendSerialize)
-                        this.OnSerializeUnreliableRead(serializeData[s] as Hashtable, originatingPlayer,
-                            remoteUpdateServerTimestamp, remoteLevelPrefix);
-                    else
-                        this.OnSerializeReliableRead(serializeData[s] as Hashtable, originatingPlayer,
-                            remoteUpdateServerTimestamp, remoteLevelPrefix);
+                    this.OnSerializeRead(serializeData[s] as Hashtable, originatingPlayer, remoteUpdateServerTimestamp, remoteLevelPrefix);
                 }
                 break;
 
-            case PunEvent.Create:
-                PhotonNetwork.HandleCreate((Hashtable) photonEvent[ParameterCode.Data], originatingPlayer);
+            case PunEvent.Instantiation:
+                this.DoInstantiate((Hashtable)photonEvent[ParameterCode.Data], originatingPlayer, null);
                 break;
 
             case PunEvent.CloseConnection:
@@ -2043,12 +2034,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 SendMonoMessage(PhotonNetworkingMessage.OnLobbyStatisticsUpdate);
                 break;
 
-            case PunEvent.SpawnObject:
-                PhotonNetwork.HandleSpawn((Hashtable) photonEvent[ParameterCode.Data], originatingPlayer);
-                break;
-            case PunEvent.DespawnObject:
-
-                break;
             default:
                 if (photonEvent.Code < 200)
                 {
@@ -2066,17 +2051,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
 
         //this.externalListener.OnEvent(photonEvent);
-    }
-
-    internal void OnCreateRoom()
-    {
-        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
-        {
-            PhotonView view = pair.Value;
-            if (!view.isRuntimeInstantiated)
-                view.Spawn();
-        }
-        SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
     }
 
     protected internal void UpdatedActorList(int[] actorsInRoom)
@@ -2405,7 +2379,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         return true;
     }
 
-    internal Hashtable SendCreate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
+    internal Hashtable SendInstantiate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
     {
         // first viewID is now also the gameobject's instantiateId
         int instantiateId = viewIDs[0];   // LIMITS PHOTONVIEWS&PLAYERS
@@ -2450,8 +2424,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
 
         RaiseEventOptions options = new RaiseEventOptions();
+        options.CachingOption = (isGlobalObject) ? EventCaching.AddToRoomCacheGlobal : EventCaching.AddToRoomCache;
 
-        this.OpRaiseEvent(PunEvent.Create, instantiateEvent, true, options);
+        this.OpRaiseEvent(PunEvent.Instantiation, instantiateEvent, true, options);
         return instantiateEvent;
     }
 
@@ -2608,7 +2583,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     }
 
     private Dictionary<int, object[]> tempInstantiationData = new Dictionary<int, object[]>();
-    private int relevanceCount = 0;
 
     private void StoreInstantiationData(int instantiationId, object[] instantiationData)
     {
@@ -2821,7 +2795,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         removeFilter[(byte)7] = instantiateId;
 
         RaiseEventOptions options = new RaiseEventOptions() { CachingOption = EventCaching.RemoveFromRoomCache, TargetActors = new int[] { creatorId } };
-        this.OpRaiseEvent(PunEvent.Create, removeFilter, true, options);
+        this.OpRaiseEvent(PunEvent.Instantiation, removeFilter, true, options);
         //this.OpRaiseEvent(PunEvent.Instantiation, removeFilter, true, 0, new int[] { actorNr }, EventCaching.RemoveFromRoomCache);
 
         Hashtable evData = new Hashtable();
@@ -2861,7 +2835,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         // removes all "Instantiation" events of player actorNr. this is not an event for anyone else
         RaiseEventOptions options = new RaiseEventOptions() { CachingOption = EventCaching.RemoveFromRoomCache, TargetActors = new int[] { actorNr } };
-        this.OpRaiseEvent(PunEvent.Create, null, true, options);
+        this.OpRaiseEvent(PunEvent.Instantiation, null, true, options);
         //this.OpRaiseEvent(PunEvent.Instantiation, null, true, 0, new int[] { actorNr }, EventCaching.RemoveFromRoomCache);
     }
 
@@ -3390,8 +3364,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             return; // No need to send OnSerialize messages (these are never buffered anyway)
         }
 
-        //dataPerGroupReliable.Clear();
-        //dataPerGroupUnreliable.Clear();
+        dataPerGroupReliable.Clear();
+        dataPerGroupUnreliable.Clear();
 
         /* Format of the data hashtable:
          * Hasthable dataPergroup*
@@ -3400,138 +3374,173 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
          *  +  data
          */
 
-        relevanceCount++;
         foreach (KeyValuePair<int, PhotonView> kvp in this.photonViewList)
         {
             PhotonView view = kvp.Value;
 
-            if (view.shouldSync && view.isMine && view.HasSpawned)
+            if (view.synchronization != ViewSynchronization.Off)
             {
-#if UNITY_2_6_1 || UNITY_2_6 || UNITY_3_0 || UNITY_3_0_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5
-                if (!view.gameObject.active)
+                // Fetch all sending photonViews
+                if (view.isMine)
                 {
-                    continue; // Only on actives
-                }
-#else
-                if (!view.gameObject.activeInHierarchy)
-                {
-                    continue; // Only on actives
-                }
-#endif
-                if (this.blockSendingGroups.Contains(view.group))
-                {
-                    continue; // Block sending on this group
-                }
+                    #if UNITY_2_6_1 || UNITY_2_6 || UNITY_3_0 || UNITY_3_0_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5
+                    if (!view.gameObject.active)
+                    {
+                        continue; // Only on actives
+                    }
+                    #else
+                    if (!view.gameObject.activeInHierarchy)
+                    {
+                        continue; // Only on actives
+                    }
+                    #endif
 
-                if (view.ParentView == null)
-                    view.BuildRelevance();
+                    if (this.blockSendingGroups.Contains(view.group))
+                    {
+                        continue; // Block sending on this group
+                    }
 
-                OnSerializeReliableWrite(view);
-                OnSerializeUnreliableWrite(view);
+                    // Run it trough its OnSerialize
+                    Hashtable evData = this.OnSerializeWrite(view);
+                    if (evData == null)
+                    {
+                        continue;
+                    }
+
+                    if (view.synchronization == ViewSynchronization.ReliableDeltaCompressed || view.mixedModeIsReliable)
+                    {
+                        if (!evData.ContainsKey((byte)1) && !evData.ContainsKey((byte)2))
+                        {
+                            // Everything has been removed by compression, nothing to send
+                        }
+                        else
+                        {
+                            if (!dataPerGroupReliable.ContainsKey(view.group))
+                            {
+                                dataPerGroupReliable[view.group] = new Hashtable();
+                                dataPerGroupReliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
+                                if (currentLevelPrefix >= 0)
+                                {
+                                    dataPerGroupReliable[view.group][(byte)1] = this.currentLevelPrefix;
+                                }
+                            }
+                            Hashtable groupHashtable = dataPerGroupReliable[view.group];
+                            groupHashtable.Add((short)groupHashtable.Count, evData);
+                        }
+                    }
+                    else
+                    {
+                        if (!dataPerGroupUnreliable.ContainsKey(view.group))
+                        {
+                            dataPerGroupUnreliable[view.group] = new Hashtable();
+                            dataPerGroupUnreliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
+                            if (currentLevelPrefix >= 0)
+                            {
+                                dataPerGroupUnreliable[view.group][(byte)1] = this.currentLevelPrefix;
+                            }
+                        }
+                        Hashtable groupHashtable = dataPerGroupUnreliable[view.group];
+                        groupHashtable.Add((short)groupHashtable.Count, evData);
+                    }
+                }
+                else
+                {
+                    // Debug.Log(" NO OBS on " + view.name + " " + view.owner);
+                }
+            }
+            else
+            {
             }
         }
 
-        PhotonPlayer[] players = PhotonNetwork.otherPlayers;
-        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
-        {
-            PhotonView view = pair.Value;
+        //Send the messages: every group is send in it's own message and unreliable and reliable are split as well
+        RaiseEventOptions options = new RaiseEventOptions();
 
-            
-            foreach (PhotonPlayer player in players)
-            {
-                if (!view.shouldSync || !view.isMine || !view.HasSpawned)
-                    continue;
-
-                if (!view.IsRelevantTo(player))
-                    continue;
-
-#if UNITY_2_6_1 || UNITY_2_6 || UNITY_3_0 || UNITY_3_0_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5
-                if (!view.gameObject.active)
-                {
-                    continue; // Only on actives
-                }
-#else
-                if (!view.gameObject.activeInHierarchy)
-                {
-                    continue; // Only on actives
-                }
+#if PHOTON_DEVELOP
+        options.Receivers = ReceiverGroup.All;
 #endif
-                if (this.blockSendingGroups.Contains(view.@group))
-                {
-                    continue; // Block sending on this group
-                }
 
-                dataPerGroupReliable.Clear();
-                dataPerGroupUnreliable.Clear();
-
-                if (!dataPerGroupReliable.ContainsKey(view.group))
-                {
-                    dataPerGroupReliable[view.group] = new Hashtable();
-                    dataPerGroupReliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
-                    if (currentLevelPrefix >= 0)
-                    {
-                        dataPerGroupReliable[view.group][(byte)1] = this.currentLevelPrefix;
-                    }
-                }
-
-                Hashtable reliableGroupHashtable = dataPerGroupReliable[view.group];
-                reliableGroupHashtable.Add((short)reliableGroupHashtable.Count, view.reliableSerializedData);
-
-                if (!dataPerGroupUnreliable.ContainsKey(view.group))
-                {
-                    dataPerGroupUnreliable[view.group] = new Hashtable();
-                    dataPerGroupUnreliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
-                    if (currentLevelPrefix >= 0)
-                    {
-                        dataPerGroupUnreliable[view.group][(byte)1] = this.currentLevelPrefix;
-                    }
-                }
-
-                Hashtable unreliableGroupHashtable = dataPerGroupUnreliable[view.group];
-                unreliableGroupHashtable.Add((short)unreliableGroupHashtable.Count, view.unreliableSerializedData);
-
-                //Send the messages: every group is send in it's own message and unreliable and reliable are split as well
-                RaiseEventOptions options = new RaiseEventOptions();
-                options.TargetActors = new int[] {player.ID};
-
-                foreach (KeyValuePair<int, Hashtable> kvp in dataPerGroupReliable)
-                {
-                    options.InterestGroup = (byte)kvp.Key;
-                    this.OpRaiseEvent(PunEvent.SendSerializeReliable, kvp.Value, true, options);
-                }
-                foreach (KeyValuePair<int, Hashtable> kvp in dataPerGroupUnreliable)
-                {
-                    options.InterestGroup = (byte)kvp.Key;
-                    this.OpRaiseEvent(PunEvent.SendSerialize, kvp.Value, false, options);
-                }
-            }
+        foreach (KeyValuePair<int, Hashtable> kvp in dataPerGroupReliable)
+        {
+            options.InterestGroup = (byte)kvp.Key;
+            this.OpRaiseEvent(PunEvent.SendSerializeReliable, kvp.Value, true, options);
+        }
+        foreach (KeyValuePair<int, Hashtable> kvp in dataPerGroupUnreliable)
+        {
+            options.InterestGroup = (byte)kvp.Key;
+            this.OpRaiseEvent(PunEvent.SendSerialize, kvp.Value, false, options);
         }
     }
 
     // calls OnPhotonSerializeView (through ExecuteOnSerialize)
     // the content created here is consumed by receivers in: ReadOnSerialize
-    internal bool OnSerializeReliableWrite(PhotonView view)
+    private Hashtable OnSerializeWrite(PhotonView view)
     {
+        PhotonStream pStream = new PhotonStream( true, null );
         PhotonMessageInfo info = new PhotonMessageInfo( this.mLocalActor, this.ServerTimeInMilliSeconds, view );
 
-        view.SerializeReliable(info);
+        // each view creates a list of values that should be sent
+        view.SerializeView( pStream, info );
 
-        return true;
-    }
+        if( pStream.Count == 0 )
+        {
+            return null;
+        }
 
-    internal bool OnSerializeUnreliableWrite(PhotonView view)
-    {
-        PhotonMessageInfo info = new PhotonMessageInfo(this.mLocalActor, this.ServerTimeInMilliSeconds, view);
+        object[] dataArray = pStream.data.ToArray();
 
-        view.SerializeUnreliable(info);
+        if (view.synchronization == ViewSynchronization.UnreliableOnChange)
+        {
+            if (AlmostEquals(dataArray, view.lastOnSerializeDataSent))
+            {
+                if (view.mixedModeIsReliable)
+                {
+                    return null;
+                }
 
-        return true;
+                view.mixedModeIsReliable = true;
+                view.lastOnSerializeDataSent = dataArray;
+            }
+            else
+            {
+                view.mixedModeIsReliable = false;
+                view.lastOnSerializeDataSent = dataArray;
+            }
+        }
+
+        // EVDATA:
+        // 0=View ID (an int, never compressed cause it's not in the data)
+        // 1=data of observed type (different per type of observed object)
+        // 2=compressed data (in this case, key 1 is empty)
+        // 3=list of values that are actually null (if something was changed but actually IS null)
+        Hashtable evData = new Hashtable();
+        evData[(byte)0] = (int)view.viewID;
+        evData[(byte)1] = dataArray;    // this is the actual data (script or observed object)
+
+
+        if (view.synchronization == ViewSynchronization.ReliableDeltaCompressed)
+        {
+            // compress content of data set (by comparing to view.lastOnSerializeDataSent)
+            // the "original" dataArray is NOT modified by DeltaCompressionWrite
+            // if something was compressed, the evData key 2 and 3 are used (see above)
+            bool somethingLeftToSend = this.DeltaCompressionWrite(view, evData);
+
+            // buffer the full data set (for next compression)
+            view.lastOnSerializeDataSent = dataArray;
+
+            if (!somethingLeftToSend)
+            {
+                return null;
+            }
+        }
+
+        return evData;
     }
 
     /// <summary>
     /// Reads updates created by OnSerializeWrite
     /// </summary>
-    internal void OnSerializeReliableRead(Hashtable data, PhotonPlayer sender, int networkTime, short correctPrefix)
+    private void OnSerializeRead(Hashtable data, PhotonPlayer sender, int networkTime, short correctPrefix)
     {
         // read view ID from key (byte)0: a int-array (PUN 1.17++)
         int viewID = (int)data[(byte)0];
@@ -3556,60 +3565,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             return; // Ignore group
         }
 
-        if (!this.DeltaCompressionRead(view, data))
-        {
-            // Skip this packet as we haven't got received complete-copy of this view yet.
-            if (PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
-                Debug.Log("Skipping packet for " + view.name + " [" + view.viewID + "] as we haven't received a full packet for delta compression yet. This is OK if it happens for the first few frames after joining a game.");
-            return;
-        }
 
-        // store last received for delta-compression usage
-        view.lastOnSerializeDataReceived = data[(byte)1] as object[];
-
-        if (sender.ID != view.ownerId)
+        if (view.synchronization == ViewSynchronization.ReliableDeltaCompressed)
         {
-            if (!view.isSceneView || !sender.isMasterClient)
+            if (!this.DeltaCompressionRead(view, data))
             {
-                // obviously the owner changed and we didn't yet notice.
-                Debug.Log("Adjusting owner to sender of updates. From: " + view.ownerId + " to: " + sender.ID);
-                view.ownerId = sender.ID;
+                // Skip this packet as we haven't got received complete-copy of this view yet.
+                if (PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
+                    Debug.Log("Skipping packet for " + view.name + " [" + view.viewID + "] as we haven't received a full packet for delta compression yet. This is OK if it happens for the first few frames after joining a game.");
+                return;
             }
-        }
 
-        object[] contents = data[(byte)1] as object[];
-        PhotonStream pStream = new PhotonStream(false, contents);
-        PhotonMessageInfo info = new PhotonMessageInfo(sender, networkTime, view);
-
-        view.DeserializeReliable( pStream, info );
-    }
-
-    /// <summary>
-    /// Reads updates created by OnSerializeWrite
-    /// </summary>
-    internal void OnSerializeUnreliableRead(Hashtable data, PhotonPlayer sender, int networkTime, short correctPrefix)
-    {
-        // read view ID from key (byte)0: a int-array (PUN 1.17++)
-        int viewID = (int)data[(byte)0];
-
-
-        PhotonView view = this.GetPhotonView(viewID);
-        if (view == null)
-        {
-            Debug.LogWarning("Received OnSerialization for view ID " + viewID + ". We have no such PhotonView! Ignored this if you're leaving a room. State: " + this.State);
-            return;
-        }
-
-        if (view.prefix > 0 && correctPrefix != view.prefix)
-        {
-            Debug.LogError("Received OnSerialization for view ID " + viewID + " with prefix " + correctPrefix + ". Our prefix is " + view.prefix);
-            return;
-        }
-
-        // SetReceiving filtering
-        if (view.group != 0 && !this.allowedReceivingGroups.Contains(view.group))
-        {
-            return; // Ignore group
+            // store last received for delta-compression usage
+            view.lastOnSerializeDataReceived = data[(byte)1] as object[];
         }
 
         if (sender.ID != view.ownerId)
@@ -3626,7 +3594,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         PhotonStream pStream = new PhotonStream(false, contents);
         PhotonMessageInfo info = new PhotonMessageInfo(sender, networkTime, view);
 
-        view.DeserializeUnreliable(pStream, info);
+        view.DeserializeView( pStream, info );
     }
 
     private bool AlmostEquals(object[] lastData, object[] currentContent)

@@ -35,7 +35,6 @@ internal static class CustomTypes
         PhotonPeer.RegisterType(typeof(Vector3), (byte)'V', SerializeVector3, DeserializeVector3);
         PhotonPeer.RegisterType(typeof(Quaternion), (byte)'Q', SerializeQuaternion, DeserializeQuaternion);
         PhotonPeer.RegisterType(typeof(PhotonPlayer), (byte)'P', SerializePhotonPlayer, DeserializePhotonPlayer);
-        PhotonPeer.RegisterType(typeof (uint), (byte) 'U', SerializeUint, DeserializeUint);
     }
 
 
@@ -176,33 +175,6 @@ internal static class CustomTypes
         {
             return null;
         }
-    }
-
-    public static readonly byte[] memUint = new byte[4];
-    private static short SerializeUint(MemoryStream outStream, object customObject)
-    {
-        lock (memUint)
-        {
-            byte[] bytes = memUint;
-            int off = 0;
-            uint val = (uint) customObject;
-            Protocol.Serialize((int)val, bytes, ref off);
-            outStream.Write(bytes, 0, 4);
-            return 4;
-        }
-    }
-
-    private static object DeserializeUint(MemoryStream inStream, short length)
-    {
-        int intVal;
-        lock (memUint)
-        {
-            inStream.Read(memUint, 0, length);
-            int off = 0;
-            Protocol.Deserialize(out intVal, memUint, ref off);
-        }
-
-        return (uint) intVal;
     }
 
     #endregion

@@ -24,25 +24,9 @@ public static class Extensions
         return go.GetComponentsInChildren<PhotonView>(true) as PhotonView[];
     }
 
-    public static PhotonView GetPhotonViewRoot(this UnityEngine.GameObject go)
-    {
-        Transform parent = go.transform.parent;
-        PhotonView view = go.GetPhotonView();
-        while (parent)
-        {
-            PhotonView parentView = parent.GetComponent<PhotonView>();
-            if (parentView)
-                view = parentView;
-
-            parent = parent.parent;
-        }
-
-        return view;
-    }
-
     public static PhotonView GetPhotonView(this UnityEngine.GameObject go)
     {
-        return go.GetComponent<PhotonView>();
+        return go.GetComponent<PhotonView>() as PhotonView;
     }
 
     /// <summary>compares the squared magnitude of target - second to given float value</summary>

@@ -397,7 +397,18 @@ public class PhotonConverter : Photon.MonoBehaviour
                 EditorUtility.SetDirty(view.gameObject);
             }
             view.observed = netView.observed;
-            view.shouldSync = netView.stateSynchronization != NetworkStateSynchronization.Off;
+            if (netView.stateSynchronization == NetworkStateSynchronization.Unreliable)
+            {
+                view.synchronization = ViewSynchronization.Unreliable;
+            }
+            else if (netView.stateSynchronization == NetworkStateSynchronization.ReliableDeltaCompressed)
+            {
+                view.synchronization = ViewSynchronization.ReliableDeltaCompressed;
+            }
+            else
+            {
+                view.synchronization = ViewSynchronization.Off;
+            }
             DestroyImmediate(netView, true);
         }
         AssetDatabase.Refresh();

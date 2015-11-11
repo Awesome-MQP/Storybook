@@ -24,14 +24,17 @@ public class GameManager : Photon.PunBehaviour {
 
 	// Update is called once per frame
 	void Start () {
+        DontDestroyOnLoad(this);
         List<PlayerEntity> playerList = new List<PlayerEntity>();
         Camera.main.GetComponent<AudioListener>().enabled = false;
 
         // Only call StartCombat on the master client
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             StartCombat(playerList);
         }
+        */
 	}
 
     /// <summary>
@@ -87,6 +90,8 @@ public class GameManager : Photon.PunBehaviour {
         {
             PhotonNetwork.Destroy(allPawns[i].GetComponent<PhotonView>());
         }
+
+        _returnToDungeon();
     }
 
     /// <summary>
@@ -145,6 +150,13 @@ public class GameManager : Photon.PunBehaviour {
         List<PlayerEntity> allPlayersList = new List<PlayerEntity>(allPlayers);
         Debug.Log("Adding " + allPlayers.Length.ToString() + " players");
         return allPlayersList;
+    }
+
+    private void _returnToDungeon()
+    {
+        DungeonMovement dm = FindObjectOfType<DungeonMovement>();
+        dm.enabled = true;
+        dm.TransitionToDungeon();
     }
 
     /// <summary>

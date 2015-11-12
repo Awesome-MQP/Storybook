@@ -274,14 +274,21 @@ public class PhotonView : Photon.MonoBehaviour
     protected internal bool removedFromLocalViewList;
 
     internal MonoBehaviour[] RpcMonoBehaviours;
+
     private MethodInfo OnSerializeMethodInfo;
 
     private bool failedToFindOnSerialize;
 
-    internal void Spawn()
+    internal void OnSpawn()
     {
         hasSpawned = true;
         gameObject.SetActive(true);
+    }
+
+    internal void OnDespawn()
+    {
+        hasSpawned = false;
+        gameObject.SetActive(false);
     }
 
     /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
@@ -391,6 +398,8 @@ public class PhotonView : Photon.MonoBehaviour
                 Debug.Log("PUN-instantiated '" + this.gameObject.name + "' got destroyed by engine. This is OK when loading levels. Otherwise use: PhotonNetwork.Destroy().");
             }
         }
+
+        hasSpawned = false;
     }
 
     public void SerializeReliable(PhotonMessageInfo info)
@@ -442,9 +451,8 @@ public class PhotonView : Photon.MonoBehaviour
 
         object[] data = stream.ToArray();
 
-        reliableSerializedData[(byte)0] = viewID;
-        reliableSerializedData[(byte)1] = info.timestamp;
-        reliableSerializedData[(byte)2] = data;
+        unreliableSerializedData[(byte)0] = viewID;
+        unreliableSerializedData[(byte)1] = data;
     }
 
     public void DeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
@@ -470,7 +478,25 @@ public class PhotonView : Photon.MonoBehaviour
         return wasRelevantTo.Contains(player);
     }
 
-    public void RebuildRelevance()
+    public void RebuildNetworkRelavance()
+    {
+        BuildRelevance();
+
+        PhotonPlayer[] otherPlayers = PhotonNetwork.otherPlayers;
+        foreach (PhotonPlayer player in otherPlayers)
+        {
+            if (WasRelevant(player) && !IsRelevantTo(player))
+            {
+                PhotonNetwork.Despawn(this, player);
+            }
+            else if (!WasRelevant(player) && IsRelevantTo(player))
+            {
+                PhotonNetwork.Spawn(this, player);
+            }
+        }
+    }
+
+    internal void RebuildRelevance()
     {
         if (parentView == null)
         {
@@ -482,7 +508,7 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public void BuildRelevance()
+    internal void BuildRelevance()
     {
         InternalBuildRelevance();
     }
@@ -858,6 +884,7 @@ public class PhotonView : Photon.MonoBehaviour
     private void OnTransformParentChanged()
     {
         BuildParent();
+        RebuildNetworkRelavance();
     }
 
     private void BuildParent()
@@ -886,14 +913,19 @@ public class PhotonView : Photon.MonoBehaviour
     }
 
     private HashSet<PhotonPlayer> relevantTo = new HashSet<PhotonPlayer>();
-    private HashSet<PhotonPlayer> trueRelevance = new HashSet<PhotonPlayer>(); 
+
+    private HashSet<PhotonPlayer> trueRelevance = new HashSet<PhotonPlayer>();
+
     private HashSet<PhotonPlayer> wasRelevantTo = new HashSet<PhotonPlayer>();
 
     private int buildId;
+
     private bool hasSpawned;
 
     internal Hashtable reliableSerializedData = new Hashtable();
+
     internal Hashtable unreliableSerializedData = new Hashtable();
+
     public string prefabName;
 
     private PhotonView parentView;

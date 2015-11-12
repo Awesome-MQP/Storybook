@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+//TODO: MAKE MORE GENERIC
+
 public class CombatManager : Photon.PunBehaviour {
 
     [SerializeField]
@@ -35,22 +37,7 @@ public class CombatManager : Photon.PunBehaviour {
     void Start()
     {
         // Get the state machine and get it out of the start state by setting the StartCombat trigger
-        m_combatStateMachine = GetComponent<Animator>() as Animator;
-        m_combatStateMachine.SetBool("StartToThink", true);
-
-        // Set the combat manager of all the combat state machine states to this object
-        CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
-        foreach (CombatState cm in allCombatStates)
-        {
-            cm.SetCombatManager(this);
-        }
-
-        // Default current state to think state
-        m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
-    }
-
-    public void StartCombat()
-    {
+        m_combatStateMachine = GetComponent<Animator>();
         if (PhotonNetwork.isMasterClient)
         {
             // Spawn and place the player pawns
@@ -60,25 +47,21 @@ public class CombatManager : Photon.PunBehaviour {
             // Spawn and place the enemy pawns
             _spawnEnemyPawns();
             _placeEnemies();
+
+            m_combatStateMachine.SetBool("StartToThink", true);
+
+            // Set the combat manager of all the combat state machine states to this object
+            CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
+            foreach (CombatState cm in allCombatStates)
+            {
+                cm.SetCombatManager(this);
+            }
+
+            // Default current state to think state
+            m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         }
-    }
-
-    /// <summary>
-    /// Called by CombatPawn when a player has submitted their move
-    /// </summary>
-    /// <param name="playerMove">The move that the player will do for the turn</param>
-    public void SubmitPlayerMove(PlayerMove playerMove) {
-        Debug.Log("Submitting player move");
-        m_submittedMoves += 1;
-    }
-
-    /// <summary>
-    /// Called by enemies when they select their move
-    /// </summary>
-    /// <param name="enemyMove">The move that the enemy will do for the turn</param>
-    public void SubmitEnemyMove(EnemyMove enemyMove)
-    {
-        m_submittedEnemyMoves += 1;
+        else
+            m_combatStateMachine.enabled = false;
     }
 
     /// <summary>
@@ -94,8 +77,7 @@ public class CombatManager : Photon.PunBehaviour {
         }
         else
         {
-            m_pawnToCombatMove.Remove(combatPawn);
-            m_pawnToCombatMove.Add(combatPawn, moveForTurn);
+            m_pawnToCombatMove[combatPawn] = moveForTurn;
         }
     }
 
@@ -105,9 +87,6 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     public void StartNewTurn()
     {
-        Debug.Log("CombatManager starting new turn");
-        Debug.Log("Player 1 Health = " + m_playerPawnList[0].Health);
-        Debug.Log("Enemy 1 Health = " + m_enemyList[0].Health);
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
         _incrementEnemyMana();
@@ -124,6 +103,7 @@ public class CombatManager : Photon.PunBehaviour {
         FindObjectOfType<GameManager>().EndCombat(this);
     }
 
+    //TODO: Move this code to the player pawn
     /// <summary>
     /// Places the players at the player points on the combat plane
     /// </summary>

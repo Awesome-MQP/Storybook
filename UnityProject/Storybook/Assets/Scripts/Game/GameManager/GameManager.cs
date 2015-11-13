@@ -22,6 +22,8 @@ public class GameManager : Photon.PunBehaviour {
     private bool test3Done = false;
     private bool test4Done = false;
 
+    private GameObject m_combatInstance;
+
 	// Update is called once per frame
 	void Start () {
         DontDestroyOnLoad(this);
@@ -45,23 +47,23 @@ public class GameManager : Photon.PunBehaviour {
     {
         Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
-        GameObject combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
-        CombatManager combatManager = combatInstance.GetComponent<CombatManager>();
+        GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
+        CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
         combatManager.SetPlayerEntityList(playersEnteringCombat);
         combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
         combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
 
         // Get all the player position nodes and set it in the combat manager
-        PlayerPositionNode[] playerPositions = combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
+        PlayerPositionNode[] playerPositions = m_combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
         List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
         combatManager.SetPlayerPositions(playerPositionsList);
 
         // Get all the enemy position nodes and set it in the combat manager
-        EnemyPositionNode[] enemyPositions = combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
+        EnemyPositionNode[] enemyPositions = m_combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
         List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
         combatManager.SetEnemyPositions(enemyPositionsList);
 
-        m_combatInstances.Add(combatInstance);
+        m_combatInstances.Add(m_combatInstance);
         combatManager.StartCombat();
     }
 
@@ -80,6 +82,7 @@ public class GameManager : Photon.PunBehaviour {
             // If the CombatManager of the current combat matches the given CombatManager, destroy the combat instance
             if (currentCombatManager == cm)
             {
+                m_combatInstances.Remove(currentCombatInstance);
                 PhotonNetwork.Destroy(currentCombatInstance);
                 break;
             }

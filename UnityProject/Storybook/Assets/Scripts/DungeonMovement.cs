@@ -251,7 +251,6 @@ public class DungeonMovement : Photon.PunBehaviour {
     private void TransitionToCombat()
     {
         MapManager mapManager = FindObjectOfType<MapManager>();
-        CombatManager combatManager = FindObjectOfType<CombatManager>();
         mapManager.LoadMap(false);
         mapManager.enabled = false;
         foreach (GameObject go in m_playerPawns)

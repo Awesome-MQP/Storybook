@@ -45,7 +45,7 @@ public class MapManager : MonoBehaviour {
         // Place the room.
         Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
         RoomObject room = (RoomObject) Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
-        room.SetRoomLocation(gridPosition);
+        room.RoomLocation = gridPosition;
         _determineDoorPlacement(gridPosition, room);
         _checkDoorRooms(gridPosition, room);
         m_worldGrid[placeX, placeY] = room;

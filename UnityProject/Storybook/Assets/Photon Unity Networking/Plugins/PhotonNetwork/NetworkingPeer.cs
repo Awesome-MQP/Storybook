@@ -1832,10 +1832,26 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     int newOwnerId = transferViewToUserID[1];
 
                     PhotonView pv = PhotonView.Find(requestedViewId);
-                    pv.ownerId = newOwnerId;
+                    if(originatingPlayer == pv.owner || !pv.isOwnerActive && originatingPlayer.isMasterClient)
+                        pv.ownerId = newOwnerId;
 
                     break;
                 }
+            case PunEvent.ControllerTransfer:
+                int[] transferUserData = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
+                int viewId = transferUserData[0];
+                int playerId = transferUserData[1];
+
+                PhotonView view = PhotonView.Find(viewId);
+                if (!view)
+                {
+                    break;
+                }
+
+                if (originatingPlayer == view.owner || !view.isOwnerActive && originatingPlayer.isMasterClient)
+                    view.controllerId = playerId;
+
+                break;
             case EventCode.GameList:
                 {
                     this.mGameList = new Dictionary<string, RoomInfo>();
@@ -2201,6 +2217,23 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 "Received RPC \"" + inMethodName + "\" on viewID " + netViewID + " with a prefix of " + otherSidePrefix
                 + ", our prefix is " + photonNetview.prefix + ". The RPC has been ignored.");
             return;
+        }
+
+        if (!photonNetview.AllowFullCommunication)
+        {
+            //If we own the object and the sender is not the controller then ignore
+            if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
+            {
+                Debug.LogError("Error: Sender from non controller object is illegal on {0}.", photonNetview);
+                return;
+            }
+
+            //If we do not own the object and the sender was not the owner then ignore
+            if (!photonNetview.isMine && sender != photonNetview.owner)
+            {
+                Debug.LogError("Error: Sender from non owner object is illegal on {0}.", photonNetview);
+                return;
+            }
         }
 
         // Get method name
@@ -2842,6 +2875,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         Debug.Log("TransferOwnership() view " + viewID + " to: " + playerID + " Time: " + Environment.TickCount % 1000);
         //PhotonNetwork.networkingPeer.OpRaiseEvent(PunEvent.OwnershipTransfer, true, new int[] {viewID, playerID}, 0, EventCaching.DoNotCache, null, ReceiverGroup.All, 0);
         this.OpRaiseEvent(PunEvent.OwnershipTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
+    }
+
+    internal protected void TransferController(int viewId, int playerId)
+    {
+        this.OpRaiseEvent(PunEvent.ControllerTransfer, new int[] { viewId, playerId }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
     }
 
     public bool LocalCleanPhotonView(PhotonView view)

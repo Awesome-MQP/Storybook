@@ -1,12 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-abstract public class RoomObject : MonoBehaviour {
+//TODO: 
+
+public abstract class RoomObject : MonoBehaviour{
 
     public readonly int NORTH_DOOR_INDEX = 0;
     public readonly int EAST_DOOR_INDEX = 1;
     public readonly int SOUTH_DOOR_INDEX = 2;
     public readonly int WEST_DOOR_INDEX = 3;
+
+    [SerializeField]
+    Transform m_cameraNode;
+
+    [SerializeField]
+    private Door[] m_roomDoors;
+                         // Ordering for indices should be clockwise, starting from the north.
+                         // In a standard 1x1 room, it would be like:
+                         // 0 - North, 1 - East, 2 - South, 3 - West.
+                         // In a larger room, it would probably be more like 0-N, 1-N, 2-E, 3-S, 4-S, and so on.
+                         // If a door does not exist here, just use "null"
+    [SerializeField]
+    private Location m_roomLocation;
+    [SerializeField]
+    private int m_roomSize; // Can be x1, x2, x4.
+    [SerializeField]
+    private Genre m_roomGenre;
+    [SerializeField]
+    private string m_roomFeature;
+
+    [SerializeField]
+    private Transform m_player1Pos;
+
+    [SerializeField]
+    private Transform m_player2Pos;
+
+    [SerializeField]
+    private Transform m_player3Pos;
+
+    [SerializeField]
+    private Transform m_player4Pos;
 
     void Start()
     {
@@ -27,20 +60,6 @@ abstract public class RoomObject : MonoBehaviour {
         set { m_roomDoors = value; }
     }
 
-    // Property for a Room's Genre
-    public Genre RoomGenre
-    {
-        get { return m_roomGenre; }
-        set { m_roomGenre = value; }
-    }
-
-    // Property for a Room's Feature
-    public string RoomFeature
-    {
-        get { return m_roomFeature; }
-        set { m_roomFeature = value; }
-    }
-
     // Property for the size of a room
     public int RoomSize
     {
@@ -48,25 +67,17 @@ abstract public class RoomObject : MonoBehaviour {
         set { m_roomSize = value; }
     }
 
-    // What to do immediately when we enter the room
-    // Parent class does nothing special, so just return
-    public void OnRoomEnter()
+    public Genre RoomGenre
     {
-        return;
+        get { return m_roomGenre; }
+        set { m_roomGenre = value; }
     }
 
-    // What to do immediately when we exit the room
-    // Parent class does nothing special, so just return
-    public void OnRoomExit()
+    // Get Feature of a room
+    public string RoomFeature
     {
-        return;
-    }
-
-    // What to do when the room's event activates
-    // Parent class does nothing special, so just return
-    public void OnRoomEvent()
-    {
-        return;
+        get { return m_roomFeature; }
+        set { m_roomFeature = value; }
     }
 
     public Transform CameraNode
@@ -93,35 +104,4 @@ abstract public class RoomObject : MonoBehaviour {
     {
         get { return m_player4Pos; }
     }
-
-    [SerializeField]
-    Transform m_cameraNode;
-
-    [SerializeField]
-    private Door[] m_roomDoors;
-    // Ordering for indices should be clockwise, starting from the north.
-    // In a standard 1x1 room, it would be like:
-    // 0 - North, 1 - East, 2 - South, 3 - West.
-    // In a larger room, it would probably be more like 0-N, 1-N, 2-E, 3-S, 4-S, and so on.
-    // If a door does not exist here, just use "null"
-    [SerializeField]
-    private Location m_roomLocation;
-    [SerializeField]
-    private int m_roomSize; // Can be x1, x2, x4.
-    [SerializeField]
-    private Genre m_roomGenre;
-    [SerializeField]
-    private string m_roomFeature;
-
-    [SerializeField]
-    private Transform m_player1Pos;
-
-    [SerializeField]
-    private Transform m_player2Pos;
-
-    [SerializeField]
-    private Transform m_player3Pos;
-
-    [SerializeField]
-    private Transform m_player4Pos;
 }

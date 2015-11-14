@@ -211,14 +211,30 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
+    public PhotonPlayer Controller
+    {
+        get { return PhotonPlayer.Find(controllerId);}
+    }
+
     public int OwnerActorNr
     {
         get { return this.ownerId; }
     }
 
+    public int ControllerActorNr
+    {
+        get { return controllerId; }
+        set { controllerId = value; }
+    }
+
     public bool isOwnerActive
     {
         get { return this.ownerId != 0 && PhotonNetwork.networkingPeer.mActors.ContainsKey(this.ownerId); }
+    }
+
+    public bool isControllerActive
+    {
+        get { return this.controllerId != 0 && PhotonNetwork.networkingPeer.mActors.ContainsKey(this.controllerId); }
     }
 
     public int CreatorActorNr
@@ -242,6 +258,16 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// True if the PhotonView is controlled by the local player
+    /// </summary>
+    public bool isController
+    {
+        get { return (controllerId == PhotonNetwork.player.ID) ||
+            (!this.isControllerActive && PhotonNetwork.isMasterClient);
+        }
+    }
+
     public bool HasSpawned
     {
         get { return hasSpawned; }
@@ -252,18 +278,9 @@ public class PhotonView : Photon.MonoBehaviour
         get { return parentView; }
     }
 
-    public int ControllerId
+    public bool AllowFullCommunication
     {
-        get { return controllerId; }
-        set
-        {
-            if (isMine)
-            {
-                //TODO: Send controller change event
-            }
-
-            controllerId = value;
-        }
+        get { return allowFullCommunication; }
     }
 
     protected internal bool didAwake;
@@ -274,14 +291,21 @@ public class PhotonView : Photon.MonoBehaviour
     protected internal bool removedFromLocalViewList;
 
     internal MonoBehaviour[] RpcMonoBehaviours;
+
     private MethodInfo OnSerializeMethodInfo;
 
     private bool failedToFindOnSerialize;
 
-    internal void Spawn()
+    internal void OnSpawn()
     {
         hasSpawned = true;
         gameObject.SetActive(true);
+    }
+
+    internal void OnDespawn()
+    {
+        hasSpawned = false;
+        gameObject.SetActive(false);
     }
 
     /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
@@ -371,8 +395,25 @@ public class PhotonView : Photon.MonoBehaviour
     /// </remarks>
     public void TransferOwnership(int newOwnerId)
     {
-        PhotonNetwork.networkingPeer.TransferOwnership(this.viewID, newOwnerId);
-        this.ownerId = newOwnerId;  // immediately switch ownership locally, to avoid more updates sent from this client.
+        if (HasSpawned && isMine)
+        {
+            PhotonNetwork.networkingPeer.TransferOwnership(this.viewID, newOwnerId);
+            this.ownerId = newOwnerId;// immediately switch ownership locally, to avoid more updates sent from this client.
+        }
+    }
+
+    public void TransferController(PhotonPlayer player)
+    {
+        TransferOwnership(player.ID);
+    }
+
+    public void TransferController(int newControllerId)
+    {
+        if (HasSpawned && isMine)
+        {
+            PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
+            controllerId = newControllerId;
+        }
     }
 
     protected internal void OnDestroy()
@@ -391,6 +432,8 @@ public class PhotonView : Photon.MonoBehaviour
                 Debug.Log("PUN-instantiated '" + this.gameObject.name + "' got destroyed by engine. This is OK when loading levels. Otherwise use: PhotonNetwork.Destroy().");
             }
         }
+
+        hasSpawned = false;
     }
 
     public void SerializeReliable(PhotonMessageInfo info)
@@ -442,9 +485,8 @@ public class PhotonView : Photon.MonoBehaviour
 
         object[] data = stream.ToArray();
 
-        reliableSerializedData[(byte)0] = viewID;
-        reliableSerializedData[(byte)1] = info.timestamp;
-        reliableSerializedData[(byte)2] = data;
+        unreliableSerializedData[(byte)0] = viewID;
+        unreliableSerializedData[(byte)1] = data;
     }
 
     public void DeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
@@ -470,7 +512,25 @@ public class PhotonView : Photon.MonoBehaviour
         return wasRelevantTo.Contains(player);
     }
 
-    public void RebuildRelevance()
+    public void RebuildNetworkRelavance()
+    {
+        BuildRelevance();
+
+        PhotonPlayer[] otherPlayers = PhotonNetwork.otherPlayers;
+        foreach (PhotonPlayer player in otherPlayers)
+        {
+            if (WasRelevant(player) && !IsRelevantTo(player))
+            {
+                PhotonNetwork.Despawn(this, player);
+            }
+            else if (!WasRelevant(player) && IsRelevantTo(player))
+            {
+                PhotonNetwork.Spawn(this, player);
+            }
+        }
+    }
+
+    internal void RebuildRelevance()
     {
         if (parentView == null)
         {
@@ -482,7 +542,7 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public void BuildRelevance()
+    internal void BuildRelevance()
     {
         InternalBuildRelevance();
     }
@@ -812,6 +872,33 @@ public class PhotonView : Photon.MonoBehaviour
         PhotonNetwork.RPC(this, methodName, targetPlayer, false, parameters);
     }
 
+    /// <summary>
+    /// Call a RPC on this object on the owner connection.
+    /// </summary>
+    /// <param name="methodName">The name of the method to call.</param>
+    /// <param name="parameters">The parameters to pass.</param>
+    public void RpcOwner(string methodName, params object[] parameters)
+    {
+        if (owner == null)
+        {
+            Debug.LogError("Cannot send RPC to owner, no owner exists.");
+            return;
+        }
+
+        RPC(methodName, owner, parameters);
+    }
+
+    public void RpcController(string methodName, params object[] parameters)
+    {
+        if (Controller == null)
+        {
+            Debug.LogError("Cannot send RPC to owner, no owner exists.");
+            return;
+        }
+
+        RPC(methodName, Controller, parameters);
+    }
+
     public virtual bool IsRelevantTo(PhotonPlayer targetPlayer)
     {
         foreach (Component component in ObservedComponents)
@@ -858,6 +945,7 @@ public class PhotonView : Photon.MonoBehaviour
     private void OnTransformParentChanged()
     {
         BuildParent();
+        RebuildNetworkRelavance();
     }
 
     private void BuildParent()
@@ -886,19 +974,27 @@ public class PhotonView : Photon.MonoBehaviour
     }
 
     private HashSet<PhotonPlayer> relevantTo = new HashSet<PhotonPlayer>();
-    private HashSet<PhotonPlayer> trueRelevance = new HashSet<PhotonPlayer>(); 
+
+    private HashSet<PhotonPlayer> trueRelevance = new HashSet<PhotonPlayer>();
+
     private HashSet<PhotonPlayer> wasRelevantTo = new HashSet<PhotonPlayer>();
 
     private int buildId;
+
     private bool hasSpawned;
 
     internal Hashtable reliableSerializedData = new Hashtable();
+
     internal Hashtable unreliableSerializedData = new Hashtable();
+
     public string prefabName;
 
     private PhotonView parentView;
 
     private HashSet<PhotonPlayer> existsOn = new HashSet<PhotonPlayer>();
 
-    private int controllerId;
+    internal int controllerId;
+
+    [SerializeField]
+    private bool allowFullCommunication;//if true then allow any player to send rpcs to this object, not just the controller and owner
 }

@@ -6,16 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/PhotonTest.unity
+    path: Assets/Scenes/Demo/GameLobby.unity
   - enabled: 1
-    path: Assets/Scenes/NetworkTest.unity
-  - enabled: 0
-    path: Assets/Scenes/TestGameManager.unity
-  - enabled: 0
-    path: Assets/Scenes/CombatUI.unity
+    path: Assets/Scenes/Demo/DemoCombatScene.unity
   - enabled: 1
-    path: Assets/Scenes/GameLobby.unity
-  - enabled: 1
-    path: Assets/Scenes/TestRoomPlacement.unity
-  - enabled: 1
-    path: Assets/Scenes/DemoCombatScene.unity
+    path: Assets/Scenes/Demo/TestRoomPlacement.unity

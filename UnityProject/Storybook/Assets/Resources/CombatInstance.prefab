@@ -46,13 +46,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400336}
-  - 20: {fileID: 2015216}
-  - 92: {fileID: 9249538}
-  - 124: {fileID: 12472204}
-  - 81: {fileID: 8143478}
   m_Layer: 0
   m_Name: Combat Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -385,7 +381,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 154568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2156.14258, y: 1374.71362, z: 1116.80212}
+  m_LocalPosition: {x: -47.2678185, y: 8.62324142, z: -36.3238564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 434462}
@@ -406,40 +402,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 441906}
   m_RootOrder: 2
---- !u!20 &2015216
-Camera:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 115414}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 187.070328
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
-  m_StereoMirrorMode: 0
 --- !u!23 &2315016
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -731,20 +693,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!81 &8143478
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 115414}
-  m_Enabled: 1
---- !u!92 &9249538
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 115414}
-  m_Enabled: 1
 --- !u!95 &9550440
 Animator:
   serializedVersion: 3
@@ -929,13 +877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_combatPawnPrefab: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
   m_enemyPawnPrefab: {fileID: 11487484, guid: e0fa81d364840e04cb1312e5604dc30d, type: 2}
---- !u!124 &12472204
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 115414}
-  m_Enabled: 1
+  m_cameraPos: {fileID: 400336}
 --- !u!135 &13500524
 SphereCollider:
   m_ObjectHideFlags: 1

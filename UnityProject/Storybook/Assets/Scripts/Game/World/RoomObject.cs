@@ -39,6 +39,11 @@ public class RoomObject : MonoBehaviour{
     [SerializeField]
     private Transform m_player4Pos;
 
+    void Start()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     // Set the location of the room.
     // Should only be used once, when placing the room.
     public void SetRoomLocation(Location loc)

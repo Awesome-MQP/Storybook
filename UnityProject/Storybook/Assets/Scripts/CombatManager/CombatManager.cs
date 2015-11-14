@@ -13,6 +13,9 @@ public class CombatManager : Photon.PunBehaviour {
     [SerializeField]
     private CombatPawn m_enemyPawnPrefab;
 
+    [SerializeField]
+    private Transform m_cameraPos;
+
     private CombatPawn[] m_enemiesToSpawn;
 
     private int m_submittedMoves = 0;
@@ -36,6 +39,9 @@ public class CombatManager : Photon.PunBehaviour {
     // Use this for initialization
     void Start()
     {
+        Camera.main.transform.position = CameraPos.position;
+        Camera.main.transform.rotation = Quaternion.identity;
+
         // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>();
         if (PhotonNetwork.isMasterClient)
@@ -358,5 +364,10 @@ public class CombatManager : Photon.PunBehaviour {
     public void SetPlayersToSpawn(int playersToSpawn)
     {
         m_playersToSpawn = playersToSpawn;
+    }
+
+    public Transform CameraPos
+    {
+        get { return m_cameraPos; }
     }
 }

@@ -14,11 +14,6 @@ public class CharacterAnimator : MonoBehaviour {
     private bool m_isAtDestination = false;
     private float m_startTime;
 
-    void Start()
-    {
-        DontDestroyOnLoad(this);
-    }
-
     // Update is called once per frame
     void Update()
     {

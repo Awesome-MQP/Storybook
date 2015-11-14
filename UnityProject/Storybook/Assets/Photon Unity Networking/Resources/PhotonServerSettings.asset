@@ -22,29 +22,32 @@ MonoBehaviour:
   EnableLobbyStatistics: 0
   RpcList:
   - Chat
-  - CreateNewRoom
   - DestroyRpc
-  - IncrementPlayersReady
   - InstantiateRpc
-  - MovePlayer
-  - MoveToRoomAtLoc
   - OnAwakeRPC
   - PickupItemInit
-  - PlacePlayer
   - PunPickup
   - PunPickupSimple
   - PunRespawn
   - RequestForPickupTimes
+  - StartGame
   - SelectHostPlayer
-  - SendEnemyMoveOverNetwork
   - SendOutHostId
-  - SendPlayerMoveOverNetwork
+  - CreateNewRoom
+  - MoveToRoomAtLoc
+  - PlacePlayer
+  - MovePlayers
+  - MovePlayer
+  - StopPlayer
   - SetNewRoomLoc
   - CmdInternalRenameServer
 =======
   - StartCombat
-  - StartGame
-  - StopPlayer
-  - TransitionToCombat
-  - TransitionToDungeonRPC
+  - SendPawnIdRPC
+  - SendMoveOverNetwork
+  - SendEnemyMoveOverNetwork
+  - SendPlayerMoveOverNetwork
+  - DestroyState
+  - DeleteCombatRPC
+  - IncrementPlayersReady
   DisableAutoOpenWizard: 1

@@ -47,7 +47,6 @@ public class NetExecuteState : NetworkState {
                 m_currentCombatPawn.MoveForTurn.SetIsMoveComplete(false);
                 currentMove.SetIsMoveComplete(false);
                 m_currentCombatPawn.SetIsActionComplete(true);
-                _changePawnColor(false);
                 GetNextCombatPawn();
             }
         }
@@ -73,11 +72,6 @@ public class NetExecuteState : NetworkState {
                 areAllPlayersDefeated = false;
                 break;
             }
-            else
-            {
-                Material currentPawnMaterial = playerPawn.GetComponent<Renderer>().material;
-                currentPawnMaterial.SetColor("_Color", Color.black);
-            }
         }
         return areAllPlayersDefeated;
     }
@@ -95,11 +89,6 @@ public class NetExecuteState : NetworkState {
             {
                 areAllEnemiesDefeated = false;
                 break;
-            }
-            else
-            {
-                Material currentPawnMaterial = enemyPawn.GetComponent<Renderer>().material;
-                currentPawnMaterial.SetColor("_Color", Color.black);
             }
         }
         return areAllEnemiesDefeated;
@@ -162,7 +151,6 @@ public class NetExecuteState : NetworkState {
             // Need to initialize the move in case the same move has been used this turn since it resets the booleans
             CombatMove pawnMove = CManager.PawnToMove[m_currentCombatPawn];
             pawnMove.InitializeMove();
-            _changePawnColor(true);
         }
 
         // Otherwise, all the combat pawns have done their move, so exit the execute state
@@ -188,8 +176,6 @@ public class NetExecuteState : NetworkState {
             if (!pawn.IsAlive)
             {
                 removedList.Add(pawn);
-                Material currentPawnMaterial = pawn.GetComponent<Renderer>().material;
-                currentPawnMaterial.SetColor("_Color", Color.black);
             }
         }
         foreach (CombatPawn pawn in removedList)
@@ -212,8 +198,6 @@ public class NetExecuteState : NetworkState {
             if (!enemy.IsAlive)
             {
                 removedList.Add(enemy);
-                Material currentPawnMaterial = enemy.GetComponent<Renderer>().material;
-                currentPawnMaterial.SetColor("_Color", Color.black); 
             }
         }
         foreach (CombatEnemy enemy in removedList)
@@ -351,29 +335,5 @@ public class NetExecuteState : NetworkState {
     private void IncrementPlayersReady()
     {
         m_playersReady += 1;
-    }
-
-    private void _changePawnColor(bool isStartingAttack)
-    {
-        Material currentPawnMaterial = m_currentCombatPawn.GetComponent<Renderer>().material;
-        if (isStartingAttack)
-        {
-            if (m_currentCombatPawn.MoveForTurn.IsMoveAttack)
-            {
-                currentPawnMaterial.SetColor("_Color", Color.red);
-            }
-            else
-            {
-                currentPawnMaterial.SetColor("_Color", Color.blue);
-            }
-        }
-        else if (!m_currentCombatPawn.IsAlive)
-        {
-            currentPawnMaterial.SetColor("_Color", Color.black);
-        }
-        else
-        {
-            currentPawnMaterial.SetColor("_Color", Color.white);
-        }
     }
 }

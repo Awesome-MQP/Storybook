@@ -15,42 +15,31 @@ public class DungeonMovement : Photon.PunBehaviour {
     private Location m_newRoomLoc;
     private GameObject m_playerPawn = null;
     private List<GameObject> m_playerPawns = new List<GameObject>();
-    private bool m_isInBattle = false;
-    private Quaternion m_dungeonRotation;
 
     // Use this for initialization
     void Start () {
-        DontDestroyOnLoad(this);
         m_scenePhotonView = this.GetComponent<PhotonView>();
         m_scenePhotonView.RPC("SelectHostPlayer", PhotonTargets.MasterClient);
         m_mapManager = FindObjectOfType<MapManager>();
         m_currentLoc = new Location(0, 0);
         m_currentRoom = m_mapManager.PlaceRoom(m_currentLoc);
         m_scenePhotonView.RPC("PlacePlayer", PhotonTargets.All);
-        m_dungeonRotation = Camera.main.transform.rotation;
     }
 
     void Update()
     {
         // If a pawn is at the destination, stop all pawns from moving and move all players to the new room
-        if (m_playerPawns.Count > 0 && m_playerPawns[0].GetComponent<CharacterAnimator>().IsAtDestination && PhotonNetwork.isMasterClient)
+        if (m_playerPawns.Count > 0 && m_playerPawns[0].GetComponent<CharacterAnimator>().IsAtDestination)
         {
             m_scenePhotonView.RPC("StopPlayer", PhotonTargets.All);
             m_scenePhotonView.RPC("MoveToRoomAtLoc", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
-            enabled = false;
-            if (PhotonNetwork.isMasterClient)
-            {
-                PhotonNetwork.LoadLevel("DemoCombatScene");
-                m_scenePhotonView.RPC("TransitionToCombat", PhotonTargets.All);
-                FindObjectOfType<GameManager>().StartCombat(null);
-            }
         }
     }
 
     void OnGUI()
     {
         // Only the host can choose which direction to move in
-        if (m_hostPlayerId == PhotonNetwork.player.ID && !m_isInBattle)
+        if (m_hostPlayerId == PhotonNetwork.player.ID)
         {
             Door northDoor = m_currentRoom.RoomDoors[m_currentRoom.NORTH_DOOR_INDEX];
             Door westDoor = m_currentRoom.RoomDoors[m_currentRoom.WEST_DOOR_INDEX];
@@ -245,39 +234,5 @@ public class DungeonMovement : Photon.PunBehaviour {
     private void SetNewRoomLoc(int locX, int locY)
     {
         m_newRoomLoc = new Location(locX, locY);
-    }
-
-    [PunRPC]
-    private void TransitionToCombat()
-    {
-        MapManager mapManager = FindObjectOfType<MapManager>();
-        mapManager.LoadMap(false);
-        mapManager.enabled = false;
-        foreach (GameObject go in m_playerPawns)
-        {
-            go.SetActive(false);
-        }
-        enabled = false;
-    }
-
-    public void TransitionToDungeon()
-    {
-        m_scenePhotonView.RPC("TransitionToDungeonRPC", PhotonTargets.All);
-    }
-
-    [PunRPC]
-    public void TransitionToDungeonRPC()
-    {
-        MapManager mapManager = FindObjectOfType<MapManager>();
-        mapManager.LoadMap(true);
-        mapManager.enabled = true;
-        foreach (GameObject go in m_playerPawns)
-        {
-            go.SetActive(true);
-        }
-
-        FindObjectOfType<Camera>().enabled = true;
-        Camera.main.transform.position = m_currentRoom.CameraNode.transform.position;
-        Camera.main.transform.rotation = m_dungeonRotation;
     }
 }

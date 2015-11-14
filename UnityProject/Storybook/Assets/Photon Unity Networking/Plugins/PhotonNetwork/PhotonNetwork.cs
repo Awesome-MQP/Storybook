@@ -2070,7 +2070,7 @@ public static class PhotonNetwork
     /// <returns>False if event could not be sent</returns>
     public static bool RaiseEvent(byte eventCode, object eventContent, bool sendReliable, RaiseEventOptions options)
     {
-        if (!inRoom)
+        if (!inRoom || eventCode >= 200)
         {
             Debug.LogWarning("RaiseEvent() failed. Your event is not being sent! Check if your are in a Room and the eventCode must be less than 200 (0..199).");
             return false;
@@ -2279,156 +2279,17 @@ public static class PhotonNetwork
         Spawn(view, otherPlayers);
     }
 
+    public static void Despawn(PhotonView view)
+    {
+        if(!view.isMine)
+            return;
+
+
+    }
+
     public static void Spawn(PhotonView view, PhotonPlayer target)
     {
         Spawn(view, new []{target});
-    }
-
-    internal static void HandleSpawn(Hashtable evData, PhotonPlayer player)
-    {
-        int time = (int)evData[(byte)0];
-        int[] ids = (int[])evData[(byte)1];
-        Hashtable[] serializedReliableData = (Hashtable[])evData[(byte)2];
-        Hashtable[] serializedUnreliableData = (Hashtable[])evData[(byte)3];
-        short prefix = (short)evData[(byte)4];
-        int controllerId = (int) evData[(byte) 6];
-
-        PhotonView[] views = new PhotonView[ids.Length];
-        for (int i = 0; i < ids.Length; i++)
-        {
-            int id = ids[i];
-            PhotonView view = PhotonView.Find(id);
-
-            if (view.prefix > 0 && view.prefix != prefix)
-            {
-                Debug.LogErrorFormat("View spawned with wrong level prefix.");
-                return;
-            }
-
-            networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
-            networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
-
-            view.controllerId = controllerId;
-
-            view.OnSpawn();
-
-            views[i] = view;
-        }
-
-        if (evData.ContainsKey((byte)5))
-        {
-            PhotonView parent = PhotonView.Find((int)evData[(byte)5]);
-            views[0].transform.parent = parent.transform;
-        }
-    }
-
-    /// <summary>
-    /// Spawns the photon view on the network, if it does not exist on a client then we will also send a create command
-    /// </summary>
-    /// <param name="view">The view to attempt to spawn.</param>
-    /// <param name="players">The players to attempt to spawn on. This will not force relevance.</param>
-    private static void Spawn(PhotonView view, PhotonPlayer[] players)
-    {
-        if (!view.isMine)
-            return;
-
-        //if we are not the root view then we should handle it from the root view
-        if (view.instantiationId != view.viewID)
-        {
-            PhotonView root = PhotonView.Find(view.instantiationId);
-            Spawn(root, players);
-            return;
-        }
-
-        if (view.ParentView && !view.ParentView.HasSpawned)
-        {
-            Spawn(view.ParentView, players);
-            return;
-        }
-
-        view.RebuildRelevance();
-
-        List<PhotonPlayer> relevantPlayerList = new List<PhotonPlayer>(players);
-        for (int i = 0; i < players.Length; i++)
-        {
-            PhotonPlayer photonPlayer = players[i];
-            if (!view.IsRelevantTo(photonPlayer))
-                relevantPlayerList.RemoveAt(i);
-        }
-        PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
-
-        //find all children that belong to us
-        PhotonView[] children = view.GetComponentsInChildren<PhotonView>();
-        List<PhotonView> childrenList = new List<PhotonView>(children);
-        for (int i = 0; i < childrenList.Count; i++)
-        {
-            if (childrenList[i].instantiationId != view.instantiationId)
-            {
-                childrenList.RemoveAt(i);
-                i--;
-            }
-        }
-        PhotonView[] ownedChildren = childrenList.ToArray();
-        int[] ownedChildrenId = new int[ownedChildren.Length];
-        for (int i = 0; i < ownedChildren.Length; i++)
-        {
-            PhotonView child = ownedChildren[i];
-            ownedChildrenId[i] = child.viewID;
-        }
-
-        InternalTryCreateOnPlayers(ownedChildren, relevantPlayers);
-
-        //Create the serialized data to send
-        Hashtable[] serializedReliableData = new Hashtable[ownedChildren.Length];
-        Hashtable[] serializedUnreliableData = new Hashtable[ownedChildren.Length];
-        for (int i = 0; i < ownedChildren.Length; i++)
-        {
-            PhotonView child = ownedChildren[i];
-
-            networkingPeer.OnSerializeReliableWrite(child);
-            networkingPeer.OnSerializeUnreliableWrite(child);
-
-            serializedReliableData[i] = child.reliableSerializedData;
-            serializedUnreliableData[i] = child.unreliableSerializedData;
-        }
-
-        Hashtable evData = new Hashtable();
-        evData[(byte)0] = networkingPeer.ServerTimeInMilliSeconds;
-        evData[(byte)1] = ownedChildrenId;
-        evData[(byte)2] = serializedReliableData;
-        evData[(byte)3] = serializedUnreliableData;
-        evData[(byte)4] = networkingPeer.currentLevelPrefix;
-
-        if (view.ParentView)
-            evData[(byte)5] = view.ParentView.viewID;
-
-        evData[(byte) 6] = view.ControllerActorNr;
-
-        int[] relevantPlayerIds = new int[relevantPlayers.Length];
-        for (int i = 0; i < relevantPlayers.Length; i++)
-        {
-            PhotonPlayer photonPlayer = relevantPlayers[i];
-            relevantPlayerIds[i] = photonPlayer.ID;
-        }
-
-        RaiseEventOptions options = new RaiseEventOptions();
-        options.TargetActors = relevantPlayerIds;
-
-        RaiseEvent(PunEvent.SpawnObject, evData, true, options);
-
-        foreach (PhotonView child in ownedChildren)
-        {
-            child.OnSpawn();
-        }
-
-        //Children that are not part of the prefab will not be spawned, so we go through
-        foreach (PhotonView child in children)
-        {
-            if (child != view && child.ParentView == view && child.instantiationId != view.viewID)
-            {
-                Spawn(child, relevantPlayers);
-            }
-        }
     }
 
     internal static void HandleCreate(Hashtable evData, PhotonPlayer sender)
@@ -2469,57 +2330,135 @@ public static class PhotonNetwork
 
             view.viewID = viewId;
             view.ownerId = ownerId;
-            view.controllerId = controllerId;
+            view.ControllerId = controllerId;
             view.group = group;
             view.prefix = prefix;
         }
     }
 
-    public static void Despawn(PhotonView view)
+    internal static void HandleSpawn(Hashtable evData, PhotonPlayer player)
     {
-        Despawn(view, otherPlayers);
+        int time = (int)evData[(byte)0];
+        int[] ids = (int[])evData[(byte)1];
+        Hashtable[] serializedReliableData = (Hashtable[])evData[(byte)2];
+        Hashtable[] serializedUnreliableData = (Hashtable[])evData[(byte)3];
+        short prefix = (short)evData[(byte)4];
+
+        PhotonView[] views = new PhotonView[ids.Length];
+        for (int i = 0; i < ids.Length; i++)
+        {
+            int id = ids[i];
+            PhotonView view = PhotonView.Find(id);
+
+            if (view.prefix > 0 && view.prefix != prefix)
+            {
+                Debug.LogErrorFormat("View spawned with wrong level prefix.");
+                return;
+            }
+
+            networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
+            networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
+
+            view.Spawn();
+
+            views[i] = view;
+        }
+
+        if (evData.ContainsKey((byte)5))
+        {
+            PhotonView parent = PhotonView.Find((int) evData[(byte) 5]);
+            views[0].transform.parent = parent.transform;
+        }
     }
 
-    public static void Despawn(PhotonView view, PhotonPlayer player)
+    /// <summary>
+    /// Spawns the photon view on the network, if it does not exist on a client then we will also send a create command
+    /// </summary>
+    /// <param name="view">The view to attempt to spawn.</param>
+    /// <param name="players">The players to attempt to spawn on. This will not force relevance.</param>
+    private static void Spawn(PhotonView view, PhotonPlayer[] players)
     {
-        Despawn(view, new []{player});
-    }
-
-    private static void Despawn(PhotonView view, PhotonPlayer[] players)
-    {
-        if(!view.isMine)
+        if (!view.isMine)
             return;
 
-        List<int> relevantPlayerList = new List<int>(players.Length);
+        //if we are not the root view then we should handle it from the root view
+        if (view.instantiationId != view.viewID)
+        {
+            PhotonView root = PhotonView.Find(view.instantiationId);
+            Spawn(root, players);
+            return;
+        }
+
+        view.RebuildRelevance();
+
+        List<PhotonPlayer> relevantPlayerList = new List<PhotonPlayer>(players);
         for (int i = 0; i < players.Length; i++)
         {
             PhotonPlayer photonPlayer = players[i];
-            if (view.IsRelevantTo(photonPlayer))
-                relevantPlayerList.Add(photonPlayer.ID);
+            if(view.IsRelevantTo(photonPlayer))
+                relevantPlayerList.RemoveAt(i);
         }
-        int[] relevantPlayers = relevantPlayerList.ToArray();
+        PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
 
-        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>();
-        int[] viewStructureIds = new int[viewStructure.Length];
-        for (int i = 0; i < viewStructure.Length; i++)
+        //find all children that belong to us
+        List<PhotonView> children = new List<PhotonView>(view.GetComponentsInChildren<PhotonView>());
+        for (int i = 0; i < children.Count; i++)
         {
-            PhotonView photonView = viewStructure[i];
-            viewStructureIds[i] = photonView.viewID;
+            if (children[i].instantiationId != view.instantiationId)
+            {
+                children.RemoveAt(i);
+                i--;
+            }
+        }
+        PhotonView[] ownedChildren = children.ToArray();
+        int[] ownedChildrenId = new int[ownedChildren.Length];
+        for (int i = 0; i < ownedChildren.Length; i++)
+        {
+            PhotonView child = ownedChildren[i];
+            ownedChildrenId[i] = child.viewID;
+        }
+
+        InternalTryCreateOnPlayers(ownedChildren, relevantPlayers);
+
+        //Create the serialized data to send
+        Hashtable[] serializedReliableData = new Hashtable[ownedChildren.Length];
+        Hashtable[] serializedUnreliableData = new Hashtable[ownedChildren.Length];
+        for (int i = 0; i < ownedChildren.Length; i++)
+        {
+            PhotonView child = ownedChildren[i];
+
+            networkingPeer.OnSerializeReliableWrite(child);
+            networkingPeer.OnSerializeUnreliableWrite(child);
+
+            serializedReliableData[i] = child.reliableSerializedData;
+            serializedUnreliableData[i] = child.unreliableSerializedData;
+        }
+
+        Hashtable evData = new Hashtable();
+        evData[(byte)0] = networkingPeer.ServerTimeInMilliSeconds;
+        evData[(byte)1] = ownedChildrenId;
+        evData[(byte)2] = serializedReliableData;
+        evData[(byte)3] = serializedUnreliableData;
+        evData[(byte)4] = networkingPeer.currentLevelPrefix;
+
+        if (view.ParentView)
+            evData[(byte)5] = view.ParentView.viewID;
+
+        int[] relevantPlayerIds = new int[relevantPlayers.Length];
+        for (int i = 0; i < relevantPlayers.Length; i++)
+        {
+            PhotonPlayer photonPlayer = relevantPlayers[i];
+            relevantPlayerIds[i] = photonPlayer.ID;
         }
 
         RaiseEventOptions options = new RaiseEventOptions();
-        options.TargetActors = relevantPlayers;
+        options.TargetActors = relevantPlayerIds;
 
-        RaiseEvent(PunEvent.DespawnObject, viewStructureIds, true, options);
-    }
+        RaiseEvent(PunEvent.SpawnObject, evData, true, options);
 
-    internal static void HandleDespawn(int[] viewStructureIds)
-    {
-        for (int i = viewStructureIds.Length - 1; i >= 0; i--)
+        foreach (PhotonView child in ownedChildren)
         {
-            PhotonView view = PhotonView.Find(viewStructureIds[i]);
-            if(view)
-                view.OnDespawn();
+            child.Spawn();
         }
     }
 
@@ -2572,7 +2511,7 @@ public static class PhotonNetwork
         evData[(byte)5] = root.transform.position;
         evData[(byte)6] = root.transform.rotation;
         evData[(byte)7] = root.ownerId;
-        evData[(byte)8] = root.Controller;
+        evData[(byte)8] = root.ControllerId;
 
         //TODO: Add instantiated data here
 
@@ -2707,19 +2646,6 @@ public static class PhotonNetwork
         }
     }
 
-    public static void Destroy(GameObject go)
-    {
-        PhotonView view = go.GetComponent<PhotonView>();
-        if (view != null)
-        {
-            Destroy(view);
-        }
-        else
-        {
-            Debug.LogError("Game object must have a photon view ");
-        }
-    }
-
     /// <summary>
     /// Network-Destroy the GameObject associated with the PhotonView, unless the PhotonView is static or not under this client's control.
     /// </summary>
@@ -2744,34 +2670,121 @@ public static class PhotonNetwork
     /// <returns>Nothing. Check error debug log for any issues.</returns>
     public static void Destroy(PhotonView targetView)
     {
-        Destroy(targetView, otherPlayers);
+        if (targetView != null)
+        {
+            networkingPeer.RemoveInstantiatedGO(targetView.gameObject, !inRoom);
+        }
+        else
+        {
+            Debug.LogError("Destroy(targetPhotonView) failed, cause targetPhotonView is null.");
+        }
     }
 
-    private static void Destroy(PhotonView targetView, PhotonPlayer[] players)
+    /// <summary>
+    /// Network-Destroy the GameObject, unless it is static or not under this client's control.
+    /// </summary>
+    /// <remarks>
+    /// Destroying a networked GameObject includes:
+    /// - Removal of the Instantiate call from the server's room buffer.
+    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
+    ///
+    /// Usually, when you leave a room, the GOs get destroyed automatically.
+    /// If you have to destroy a GO while not in a room, the Destroy is only done locally.
+    ///
+    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
+    ///
+    /// The GameObject must be under this client's control:
+    /// - Instantiated and owned by this client.
+    /// - Instantiated objects of players who left the room are controlled by the Master Client.
+    /// - Scene-owned game objects are controlled by the Master Client.
+    /// - GameObject can be destroyed while client is not in a room.
+    /// </remarks>
+    /// <returns>Nothing. Check error debug log for any issues.</returns>
+    public static void Destroy(GameObject targetGo)
     {
-        if (!targetView.isMine)
+        networkingPeer.RemoveInstantiatedGO(targetGo, !inRoom);
+    }
+
+    /// <summary>
+    /// Network-Destroy all GameObjects, PhotonViews and their RPCs of targetPlayer. Can only be called on local player (for "self") or Master Client (for anyone).
+    /// </summary>
+    /// <remarks>
+    /// Destroying a networked GameObject includes:
+    /// - Removal of the Instantiate call from the server's room buffer.
+    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
+    ///
+    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
+    /// </remarks>
+    /// <returns>Nothing. Check error debug log for any issues.</returns>
+    public static void DestroyPlayerObjects(PhotonPlayer targetPlayer)
+    {
+        if (player == null)
         {
-            Debug.LogError("Cannot delete object that we do not own.");
+            Debug.LogError("DestroyPlayerObjects() failed, cause parameter 'targetPlayer' was null.");
+        }
+
+        DestroyPlayerObjects(targetPlayer.ID);
+    }
+
+    /// <summary>
+    /// Network-Destroy all GameObjects, PhotonViews and their RPCs of this player (by ID). Can only be called on local player (for "self") or Master Client (for anyone).
+    /// </summary>
+    /// <remarks>
+    /// Destroying a networked GameObject includes:
+    /// - Removal of the Instantiate call from the server's room buffer.
+    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
+    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
+    ///
+    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
+    /// </remarks>
+    /// <returns>Nothing. Check error debug log for any issues.</returns>
+    public static void DestroyPlayerObjects(int targetPlayerId)
+    {
+        if (!VerifyCanUseNetwork())
+        {
             return;
         }
-
-        List<int> relevantPlayerList = new List<int>(players.Length);
-        for (int i = 0; i < players.Length; i++)
+        if (player.isMasterClient || targetPlayerId == player.ID)
         {
-            PhotonPlayer photonPlayer = players[i];
-            if (targetView.IsRelevantTo(photonPlayer))
-                relevantPlayerList.Add(photonPlayer.ID);
+            networkingPeer.DestroyPlayerObjects(targetPlayerId, false);
         }
-        int[] relevantPlayers = relevantPlayerList.ToArray();
-
-        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>();
-
+        else
+        {
+            Debug.LogError("DestroyPlayerObjects() failed, cause players can only destroy their own GameObjects. A Master Client can destroy anyone's. This is master: " + PhotonNetwork.isMasterClient);
+        }
     }
 
-    internal static void HandleDestroy(int[] viewStructureIds)
+    /// <summary>
+    /// Network-Destroy all GameObjects, PhotonViews and their RPCs in the room. Removes anything buffered from the server. Can only be called by Master Client (for anyone).
+    /// </summary>
+    /// <remarks>
+    /// Can only be called by Master Client (for anyone).
+    /// Unlike the Destroy methods, this will remove anything from the server's room buffer. If your game
+    /// buffers anything beyond Instantiate and RPC calls, that will be cleaned as well from server.
+    ///
+    /// Destroying all includes:
+    /// - Remove anything from the server's room buffer (Instantiate, RPCs, anything buffered).
+    /// - Sending a message to other clients to destroy everything locally, too (affected by network lag).
+    ///
+    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
+    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
+    /// </remarks>
+    /// <returns>Nothing. Check error debug log for any issues.</returns>
+    public static void DestroyAll()
     {
-        PhotonView rootView = PhotonView.Find(viewStructureIds[0]);
-        Object.Destroy(rootView.gameObject);
+        if (isMasterClient)
+        {
+            networkingPeer.DestroyAll(false);
+        }
+        else
+        {
+            Debug.LogError("Couldn't call DestroyAll() as only the master client is allowed to call this.");
+        }
     }
 
     /// <summary>
@@ -3040,9 +3053,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelNumber);
-
-        networkingPeer.LevelLoadOperation = operation;
+        Application.LoadLevel(levelNumber);
     }
 
     /// <summary>Wraps loading a level to pause the network mesage-queue. Optionally syncs the loaded level in a room.</summary>
@@ -3068,9 +3079,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelName);
-
-        networkingPeer.LevelLoadOperation = operation;
+        Application.LoadLevel(levelName);
     }
 
 

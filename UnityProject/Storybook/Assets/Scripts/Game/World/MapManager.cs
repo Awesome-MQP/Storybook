@@ -20,7 +20,6 @@ public class MapManager : MonoBehaviour {
     // Initialize
     void Awake()
     {
-        DontDestroyOnLoad(this);
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
     }
 	
@@ -232,21 +231,5 @@ public class MapManager : MonoBehaviour {
         RoomObject newRoom = m_worldGrid[newCameraLoc.X, newCameraLoc.Y];
         Transform roomCamNode = newRoom.CameraNode;
         Camera.main.transform.position = roomCamNode.transform.position;
-    }
-
-    public void LoadMap(bool isLoad)
-    {
-        for (int i = 0; i < m_worldMaxXSize; i++)
-        {
-            for (int j = 0; j < m_worldMaxYSize; j++)
-            {
-                RoomObject room = m_worldGrid[i, j];
-                if (room != null)
-                {
-                    room.enabled = isLoad;
-                    room.gameObject.SetActive(isLoad);
-                }
-            }
-        }
     }
 }

@@ -1205,7 +1205,6 @@ internal class PunEvent
     public const byte VacantViewIds = 211;
     public const byte SpawnObject = 212;
     public const byte DespawnObject = 213;
-    public const byte ControllerTransfer = 214;
 }
 
 /// <summary>

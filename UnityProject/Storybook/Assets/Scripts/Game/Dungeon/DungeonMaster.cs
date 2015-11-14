@@ -25,7 +25,7 @@ public class DungeonMaster : MonoBehaviour{
     /// <param name="genre">The specified Genre of the room to search for.</param>
     /// <param name="feature">The specified Feature of the room to search for.</param>
     /// <returns>The room if a match is found, or null if no match is found.</returns>
-    RoomObject GetRoomPrefab(int size, Genre genre, RoomFeature feature)
+    RoomObject GetRoomPrefab(int size, Genre genre, string feature)
     {
         // List of "good" rooms - ones that match the criteria passed in.
         List<RoomObject> goodRooms = new List<RoomObject>();
@@ -33,15 +33,15 @@ public class DungeonMaster : MonoBehaviour{
         // Check each room to see if there is a match
         foreach(RoomObject r in m_rooms)
         {
-            if(r.GetRoomSize() != size)
+            if(r.RoomSize != size)
             {
                 continue;
             }
-            else if(r.GetRoomGenre() != genre)
+            else if(r.RoomGenre != genre)
             {
                 continue;
             }
-            else if(r.GetRoomFeature() != feature)
+            else if(r.RoomFeature != feature)
             {
                 continue;
             }
@@ -70,8 +70,8 @@ public class DungeonMaster : MonoBehaviour{
     /// </summary>
     void TestGetRoomPrefab()
     {
-        GetRoomPrefab(1, Genre.SciFi, RoomFeature.Curse);
-        GetRoomPrefab(4, Genre.Horror, RoomFeature.Shop);
-        GetRoomPrefab(2, Genre.Fantasy, RoomFeature.Treasure);
+        GetRoomPrefab(1, Genre.SciFi, "Curse");
+        GetRoomPrefab(4, Genre.Horror, "Shop");
+        GetRoomPrefab(2, Genre.Fantasy, "Treasure");
     }
 }

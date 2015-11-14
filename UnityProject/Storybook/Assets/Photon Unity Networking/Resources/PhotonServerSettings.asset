@@ -41,7 +41,6 @@ MonoBehaviour:
   - SendPlayerMoveOverNetwork
   - SetNewRoomLoc
   - StartCombat
-  - StartCombatForRoom
   - StartGame
   - StopPlayer
   - TransitionToCombat

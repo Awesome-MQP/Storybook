@@ -2291,6 +2291,7 @@ public static class PhotonNetwork
         Hashtable[] serializedReliableData = (Hashtable[])evData[(byte)2];
         Hashtable[] serializedUnreliableData = (Hashtable[])evData[(byte)3];
         short prefix = (short)evData[(byte)4];
+        int controllerId = (int) evData[(byte) 6];
 
         PhotonView[] views = new PhotonView[ids.Length];
         for (int i = 0; i < ids.Length; i++)
@@ -2306,6 +2307,8 @@ public static class PhotonNetwork
 
             networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
             networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
+
+            view.controllerId = controllerId;
 
             view.OnSpawn();
 
@@ -2399,6 +2402,8 @@ public static class PhotonNetwork
         if (view.ParentView)
             evData[(byte)5] = view.ParentView.viewID;
 
+        evData[(byte) 6] = view.ControllerActorNr;
+
         int[] relevantPlayerIds = new int[relevantPlayers.Length];
         for (int i = 0; i < relevantPlayers.Length; i++)
         {
@@ -2464,7 +2469,7 @@ public static class PhotonNetwork
 
             view.viewID = viewId;
             view.ownerId = ownerId;
-            view.ControllerId = controllerId;
+            view.controllerId = controllerId;
             view.group = group;
             view.prefix = prefix;
         }
@@ -2567,7 +2572,7 @@ public static class PhotonNetwork
         evData[(byte)5] = root.transform.position;
         evData[(byte)6] = root.transform.rotation;
         evData[(byte)7] = root.ownerId;
-        evData[(byte)8] = root.ControllerId;
+        evData[(byte)8] = root.Controller;
 
         //TODO: Add instantiated data here
 

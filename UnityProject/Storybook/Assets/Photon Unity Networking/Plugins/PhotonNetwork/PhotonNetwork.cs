@@ -2358,7 +2358,7 @@ public static class PhotonNetwork
         PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
 
         //find all children that belong to us
-        PhotonView[] children = view.GetComponentsInChildren<PhotonView>();
+        PhotonView[] children = view.GetComponentsInChildren<PhotonView>(true);
         List<PhotonView> childrenList = new List<PhotonView>(children);
         for (int i = 0; i < childrenList.Count; i++)
         {
@@ -2460,7 +2460,7 @@ public static class PhotonNetwork
         }
 
         GameObject newObject = Object.Instantiate(prefabGo, position, rotation) as GameObject;
-        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>();
+        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>(true);
 
         for (int i = 0; i < viewIds.Length; i++)
         {
@@ -2499,7 +2499,7 @@ public static class PhotonNetwork
         }
         int[] relevantPlayers = relevantPlayerList.ToArray();
 
-        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>();
+        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>(false);
         int[] viewStructureIds = new int[viewStructure.Length];
         for (int i = 0; i < viewStructure.Length; i++)
         {
@@ -2764,8 +2764,9 @@ public static class PhotonNetwork
         }
         int[] relevantPlayers = relevantPlayerList.ToArray();
 
-        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>();
+        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>(false);
 
+        //TODO: Finish
     }
 
     internal static void HandleDestroy(int[] viewStructureIds)

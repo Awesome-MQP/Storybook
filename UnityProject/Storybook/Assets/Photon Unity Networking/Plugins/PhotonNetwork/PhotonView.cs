@@ -564,7 +564,7 @@ public class PhotonView : Photon.MonoBehaviour
         if (parentView != null && parentView != this)
             trueRelevance.IntersectWith(parentView.trueRelevance);
 
-        PhotonView[] childrenViews = GetComponentsInChildren<PhotonView>();
+        PhotonView[] childrenViews = GetComponentsInChildren<PhotonView>(true);
         foreach (PhotonView view in childrenViews)
         {
             if(view != this)

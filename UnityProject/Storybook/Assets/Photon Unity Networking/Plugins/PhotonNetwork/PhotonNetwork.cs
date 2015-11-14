@@ -2070,7 +2070,7 @@ public static class PhotonNetwork
     /// <returns>False if event could not be sent</returns>
     public static bool RaiseEvent(byte eventCode, object eventContent, bool sendReliable, RaiseEventOptions options)
     {
-        if (!inRoom || eventCode >= 200)
+        if (!inRoom)
         {
             Debug.LogWarning("RaiseEvent() failed. Your event is not being sent! Check if your are in a Room and the eventCode must be less than 200 (0..199).");
             return false;
@@ -2279,61 +2279,9 @@ public static class PhotonNetwork
         Spawn(view, otherPlayers);
     }
 
-    public static void Despawn(PhotonView view)
-    {
-        if(!view.isMine)
-            return;
-
-
-    }
-
     public static void Spawn(PhotonView view, PhotonPlayer target)
     {
         Spawn(view, new []{target});
-    }
-
-    internal static void HandleCreate(Hashtable evData, PhotonPlayer sender)
-    {
-        int time = (int)evData[(byte)0];
-        string prefabName = (string)evData[(byte)1];
-        short prefix = (short)evData[(byte)2];
-        int[] viewIds = (int[])evData[(byte)3];
-        int group = (int)evData[(byte)4];
-        Vector3 position = (Vector3)evData[(byte)5];
-        Quaternion rotation = (Quaternion)evData[(byte)6];
-        int ownerId = (int)evData[(byte)7];
-        int controllerId = (int)evData[(byte)8];
-
-        GameObject prefabGo;
-        if (!UsePrefabCache || !PrefabCache.TryGetValue(prefabName, out prefabGo))
-        {
-            prefabGo = (GameObject)Resources.Load(prefabName, typeof(GameObject));
-            if (UsePrefabCache)
-            {
-                PrefabCache.Add(prefabName, prefabGo);
-            }
-        }
-
-        if (prefabGo == null)
-        {
-            Debug.LogError("Failed to Instantiate prefab: " + prefabName + ". Verify the Prefab is in a Resources folder (and not in a subfolder)");
-            return;
-        }
-
-        GameObject newObject = Object.Instantiate(prefabGo, position, rotation) as GameObject;
-        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>();
-
-        for (int i = 0; i < viewIds.Length; i++)
-        {
-            int viewId = viewIds[i];
-            PhotonView view = views[i];
-
-            view.viewID = viewId;
-            view.ownerId = ownerId;
-            view.ControllerId = controllerId;
-            view.group = group;
-            view.prefix = prefix;
-        }
     }
 
     internal static void HandleSpawn(Hashtable evData, PhotonPlayer player)
@@ -2359,14 +2307,14 @@ public static class PhotonNetwork
             networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
             networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
 
-            view.Spawn();
+            view.OnSpawn();
 
             views[i] = view;
         }
 
         if (evData.ContainsKey((byte)5))
         {
-            PhotonView parent = PhotonView.Find((int) evData[(byte) 5]);
+            PhotonView parent = PhotonView.Find((int)evData[(byte)5]);
             views[0].transform.parent = parent.transform;
         }
     }
@@ -2389,28 +2337,35 @@ public static class PhotonNetwork
             return;
         }
 
+        if (view.ParentView && !view.ParentView.HasSpawned)
+        {
+            Spawn(view.ParentView, players);
+            return;
+        }
+
         view.RebuildRelevance();
 
         List<PhotonPlayer> relevantPlayerList = new List<PhotonPlayer>(players);
         for (int i = 0; i < players.Length; i++)
         {
             PhotonPlayer photonPlayer = players[i];
-            if(view.IsRelevantTo(photonPlayer))
+            if (!view.IsRelevantTo(photonPlayer))
                 relevantPlayerList.RemoveAt(i);
         }
         PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
 
         //find all children that belong to us
-        List<PhotonView> children = new List<PhotonView>(view.GetComponentsInChildren<PhotonView>());
-        for (int i = 0; i < children.Count; i++)
+        PhotonView[] children = view.GetComponentsInChildren<PhotonView>();
+        List<PhotonView> childrenList = new List<PhotonView>(children);
+        for (int i = 0; i < childrenList.Count; i++)
         {
-            if (children[i].instantiationId != view.instantiationId)
+            if (childrenList[i].instantiationId != view.instantiationId)
             {
-                children.RemoveAt(i);
+                childrenList.RemoveAt(i);
                 i--;
             }
         }
-        PhotonView[] ownedChildren = children.ToArray();
+        PhotonView[] ownedChildren = childrenList.ToArray();
         int[] ownedChildrenId = new int[ownedChildren.Length];
         for (int i = 0; i < ownedChildren.Length; i++)
         {
@@ -2458,7 +2413,108 @@ public static class PhotonNetwork
 
         foreach (PhotonView child in ownedChildren)
         {
-            child.Spawn();
+            child.OnSpawn();
+        }
+
+        //Children that are not part of the prefab will not be spawned, so we go through
+        foreach (PhotonView child in children)
+        {
+            if (child != view && child.ParentView == view && child.instantiationId != view.viewID)
+            {
+                Spawn(child, relevantPlayers);
+            }
+        }
+    }
+
+    internal static void HandleCreate(Hashtable evData, PhotonPlayer sender)
+    {
+        int time = (int)evData[(byte)0];
+        string prefabName = (string)evData[(byte)1];
+        short prefix = (short)evData[(byte)2];
+        int[] viewIds = (int[])evData[(byte)3];
+        int group = (int)evData[(byte)4];
+        Vector3 position = (Vector3)evData[(byte)5];
+        Quaternion rotation = (Quaternion)evData[(byte)6];
+        int ownerId = (int)evData[(byte)7];
+        int controllerId = (int)evData[(byte)8];
+
+        GameObject prefabGo;
+        if (!UsePrefabCache || !PrefabCache.TryGetValue(prefabName, out prefabGo))
+        {
+            prefabGo = (GameObject)Resources.Load(prefabName, typeof(GameObject));
+            if (UsePrefabCache)
+            {
+                PrefabCache.Add(prefabName, prefabGo);
+            }
+        }
+
+        if (prefabGo == null)
+        {
+            Debug.LogError("Failed to Instantiate prefab: " + prefabName + ". Verify the Prefab is in a Resources folder (and not in a subfolder)");
+            return;
+        }
+
+        GameObject newObject = Object.Instantiate(prefabGo, position, rotation) as GameObject;
+        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>();
+
+        for (int i = 0; i < viewIds.Length; i++)
+        {
+            int viewId = viewIds[i];
+            PhotonView view = views[i];
+
+            view.viewID = viewId;
+            view.ownerId = ownerId;
+            view.ControllerId = controllerId;
+            view.group = group;
+            view.prefix = prefix;
+        }
+    }
+
+    public static void Despawn(PhotonView view)
+    {
+        Despawn(view, otherPlayers);
+    }
+
+    public static void Despawn(PhotonView view, PhotonPlayer player)
+    {
+        Despawn(view, new []{player});
+    }
+
+    private static void Despawn(PhotonView view, PhotonPlayer[] players)
+    {
+        if(!view.isMine)
+            return;
+
+        List<int> relevantPlayerList = new List<int>(players.Length);
+        for (int i = 0; i < players.Length; i++)
+        {
+            PhotonPlayer photonPlayer = players[i];
+            if (view.IsRelevantTo(photonPlayer))
+                relevantPlayerList.Add(photonPlayer.ID);
+        }
+        int[] relevantPlayers = relevantPlayerList.ToArray();
+
+        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>();
+        int[] viewStructureIds = new int[viewStructure.Length];
+        for (int i = 0; i < viewStructure.Length; i++)
+        {
+            PhotonView photonView = viewStructure[i];
+            viewStructureIds[i] = photonView.viewID;
+        }
+
+        RaiseEventOptions options = new RaiseEventOptions();
+        options.TargetActors = relevantPlayers;
+
+        RaiseEvent(PunEvent.DespawnObject, viewStructureIds, true, options);
+    }
+
+    internal static void HandleDespawn(int[] viewStructureIds)
+    {
+        for (int i = viewStructureIds.Length - 1; i >= 0; i--)
+        {
+            PhotonView view = PhotonView.Find(viewStructureIds[i]);
+            if(view)
+                view.OnDespawn();
         }
     }
 
@@ -2646,6 +2702,19 @@ public static class PhotonNetwork
         }
     }
 
+    public static void Destroy(GameObject go)
+    {
+        PhotonView view = go.GetComponent<PhotonView>();
+        if (view != null)
+        {
+            Destroy(view);
+        }
+        else
+        {
+            Debug.LogError("Game object must have a photon view ");
+        }
+    }
+
     /// <summary>
     /// Network-Destroy the GameObject associated with the PhotonView, unless the PhotonView is static or not under this client's control.
     /// </summary>
@@ -2670,121 +2739,34 @@ public static class PhotonNetwork
     /// <returns>Nothing. Check error debug log for any issues.</returns>
     public static void Destroy(PhotonView targetView)
     {
-        if (targetView != null)
-        {
-            networkingPeer.RemoveInstantiatedGO(targetView.gameObject, !inRoom);
-        }
-        else
-        {
-            Debug.LogError("Destroy(targetPhotonView) failed, cause targetPhotonView is null.");
-        }
+        Destroy(targetView, otherPlayers);
     }
 
-    /// <summary>
-    /// Network-Destroy the GameObject, unless it is static or not under this client's control.
-    /// </summary>
-    /// <remarks>
-    /// Destroying a networked GameObject includes:
-    /// - Removal of the Instantiate call from the server's room buffer.
-    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
-    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
-    ///
-    /// Usually, when you leave a room, the GOs get destroyed automatically.
-    /// If you have to destroy a GO while not in a room, the Destroy is only done locally.
-    ///
-    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
-    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
-    ///
-    /// The GameObject must be under this client's control:
-    /// - Instantiated and owned by this client.
-    /// - Instantiated objects of players who left the room are controlled by the Master Client.
-    /// - Scene-owned game objects are controlled by the Master Client.
-    /// - GameObject can be destroyed while client is not in a room.
-    /// </remarks>
-    /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void Destroy(GameObject targetGo)
+    private static void Destroy(PhotonView targetView, PhotonPlayer[] players)
     {
-        networkingPeer.RemoveInstantiatedGO(targetGo, !inRoom);
-    }
-
-    /// <summary>
-    /// Network-Destroy all GameObjects, PhotonViews and their RPCs of targetPlayer. Can only be called on local player (for "self") or Master Client (for anyone).
-    /// </summary>
-    /// <remarks>
-    /// Destroying a networked GameObject includes:
-    /// - Removal of the Instantiate call from the server's room buffer.
-    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
-    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
-    ///
-    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
-    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
-    /// </remarks>
-    /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void DestroyPlayerObjects(PhotonPlayer targetPlayer)
-    {
-        if (player == null)
+        if (!targetView.isMine)
         {
-            Debug.LogError("DestroyPlayerObjects() failed, cause parameter 'targetPlayer' was null.");
-        }
-
-        DestroyPlayerObjects(targetPlayer.ID);
-    }
-
-    /// <summary>
-    /// Network-Destroy all GameObjects, PhotonViews and their RPCs of this player (by ID). Can only be called on local player (for "self") or Master Client (for anyone).
-    /// </summary>
-    /// <remarks>
-    /// Destroying a networked GameObject includes:
-    /// - Removal of the Instantiate call from the server's room buffer.
-    /// - Removing RPCs buffered for PhotonViews that got created indirectly with the PhotonNetwork.Instantiate call.
-    /// - Sending a message to other clients to remove the GameObject also (affected by network lag).
-    ///
-    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
-    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
-    /// </remarks>
-    /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void DestroyPlayerObjects(int targetPlayerId)
-    {
-        if (!VerifyCanUseNetwork())
-        {
+            Debug.LogError("Cannot delete object that we do not own.");
             return;
         }
-        if (player.isMasterClient || targetPlayerId == player.ID)
+
+        List<int> relevantPlayerList = new List<int>(players.Length);
+        for (int i = 0; i < players.Length; i++)
         {
-            networkingPeer.DestroyPlayerObjects(targetPlayerId, false);
+            PhotonPlayer photonPlayer = players[i];
+            if (targetView.IsRelevantTo(photonPlayer))
+                relevantPlayerList.Add(photonPlayer.ID);
         }
-        else
-        {
-            Debug.LogError("DestroyPlayerObjects() failed, cause players can only destroy their own GameObjects. A Master Client can destroy anyone's. This is master: " + PhotonNetwork.isMasterClient);
-        }
+        int[] relevantPlayers = relevantPlayerList.ToArray();
+
+        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>();
+
     }
 
-    /// <summary>
-    /// Network-Destroy all GameObjects, PhotonViews and their RPCs in the room. Removes anything buffered from the server. Can only be called by Master Client (for anyone).
-    /// </summary>
-    /// <remarks>
-    /// Can only be called by Master Client (for anyone).
-    /// Unlike the Destroy methods, this will remove anything from the server's room buffer. If your game
-    /// buffers anything beyond Instantiate and RPC calls, that will be cleaned as well from server.
-    ///
-    /// Destroying all includes:
-    /// - Remove anything from the server's room buffer (Instantiate, RPCs, anything buffered).
-    /// - Sending a message to other clients to destroy everything locally, too (affected by network lag).
-    ///
-    /// Destroying networked objects works only if they got created with PhotonNetwork.Instantiate().
-    /// Objects loaded with a scene are ignored, no matter if they have PhotonView components.
-    /// </remarks>
-    /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void DestroyAll()
+    internal static void HandleDestroy(int[] viewStructureIds)
     {
-        if (isMasterClient)
-        {
-            networkingPeer.DestroyAll(false);
-        }
-        else
-        {
-            Debug.LogError("Couldn't call DestroyAll() as only the master client is allowed to call this.");
-        }
+        PhotonView rootView = PhotonView.Find(viewStructureIds[0]);
+        Object.Destroy(rootView.gameObject);
     }
 
     /// <summary>

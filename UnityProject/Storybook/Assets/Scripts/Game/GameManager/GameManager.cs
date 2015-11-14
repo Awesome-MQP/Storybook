@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class GameManager : Photon.PunBehaviour {
 
     [SerializeField]
-    private GameObject m_combatInstancePrefab;
+    private CombatManager m_combatInstancePrefab;
 
     [SerializeField]
     private Vector3 m_defaultLocation;
@@ -17,10 +17,6 @@ public class GameManager : Photon.PunBehaviour {
 
     private List<GameObject> m_combatInstances = new List<GameObject>();
     private float m_timeElapsed = 0;
-    private bool test1Done = false;
-    private bool test2Done = false;
-    private bool test3Done = false;
-    private bool test4Done = false;
 
     private GameObject m_combatInstance;
 
@@ -29,14 +25,6 @@ public class GameManager : Photon.PunBehaviour {
         DontDestroyOnLoad(this);
         List<PlayerEntity> playerList = new List<PlayerEntity>();
         Camera.main.GetComponent<AudioListener>().enabled = false;
-
-        // Only call StartCombat on the master client
-        /*
-        if (PhotonNetwork.isMasterClient)
-        {
-            StartCombat(playerList);
-        }
-        */
 	}
 
     /// <summary>
@@ -45,6 +33,11 @@ public class GameManager : Photon.PunBehaviour {
     /// <param name="playersEnteringCombat"></param>
     public void StartCombat(List<PlayerEntity> playersEnteringCombat)
     {
+        //TODO: Figure out how this will work between clients
+        //TODO: Grab all players rather than pass a list
+        //TODO: Pass in enemies to start combat with
+        //TODO: Check for master client
+
         Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
         GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
@@ -64,7 +57,7 @@ public class GameManager : Photon.PunBehaviour {
         combatManager.SetEnemyPositions(enemyPositionsList);
 
         m_combatInstances.Add(m_combatInstance);
-        combatManager.StartCombat();
+        //combatManager.StartCombat();
     }
 
     /// <summary>
@@ -73,6 +66,8 @@ public class GameManager : Photon.PunBehaviour {
     /// <param name="cm">The CombatManager whose combat instance will be destroyed</param>
     public void EndCombat(CombatManager cm)
     {
+        //TODO: Game manager should contain open combat manager, do not need to pass it
+
         // Iterate through all of the combat instances
         for (int i = 0; i < m_combatInstances.Count; i++)
         {
@@ -98,52 +93,6 @@ public class GameManager : Photon.PunBehaviour {
     }
 
     /// <summary>
-    /// Ends all the currently running combat instances
-    /// </summary>
-    public void EndAllCombat()
-    {
-        // Iterate through all the combat instances and destroy each of them
-        for (int i = 0; i < m_combatInstances.Count; i++)
-        {
-            GameObject currentCombatInstance = m_combatInstances[i];
-            Destroy(currentCombatInstance);
-        }
-    }
-
-
-    /// <summary>
-    /// Returns the combat instance that the given player is in
-    /// Returns null if the given player is not in a combat instance
-    /// </summary>
-    /// <param name="player">The player whose combat will be returned</param>
-    /// <returns>The combat instance that the given player is a part of</returns>
-    public GameObject GetCombatForPlayer(PlayerEntity player)
-    {
-        //TODO: Make a lookup table from player entity to combat manager, this could be done with a variable on PlayerEntity or list in GameManager
-        // Iterate through all of the combat instances
-        for (int i = 0; i < m_combatInstances.Count; i++)
-        {
-            // Get the PlayerEntity list from the current combat instance
-            GameObject currentCombatInstance = m_combatInstances[i];
-            CombatManager currentCombatManager = currentCombatInstance.GetComponent<CombatManager>();
-
-            // Iterate through all of the PlayerEntity in the combat
-            foreach (PlayerEntity pe in currentCombatManager.PlayerEntityList)
-            {
-                // If the current PlayerEntity matches the given PlayerEntity, return the combat instance
-                if (pe == player)
-                {
-                    Debug.Log("Combat with test player index = " + i.ToString());
-                    return currentCombatInstance;
-                }
-            }
-        }
-
-        // If the given player is not in a combat, return null
-        return null;
-    }
-
-    /// <summary>
     /// Gets all of the PlayerEntity in the game
     /// </summary>
     /// <returns>A list of all the PlayerEntity currently in the game</returns>
@@ -162,42 +111,4 @@ public class GameManager : Photon.PunBehaviour {
         dm.TransitionToDungeon();
     }
 
-    /// <summary>
-    /// Function to test the game manager
-    /// </summary>
-    private void _testGameManager()
-    {
-        m_timeElapsed += Time.deltaTime;
-        if (m_timeElapsed >= 3 && !test1Done)
-        {
-            List<PlayerEntity> playerList = new List<PlayerEntity>();
-            StartCombat(playerList);
-            test1Done = true;
-        }
-        else if (m_timeElapsed >= 6 && !test2Done)
-        {
-            List<PlayerEntity> playerList = new List<PlayerEntity>();
-            StartCombat(playerList);
-            test2Done = true;
-        }
-        else if (m_timeElapsed >= 9 && !test3Done)
-        {
-            EndCombat(m_combatInstances[0].GetComponent<CombatManager>());
-            test3Done = true;
-        }
-        else if (m_timeElapsed >= 10 && !test4Done)
-        {
-            EndAllCombat();
-            test4Done = true;
-        }
-    }
-
-    private void _testNetworkedAnimator()
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            GameObject animatorObject = PhotonNetwork.Instantiate("CombatAnimator", Vector3.zero, Quaternion.identity, 0);
-            Animator animator = animatorObject.GetComponent<Animator>();
-        }
-    }
 }

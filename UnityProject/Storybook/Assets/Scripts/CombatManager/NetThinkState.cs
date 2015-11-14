@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//TODO: Make Server Client rather than Peer-Peer
+
 public class NetThinkState : NetworkState {
 
     private bool m_goToExecuteState = false;

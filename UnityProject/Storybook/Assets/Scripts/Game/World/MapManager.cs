@@ -223,6 +223,7 @@ public class MapManager : MonoBehaviour {
         return exitDoor;
     }
 
+    //TODO: Move this to the player entity
     /// <summary>
     /// Moves the camera to the given location, called when a player switches rooms
     /// </summary>

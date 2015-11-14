@@ -14,7 +14,7 @@ public class Door : MonoBehaviour {
     // TODO : Add implementation for passing through doors.
     //        (Requires world manager and more complete level-building stuff first.)
 
-
+    //TODO: This can be changed to just disable the entire object
     /// <summary>
     /// Disables the collider and renderer on the door, as well as setting the enabled boolean to false
     /// </summary>

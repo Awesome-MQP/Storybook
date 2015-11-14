@@ -7,7 +7,7 @@ using System.Reflection;
 public class TypeHelper
 {
     // Type init script
-    [RuntimeInitializeOnLoadMethod]
+    [PreLoadMethod(Order = -1000)]
     private static void _Startup()
     {
         AssemblyName[] referencAssemblyNames = Assembly.GetExecutingAssembly().GetReferencedAssemblies();

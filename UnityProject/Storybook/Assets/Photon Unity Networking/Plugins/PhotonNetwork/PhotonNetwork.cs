@@ -2291,6 +2291,7 @@ public static class PhotonNetwork
         Hashtable[] serializedReliableData = (Hashtable[])evData[(byte)2];
         Hashtable[] serializedUnreliableData = (Hashtable[])evData[(byte)3];
         short prefix = (short)evData[(byte)4];
+        int controllerId = (int) evData[(byte) 6];
 
         PhotonView[] views = new PhotonView[ids.Length];
         for (int i = 0; i < ids.Length; i++)
@@ -2306,6 +2307,8 @@ public static class PhotonNetwork
 
             networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
             networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
+
+            view.controllerId = controllerId;
 
             view.OnSpawn();
 
@@ -2355,7 +2358,7 @@ public static class PhotonNetwork
         PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
 
         //find all children that belong to us
-        PhotonView[] children = view.GetComponentsInChildren<PhotonView>();
+        PhotonView[] children = view.GetComponentsInChildren<PhotonView>(true);
         List<PhotonView> childrenList = new List<PhotonView>(children);
         for (int i = 0; i < childrenList.Count; i++)
         {
@@ -2398,6 +2401,8 @@ public static class PhotonNetwork
 
         if (view.ParentView)
             evData[(byte)5] = view.ParentView.viewID;
+
+        evData[(byte) 6] = view.ControllerActorNr;
 
         int[] relevantPlayerIds = new int[relevantPlayers.Length];
         for (int i = 0; i < relevantPlayers.Length; i++)
@@ -2455,7 +2460,7 @@ public static class PhotonNetwork
         }
 
         GameObject newObject = Object.Instantiate(prefabGo, position, rotation) as GameObject;
-        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>();
+        PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>(true);
 
         for (int i = 0; i < viewIds.Length; i++)
         {
@@ -2464,7 +2469,7 @@ public static class PhotonNetwork
 
             view.viewID = viewId;
             view.ownerId = ownerId;
-            view.ControllerId = controllerId;
+            view.controllerId = controllerId;
             view.group = group;
             view.prefix = prefix;
         }
@@ -2494,7 +2499,7 @@ public static class PhotonNetwork
         }
         int[] relevantPlayers = relevantPlayerList.ToArray();
 
-        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>();
+        PhotonView[] viewStructure = view.GetComponentsInChildren<PhotonView>(false);
         int[] viewStructureIds = new int[viewStructure.Length];
         for (int i = 0; i < viewStructure.Length; i++)
         {
@@ -2567,7 +2572,7 @@ public static class PhotonNetwork
         evData[(byte)5] = root.transform.position;
         evData[(byte)6] = root.transform.rotation;
         evData[(byte)7] = root.ownerId;
-        evData[(byte)8] = root.ControllerId;
+        evData[(byte)8] = root.Controller;
 
         //TODO: Add instantiated data here
 
@@ -2759,8 +2764,9 @@ public static class PhotonNetwork
         }
         int[] relevantPlayers = relevantPlayerList.ToArray();
 
-        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>();
+        PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>(false);
 
+        //TODO: Finish
     }
 
     internal static void HandleDestroy(int[] viewStructureIds)

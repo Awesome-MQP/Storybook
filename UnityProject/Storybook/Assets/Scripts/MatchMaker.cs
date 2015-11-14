@@ -8,7 +8,7 @@ public class MatchMaker : Photon.PunBehaviour {
 
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("0.1");
+        PhotonNetwork.ConnectUsingSettings("0.2");
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 
@@ -17,11 +17,11 @@ public class MatchMaker : Photon.PunBehaviour {
         GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
         if (isFirst && GUILayout.Button("Start Game"))
         {
-            ScenePhotonView.RPC("StartGame", PhotonTargets.All);
+            PhotonNetwork.LoadLevel("TestRoomPlacement");
         }
         if (isFirst && GUILayout.Button("Start Combat"))
         {
-            ScenePhotonView.RPC("StartCombat", PhotonTargets.All);
+            PhotonNetwork.LoadLevel("DemoCombatScene");
         }
     }
 

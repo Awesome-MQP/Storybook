@@ -2259,7 +2259,6 @@ public static class PhotonNetwork
 
             view.prefix = networkingPeer.currentLevelPrefix;
             view.instantiationId = i == 0 ? id : views[0].viewID;
-            view.isRuntimeInstantiated = true;
             view.instantiationDataField = data;
             view.prefabName = i == 0 ? prefabName : "";
 
@@ -2766,7 +2765,17 @@ public static class PhotonNetwork
 
         PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>(false);
 
-        //TODO: Finish
+        int[] viewIds = new int[viewStructure.Length];
+        for (int i = 0; i < viewStructure.Length; i++)
+        {
+            PhotonView photonView = viewStructure[i];
+            viewIds[i] = photonView.viewID;
+        }
+
+        RaiseEventOptions options = new RaiseEventOptions();
+        options.TargetActors = relevantPlayers;
+
+        RaiseEvent(PunEvent.Destroy, viewIds, true, options);
     }
 
     internal static void HandleDestroy(int[] viewStructureIds)

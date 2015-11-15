@@ -10,7 +10,7 @@ public class TestLobby : Photon.PunBehaviour
 
     public override void OnConnectedToMaster()
     {
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
         PhotonNetwork.CreateRoom("AlphaRoom");
 #else
         PhotonNetwork.JoinRoom("AlphaRoom");

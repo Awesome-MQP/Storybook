@@ -1782,7 +1782,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             case PunEvent.OwnershipRequest:
             {
-                int[] requestValues = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
+
+                Debug.LogError("Owner request has been deprecated with new changes.");
+
+#if NEVER
+                    int[] requestValues = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
                 int requestedViewId = requestValues[0];
                 int currentOwner = requestValues[1];
                 Debug.Log("Ev OwnershipRequest: " + photonEvent.Parameters.ToStringFull() + " ViewID: " + requestedViewId + " from: " + currentOwner + " Time: " + Environment.TickCount%1000);
@@ -1820,6 +1824,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     default:
                         break;
                 }
+#endif
             }
                 break;
 
@@ -1832,8 +1837,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     int newOwnerId = transferViewToUserID[1];
 
                     PhotonView pv = PhotonView.Find(requestedViewId);
-                    if(originatingPlayer == pv.owner || !pv.isOwnerActive && originatingPlayer.isMasterClient)
+                    if (originatingPlayer == pv.owner || !pv.isOwnerActive && originatingPlayer.isMasterClient)
+                    {
                         pv.ownerId = newOwnerId;
+                        if(newOwnerId == PhotonNetwork.player.ID)
+                            pv.SendMessage("OnStartOwner", false, SendMessageOptions.DontRequireReceiver);
+                    }
 
                     break;
                 }
@@ -1849,7 +1858,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
 
                 if (originatingPlayer == view.owner || !view.isOwnerActive && originatingPlayer.isMasterClient)
+                {
                     view.controllerId = playerId;
+                    if(playerId == PhotonNetwork.player.ID)
+                        view.SendMessage("OnStartController", false, SendMessageOptions.DontRequireReceiver);
+                }
 
                 break;
             case EventCode.GameList:
@@ -2120,7 +2133,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         this.OpRaiseEvent(PunEvent.VacantViewIds, vacantViews.ToArray(), true, null);
     }
 
-    #endregion
+#endregion
 
     public static void SendMonoMessage(PhotonNetworkingMessage methodString, params object[] parameters)
     {
@@ -2874,7 +2887,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         Debug.Log("TransferOwnership() view " + viewID + " to: " + playerID + " Time: " + Environment.TickCount % 1000);
         //PhotonNetwork.networkingPeer.OpRaiseEvent(PunEvent.OwnershipTransfer, true, new int[] {viewID, playerID}, 0, EventCaching.DoNotCache, null, ReceiverGroup.All, 0);
-        this.OpRaiseEvent(PunEvent.OwnershipTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
+        this.OpRaiseEvent(PunEvent.ControllerTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
     }
 
     internal protected void TransferController(int viewId, int playerId)

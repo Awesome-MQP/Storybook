@@ -286,7 +286,7 @@ public class PhotonView : Photon.MonoBehaviour
     protected internal bool didAwake;
 
     [SerializeField]
-    protected internal bool isRuntimeInstantiated;
+    protected internal bool isRuntimeInstantiated = true;
 
     protected internal bool removedFromLocalViewList;
 
@@ -296,10 +296,28 @@ public class PhotonView : Photon.MonoBehaviour
 
     private bool failedToFindOnSerialize;
 
+    void OnValidate()
+    {
+        isRuntimeInstantiated = false;
+    }
+
     internal void OnSpawn()
     {
         hasSpawned = true;
         gameObject.SetActive(true);
+
+        if (isMine)
+        {
+            SendMessage("OnStartOwner", true, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (isController)
+        {
+            SendMessage("OnStartController", true, SendMessageOptions.DontRequireReceiver);
+        }
+        else
+        {
+            SendMessage("OnStartPeer", true, SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     internal void OnDespawn()
@@ -409,9 +427,10 @@ public class PhotonView : Photon.MonoBehaviour
 
     public void TransferController(int newControllerId)
     {
-        if (HasSpawned && isMine)
+        if (isMine)
         {
-            PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
+            if(HasSpawned)
+                PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
             controllerId = newControllerId;
         }
     }

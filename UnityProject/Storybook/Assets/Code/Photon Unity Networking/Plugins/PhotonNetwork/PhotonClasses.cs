@@ -380,6 +380,24 @@ public interface IPunCallbacks
     void OnDeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info);
 
     bool IsRelevantTo(PhotonPlayer player);
+
+    /// <summary>
+    /// Called when this object starts as an owner.
+    /// </summary>
+    /// <param name="wasSpawn">This is true if this was calused by a spawn.</param>
+    void OnStartOwner(bool wasSpawn);
+
+    /// <summary>
+    /// Called when this object starts as a controller.
+    /// </summary>
+    /// <param name="wasSpawn">This is true if this was caused by a spawn.</param>
+    void OnStartController(bool wasSpawn);
+
+    /// <summary>
+    /// Called when this object starts as a peer.
+    /// </summary>
+    /// <param name="wasSpawn">This is true if this was caused by a spawn.</param>
+    void OnStartPeer(bool wasSpawn);
 }
 
 /// <summary>
@@ -478,18 +496,26 @@ namespace Photon
     {
         protected virtual void Awake()
         {
+            BuildPropertyInfo();
+        }
+
+        private void BuildPropertyInfo()
+        {
+            if (m_hasBuildProperties)
+                return;
+
             PropertyInfo[] properties =
-                GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                            GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             for (int i = 0; i < properties.Length; i++)
             {
                 PropertyInfo propertyInfo = properties[i];
-                bool isSyncProperty = propertyInfo.IsDefined(typeof (SyncProperty), true);
+                bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), true);
                 bool hasGetAndSet = propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null;
 
                 if (isSyncProperty && hasGetAndSet)
                 {
-                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof (SyncProperty), true)[0] as SyncProperty;
+                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof(SyncProperty), true)[0] as SyncProperty;
 
                     if (syncProperty.IsReliable)
                     {
@@ -504,6 +530,8 @@ namespace Photon
                     }
                 }
             }
+
+            m_hasBuildProperties = true;
         }
 
         protected uint GetBitMask(int bit)
@@ -540,6 +568,9 @@ namespace Photon
         {
             if(!photonView.isMine)
                 return;
+
+            if (!m_hasBuildProperties)
+                BuildPropertyInfo();
 
             StackTrace stackTrace = new StackTrace();
             MethodBase setter = stackTrace.GetFrame(1).GetMethod();
@@ -901,6 +932,9 @@ namespace Photon
 
         public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!m_hasBuildProperties)
+                BuildPropertyInfo();
+
             PhotonView view = gameObject.GetPhotonView();
 
             stream.SendNext(view.HasSpawned ? m_dirtyBits : uint.MaxValue);
@@ -919,6 +953,9 @@ namespace Photon
 
         public virtual void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info)
         {
+            if(!m_hasBuildProperties)
+                BuildPropertyInfo();
+
             m_dirtyBits = (uint)stream.ReceiveNext();
 
             for (int i = 0; i < m_propertiesByNumber.Count; i++)
@@ -933,6 +970,9 @@ namespace Photon
 
         public virtual void OnSerializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!m_hasBuildProperties)
+                BuildPropertyInfo();
+
             foreach (PropertyInfo property in m_unreliableProperties)
             {
                 stream.SendNext(property.GetValue(this, null));
@@ -941,6 +981,9 @@ namespace Photon
 
         public virtual void OnDeserializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
         {
+            if(!m_hasBuildProperties)
+                BuildPropertyInfo();
+
             foreach (PropertyInfo property in m_unreliableProperties)
             {
                 property.SetValue(this, stream.ReceiveNext(), null);
@@ -952,11 +995,28 @@ namespace Photon
             return true;
         }
 
+        public virtual void OnStartOwner(bool wasSpawn)
+        {
+            
+        }
+
+        public virtual void OnStartController(bool wasSpawn)
+        {
+            
+        }
+
+        public virtual void OnStartPeer(bool wasSpawn)
+        {
+            
+        }
+
         private Dictionary<string, PropertyInfo> m_propertiesByName = new Dictionary<string, PropertyInfo>();
         private Dictionary<int, PropertyInfo> m_propertiesByNumber = new Dictionary<int, PropertyInfo>();
         private Dictionary<string, int> m_propertyNumbersByName = new Dictionary<string, int>(); 
         private Dictionary<MethodBase, PropertyInfo> m_propertiesBySetter = new Dictionary<MethodBase, PropertyInfo>(); 
         private uint m_dirtyBits;
+
+        private bool m_hasBuildProperties;
 
         private List<PropertyInfo> m_unreliableProperties = new List<PropertyInfo>(); 
     }

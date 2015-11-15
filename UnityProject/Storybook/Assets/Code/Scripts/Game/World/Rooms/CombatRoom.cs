@@ -14,7 +14,7 @@ public class CombatRoom : RoomObject {
     // On entering the room, do nothing since there is nothing special in this room.
     protected override void OnRoomEnter()
     {
-        // TODO: Spawn monsters.
+        // TODO: Spawn monsters
         return;
     }
 

@@ -41,9 +41,27 @@ public abstract class RoomObject : MonoBehaviour{
     [SerializeField]
     private Transform m_player4Pos;
 
-    void Start()
+    protected virtual void Start()
     {
         DontDestroyOnLoad(this);
+    }
+
+    // What do we do immediately upon entering the room?
+    protected virtual void OnRoomEnter()
+    {
+        return;
+    }
+
+    // What do we do as soon as all players reach the center of the room?
+    protected virtual void OnRoomEvent()
+    {
+        return;
+    }
+
+    // What do we do immediately upon leaving the room?
+    protected virtual void OnRoomExit()
+    {
+        return;
     }
 
     // Property for a Room's Location

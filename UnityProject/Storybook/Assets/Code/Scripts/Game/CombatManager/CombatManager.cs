@@ -20,14 +20,16 @@ public class CombatManager : Photon.PunBehaviour {
 
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
-    private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
-    private List<CombatAI> m_enemyList = new List<CombatAI>();
+    //private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
+    //private List<CombatAI> m_enemyList = new List<CombatAI>();
+    private List<CombatPawn> m_allPawns = new List<CombatPawn>();
     private List<PlayerEntity> m_playerEntityList = new List<PlayerEntity>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
     private int m_playersToSpawn = 1;
+    private int m_teamsInCombat = 2;
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
@@ -115,10 +117,13 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     private void _placePlayers()
     {
-        for (int i = 0; i < m_playerPawnList.Count; i++)
+        for (int i = 0; i < m_allPawns.Count; i++)
         {
-            CombatPawn currentPawn = m_playerPawnList[i];
-            currentPawn.transform.position = m_playerPositionList[i].transform.position;
+            CombatPawn currentPawn = m_allPawns[i];
+            if (currentPawn is CombatPlayer)
+            {
+                currentPawn.transform.position = m_playerPositionList[i].transform.position;
+            }
         }
     }
 
@@ -136,7 +141,7 @@ public class CombatManager : Photon.PunBehaviour {
             combatPawnScript.RegisterCombatManager(this);
             combatPawnScript.SetPawnId(i + 1);
             Debug.Log("Adding pawn to list");
-            m_playerPawnList.Add(combatPawnScript);
+            m_allPawns.Add(combatPawnScript);
         }
     }
 
@@ -145,10 +150,13 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     private void _placeEnemies()
     {
-        for (int i = 0; i < m_enemyList.Count; i++)
+        for (int i = 0; i < m_allPawns.Count; i++)
         {
-            CombatPawn currentPawn = m_enemyList[i];
-            currentPawn.transform.position = m_enemyPositionList[i].transform.position;
+            CombatPawn currentPawn = m_allPawns[i];
+            if (currentPawn is CombatAI)
+            {
+                currentPawn.transform.position = m_enemyPositionList[i].transform.position;
+            }
         }
     }
 
@@ -165,7 +173,7 @@ public class CombatManager : Photon.PunBehaviour {
             CombatAI combatEnemy = enemyObject.GetComponent<CombatAI>();
             combatEnemy.RegisterCombatManager(this);
             combatEnemy.SetPawnId(i + 1);
-            m_enemyList.Add(combatEnemy);
+            m_allPawns.Add(combatEnemy);
         }
     }
 
@@ -186,9 +194,13 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     private void _incrementEnemyMana()
     {
-        foreach (CombatAI ce in m_enemyList)
+        foreach (CombatPawn pawn in m_allPawns)
         {
-            ce.IncrementManaForTurn();
+            if (pawn is CombatAI)
+            {
+                CombatAI ai = (CombatAI) pawn;
+                ai.IncrementManaForTurn();
+            }
         }
     }
 
@@ -209,7 +221,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// <param name="playerToRemove">The player to remove</param>
     public void RemovePlayerFromCombat(CombatPawn playerToRemove)
     {
-        m_playerPawnList.Remove(playerToRemove);
+        m_allPawns.Remove(playerToRemove);
         m_pawnToCombatMove.Remove(playerToRemove);
     }
 
@@ -219,7 +231,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// <param name="enemyToRemove">The enemy to remove</param>
     public void RemoveEnemyFromCombat(CombatAI enemyToRemove)
     {
-        m_enemyList.Remove(enemyToRemove);
+        m_allPawns.Remove(enemyToRemove);
         m_pawnToCombatMove.Remove(enemyToRemove);
     }
 
@@ -240,32 +252,6 @@ public class CombatManager : Photon.PunBehaviour {
     public void SetPlayerEntityList(List<PlayerEntity> newPlayerList)
     {
         m_playerEntityList = newPlayerList;
-    }
-
-    /// <summary>
-    /// The list of all the player pawns in the combat
-    /// </summary>
-    public CombatPawn[] PlayerPawnList
-    {
-        get { return m_playerPawnList.ToArray(); }
-    }
-
-    public void SetPlayerPawnList(List<CombatPawn> newPlayerPawnList)
-    {
-        m_playerPawnList = newPlayerPawnList;
-    }
-
-    /// <summary>
-    /// The list of all the enemies in the combat
-    /// </summary>
-    public CombatAI[] EnemyList
-    {
-        get { return m_enemyList.ToArray(); }
-    }
-
-    public void SetEnemyList(List<CombatAI> newEnemyList)
-    {
-        m_enemyList = newEnemyList;
     }
 
     /// <summary>
@@ -317,19 +303,14 @@ public class CombatManager : Photon.PunBehaviour {
     /// <summary>
     /// The list of all the pawns in the combat (enemies and players)
     /// </summary>
-    public IEnumerable<CombatPawn> AllPawns
+    public CombatPawn[] AllPawns
     {
-        get
-        {
-            foreach (CombatPawn playerPawn in m_playerPawnList)
-            {
-                yield return playerPawn;
-            }
-            foreach (CombatPawn enemyPawn in m_enemyList)
-            {
-                yield return enemyPawn;
-            }
-        }
+        get { return m_allPawns.ToArray(); }
+    }
+
+    public void SetAllPawns(List<CombatPawn> allPawns)
+    {
+        m_allPawns = allPawns;
     }
 
     /// <summary>
@@ -371,5 +352,68 @@ public class CombatManager : Photon.PunBehaviour {
     public Transform CameraPos
     {
         get { return m_cameraPos; }
+    }
+
+    public List<CombatPawn> GetPawnsForTeam(byte teamId)
+    {
+        List<CombatPawn> teamPawns = new List<CombatPawn>();
+        foreach(CombatPawn pawn in m_allPawns)
+        {
+            if (pawn.TeamId == teamId)
+            {
+                teamPawns.Add(pawn);
+            }
+        }
+        return teamPawns;
+    }
+
+    public int TeamsInCombat
+    {
+        get { return m_teamsInCombat; }
+    }
+
+    public void SetTeamsInCombat(int teamsInCombat)
+    {
+        m_teamsInCombat = teamsInCombat;
+    }
+
+    public CombatAI[] CombatAIList
+    {
+        get
+        {
+            List<CombatAI> combatAI = new List<CombatAI>();
+            foreach(CombatPawn pawn in m_allPawns)
+            {
+                if (pawn is CombatAI)
+                {
+                    combatAI.Add((CombatAI)pawn);
+                }
+            }
+            return combatAI.ToArray();
+        }
+    }
+
+    public CombatPlayer[] CombatPlayerList
+    {
+        get
+        {
+            List<CombatPlayer> combatPlayers = new List<CombatPlayer>();
+            foreach(CombatPawn pawn in m_allPawns)
+            {
+                if (pawn is CombatPlayer)
+                {
+                    combatPlayers.Add((CombatPlayer)pawn);
+                }
+            }
+            return combatPlayers.ToArray();
+        }
+    }
+
+    public void DestroyAllPawns()
+    {
+        foreach(CombatPawn pawn in m_allPawns)
+        {
+            Destroy(pawn.gameObject);
+        }
     }
 }

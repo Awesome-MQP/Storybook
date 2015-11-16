@@ -40,6 +40,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     private static PhotonView m_scenePhotonView = null;
 
+    [SerializeField]
     private byte m_teamId;
 
     public abstract void OnThink();
@@ -233,5 +234,31 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public void SetTeamId(byte teamId)
     {
         m_teamId = teamId;
+    }
+
+    protected CombatPawn[] GetPawnsOnTeam(CombatPawn[] pawnsToSearch)
+    {
+        List<CombatPawn> teamPawns = new List<CombatPawn>();
+        foreach (CombatPawn pawn in pawnsToSearch)
+        {
+            if (pawn.TeamId == m_teamId)
+            {
+                teamPawns.Add(pawn);
+            }
+        }
+        return teamPawns.ToArray();
+    }
+
+    protected CombatPawn[] GetPawnsOpposing(CombatPawn[] pawnsToSearch)
+    {
+        List<CombatPawn> opposingPawns = new List<CombatPawn>();
+        foreach (CombatPawn pawn in pawnsToSearch)
+        {
+            if (pawn.TeamId != m_teamId)
+            {
+                opposingPawns.Add(pawn);
+            }
+        }
+        return opposingPawns.ToArray();
     }
 }

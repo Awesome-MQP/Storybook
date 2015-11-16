@@ -23,10 +23,10 @@ public abstract class CombatPlayer : CombatPawn {
         if (!PhotonNetwork.isMasterClient)
         {
             CombatManager combatManager = FindObjectOfType<CombatManager>();
-            CombatPawn[] playerPawns = combatManager.PlayerPawnList;
-            List<CombatPawn> playerPawnsList = new List<CombatPawn>(playerPawns);
-            playerPawnsList.Add(this);
-            combatManager.SetPlayerPawnList(playerPawnsList);
+            CombatPawn[] allPawns = combatManager.AllPawns;
+            List<CombatPawn> allPawnsList = new List<CombatPawn>(allPawns);
+            allPawnsList.Add(this);
+            combatManager.SetAllPawns(allPawnsList);
         }
     }
 }

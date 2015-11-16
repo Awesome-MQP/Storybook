@@ -91,6 +91,7 @@ MonoBehaviour:
   m_defense: 1
   m_attack: 80
   m_genre: 2
+  m_teamId: 1
   m_playerHand:
   - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
   - {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
@@ -109,7 +110,7 @@ MonoBehaviour:
   group: 0
   prefixBackup: -1
   observed: {fileID: 0}
-  synchronization: 3
+  shouldSync: 1
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
@@ -120,6 +121,8 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -209,6 +212,10 @@ Prefab:
       propertyPath: ObservedComponents.Array.data[1]
       value: 
       objectReference: {fileID: 11474058}
+    - target: {fileID: 0}
+      propertyPath: m_teamId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124672}

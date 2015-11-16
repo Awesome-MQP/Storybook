@@ -74,6 +74,7 @@ public class GameManager : Photon.PunBehaviour {
     public void EndCombat(CombatManager cm)
     {
         //TODO: Game manager should contain open combat manager, do not need to pass it
+        cm.DestroyAllPawns();
 
         // Iterate through all of the combat instances
         for (int i = 0; i < m_combatInstances.Count; i++)
@@ -85,18 +86,12 @@ public class GameManager : Photon.PunBehaviour {
             if (currentCombatManager == cm)
             {
                 m_combatInstances.Remove(currentCombatInstance);
-                PhotonNetwork.Destroy(currentCombatInstance);
+                Destroy(currentCombatInstance);
                 break;
             }
         }
 
-        CombatPawn[] allPawns = FindObjectsOfType<CombatPawn>();
-        for (int i = 0; i < allPawns.Length; i++)
-        {
-            PhotonNetwork.Destroy(allPawns[i].GetComponent<PhotonView>());
-        }
-
-        _returnToDungeon();
+        //_returnToDungeon();
     }
 
     /// <summary>

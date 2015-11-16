@@ -66,16 +66,16 @@ public class NetExecuteState : NetworkState {
     private bool _areAllPlayersDefeated()
     {
         bool areAllPlayersDefeated = true;
-        foreach (CombatPawn playerPawn in CManager.PlayerPawnList)
+        foreach (CombatPawn pawn in CManager.AllPawns)
         {
-            if (playerPawn.IsAlive)
+            if (pawn.TeamId == 1 && pawn.IsAlive)
             {
                 areAllPlayersDefeated = false;
                 break;
             }
-            else
+            else if (pawn.TeamId == 1)
             {
-                Material currentPawnMaterial = playerPawn.GetComponent<Renderer>().material;
+                Material currentPawnMaterial = pawn.GetComponent<Renderer>().material;
                 currentPawnMaterial.SetColor("_Color", Color.black);
             }
         }
@@ -88,21 +88,31 @@ public class NetExecuteState : NetworkState {
     /// <returns>True if all the enemies have been defeated, false otherwise</returns>
     private bool _areAllEnemiesDefeated()
     {
-        bool areAllEnemiesDefeated = true;
-        foreach (CombatAI enemyPawn in CManager.EnemyList)
+        bool areAllAITeamsDefeated = true;
+        // Start i at 2 since 1 is reserved for the player team
+        for (byte i = 2; i <= CManager.TeamsInCombat; i++)
         {
-            if (enemyPawn.IsAlive)
+            bool isTeamDefeated = _isTeamDefeated(i);
+            if (!isTeamDefeated)
             {
-                areAllEnemiesDefeated = false;
+                areAllAITeamsDefeated = false;
                 break;
             }
-            else
+        }
+
+        return areAllAITeamsDefeated;
+    }
+
+    private bool _isTeamDefeated(byte teamId)
+    {
+        foreach (CombatPawn pawn in CManager.AllPawns)
+        {
+            if (pawn.TeamId == teamId && pawn.IsAlive)
             {
-                Material currentPawnMaterial = enemyPawn.GetComponent<Renderer>().material;
-                currentPawnMaterial.SetColor("_Color", Color.black);
+                return false;
             }
         }
-        return areAllEnemiesDefeated;
+        return true;
     }
 
     /// <summary>
@@ -183,9 +193,9 @@ public class NetExecuteState : NetworkState {
     private List<CombatPawn> _checkForDefeatedPlayers()
     {
         List<CombatPawn> removedList = new List<CombatPawn>();
-        foreach (CombatPawn pawn in CManager.PlayerPawnList)
+        foreach (CombatPawn pawn in CManager.AllPawns)
         {
-            if (!pawn.IsAlive)
+            if (!pawn.IsAlive && pawn is CombatPlayer)
             {
                 removedList.Add(pawn);
                 Material currentPawnMaterial = pawn.GetComponent<Renderer>().material;
@@ -207,11 +217,11 @@ public class NetExecuteState : NetworkState {
     private List<CombatPawn> _checkForDefeatedEnemies()
     {
         List<CombatAI> removedList = new List<CombatAI>();
-        foreach (CombatAI enemy in CManager.EnemyList)
+        foreach (CombatPawn enemy in CManager.AllPawns)
         {
-            if (!enemy.IsAlive)
+            if (!enemy.IsAlive && enemy is CombatAI)
             {
-                removedList.Add(enemy);
+                removedList.Add((CombatAI)enemy);
                 Material currentPawnMaterial = enemy.GetComponent<Renderer>().material;
                 currentPawnMaterial.SetColor("_Color", Color.black); 
             }
@@ -234,7 +244,7 @@ public class NetExecuteState : NetworkState {
         List<CombatPawn> defeatedPlayers = _checkForDefeatedPlayers();
 
         // Update the move targets for all of the enemies if their moves contain a defeated unit
-        foreach (CombatAI ce in CManager.EnemyList)
+        foreach (CombatAI ce in CManager.CombatAIList)
         {
             // If the pawn's action is already complete, move to the next one
             if (ce.IsActionComplete)
@@ -246,19 +256,19 @@ public class NetExecuteState : NetworkState {
             {
                 if (defeatedEnemies.Contains(enemyTarget))
                 {
-                    HashSet<CombatPawn> enemyListSet = new HashSet<CombatPawn>(CManager.EnemyList);
+                    HashSet<CombatPawn> enemyListSet = new HashSet<CombatPawn>(CManager.CombatAIList);
                     enemyMove.ChooseTargets(enemyListSet);
                 }
                 if (defeatedPlayers.Contains(enemyTarget))
                 {
-                    HashSet<CombatPawn> playerListSet = new HashSet<CombatPawn>(CManager.PlayerPawnList);
+                    HashSet<CombatPawn> playerListSet = new HashSet<CombatPawn>(CManager.CombatPlayerList);
                     enemyMove.ChooseTargets(playerListSet);
                 }
             }
         }
 
         // Select other move targets for all of the players if their moves contain a defeated unit
-        foreach (CombatPawn playerPawn in CManager.PlayerPawnList)
+        foreach (CombatPawn playerPawn in CManager.CombatPlayerList)
         {
             // If the pawn's action is already complete, move to the next one
             if (playerPawn.IsActionComplete)
@@ -276,7 +286,7 @@ public class NetExecuteState : NetworkState {
                     }
                     else
                     {
-                        List<CombatPawn> enemyList = new List<CombatPawn>(CManager.EnemyList);
+                        List<CombatPawn> enemyList = new List<CombatPawn>(CManager.CombatAIList);
                         playerMove.ChooseRandomTargets(enemyList);
                     }
                 }
@@ -288,7 +298,7 @@ public class NetExecuteState : NetworkState {
                     }
                     else
                     {
-                        List<CombatPawn> playerList = new List<CombatPawn>(CManager.PlayerPawnList);
+                        List<CombatPawn> playerList = new List<CombatPawn>(CManager.CombatPlayerList);
                         playerMove.ChooseRandomTargets(playerList);
                     }
                 }

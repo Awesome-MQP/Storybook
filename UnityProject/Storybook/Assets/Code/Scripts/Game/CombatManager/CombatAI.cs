@@ -49,10 +49,10 @@ public abstract class CombatAI : CombatPawn {
         if (!PhotonNetwork.isMasterClient)
         {
             CombatManager combatManager = FindObjectOfType<CombatManager>();
-            CombatAI[] enemyPawns = combatManager.EnemyList;
-            List<CombatAI> enemyPawnsList = new List<CombatAI>(enemyPawns);
-            enemyPawnsList.Add(this);
-            combatManager.SetEnemyList(enemyPawnsList);
+            CombatPawn[] allPawns = combatManager.AllPawns;
+            List<CombatPawn> allPawnsList = new List<CombatPawn>(allPawns);
+            allPawnsList.Add(this);
+            combatManager.SetAllPawns(allPawnsList);
         }
     }
 
@@ -70,14 +70,14 @@ public abstract class CombatAI : CombatPawn {
         EnemyMove chosenMove = _chooseMove();
         CombatPawn[] possibleTargets;
 
-        // If the chosen move is an attack, the possible targets are the players
+        // If the chosen move is an attack, the possible targets are the opposing characters
         if (chosenMove.IsMoveAttack) {
-            possibleTargets = CManager.PlayerPawnList;
+            possibleTargets = GetPawnsOpposing(CManager.AllPawns); 
         }
-        // Otherwise the possible targets are the enemies
+        // Otherwise the possible targets are the characters on the same team
         else
         {
-            possibleTargets = CManager.EnemyList;
+            possibleTargets = GetPawnsOnTeam(CManager.AllPawns);
         }
 
         chosenMove.SetMoveTargets(new List<CombatPawn>());

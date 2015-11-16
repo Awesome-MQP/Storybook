@@ -56,14 +56,14 @@ public class TestAI : CombatAI
         if (chosenMove.IsMoveAttack)
         {
             Debug.Log("Enemy move is an attack");
-            possibleTargetList = CManager.PlayerPawnList;
+            possibleTargetList = GetPawnsOpposing(CManager.AllPawns);
         }
 
         // If the move is a support move, the other enemies are the possible targets
         else
         {
             Debug.Log("Enemy move is not an attack");
-            possibleTargetList = CManager.EnemyList;
+            possibleTargetList = GetPawnsOnTeam(CManager.AllPawns);
         }
 
         // Iterate through the pawns in the possibleTargetList and find the targets

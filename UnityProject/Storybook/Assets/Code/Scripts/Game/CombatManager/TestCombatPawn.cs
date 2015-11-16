@@ -16,7 +16,7 @@ public class TestCombatPawn : CombatPlayer
             Debug.Log(m_scenePhotonView.viewID);
             Debug.Log("Space bar pressed");
             List<CombatPawn> targetList = new List<CombatPawn>();
-            targetList.Add(CManager.EnemyList[0]);
+            targetList.Add(GetPawnsOpposing(CManager.AllPawns)[0]);
             PlayerMove chosenMove = PlayerHand[0];
             chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
@@ -56,14 +56,14 @@ public class TestCombatPawn : CombatPlayer
         if (chosenMove.IsMoveAttack)
         {
             Debug.Log("Move is an attack");
-            possibleTargetList = CManager.EnemyList;
+            possibleTargetList = GetPawnsOpposing(CManager.AllPawns);
         }
 
         // If the move is a support move, the possible targets are the player list
         else
         {
             Debug.Log("Move is not an attack");
-            possibleTargetList = CManager.PlayerPawnList;
+            possibleTargetList = GetPawnsOnTeam(CManager.AllPawns);
         }
 
         // Iterate through the possible targets and find the targets based on the targetIds

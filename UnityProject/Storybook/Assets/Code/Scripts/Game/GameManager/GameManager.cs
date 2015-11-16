@@ -23,13 +23,12 @@ public class GameManager : Photon.PunBehaviour {
 	// Update is called once per frame
 	void Start () {
         DontDestroyOnLoad(this);
-        List<PlayerEntity> playerList = new List<PlayerEntity>();
         //Camera.main.GetComponent<AudioListener>().enabled = false;
 
         // Only call StartCombat on the master client
         if (PhotonNetwork.isMasterClient)
         {
-            StartCombat(playerList);
+            StartCombat();
         }
     }
 
@@ -37,59 +36,51 @@ public class GameManager : Photon.PunBehaviour {
     /// Starts a combat instance and sets the players for the combat manager to the list of players given to this function
     /// </summary>
     /// <param name="playersEnteringCombat"></param>
-    public void StartCombat(List<PlayerEntity> playersEnteringCombat)
+    public void StartCombat()
     {
         //TODO: Figure out how this will work between clients
-        //TODO: Grab all players rather than pass a list
         //TODO: Pass in enemies to start combat with
-        //TODO: Check for master client
 
-        Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
-            m_defaultLocation.z + 1000 * m_combatInstances.Count);
-        GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
-        CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
-        combatManager.SetPlayerEntityList(playersEnteringCombat);
-        combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
-        combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
+        if (PhotonNetwork.isMasterClient)
+        {
+            List<PlayerEntity> playersEnteringCombat = new List<PlayerEntity>(FindObjectsOfType<PlayerEntity>());
+            Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
+                m_defaultLocation.z + 1000 * m_combatInstances.Count);
+            GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
+            CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
+            combatManager.SetPlayerEntityList(playersEnteringCombat);
+            combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
+            combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
 
-        // Get all the player position nodes and set it in the combat manager
-        PlayerPositionNode[] playerPositions = m_combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
-        List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
-        combatManager.SetPlayerPositions(playerPositionsList);
+            // Get all the player position nodes and set it in the combat manager
+            PlayerPositionNode[] playerPositions = m_combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
+            List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
+            combatManager.SetPlayerPositions(playerPositionsList);
 
-        // Get all the enemy position nodes and set it in the combat manager
-        EnemyPositionNode[] enemyPositions = m_combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
-        List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
-        combatManager.SetEnemyPositions(enemyPositionsList);
+            // Get all the enemy position nodes and set it in the combat manager
+            EnemyPositionNode[] enemyPositions = m_combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
+            List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
+            combatManager.SetEnemyPositions(enemyPositionsList);
 
-        m_combatInstances.Add(m_combatInstance);
-        //combatManager.StartCombat();
+            m_combatInstances.Add(m_combatInstance);
+            //combatManager.StartCombat();
+        }
     }
 
     /// <summary>
     /// Ends the combat instance that has the given CombatManager
     /// </summary>
     /// <param name="cm">The CombatManager whose combat instance will be destroyed</param>
-    public void EndCombat(CombatManager cm)
+    public void EndCombat()
     {
-        //TODO: Game manager should contain open combat manager, do not need to pass it
+        CombatManager cm = m_combatInstances[0].GetComponent<CombatManager>();
+
         cm.DestroyAllPawns();
 
-        // Iterate through all of the combat instances
-        for (int i = 0; i < m_combatInstances.Count; i++)
-        {
-            GameObject currentCombatInstance = m_combatInstances[i];
-            CombatManager currentCombatManager = currentCombatInstance.GetComponent<CombatManager>();
-
-            // If the CombatManager of the current combat matches the given CombatManager, destroy the combat instance
-            if (currentCombatManager == cm)
-            {
-                m_combatInstances.Remove(currentCombatInstance);
-                Destroy(currentCombatInstance);
-                break;
-            }
-        }
+        GameObject currentCombatInstance = m_combatInstances[0];
+        m_combatInstances.Remove(currentCombatInstance);
+        Destroy(currentCombatInstance);
 
         //_returnToDungeon();
     }

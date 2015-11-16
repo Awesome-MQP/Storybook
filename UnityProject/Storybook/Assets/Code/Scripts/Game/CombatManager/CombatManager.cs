@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-//TODO: MAKE MORE GENERIC
-
 public class CombatManager : Photon.PunBehaviour {
 
     [SerializeField]
@@ -107,7 +105,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     public void EndCurrentCombat()
     {
-        FindObjectOfType<GameManager>().EndCombat(this);
+        FindObjectOfType<GameManager>().EndCombat();
     }
 
     //TODO: Move this code to the player pawn

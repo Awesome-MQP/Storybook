@@ -2706,7 +2706,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static void Destroy(GameObject go)
+    internal static void Destroy(GameObject go)
     {
         PhotonView view = go.GetComponent<PhotonView>();
         if (view != null)
@@ -2741,7 +2741,7 @@ public static class PhotonNetwork
     /// - GameObject can be destroyed while client is not in a room.
     /// </remarks>
     /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void Destroy(PhotonView targetView)
+    internal static void Destroy(PhotonView targetView)
     {
         Destroy(targetView, otherPlayers);
     }

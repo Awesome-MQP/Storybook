@@ -437,20 +437,12 @@ public class PhotonView : Photon.MonoBehaviour
 
     protected internal void OnDestroy()
     {
-        if (!this.removedFromLocalViewList)
+        if (isMine)
         {
-            bool wasInList = PhotonNetwork.networkingPeer.LocalCleanPhotonView(this);
-            bool loading = false;
-            
-            #if !UNITY_5 || UNITY_5_0 || UNITY_5_1
-            loading = Application.isLoadingLevel;
-            #endif
-
-            if (wasInList && !loading && this.instantiationId > 0 && !PhotonHandler.AppQuits && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
-            {
-                Debug.Log("PUN-instantiated '" + this.gameObject.name + "' got destroyed by engine. This is OK when loading levels. Otherwise use: PhotonNetwork.Destroy().");
-            }
+            PhotonNetwork.Destroy(this);
         }
+
+        PhotonNetwork.networkingPeer.LocalCleanPhotonView(this);
 
         hasSpawned = false;
     }

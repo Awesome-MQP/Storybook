@@ -286,7 +286,7 @@ public class PhotonView : Photon.MonoBehaviour
     protected internal bool didAwake;
 
     [SerializeField]
-    protected internal bool isRuntimeInstantiated;
+    protected internal bool isRuntimeInstantiated = true;
 
     protected internal bool removedFromLocalViewList;
 
@@ -296,10 +296,28 @@ public class PhotonView : Photon.MonoBehaviour
 
     private bool failedToFindOnSerialize;
 
+    void OnValidate()
+    {
+        isRuntimeInstantiated = false;
+    }
+
     internal void OnSpawn()
     {
         hasSpawned = true;
         gameObject.SetActive(true);
+
+        if (isMine)
+        {
+            SendMessage("OnStartOwner", true, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (isController)
+        {
+            SendMessage("OnStartController", true, SendMessageOptions.DontRequireReceiver);
+        }
+        else
+        {
+            SendMessage("OnStartPeer", true, SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     internal void OnDespawn()
@@ -409,29 +427,22 @@ public class PhotonView : Photon.MonoBehaviour
 
     public void TransferController(int newControllerId)
     {
-        if (HasSpawned && isMine)
+        if (isMine)
         {
-            PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
+            if(HasSpawned)
+                PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
             controllerId = newControllerId;
         }
     }
 
     protected internal void OnDestroy()
     {
-        if (!this.removedFromLocalViewList)
+        if (isMine)
         {
-            bool wasInList = PhotonNetwork.networkingPeer.LocalCleanPhotonView(this);
-            bool loading = false;
-            
-            #if !UNITY_5 || UNITY_5_0 || UNITY_5_1
-            loading = Application.isLoadingLevel;
-            #endif
-
-            if (wasInList && !loading && this.instantiationId > 0 && !PhotonHandler.AppQuits && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
-            {
-                Debug.Log("PUN-instantiated '" + this.gameObject.name + "' got destroyed by engine. This is OK when loading levels. Otherwise use: PhotonNetwork.Destroy().");
-            }
+            PhotonNetwork.Destroy(this);
         }
+
+        PhotonNetwork.networkingPeer.LocalCleanPhotonView(this);
 
         hasSpawned = false;
     }
@@ -446,7 +457,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                SerializeComponent(this.ObservedComponents[i], stream, info, true);
+                if(ObservedComponents[i])
+                    SerializeComponent(this.ObservedComponents[i], stream, info, true);
             }
         }
 
@@ -479,7 +491,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                SerializeComponent(this.ObservedComponents[i], stream, info, false);
+                if(ObservedComponents[i])
+                    SerializeComponent(this.ObservedComponents[i], stream, info, false);
             }
         }
 
@@ -497,7 +510,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                DeserializeComponent(this.ObservedComponents[i], stream, info, false);
+                if(ObservedComponents[i])
+                    DeserializeComponent(this.ObservedComponents[i], stream, info, false);
             }
         }
     }
@@ -903,6 +917,9 @@ public class PhotonView : Photon.MonoBehaviour
     {
         foreach (Component component in ObservedComponents)
         {
+            if (!component)
+                return false;
+
             MethodInfo method = component.GetType()
                 .GetMethod("IsRelevantTo", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonPlayer)}, null);

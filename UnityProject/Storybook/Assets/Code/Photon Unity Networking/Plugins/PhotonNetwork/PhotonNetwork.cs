@@ -2259,7 +2259,6 @@ public static class PhotonNetwork
 
             view.prefix = networkingPeer.currentLevelPrefix;
             view.instantiationId = i == 0 ? id : views[0].viewID;
-            view.isRuntimeInstantiated = true;
             view.instantiationDataField = data;
             view.prefabName = i == 0 ? prefabName : "";
 
@@ -2707,7 +2706,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static void Destroy(GameObject go)
+    internal static void Destroy(GameObject go)
     {
         PhotonView view = go.GetComponent<PhotonView>();
         if (view != null)
@@ -2742,9 +2741,9 @@ public static class PhotonNetwork
     /// - GameObject can be destroyed while client is not in a room.
     /// </remarks>
     /// <returns>Nothing. Check error debug log for any issues.</returns>
-    public static void Destroy(PhotonView targetView)
+    internal static void Destroy(PhotonView targetView)
     {
-        Destroy(targetView, otherPlayers);
+        Destroy(targetView, targetView.RelevantPlayers);
     }
 
     private static void Destroy(PhotonView targetView, PhotonPlayer[] players)
@@ -2755,24 +2754,41 @@ public static class PhotonNetwork
             return;
         }
 
-        List<int> relevantPlayerList = new List<int>(players.Length);
+        List<int> playerIdList = new List<int>(players.Length);
         for (int i = 0; i < players.Length; i++)
         {
-            PhotonPlayer photonPlayer = players[i];
-            if (targetView.IsRelevantTo(photonPlayer))
-                relevantPlayerList.Add(photonPlayer.ID);
+            playerIdList.Add(players[i].ID);
         }
-        int[] relevantPlayers = relevantPlayerList.ToArray();
+        int[] playerIds = playerIdList.ToArray();
 
         PhotonView[] viewStructure = targetView.GetComponentsInChildren<PhotonView>(false);
 
-        //TODO: Finish
+        int[] viewIds = new int[viewStructure.Length];
+        for (int i = 0; i < viewStructure.Length; i++)
+        {
+            PhotonView photonView = viewStructure[i];
+
+            foreach (PhotonPlayer photonPlayer in players)
+            {
+                photonView.UnregisterToPlayer(photonPlayer);
+            }
+
+            viewIds[i] = photonView.viewID;
+        }
+
+        RaiseEventOptions options = new RaiseEventOptions();
+        options.TargetActors = playerIds;
+
+        RaiseEvent(PunEvent.Destroy, viewIds, true, options);
     }
 
     internal static void HandleDestroy(int[] viewStructureIds)
     {
         PhotonView rootView = PhotonView.Find(viewStructureIds[0]);
-        Object.Destroy(rootView.gameObject);
+
+        //Handle delete silently if the view does not exist, delete can be sent to views that do not exist on the client
+        if(rootView)
+            Object.Destroy(rootView.gameObject);
     }
 
     /// <summary>

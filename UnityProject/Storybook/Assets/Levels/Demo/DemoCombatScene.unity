@@ -253,6 +253,7 @@ MonoBehaviour:
   m_defaultLocation: {x: 1000, y: 1000, z: 1000}
   m_enemiesForCombat:
   - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
+  - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
   m_playersInCombat: 2
 --- !u!23 &1900037248
 MeshRenderer:

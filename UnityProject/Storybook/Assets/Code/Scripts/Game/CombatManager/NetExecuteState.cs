@@ -256,13 +256,17 @@ public class NetExecuteState : NetworkState {
             {
                 if (defeatedEnemies.Contains(enemyTarget))
                 {
-                    HashSet<CombatPawn> enemyListSet = new HashSet<CombatPawn>(CManager.CombatAIList);
-                    enemyMove.ChooseTargets(enemyListSet);
+                    byte targetTeamId = enemyTarget.TeamId;
+                    List<CombatPawn> targetTeam = CManager.GetPawnsForTeam(targetTeamId);
+                    HashSet<CombatPawn> targetTeamListSet = new HashSet<CombatPawn>(targetTeam);
+                    enemyMove.ChooseTargets(targetTeamListSet);
                 }
                 if (defeatedPlayers.Contains(enemyTarget))
                 {
-                    HashSet<CombatPawn> playerListSet = new HashSet<CombatPawn>(CManager.CombatPlayerList);
-                    enemyMove.ChooseTargets(playerListSet);
+                    byte targetTeamId = enemyTarget.TeamId;
+                    List<CombatPawn> targetTeam = CManager.GetPawnsForTeam(targetTeamId);
+                    HashSet<CombatPawn> targetTeamListSet = new HashSet<CombatPawn>(targetTeam);
+                    enemyMove.ChooseTargets(targetTeamListSet);
                 }
             }
         }
@@ -286,8 +290,9 @@ public class NetExecuteState : NetworkState {
                     }
                     else
                     {
-                        List<CombatPawn> enemyList = new List<CombatPawn>(CManager.CombatAIList);
-                        playerMove.ChooseRandomTargets(enemyList);
+                        // TODO - Change target team if all are defeated on the current target team
+                        List<CombatPawn> targetTeamList = new List<CombatPawn>(CManager.GetPawnsForTeam(playerTarget.TeamId));
+                        playerMove.ChooseRandomTargets(targetTeamList);
                     }
                 }
                 if (defeatedPlayers.Contains(playerTarget))
@@ -298,8 +303,9 @@ public class NetExecuteState : NetworkState {
                     }
                     else
                     {
-                        List<CombatPawn> playerList = new List<CombatPawn>(CManager.CombatPlayerList);
-                        playerMove.ChooseRandomTargets(playerList);
+                        // TODO - Change target team if all are defeated on the current target team
+                        List<CombatPawn> targetTeamList = new List<CombatPawn>(CManager.GetPawnsForTeam(playerPawn.TeamId));
+                        playerMove.ChooseRandomTargets(targetTeamList);
                     }
                 }
             }

@@ -20,9 +20,8 @@ public class CombatManager : Photon.PunBehaviour {
 
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
-    //private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
-    //private List<CombatAI> m_enemyList = new List<CombatAI>();
     private List<CombatPawn> m_allPawns = new List<CombatPawn>();
+    private List<CombatPawn> m_pawnsSpawned = new List<CombatPawn>();
     private List<PlayerEntity> m_playerEntityList = new List<PlayerEntity>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
@@ -53,8 +52,8 @@ public class CombatManager : Photon.PunBehaviour {
             _placePlayers();
 
             // Spawn and place the enemy pawns
-            _spawnEnemyPawns();
-            _placeEnemies();
+            _spawnAIPawns();
+            _placeAIs();
 
             m_combatStateMachine.SetBool("StartToThink", true);
 
@@ -97,7 +96,7 @@ public class CombatManager : Photon.PunBehaviour {
     {
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
-        _incrementEnemyMana();
+        _incrementAIMana();
         _decrementAllBoosts();
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
@@ -142,13 +141,14 @@ public class CombatManager : Photon.PunBehaviour {
             combatPawnScript.SetPawnId(i + 1);
             Debug.Log("Adding pawn to list");
             m_allPawns.Add(combatPawnScript);
+            m_pawnsSpawned.Add(combatPawnScript);
         }
     }
 
     /// <summary>
     /// Places the enemy pawns at the nodes on the combat plane
     /// </summary>
-    private void _placeEnemies()
+    private void _placeAIs()
     {
         for (int i = 0; i < m_allPawns.Count; i++)
         {
@@ -164,7 +164,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// Spawns the given number of CombatEnemy objects
     /// </summary>
     /// <param name="numberToSpawn">The number of CombatEnemy objects to spawn</param>
-    private void _spawnEnemyPawns()
+    private void _spawnAIPawns()
     {
         for (int i = 0; i < m_enemiesToSpawn.Length; i++)
         {
@@ -174,6 +174,7 @@ public class CombatManager : Photon.PunBehaviour {
             combatEnemy.RegisterCombatManager(this);
             combatEnemy.SetPawnId(i + 1);
             m_allPawns.Add(combatEnemy);
+            m_pawnsSpawned.Add(combatEnemy);
         }
     }
 
@@ -192,7 +193,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// <summary>
     /// Incremenets all of the enemy pawn mana for the turn
     /// </summary>
-    private void _incrementEnemyMana()
+    private void _incrementAIMana()
     {
         foreach (CombatPawn pawn in m_allPawns)
         {
@@ -229,7 +230,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// Removes the given enemy from the combat by removing them from the enemy list and the PawnToMove dictionary
     /// </summary>
     /// <param name="enemyToRemove">The enemy to remove</param>
-    public void RemoveEnemyFromCombat(CombatAI enemyToRemove)
+    public void RemoveAIFromCombat(CombatAI enemyToRemove)
     {
         m_allPawns.Remove(enemyToRemove);
         m_pawnToCombatMove.Remove(enemyToRemove);
@@ -354,6 +355,11 @@ public class CombatManager : Photon.PunBehaviour {
         get { return m_cameraPos; }
     }
 
+    /// <summary>
+    /// Gets a list of pawns that are members of the given team
+    /// </summary>
+    /// <param name="teamId">The team to get the pawns from</param>
+    /// <returns>A list of all the pawns with the given teamId</returns>
     public List<CombatPawn> GetPawnsForTeam(byte teamId)
     {
         List<CombatPawn> teamPawns = new List<CombatPawn>();
@@ -377,6 +383,9 @@ public class CombatManager : Photon.PunBehaviour {
         m_teamsInCombat = teamsInCombat;
     }
 
+    /// <summary>
+    /// The list of all the CombatAIs in the current combat
+    /// </summary>
     public CombatAI[] CombatAIList
     {
         get
@@ -393,6 +402,9 @@ public class CombatManager : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// The list of all the CombatPlayers in the current combat
+    /// </summary>
     public CombatPlayer[] CombatPlayerList
     {
         get
@@ -409,9 +421,12 @@ public class CombatManager : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Destroys the game object of all of the pawns that are in the current combat
+    /// </summary>
     public void DestroyAllPawns()
     {
-        foreach(CombatPawn pawn in m_allPawns)
+        foreach(CombatPawn pawn in m_pawnsSpawned)
         {
             Destroy(pawn.gameObject);
         }

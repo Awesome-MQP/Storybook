@@ -86,7 +86,7 @@ public class NetExecuteState : NetworkState {
     /// Checks to see if all of the enemies in the combat have been defeated
     /// </summary>
     /// <returns>True if all the enemies have been defeated, false otherwise</returns>
-    private bool _areAllEnemiesDefeated()
+    private bool _areAllAIDefeated()
     {
         bool areAllAITeamsDefeated = true;
         // Start i at 2 since 1 is reserved for the player team
@@ -103,6 +103,11 @@ public class NetExecuteState : NetworkState {
         return areAllAITeamsDefeated;
     }
 
+    /// <summary>
+    /// Checks to see if the team with the given ID has been defeated
+    /// </summary>
+    /// <param name="teamId">The ID of the team to check</param>
+    /// <returns>True if all members of the team have been defeated, false otherwise</returns>
     private bool _isTeamDefeated(byte teamId)
     {
         foreach (CombatPawn pawn in CManager.AllPawns)
@@ -121,7 +126,7 @@ public class NetExecuteState : NetworkState {
     /// <returns>True if the combat is complete, false otherwise</returns>
     private bool _isCombatComplete()
     {
-        return (_areAllEnemiesDefeated() || _areAllPlayersDefeated());
+        return (_areAllAIDefeated() || _areAllPlayersDefeated());
     }
 
     // TODO - How to handle ties with the speed values (players have priority?)
@@ -145,8 +150,6 @@ public class NetExecuteState : NetworkState {
 
         // Handle any pawns that have been defeated by the previous move's effect
         _checkForDefeatedPawns();
-
-        // TODO - New targets for moves that include defeated players/enemies
 
         float currentHighestSpeed = 0;
         CombatPawn fastestCombatPawn = null;
@@ -228,13 +231,13 @@ public class NetExecuteState : NetworkState {
         }
         foreach (CombatAI enemy in removedList)
         {
-            CManager.RemoveEnemyFromCombat(enemy);
+            CManager.RemoveAIFromCombat(enemy);
         }
         return new List<CombatPawn>(removedList.ToArray());
     }
 
     /// <summary>
-    /// Checks to see if any enemies or players have been defeated
+    /// Checks to see if any AIs or players have been defeated
     /// Updates move targets if a move contains a unit that has been defeated
     /// Called after each move is executed
     /// </summary>
@@ -325,7 +328,8 @@ public class NetExecuteState : NetworkState {
         }
 
         // If all of the enemies are defeated, exit this state and enter the win state
-        else if (_areAllEnemiesDefeated())
+        // TODO Change to check teams
+        else if (_areAllAIDefeated())
         {
             Debug.Log("NetExecute going to win");
             m_executeToWin = true;

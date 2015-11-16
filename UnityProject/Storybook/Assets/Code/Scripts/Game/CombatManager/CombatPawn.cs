@@ -236,6 +236,11 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         m_teamId = teamId;
     }
 
+    /// <summary>
+    /// Gets an array of all the pawns on the same team as this one
+    /// </summary>
+    /// <param name="pawnsToSearch">The list of pawns to search through</param>
+    /// <returns>The array of pawns that are on the same team as the current pawn</returns>
     protected CombatPawn[] GetPawnsOnTeam(CombatPawn[] pawnsToSearch)
     {
         List<CombatPawn> teamPawns = new List<CombatPawn>();
@@ -249,6 +254,11 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         return teamPawns.ToArray();
     }
 
+    /// <summary>
+    /// Gets an array of all the pawns on the opposing teams of this pawn
+    /// </summary>
+    /// <param name="pawnsToSearch">The list of pawns to search through</param>
+    /// <returns>The array of pawns that are on opposing teams as the current pawn</returns>
     protected CombatPawn[] GetPawnsOpposing(CombatPawn[] pawnsToSearch)
     {
         List<CombatPawn> opposingPawns = new List<CombatPawn>();

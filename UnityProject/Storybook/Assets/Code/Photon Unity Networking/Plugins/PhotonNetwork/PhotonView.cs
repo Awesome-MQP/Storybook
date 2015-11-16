@@ -457,7 +457,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                SerializeComponent(this.ObservedComponents[i], stream, info, true);
+                if(ObservedComponents[i])
+                    SerializeComponent(this.ObservedComponents[i], stream, info, true);
             }
         }
 
@@ -490,7 +491,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                SerializeComponent(this.ObservedComponents[i], stream, info, false);
+                if(ObservedComponents[i])
+                    SerializeComponent(this.ObservedComponents[i], stream, info, false);
             }
         }
 
@@ -508,7 +510,8 @@ public class PhotonView : Photon.MonoBehaviour
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
-                DeserializeComponent(this.ObservedComponents[i], stream, info, false);
+                if(ObservedComponents[i])
+                    DeserializeComponent(this.ObservedComponents[i], stream, info, false);
             }
         }
     }
@@ -914,6 +917,9 @@ public class PhotonView : Photon.MonoBehaviour
     {
         foreach (Component component in ObservedComponents)
         {
+            if (!component)
+                return false;
+
             MethodInfo method = component.GetType()
                 .GetMethod("IsRelevantTo", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonPlayer)}, null);

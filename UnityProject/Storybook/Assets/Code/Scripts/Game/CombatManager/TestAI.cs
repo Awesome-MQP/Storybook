@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class TestEnemy : CombatEnemy
+public class TestAI : CombatAI
 {
 
     public override void OnThink()

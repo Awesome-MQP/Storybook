@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class CombatEnemy : CombatPawn {
+public abstract class CombatAI : CombatPawn {
 
     /// <summary>
     /// Value that increases the likelihood of the enemy choosing an attack over a effect boost
@@ -49,8 +49,8 @@ public abstract class CombatEnemy : CombatPawn {
         if (!PhotonNetwork.isMasterClient)
         {
             CombatManager combatManager = FindObjectOfType<CombatManager>();
-            CombatEnemy[] enemyPawns = combatManager.EnemyList;
-            List<CombatEnemy> enemyPawnsList = new List<CombatEnemy>(enemyPawns);
+            CombatAI[] enemyPawns = combatManager.EnemyList;
+            List<CombatAI> enemyPawnsList = new List<CombatAI>(enemyPawns);
             enemyPawnsList.Add(this);
             combatManager.SetEnemyList(enemyPawnsList);
         }

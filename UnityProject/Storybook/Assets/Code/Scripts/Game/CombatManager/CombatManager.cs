@@ -21,7 +21,7 @@ public class CombatManager : Photon.PunBehaviour {
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_playerPawnList = new List<CombatPawn>();
-    private List<CombatEnemy> m_enemyList = new List<CombatEnemy>();
+    private List<CombatAI> m_enemyList = new List<CombatAI>();
     private List<PlayerEntity> m_playerEntityList = new List<PlayerEntity>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
@@ -131,6 +131,7 @@ public class CombatManager : Photon.PunBehaviour {
         for (int i = 0; i < numberToSpawn; i++)
         {
             GameObject combatPawn = PhotonNetwork.Instantiate("TestCombatPawn", transform.position, m_combatPawnPrefab.transform.rotation, 0);
+            PhotonNetwork.Spawn(combatPawn.GetComponent<PhotonView>());
             CombatPawn combatPawnScript = combatPawn.GetComponent<CombatPawn>();
             combatPawnScript.RegisterCombatManager(this);
             combatPawnScript.SetPawnId(i + 1);
@@ -160,7 +161,8 @@ public class CombatManager : Photon.PunBehaviour {
         for (int i = 0; i < m_enemiesToSpawn.Length; i++)
         {
             GameObject enemyObject = PhotonNetwork.Instantiate(m_enemiesToSpawn[i].name, transform.position, Quaternion.identity, 0);
-            CombatEnemy combatEnemy = enemyObject.GetComponent<CombatEnemy>();
+            PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
+            CombatAI combatEnemy = enemyObject.GetComponent<CombatAI>();
             combatEnemy.RegisterCombatManager(this);
             combatEnemy.SetPawnId(i + 1);
             m_enemyList.Add(combatEnemy);
@@ -184,7 +186,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     private void _incrementEnemyMana()
     {
-        foreach (CombatEnemy ce in m_enemyList)
+        foreach (CombatAI ce in m_enemyList)
         {
             ce.IncrementManaForTurn();
         }
@@ -215,7 +217,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// Removes the given enemy from the combat by removing them from the enemy list and the PawnToMove dictionary
     /// </summary>
     /// <param name="enemyToRemove">The enemy to remove</param>
-    public void RemoveEnemyFromCombat(CombatEnemy enemyToRemove)
+    public void RemoveEnemyFromCombat(CombatAI enemyToRemove)
     {
         m_enemyList.Remove(enemyToRemove);
         m_pawnToCombatMove.Remove(enemyToRemove);
@@ -256,12 +258,12 @@ public class CombatManager : Photon.PunBehaviour {
     /// <summary>
     /// The list of all the enemies in the combat
     /// </summary>
-    public CombatEnemy[] EnemyList
+    public CombatAI[] EnemyList
     {
         get { return m_enemyList.ToArray(); }
     }
 
-    public void SetEnemyList(List<CombatEnemy> newEnemyList)
+    public void SetEnemyList(List<CombatAI> newEnemyList)
     {
         m_enemyList = newEnemyList;
     }

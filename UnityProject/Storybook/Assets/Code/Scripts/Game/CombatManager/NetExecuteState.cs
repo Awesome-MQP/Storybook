@@ -89,7 +89,7 @@ public class NetExecuteState : NetworkState {
     private bool _areAllEnemiesDefeated()
     {
         bool areAllEnemiesDefeated = true;
-        foreach (CombatEnemy enemyPawn in CManager.EnemyList)
+        foreach (CombatAI enemyPawn in CManager.EnemyList)
         {
             if (enemyPawn.IsAlive)
             {
@@ -206,8 +206,8 @@ public class NetExecuteState : NetworkState {
     /// <returns>The list of enemies that have been defeated this turn</returns>
     private List<CombatPawn> _checkForDefeatedEnemies()
     {
-        List<CombatEnemy> removedList = new List<CombatEnemy>();
-        foreach (CombatEnemy enemy in CManager.EnemyList)
+        List<CombatAI> removedList = new List<CombatAI>();
+        foreach (CombatAI enemy in CManager.EnemyList)
         {
             if (!enemy.IsAlive)
             {
@@ -216,7 +216,7 @@ public class NetExecuteState : NetworkState {
                 currentPawnMaterial.SetColor("_Color", Color.black); 
             }
         }
-        foreach (CombatEnemy enemy in removedList)
+        foreach (CombatAI enemy in removedList)
         {
             CManager.RemoveEnemyFromCombat(enemy);
         }
@@ -234,7 +234,7 @@ public class NetExecuteState : NetworkState {
         List<CombatPawn> defeatedPlayers = _checkForDefeatedPlayers();
 
         // Update the move targets for all of the enemies if their moves contain a defeated unit
-        foreach (CombatEnemy ce in CManager.EnemyList)
+        foreach (CombatAI ce in CManager.EnemyList)
         {
             // If the pawn's action is already complete, move to the next one
             if (ce.IsActionComplete)

@@ -40,6 +40,8 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     private static PhotonView m_scenePhotonView = null;
 
+    private byte m_teamId;
+
     public abstract void OnThink();
 
     void Start()
@@ -221,5 +223,15 @@ public abstract class CombatPawn : Photon.PunBehaviour {
             // Receive the pawnId
             m_pawnId = (int) stream.ReceiveNext();
         }
+    }
+
+    public byte TeamId
+    {
+        get { return m_teamId; }
+    }
+
+    public void SetTeamId(byte teamId)
+    {
+        m_teamId = teamId;
     }
 }

@@ -24,8 +24,14 @@ public class GameManager : Photon.PunBehaviour {
 	void Start () {
         DontDestroyOnLoad(this);
         List<PlayerEntity> playerList = new List<PlayerEntity>();
-        Camera.main.GetComponent<AudioListener>().enabled = false;
-	}
+        //Camera.main.GetComponent<AudioListener>().enabled = false;
+
+        // Only call StartCombat on the master client
+        if (PhotonNetwork.isMasterClient)
+        {
+            StartCombat(playerList);
+        }
+    }
 
     /// <summary>
     /// Starts a combat instance and sets the players for the combat manager to the list of players given to this function
@@ -41,6 +47,7 @@ public class GameManager : Photon.PunBehaviour {
         Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
             m_defaultLocation.z + 1000 * m_combatInstances.Count);
         GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
         CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
         combatManager.SetPlayerEntityList(playersEnteringCombat);
         combatManager.SetEnemiesToSpawn(m_enemiesForCombat);

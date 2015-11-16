@@ -16,6 +16,7 @@ public class LoseState : CombatState {
         if (PhotonNetwork.isMasterClient)
         {
             m_netLoseStateObject = PhotonNetwork.Instantiate("NetLoseState", Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(m_netLoseStateObject.GetComponent<PhotonView>());
             m_netLoseState = m_netLoseStateObject.GetComponent<NetLoseState>();
         }
     }

@@ -16,6 +16,7 @@ public class WinState : CombatState {
         if (PhotonNetwork.isMasterClient)
         {
             m_netWinStateObject = PhotonNetwork.Instantiate("NetWinState", Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(m_netWinStateObject.GetComponent<PhotonView>());
             m_netWinState = m_netWinStateObject.GetComponent<NetWinState>();
         }
     }

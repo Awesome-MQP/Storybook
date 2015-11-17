@@ -355,7 +355,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     internal bool ShouldExistOnPlayer(PhotonPlayer player)
     {
-        return isMine && IsRelevantTo(player);
+        return isMine && CheckRelevance(player);
     }
 
     internal bool ShouldCreateOnPlayer(PhotonPlayer player)
@@ -369,7 +369,7 @@ public class PhotonView : Photon.MonoBehaviour
     /// <param name="player">The player to exist on</param>
     internal void RegisterToPlayer(PhotonPlayer player)
     {
-        if (isMine && IsRelevantTo(player))
+        if (isMine && CheckRelevance(player))
         {
             existsOn.Add(player);
         }
@@ -533,11 +533,11 @@ public class PhotonView : Photon.MonoBehaviour
         PhotonPlayer[] otherPlayers = PhotonNetwork.otherPlayers;
         foreach (PhotonPlayer player in otherPlayers)
         {
-            if (WasRelevant(player) && !IsRelevantTo(player))
+            if (WasRelevant(player) && !CheckRelevance(player))
             {
                 PhotonNetwork.Despawn(this, player);
             }
-            else if (!WasRelevant(player) && IsRelevantTo(player))
+            else if (!WasRelevant(player) && CheckRelevance(player))
             {
                 PhotonNetwork.Spawn(this, player);
             }
@@ -918,7 +918,7 @@ public class PhotonView : Photon.MonoBehaviour
         foreach (Component component in ObservedComponents)
         {
             if (!component)
-                return false;
+                return true;
 
             MethodInfo method = component.GetType()
                 .GetMethod("IsRelevantTo", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,

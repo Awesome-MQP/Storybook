@@ -22,6 +22,7 @@ public class MatchMaker : Photon.PunBehaviour {
         if (isFirst && GUILayout.Button("Start Combat"))
         {
             PhotonNetwork.LoadLevel("DemoCombatScene");
+            Destroy(this);
         }
     }
 

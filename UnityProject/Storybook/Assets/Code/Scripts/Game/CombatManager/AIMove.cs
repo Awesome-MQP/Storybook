@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class EnemyMove : CombatMove {
+public abstract class AIMove : CombatMove {
 
     /// <summary>
     /// The amount that the move costs

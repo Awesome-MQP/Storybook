@@ -26,12 +26,12 @@ public abstract class CombatAI : CombatPawn {
     /// The list of moves that the enemy can use in combat
     /// </summary>
     [SerializeField]
-    private EnemyMove[] m_enemyMoveList;
+    private AIMove[] m_enemyMoveList;
 
     /// <summary>
     /// Property getter for the list of enemy moves
     /// </summary>
-    public EnemyMove[] EnemyMoves
+    public AIMove[] EnemyMoves
     {
         get { return m_enemyMoveList; }
     }
@@ -43,31 +43,20 @@ public abstract class CombatAI : CombatPawn {
         {
             move.SetMoveOwner(this);
         }
-
-        // If it is not the master client, need to add the enemy to the enemy list in CombatManager
-        // Master client does this when it spawns the pawns, so it does not need to do it here
-        if (!PhotonNetwork.isMasterClient)
-        {
-            CombatManager combatManager = FindObjectOfType<CombatManager>();
-            CombatPawn[] allPawns = combatManager.AllPawns;
-            List<CombatPawn> allPawnsList = new List<CombatPawn>(allPawns);
-            allPawnsList.Add(this);
-            combatManager.SetAllPawns(allPawnsList);
-        }
     }
 
     /// <summary>
     /// Chooses a move for the enemy pawn to use in the current turn of combat and sets the targets of the move
     /// </summary>
     /// <returns>The EnemyMove that will be used for the current turn</returns>
-    public EnemyMove CreateMove()
+    public AIMove CreateMove()
     {
         // Initalize all of the IsMoveAttack booleans for all of the enemy's moves
-        foreach (EnemyMove em in m_enemyMoveList)
+        foreach (AIMove em in m_enemyMoveList)
         {
             em.InitializeIsMoveAttack();
         }
-        EnemyMove chosenMove = _chooseMove();
+        AIMove chosenMove = _chooseMove();
         CombatPawn[] possibleTargets;
 
         // If the chosen move is an attack, the possible targets are the opposing characters
@@ -91,9 +80,9 @@ public abstract class CombatAI : CombatPawn {
     /// Chooses which move to use for the turn, move chosen is determined by current mana and the aggression value of the enemy
     /// </summary>
     /// <returns>The EnemyMove to use for the turn</returns>
-    private EnemyMove _chooseMove()
+    private AIMove _chooseMove()
     {
-        EnemyMove mostExpensiveMove = _getMostExpensiveMove();
+        AIMove mostExpensiveMove = _getMostExpensiveMove();
 
         // If the enemy currently has twice as much mana as its most expensive move, use the most expensive move this turn
         if (m_currentMana >= mostExpensiveMove.MoveCost * 2)
@@ -120,9 +109,9 @@ public abstract class CombatAI : CombatPawn {
             isMoveAttack = _isMoveAttack();
         }
 
-        List<EnemyMove> possibleMoves = new List<EnemyMove>();
+        List<AIMove> possibleMoves = new List<AIMove>();
 
-        foreach (EnemyMove em in EnemyMoves)
+        foreach (AIMove em in EnemyMoves)
         {
             if (isMoveAttack == em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
@@ -130,8 +119,8 @@ public abstract class CombatAI : CombatPawn {
             }
         }
 
-        EnemyMove chosenMove = null;
-        EnemyMove currentMove = null;
+        AIMove chosenMove = null;
+        AIMove currentMove = null;
 
         while (chosenMove == null)
         {
@@ -163,7 +152,7 @@ public abstract class CombatAI : CombatPawn {
     /// <returns>True if the enemy only has or can only use attack moves, false otherwise</returns>
     private bool _hasOnlyAttacks()
     {
-        foreach (EnemyMove em in EnemyMoves)
+        foreach (AIMove em in EnemyMoves)
         {
             if (!em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
@@ -179,7 +168,7 @@ public abstract class CombatAI : CombatPawn {
     /// <returns>True if the enemy only has or can only use boost moves, false otherwise</returns>
     private bool _hasOnlyBoosts()
     {
-        foreach (EnemyMove em in EnemyMoves)
+        foreach (AIMove em in EnemyMoves)
         {
             if (em.IsMoveAttack && em.MoveCost <= m_currentMana)
             {
@@ -193,10 +182,10 @@ public abstract class CombatAI : CombatPawn {
     /// Searches the enemy move list for the most expensive move
     /// </summary>
     /// <returns>The most expensive move that the enemy has</returns>
-    private EnemyMove _getMostExpensiveMove()
+    private AIMove _getMostExpensiveMove()
     {
-        EnemyMove currentHighest = null;
-        foreach(EnemyMove cm in EnemyMoves)
+        AIMove currentHighest = null;
+        foreach(AIMove cm in EnemyMoves)
         {
             if (currentHighest == null || cm.MoveCost > currentHighest.MoveCost)
             {
@@ -210,10 +199,10 @@ public abstract class CombatAI : CombatPawn {
     /// Searches the enemy move list for the least expensive move
     /// </summary>
     /// <returns>The least expensive move that the enemy has</returns>
-    private EnemyMove _getLeastExpensiveMove()
+    private AIMove _getLeastExpensiveMove()
     {
-        EnemyMove leastExpensiveMove = null;
-        foreach (EnemyMove em in EnemyMoves)
+        AIMove leastExpensiveMove = null;
+        foreach (AIMove em in EnemyMoves)
         {
             if (leastExpensiveMove == null || em.MoveCost < leastExpensiveMove.MoveCost)
             {
@@ -229,7 +218,7 @@ public abstract class CombatAI : CombatPawn {
     /// </summary>
     private void _initializeManaPerTurn()
     {
-        EnemyMove leastExpensiveMove = _getLeastExpensiveMove();
+        AIMove leastExpensiveMove = _getLeastExpensiveMove();
         m_manaPerTurn = leastExpensiveMove.MoveCost + 1;
     }
 
@@ -239,7 +228,7 @@ public abstract class CombatAI : CombatPawn {
     /// </summary>
     private void _initializeStartingMana()
     {
-        EnemyMove leastExpensiveMove = _getLeastExpensiveMove();
+        AIMove leastExpensiveMove = _getLeastExpensiveMove();
         m_currentMana = leastExpensiveMove.MoveCost * 2;
     }
 

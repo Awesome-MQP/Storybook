@@ -13,6 +13,15 @@ public class GameManager : Photon.PunBehaviour {
     private CombatPawn[] m_enemiesForCombat;
 
     [SerializeField]
+    private EnemyTeam m_enemyTeamForCombat;
+
+    [SerializeField]
+    private PlayerTeam m_playerTeamForCombat;
+
+    [SerializeField]
+    private CombatPlayer m_playerPawn;
+
+    [SerializeField]
     private int m_playersInCombat;
 
     private List<GameObject> m_combatInstances = new List<GameObject>();
@@ -49,7 +58,6 @@ public class GameManager : Photon.PunBehaviour {
             GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
-            combatManager.SetPlayerEntityList(playersEnteringCombat);
             combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
             combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
 

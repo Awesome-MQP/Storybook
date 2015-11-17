@@ -254,7 +254,7 @@ public class NetExecuteState : NetworkState {
             {
                 continue;
             }
-            EnemyMove enemyMove = (EnemyMove)CManager.PawnToMove[ce];
+            AIMove enemyMove = (AIMove)CManager.PawnToMove[ce];
             foreach (CombatPawn enemyTarget in enemyMove.MoveTargets)
             {
                 if (defeatedEnemies.Contains(enemyTarget))

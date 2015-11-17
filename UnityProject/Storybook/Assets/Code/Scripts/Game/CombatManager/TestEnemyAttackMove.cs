@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-public class TestEnemyAttackMove : EnemyMove {
+public class TestEnemyAttackMove : AIMove {
 
     [SerializeField]
     private int m_moveDamage = 3;

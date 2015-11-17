@@ -12,7 +12,7 @@ public class TestAI : CombatAI
         {
             PhotonView m_scenePhontonView = GetComponent<PhotonView>();
             // Randomly select a player pawn to attack
-            EnemyMove moveSelected = CreateMove();
+            AIMove moveSelected = CreateMove();
             SetMoveForTurn(moveSelected);
             SetHasSubmittedMove(true);
             Debug.Log("Enemy submitted move");
@@ -46,7 +46,7 @@ public class TestAI : CombatAI
     private void SendEnemyMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
         Debug.Log("Other enemy submitted move");
-        EnemyMove chosenMove = EnemyMoves[moveIndex];
+        AIMove chosenMove = EnemyMoves[moveIndex];
         List<CombatPawn> targets = new List<CombatPawn>();
 
         // Determine the targets of the move based on the list of target ids

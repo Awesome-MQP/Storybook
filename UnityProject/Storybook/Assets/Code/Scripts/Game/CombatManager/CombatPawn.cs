@@ -45,6 +45,15 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     public abstract void OnThink();
 
+    void Awake()
+    {
+        if (!PhotonNetwork.isMasterClient)
+        {
+            CombatManager m_combatManager = FindObjectOfType<CombatManager>();
+            m_combatManager.RegisterPawnLocal(this);
+        }
+    }
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -197,33 +206,28 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
     }
 
+    [SyncProperty]
     public int PawnId
     {
         get { return m_pawnId; }
+        protected set
+        {
+            if (gameObject.GetPhotonView().isMine)
+            {
+                m_pawnId = value;
+                PropertyChanged();
+            }
+        }
     }
 
     public void SetPawnId(int newPawnId)
     {
-        m_pawnId = newPawnId;
+        PawnId = newPawnId;
     }
 
     public PhotonView ScenePhotonView
     {
         get { return m_scenePhotonView;  }
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            // Send the pawnId to the other clients
-            stream.SendNext(PawnId);
-        }
-        else
-        {
-            // Receive the pawnId
-            m_pawnId = (int) stream.ReceiveNext();
-        }
     }
 
     public byte TeamId

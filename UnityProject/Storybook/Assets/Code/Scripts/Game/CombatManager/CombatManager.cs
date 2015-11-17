@@ -20,7 +20,6 @@ public class CombatManager : Photon.PunBehaviour {
     private int m_submittedEnemyMoves = 0;
     private List<CombatPawn> m_allPawns = new List<CombatPawn>();
     private List<CombatPawn> m_pawnsSpawned = new List<CombatPawn>();
-    private List<PlayerEntity> m_playerEntityList = new List<PlayerEntity>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
     private Animator m_combatStateMachine;
@@ -235,25 +234,6 @@ public class CombatManager : Photon.PunBehaviour {
     }
 
     /// <summary>
-    /// The list of all the PlayerEntity in the combat
-    /// </summary>
-    public IEnumerable<PlayerEntity> PlayerEntityList
-    {
-        get
-        {
-            foreach(PlayerEntity pe in m_playerEntityList)
-            {
-                yield return pe;
-            }    
-        }
-    }
-
-    public void SetPlayerEntityList(List<PlayerEntity> newPlayerList)
-    {
-        m_playerEntityList = newPlayerList;
-    }
-
-    /// <summary>
     /// The list of the PlayerPositionNodes in the combat
     /// </summary>
     public IEnumerable<PlayerPositionNode> PlayerPositions
@@ -428,5 +408,10 @@ public class CombatManager : Photon.PunBehaviour {
         {
             Destroy(pawn.gameObject);
         }
+    }
+
+    public void RegisterPawnLocal(CombatPawn pawn)
+    {
+        m_allPawns.Add(pawn);
     }
 }

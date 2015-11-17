@@ -3462,7 +3462,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 if (!view.shouldSync || !view.isMine || !view.HasSpawned)
                     continue;
 
-                if (!view.IsRelevantTo(player))
+                if (!view.CheckRelevance(player))
                     continue;
 
 #if UNITY_2_6_1 || UNITY_2_6 || UNITY_3_0 || UNITY_3_0_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5

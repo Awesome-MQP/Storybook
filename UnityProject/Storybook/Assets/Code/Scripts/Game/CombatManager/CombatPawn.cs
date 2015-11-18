@@ -36,12 +36,13 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     // Defaults to null because it needs to be able to return null moves
     private CombatMove m_moveForTurn = null;
 
+    [SerializeField]
     private int m_pawnId;
 
     private static PhotonView m_scenePhotonView = null;
 
     [SerializeField]
-    private byte m_teamId;
+    private int m_teamId;
 
     private CombatTeam m_pawnTeam;
 
@@ -207,29 +208,27 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public int PawnId
     {
         get { return m_pawnId; }
-        protected set
+        set
         {
-            if (gameObject.GetPhotonView().isMine)
-            {
-                m_pawnId = value;
-                PropertyChanged();
-            }
+            m_pawnId = value;
+            PropertyChanged();
         }
     }
 
-    public void SetPawnId(int newPawnId)
+    [SyncProperty]
+    public int TeamId
     {
-        PawnId = newPawnId;
+        get { return m_teamId; }
+        set
+        {
+            m_teamId = value;
+            PropertyChanged();
+        }
     }
 
     public PhotonView ScenePhotonView
     {
         get { return m_scenePhotonView;  }
-    }
-
-    public byte TeamId
-    {
-        get { return m_teamId; }
     }
 
     public void SetTeamId(byte teamId)
@@ -271,6 +270,10 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         return opposingPawns.ToArray();
     }
 
+
+    /// <summary>
+    /// The team that the pawn is currently a part of
+    /// </summary>
     protected CombatTeam PawnTeam
     {
         get { return m_pawnTeam; }
@@ -279,5 +282,25 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public void RegisterTeam(CombatTeam team)
     {
         m_pawnTeam = team;
+    }
+
+    /// <summary>
+    /// Calls an RPC to add the pawn to the team on all clients
+    /// </summary>
+    public void AddPawnToTeamLocal()
+    {
+        m_scenePhotonView = GetComponent<PhotonView>();
+        m_scenePhotonView.RPC("RPCAddPawnToTeam", PhotonTargets.Others);
+    }
+
+    /// <summary>
+    /// Adds the pawn to its corresponding team in the combat manager
+    /// </summary>
+    [PunRPC]
+    public void RPCAddPawnToTeam()
+    {
+        CombatManager combatManager = FindObjectOfType<CombatManager>();
+        CombatTeam pawnTeam = combatManager.GetTeamById(m_teamId);
+        pawnTeam.AddPawnToTeam(this);
     }
 }

@@ -187,7 +187,7 @@ public class NetExecuteState : NetworkState {
 
         foreach (CombatPawn pawn in removedList)
         {
-            CManager.RemovePlayerFromCombat(pawn);
+            CManager.RemovePlayerFromCombat((CombatPlayer)pawn);
         }
         return new List<CombatPawn>(removedList.ToArray());
     }
@@ -292,74 +292,6 @@ public class NetExecuteState : NetworkState {
                                 playerMove.ChooseRandomTargets(targetTeamList);
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        // Update the move targets for all of the enemies if their moves contain a defeated unit
-        foreach (CombatAI ce in CManager.CombatAIList)
-        {
-            // If the pawn's action is already complete, move to the next one
-            if (ce.IsActionComplete)
-            {
-                continue;
-            }
-            AIMove enemyMove = (AIMove)CManager.PawnToMove[ce];
-            foreach (CombatPawn enemyTarget in enemyMove.MoveTargets)
-            {
-                if (defeatedEnemies.Contains(enemyTarget))
-                {
-                    byte targetTeamId = enemyTarget.TeamId;
-                    List<CombatPawn> targetTeam = CManager.GetPawnsForTeam(targetTeamId);
-                    HashSet<CombatPawn> targetTeamListSet = new HashSet<CombatPawn>(targetTeam);
-                    enemyMove.ChooseTargets(targetTeamListSet);
-                }
-                if (defeatedPlayers.Contains(enemyTarget))
-                {
-                    byte targetTeamId = enemyTarget.TeamId;
-                    List<CombatPawn> targetTeam = CManager.GetPawnsForTeam(targetTeamId);
-                    HashSet<CombatPawn> targetTeamListSet = new HashSet<CombatPawn>(targetTeam);
-                    enemyMove.ChooseTargets(targetTeamListSet);
-                }
-            }
-        }
-
-        // Select other move targets for all of the players if their moves contain a defeated unit
-        foreach (CombatPawn playerPawn in CManager.CombatPlayerList)
-        {
-            // If the pawn's action is already complete, move to the next one
-            if (playerPawn.IsActionComplete)
-            {
-                continue;
-            }
-            PlayerMove playerMove = (PlayerMove)CManager.PawnToMove[playerPawn];
-            foreach (CombatPawn playerTarget in playerMove.MoveTargets)
-            {
-                if (defeatedEnemies.Contains(playerTarget))
-                {
-                    if (playerMove.MoveTargets.Length > 1)
-                    {
-                        playerMove.RemoveTarget(playerTarget);
-                    }
-                    else
-                    {
-                        // TODO - Change target team if all are defeated on the current target team
-                        List<CombatPawn> targetTeamList = new List<CombatPawn>(CManager.GetPawnsForTeam(playerTarget.TeamId));
-                        playerMove.ChooseRandomTargets(targetTeamList);
-                    }
-                }
-                if (defeatedPlayers.Contains(playerTarget))
-                {
-                    if (playerMove.MoveTargets.Length > 1)
-                    {
-                        playerMove.RemoveTarget(playerTarget);
-                    }
-                    else
-                    {
-                        // TODO - Change target team if all are defeated on the current target team
-                        List<CombatPawn> targetTeamList = new List<CombatPawn>(CManager.GetPawnsForTeam(playerPawn.TeamId));
-                        playerMove.ChooseRandomTargets(targetTeamList);
                     }
                 }
             }

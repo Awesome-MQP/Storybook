@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class CombatTeam : MonoBehaviour {
+public abstract class CombatTeam : Photon.PunBehaviour {
 
     [SerializeField]
     private List<CombatPawn> m_pawnsToSpawn = new List<CombatPawn>();
@@ -14,17 +14,36 @@ public abstract class CombatTeam : MonoBehaviour {
 
     private CombatManager m_combatManager;
 
+    private int m_teamId;
+
+    /// <summary>
+    /// Removes the pawn from the PawnsOnTeam list
+    /// </summary>
+    /// <param name="pawnToRemove">The pawn to remove from the list</param>
     public virtual void RemovePawnFromTeam(CombatPawn pawnToRemove)
     {
         m_pawnsOnTeam.Remove(pawnToRemove);
     }
 
+    /// <summary>
+    /// Called at the beginning of combat and initializes the teams
+    /// </summary>
     public abstract void SpawnTeam();
 
+    /// <summary>
+    /// Called when the combat is started
+    /// </summary>
     public abstract void StartCombat();
 
+    /// <summary>
+    /// Called when a new turn starts in combat
+    /// </summary>
     public abstract void StartNewTurn();
 
+    /// <summary>
+    /// Returns true if all of the pawns on the team have been defeated, false otherwise
+    /// </summary>
+    /// <returns>True if all pawns on team defeated, false otherwise</returns>
     public bool IsTeamDefeated()
     {
         if (m_pawnsOnTeam.Count == 0)
@@ -44,6 +63,11 @@ public abstract class CombatTeam : MonoBehaviour {
         return isTeamDefeated;
     }
 
+    /// <summary>
+    /// Checks to see if any pawns have been defeated
+    /// Removes pawn from the list of active pawns if it has been defeated
+    /// </summary>
+    /// <returns></returns>
     public List<CombatPawn> CheckForDefeatedPawns()
     {
         List<CombatPawn> defeatedPawns = new List<CombatPawn>();
@@ -61,14 +85,31 @@ public abstract class CombatTeam : MonoBehaviour {
         return defeatedPawns;
     }
 
+    /// <summary>
+    /// Adds a pawn to the list of pawns that have been spawned by this team
+    /// </summary>
+    /// <param name="pawnSpawned">The pawn that has been spawned</param>
     protected void AddPawnToSpawned(CombatPawn pawnSpawned)
     {
         m_allPawnsSpawned.Add(pawnSpawned);
     }
 
+    /// <summary>
+    /// Adds a pawn to the on team list
+    /// </summary>
+    /// <param name="pawnToAdd">The pawn to add to the list of pawns on the team</param>
     public void AddPawnToTeam(CombatPawn pawnToAdd)
     {
         m_pawnsOnTeam.Add(pawnToAdd);
+    }
+
+    /// <summary>
+    /// Adds a pawn to the list of pawns that will be spawned when the team is initialized
+    /// </summary>
+    /// <param name="pawnToSpawn">The pawn to add to the list</param>
+    public void AddPawnToSpawn(CombatPawn pawnToSpawn)
+    {
+        m_pawnsToSpawn.Add(pawnToSpawn);
     }
 
     public CombatPawn[] PawnsOnTeam
@@ -103,5 +144,28 @@ public abstract class CombatTeam : MonoBehaviour {
 
     public List<CombatPawn> PawnsToSpawn{
         get { return m_pawnsToSpawn; }
+    }
+
+    [SyncProperty]
+    public int TeamId
+    {
+        get { return m_teamId; }
+        set
+        {
+            m_teamId = value;
+            PropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Registers the team with the CombatManager, called on clients
+    /// </summary>
+    /// <param name="teamId">The id of the team to register with the combat manager</param>
+    [PunRPC]
+    public void RegisterTeamLocal(int teamId)
+    {
+        m_teamId = teamId;
+        FindObjectOfType<CombatManager>().RegisterTeamLocal(this);
+        Debug.Log("Registering team");
     }
 }

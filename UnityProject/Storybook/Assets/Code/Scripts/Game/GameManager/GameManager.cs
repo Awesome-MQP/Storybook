@@ -57,6 +57,14 @@ public class GameManager : Photon.PunBehaviour {
             GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(enemyTeam.GetComponent<PhotonView>());
 
+            for(int i = 0; i < PhotonNetwork.playerList.Length; i++)
+            {
+                playerTeam.GetComponent<CombatTeam>().AddPawnToSpawn(m_playerPawn);
+            }
+
+            playerTeam.GetComponent<CombatTeam>().TeamId = 1;
+            enemyTeam.GetComponent<CombatTeam>().TeamId = 2;
+
             List<CombatTeam> combatTeams = new List<CombatTeam>();
             combatTeams.Add(playerTeam.GetComponent<CombatTeam>());
             combatTeams.Add(enemyTeam.GetComponent<CombatTeam>());
@@ -68,21 +76,9 @@ public class GameManager : Photon.PunBehaviour {
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
-            combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
             combatManager.SetCombatTeamList(combatTeams);
 
-            // Get all the player position nodes and set it in the combat manager
-            PlayerPositionNode[] playerPositions = m_combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];
-            List<PlayerPositionNode> playerPositionsList = new List<PlayerPositionNode>(playerPositions);
-            combatManager.SetPlayerPositions(playerPositionsList);
-
-            // Get all the enemy position nodes and set it in the combat manager
-            EnemyPositionNode[] enemyPositions = m_combatInstance.GetComponentsInChildren<EnemyPositionNode>() as EnemyPositionNode[];
-            List<EnemyPositionNode> enemyPositionsList = new List<EnemyPositionNode>(enemyPositions);
-            combatManager.SetEnemyPositions(enemyPositionsList);
-
             m_combatInstances.Add(m_combatInstance);
-            //combatManager.StartCombat();
         }
     }
 

@@ -6,6 +6,7 @@ public class EnemyTeam : CombatTeam {
 
     public override void SpawnTeam()
     {
+        GetComponent<PhotonView>().RPC("RegisterTeamLocal", PhotonTargets.Others, TeamId);
         int i = 0;
         List<EnemyPositionNode> positionNodes = new List<EnemyPositionNode>(FindObjectsOfType<EnemyPositionNode>()); 
         foreach (CombatPawn pawn in PawnsToSpawn)
@@ -13,10 +14,12 @@ public class EnemyTeam : CombatTeam {
             GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, Quaternion.identity, 0);
             PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
-            enemyPawn.SetPawnId(i + 1);
+            enemyPawn.PawnId = i + 1;
+            enemyPawn.TeamId = TeamId;
             enemyPawn.RegisterTeam(this);
             AddPawnToSpawned(enemyPawn);
             AddPawnToTeam(enemyPawn);
+            enemyPawn.AddPawnToTeamLocal();
             i++;
         }
     }

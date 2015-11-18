@@ -371,7 +371,7 @@ public interface IPunCallbacks
     /// </remarks>
     void OnLobbyStatisticsUpdate();
 
-    void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info);
+    void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info, bool isInit);
 
     void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info);
 
@@ -507,6 +507,7 @@ namespace Photon
             PropertyInfo[] properties =
                             GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
+            int propCount = 0;
             for (int i = 0; i < properties.Length; i++)
             {
                 PropertyInfo propertyInfo = properties[i];
@@ -520,9 +521,11 @@ namespace Photon
                     if (syncProperty.IsReliable)
                     {
                         m_propertiesByName.Add(propertyInfo.Name, propertyInfo);
-                        m_propertiesByNumber.Add(i, propertyInfo);
-                        m_propertyNumbersByName.Add(propertyInfo.Name, i);
+                        m_propertiesByNumber.Add(propCount, propertyInfo);
+                        m_propertyNumbersByName.Add(propertyInfo.Name, propCount);
                         m_propertiesBySetter.Add(propertyInfo.GetSetMethod(true), propertyInfo);
+
+                        propCount++;
                     }
                     else
                     {
@@ -930,25 +933,26 @@ namespace Photon
         {
         }
 
-        public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info)
+        public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info, bool isInit)
         {
             if (!m_hasBuildProperties)
                 BuildPropertyInfo();
 
             PhotonView view = gameObject.GetPhotonView();
 
-            stream.SendNext(view.HasSpawned ? m_dirtyBits : uint.MaxValue);
+            stream.SendNext(isInit ? uint.MaxValue : m_dirtyBits);
 
             for (int i = 0; i < m_propertiesByNumber.Count; i++)
             {
-                if(!GetDirtyBit(i))
+                if(!isInit && !GetDirtyBit(i))
                     continue;
 
                 PropertyInfo propertyInfo = m_propertiesByNumber[i];
                 stream.SendNext(propertyInfo.GetValue(this, null));
             }
 
-            ClearDirtyBits();
+            if(!isInit)
+                ClearDirtyBits();
         }
 
         public virtual void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info)
@@ -1014,7 +1018,7 @@ namespace Photon
         private Dictionary<int, PropertyInfo> m_propertiesByNumber = new Dictionary<int, PropertyInfo>();
         private Dictionary<string, int> m_propertyNumbersByName = new Dictionary<string, int>(); 
         private Dictionary<MethodBase, PropertyInfo> m_propertiesBySetter = new Dictionary<MethodBase, PropertyInfo>(); 
-        private uint m_dirtyBits;
+        private uint m_dirtyBits = uint.MaxValue;
 
         private bool m_hasBuildProperties;
 

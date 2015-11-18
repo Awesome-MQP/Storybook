@@ -2377,7 +2377,7 @@ public static class PhotonNetwork
         {
             PhotonView child = ownedChildren[i];
 
-            networkingPeer.OnSerializeReliableWrite(child);
+            networkingPeer.OnSerializeReliableWrite(child, true);
             networkingPeer.OnSerializeUnreliableWrite(child);
 
             serializedReliableData[i] = child.reliableSerializedData;

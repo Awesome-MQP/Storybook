@@ -447,18 +447,18 @@ public class PhotonView : Photon.MonoBehaviour
         hasSpawned = false;
     }
 
-    public void SerializeReliable(PhotonMessageInfo info)
+    public void SerializeReliable(PhotonMessageInfo info, bool isInit)
     {
         PhotonStream stream = new PhotonStream(true, null);
 
-        SerializeComponent(this.observed, stream, info, true);
+        SerializeComponent(this.observed, stream, info, true, isInit);
 
         if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
                 if(ObservedComponents[i])
-                    SerializeComponent(this.ObservedComponents[i], stream, info, true);
+                    SerializeComponent(this.ObservedComponents[i], stream, info, true, isInit);
             }
         }
 
@@ -485,14 +485,14 @@ public class PhotonView : Photon.MonoBehaviour
     {
         PhotonStream stream = new PhotonStream(true, null);
 
-        SerializeComponent(this.observed, stream, info, false);
+        SerializeComponent(this.observed, stream, info, false, false);
 
         if (this.ObservedComponents != null && this.ObservedComponents.Count > 0)
         {
             for (int i = 0; i < this.ObservedComponents.Count; ++i)
             {
                 if(ObservedComponents[i])
-                    SerializeComponent(this.ObservedComponents[i], stream, info, false);
+                    SerializeComponent(this.ObservedComponents[i], stream, info, false, false);
             }
         }
 
@@ -666,7 +666,7 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    protected internal void SerializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
+    protected internal void SerializeComponent(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable, bool isInit)
     {
         if (component == null)
         {
@@ -675,7 +675,7 @@ public class PhotonView : Photon.MonoBehaviour
 
         if (component is MonoBehaviour)
         {
-            ExecuteComponentOnSerialize(component, stream, info, isReliable);
+            ExecuteComponentOnSerialize(component, stream, info, isReliable, isInit);
         }
         else if (component is Transform)
         {
@@ -745,28 +745,23 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    protected internal void ExecuteComponentOnSerialize(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable)
+    protected internal void ExecuteComponentOnSerialize(Component component, PhotonStream stream, PhotonMessageInfo info, bool isReliable, bool isInit)
     {
         if (component != null)
         {
-            if (this.m_OnSerializeMethodInfos.ContainsKey(component) == false)
+            MethodInfo newMethod = null;
+            bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnSerializeReliable" : "OnSerializeUnreliable", out newMethod);
+
+            if (foundMethod == false)
             {
-                MethodInfo newMethod = null;
-                bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnSerializeReliable" : "OnSerializeUnreliable", out newMethod);
-
-                if (foundMethod == false)
-                {
-                    Debug.LogError("The observed monobehaviour (" + component.name + ") of this PhotonView does not implement OnPhotonSerializeView()!");
-                    newMethod = null;
-                }
-
-                this.m_OnSerializeMethodInfos.Add(component, newMethod);
+                Debug.LogError("The observed monobehaviour (" + component.name + ") of this PhotonView does not implement OnPhotonSerializeView()!");
+                return;
             }
 
-            if (this.m_OnSerializeMethodInfos[component] != null)
-            {
-                this.m_OnSerializeMethodInfos[component].Invoke(component, new object[] {stream, info});
-            }
+            if (!isReliable)
+                newMethod.Invoke(component, new object[] {stream, info});
+            else
+                newMethod.Invoke(component, new object[] {stream, info, isInit});
         }
     }
 
@@ -774,24 +769,16 @@ public class PhotonView : Photon.MonoBehaviour
     {
         if (component != null)
         {
-            if (this.m_OnSerializeMethodInfos.ContainsKey(component) == false)
+            MethodInfo newMethod = null;
+            bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnDeserializeReliable" : "OnDeserializeUnreliable", out newMethod);
+
+            if (foundMethod == false)
             {
-                MethodInfo newMethod = null;
-                bool foundMethod = NetworkingPeer.GetMethod(component as MonoBehaviour, isReliable ? "OnDeserializeReliable" : "OnDeserializeUnreliable", out newMethod);
-
-                if (foundMethod == false)
-                {
-                    Debug.LogError("The observed monobehaviour (" + component.name + ") of this PhotonView does not implement a deserializing method!");
-                    newMethod = null;
-                }
-
-                this.m_OnSerializeMethodInfos.Add(component, newMethod);
+                Debug.LogError("The observed monobehaviour (" + component.name + ") of this PhotonView does not implement a deserializing method!");
+                return;
             }
 
-            if (this.m_OnSerializeMethodInfos[component] != null)
-            {
-                this.m_OnSerializeMethodInfos[component].Invoke(component, new object[] { stream, info });
-            }
+            newMethod.Invoke(component, new object[] {stream, info});
         }
     }
 

@@ -371,7 +371,7 @@ public interface IPunCallbacks
     /// </remarks>
     void OnLobbyStatisticsUpdate();
 
-    void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info);
+    void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info, bool isInit);
 
     void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info);
 
@@ -933,25 +933,26 @@ namespace Photon
         {
         }
 
-        public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info)
+        public virtual void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info, bool isInit)
         {
             if (!m_hasBuildProperties)
                 BuildPropertyInfo();
 
             PhotonView view = gameObject.GetPhotonView();
 
-            stream.SendNext(view.HasSpawned ? m_dirtyBits : uint.MaxValue);
+            stream.SendNext(isInit ? uint.MaxValue : m_dirtyBits);
 
             for (int i = 0; i < m_propertiesByNumber.Count; i++)
             {
-                if(!GetDirtyBit(i))
+                if(!isInit && !GetDirtyBit(i))
                     continue;
 
                 PropertyInfo propertyInfo = m_propertiesByNumber[i];
                 stream.SendNext(propertyInfo.GetValue(this, null));
             }
 
-            ClearDirtyBits();
+            if(!isInit)
+                ClearDirtyBits();
         }
 
         public virtual void OnDeserializeReliable(PhotonStream stream, PhotonMessageInfo info)

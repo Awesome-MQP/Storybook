@@ -3446,7 +3446,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     continue; // Block sending on this group
                 }
 
-                OnSerializeReliableWrite(view);
+                OnSerializeReliableWrite(view, false);
                 OnSerializeUnreliableWrite(view);
             }
         }
@@ -3530,11 +3530,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     // calls OnPhotonSerializeView (through ExecuteOnSerialize)
     // the content created here is consumed by receivers in: ReadOnSerialize
-    internal bool OnSerializeReliableWrite(PhotonView view)
+    internal bool OnSerializeReliableWrite(PhotonView view, bool isIntialization)
     {
         PhotonMessageInfo info = new PhotonMessageInfo( this.mLocalActor, this.ServerTimeInMilliSeconds, view );
 
-        view.SerializeReliable(info);
+        view.SerializeReliable(info, isIntialization);
 
         return true;
     }

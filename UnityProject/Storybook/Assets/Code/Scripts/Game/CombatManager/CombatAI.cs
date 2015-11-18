@@ -61,12 +61,12 @@ public abstract class CombatAI : CombatPawn {
 
         // If the chosen move is an attack, the possible targets are the opposing characters
         if (chosenMove.IsMoveAttack) {
-            possibleTargets = GetPawnsOpposing(CManager.AllPawns); 
+            possibleTargets = GetPawnsOpposing(); 
         }
         // Otherwise the possible targets are the characters on the same team
         else
         {
-            possibleTargets = GetPawnsOnTeam(CManager.AllPawns);
+            possibleTargets = GetPawnsOnTeam();
         }
 
         chosenMove.SetMoveTargets(new List<CombatPawn>());

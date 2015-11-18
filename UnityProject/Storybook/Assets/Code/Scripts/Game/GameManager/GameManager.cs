@@ -52,6 +52,15 @@ public class GameManager : Photon.PunBehaviour {
 
         if (PhotonNetwork.isMasterClient)
         {
+            GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
+            GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(enemyTeam.GetComponent<PhotonView>());
+
+            List<CombatTeam> combatTeams = new List<CombatTeam>();
+            combatTeams.Add(playerTeam.GetComponent<CombatTeam>());
+            combatTeams.Add(enemyTeam.GetComponent<CombatTeam>());
+
             List<PlayerEntity> playersEnteringCombat = new List<PlayerEntity>(FindObjectsOfType<PlayerEntity>());
             Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000 * m_combatInstances.Count, m_defaultLocation.y + 1000 * m_combatInstances.Count,
                 m_defaultLocation.z + 1000 * m_combatInstances.Count);
@@ -60,6 +69,7 @@ public class GameManager : Photon.PunBehaviour {
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
             combatManager.SetPlayersToSpawn(PhotonNetwork.playerList.Length);
+            combatManager.SetCombatTeamList(combatTeams);
 
             // Get all the player position nodes and set it in the combat manager
             PlayerPositionNode[] playerPositions = m_combatInstance.GetComponentsInChildren<PlayerPositionNode>() as PlayerPositionNode[];

@@ -22,10 +22,10 @@ public class CombatManager : Photon.PunBehaviour {
     private List<CombatPawn> m_pawnsSpawned = new List<CombatPawn>();
     private List<PlayerPositionNode> m_playerPositionList = new List<PlayerPositionNode>();
     private List<EnemyPositionNode> m_enemyPositionList = new List<EnemyPositionNode>();
+    private List<CombatTeam> m_teamList = new List<CombatTeam>();
     private Animator m_combatStateMachine;
     private CombatState m_currentState;
     private int m_playersToSpawn = 1;
-    private int m_teamsInCombat = 2;
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
@@ -40,19 +40,17 @@ public class CombatManager : Photon.PunBehaviour {
         Camera.main.transform.position = CameraPos.position;
         Camera.main.transform.rotation = Quaternion.identity;
 
+        Debug.Log("Teams in combat = " + m_teamList.Count);
+
         // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>();
         if (PhotonNetwork.isMasterClient)
         {
-            // Spawn and place the player pawns
-            _spawnPlayerPawns(m_playersToSpawn);
-            _placePlayers();
-
-            // Spawn and place the enemy pawns
-            _spawnAIPawns();
-            _placeAIs();
-
-            m_combatStateMachine.SetBool("StartToThink", true);
+            foreach (CombatTeam team in m_teamList)
+            {
+                team.RegisterCombatManager(this);
+            }
+            _spawnTeams();
 
             // Set the combat manager of all the combat state machine states to this object
             CombatState[] allCombatStates = m_combatStateMachine.GetBehaviours<CombatState>();
@@ -63,9 +61,14 @@ public class CombatManager : Photon.PunBehaviour {
 
             // Default current state to think state
             m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
+
+            m_combatStateMachine.SetBool("StartToThink", true);
         }
         else
+        {
             m_combatStateMachine.enabled = false;
+        }
+            
     }
 
     /// <summary>
@@ -93,10 +96,23 @@ public class CombatManager : Photon.PunBehaviour {
     {
         m_submittedMoves = 0;
         m_submittedEnemyMoves = 0;
-        _incrementAIMana();
-        _decrementAllBoosts();
+        foreach (CombatTeam team in m_teamList)
+        {
+            team.StartNewTurn();
+        }
         m_currentState = m_combatStateMachine.GetBehaviour<ThinkState>();
         m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
+    }
+
+    private void _spawnTeams()
+    {
+        foreach (CombatTeam team in m_teamList)
+        {
+            team.SpawnTeam();
+            team.StartCombat();
+            m_allPawns.AddRange(team.PawnsOnTeam);
+        }
+        m_pawnsSpawned = new List<CombatPawn>(m_allPawns.ToArray());
     }
 
     /// <summary>
@@ -284,7 +300,18 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     public CombatPawn[] AllPawns
     {
-        get { return m_allPawns.ToArray(); }
+        get
+        {
+            return m_allPawns.ToArray();
+            /*
+            List<CombatPawn> allPawns = new List<CombatPawn>();
+            foreach(CombatTeam team in m_teamList)
+            {
+                allPawns.AddRange(team.PawnsOnTeam);
+            }
+            return allPawns.ToArray();
+            */
+        }
     }
 
     public void SetAllPawns(List<CombatPawn> allPawns)
@@ -353,12 +380,7 @@ public class CombatManager : Photon.PunBehaviour {
 
     public int TeamsInCombat
     {
-        get { return m_teamsInCombat; }
-    }
-
-    public void SetTeamsInCombat(int teamsInCombat)
-    {
-        m_teamsInCombat = teamsInCombat;
+        get { return m_teamList.Count; }
     }
 
     /// <summary>
@@ -412,6 +434,34 @@ public class CombatManager : Photon.PunBehaviour {
 
     public void RegisterPawnLocal(CombatPawn pawn)
     {
-        m_allPawns.Add(pawn);
+        if (!m_allPawns.Contains(pawn))
+        {
+            m_allPawns.Add(pawn);
+        }
+    }
+
+    public CombatTeam[] TeamList
+    {
+        get { return m_teamList.ToArray(); }
+    }
+
+    public void SetCombatTeamList(List<CombatTeam> teamList)
+    {
+        m_teamList = teamList;
+    }
+
+    public CombatTeam GetTeamForPawn(CombatPawn pawnToGet)
+    {
+        foreach(CombatTeam team in m_teamList)
+        {
+            foreach(CombatPawn pawn in team.PawnsOnTeam)
+            {
+                if (pawn == pawnToGet)
+                {
+                    return team;
+                }
+            }
+        }
+        return null;
     }
 }

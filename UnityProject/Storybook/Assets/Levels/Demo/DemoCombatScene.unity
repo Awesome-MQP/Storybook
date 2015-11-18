@@ -254,7 +254,12 @@ MonoBehaviour:
   m_enemiesForCombat:
   - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
   - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
-  m_playersInCombat: 2
+  m_enemyTeamForCombat: {fileID: 11479944, guid: 2318e80628f177d42b16ef20eadc4eff,
+    type: 2}
+  m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
+    type: 2}
+  m_playerPawn: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
+  m_playersInCombat: 1
 --- !u!23 &1900037248
 MeshRenderer:
   m_ObjectHideFlags: 0

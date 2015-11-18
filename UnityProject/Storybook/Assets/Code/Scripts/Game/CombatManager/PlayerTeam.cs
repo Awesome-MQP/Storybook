@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class PlayerTeam : CombatTeam {
@@ -7,9 +7,18 @@ public class PlayerTeam : CombatTeam {
     public override void SpawnTeam()
     {
         int i = 0;
-        foreach (CombatPawn pawn in PawnsOnTeam)
+        List<PlayerPositionNode> positionNodes = new List<PlayerPositionNode>(FindObjectsOfType<PlayerPositionNode>());
+        foreach (CombatPawn pawn in PawnsToSpawn)
         {
-            pawn.transform.position = PawnPositions[i];
+            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
+            CombatPawn playerPawn = playerObject.GetComponent<CombatPawn>();
+            playerPawn.SetPawnId(i + 1);
+            AddPawnToSpawned(playerPawn);
+            RemovePawnFromTeam(pawn);
+            AddPawnToTeam(playerPawn);
+            playerPawn.RegisterTeam(this);
+            i++;
         }
     }
 

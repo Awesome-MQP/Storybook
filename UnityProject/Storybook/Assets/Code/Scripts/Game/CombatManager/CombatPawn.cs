@@ -43,22 +43,19 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     [SerializeField]
     private byte m_teamId;
 
-    public abstract void OnThink();
+    private CombatTeam m_pawnTeam;
 
-    void Awake()
-    {
-        if (!PhotonNetwork.isMasterClient)
-        {
-            CombatManager m_combatManager = FindObjectOfType<CombatManager>();
-            m_combatManager.RegisterPawnLocal(this);
-        }
-    }
+    public abstract void OnThink();
 
     void Start()
     {
         DontDestroyOnLoad(this);
         m_combatManager = FindObjectOfType<CombatManager>();
         m_scenePhotonView = GetComponent<PhotonView>();
+        if (!PhotonNetwork.isMasterClient)
+        {
+            m_combatManager.RegisterPawnLocal(this);
+        }
     }
 
     /// <summary>
@@ -245,17 +242,11 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// </summary>
     /// <param name="pawnsToSearch">The list of pawns to search through</param>
     /// <returns>The array of pawns that are on the same team as the current pawn</returns>
-    protected CombatPawn[] GetPawnsOnTeam(CombatPawn[] pawnsToSearch)
+    public CombatPawn[] GetPawnsOnTeam()
     {
-        List<CombatPawn> teamPawns = new List<CombatPawn>();
-        foreach (CombatPawn pawn in pawnsToSearch)
-        {
-            if (pawn.TeamId == m_teamId)
-            {
-                teamPawns.Add(pawn);
-            }
-        }
-        return teamPawns.ToArray();
+        CombatManager combatManager = FindObjectOfType<CombatManager>();
+        CombatTeam pawnTeam = combatManager.GetTeamForPawn(this);
+        return pawnTeam.PawnsOnTeam;
     }
 
     /// <summary>
@@ -263,16 +254,30 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// </summary>
     /// <param name="pawnsToSearch">The list of pawns to search through</param>
     /// <returns>The array of pawns that are on opposing teams as the current pawn</returns>
-    protected CombatPawn[] GetPawnsOpposing(CombatPawn[] pawnsToSearch)
+    public CombatPawn[] GetPawnsOpposing()
     {
+        CombatManager combatManager = FindObjectOfType<CombatManager>();
+        CombatTeam pawnTeam = combatManager.GetTeamForPawn(this);
+
         List<CombatPawn> opposingPawns = new List<CombatPawn>();
-        foreach (CombatPawn pawn in pawnsToSearch)
+        CombatTeam[] allTeams = combatManager.TeamList;
+        foreach (CombatTeam team in allTeams)
         {
-            if (pawn.TeamId != m_teamId)
+            if (team != pawnTeam)
             {
-                opposingPawns.Add(pawn);
+                opposingPawns.AddRange(team.PawnsOnTeam);
             }
         }
         return opposingPawns.ToArray();
+    }
+
+    protected CombatTeam PawnTeam
+    {
+        get { return m_pawnTeam; }
+    }
+
+    public void RegisterTeam(CombatTeam team)
+    {
+        m_pawnTeam = team;
     }
 }

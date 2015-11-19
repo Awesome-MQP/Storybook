@@ -184,11 +184,6 @@ public class NetExecuteState : NetworkState {
                 removedList.AddRange(team.CheckForDefeatedPawns());
             }
         }
-
-        foreach (CombatPawn pawn in removedList)
-        {
-            CManager.RemovePlayerFromCombat((CombatPlayer)pawn);
-        }
         return new List<CombatPawn>(removedList.ToArray());
     }
 
@@ -207,12 +202,6 @@ public class NetExecuteState : NetworkState {
                 removedList.AddRange(team.CheckForDefeatedPawns());
             }
         }
-
-        foreach (CombatPawn enemy in removedList)
-        {
-            CManager.RemoveAIFromCombat((CombatAI)enemy);
-        }
-
         return new List<CombatPawn>(removedList.ToArray());
     }
 

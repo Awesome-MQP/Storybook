@@ -6,20 +6,7 @@ using System.Collections.Generic;
 public class CombatManager : Photon.PunBehaviour {
 
     [SerializeField]
-    private CombatPawn m_combatPawnPrefab;
-
-    [SerializeField]
-    private CombatPawn m_enemyPawnPrefab;
-
-    [SerializeField]
     private Transform m_cameraPos;
-
-    private CombatPawn[] m_enemiesToSpawn;
-
-    private int m_submittedMoves = 0;
-    private int m_submittedEnemyMoves = 0;
-    private List<CombatPawn> m_allPawnsActive = new List<CombatPawn>();
-    private List<CombatPawn> m_pawnsSpawned = new List<CombatPawn>();
 
     [SerializeField]
     private List<CombatTeam> m_teamList = new List<CombatTeam>();
@@ -67,13 +54,6 @@ public class CombatManager : Photon.PunBehaviour {
         else
         {
             m_combatStateMachine.enabled = false;
-            /*
-            CombatTeam[] teamList = FindObjectsOfType<CombatTeam>();
-            foreach(CombatTeam team in teamList)
-            {
-                m_teamList.Add(team);
-            }
-            */
         }
             
     }
@@ -95,14 +75,17 @@ public class CombatManager : Photon.PunBehaviour {
         }
     }
 
+    public void RemovePawnMove(CombatPawn pawnToRemove)
+    {
+        m_pawnToCombatMove.Remove(pawnToRemove);
+    }
+
     /// <summary>
     /// Called when a new turn is beginning
     /// Called by the ThinkState
     /// </summary>
     public void StartNewTurn()
     {
-        m_submittedMoves = 0;
-        m_submittedEnemyMoves = 0;
         foreach (CombatTeam team in m_teamList)
         {
             team.StartNewTurn();
@@ -117,9 +100,7 @@ public class CombatManager : Photon.PunBehaviour {
         {
             team.SpawnTeam();
             team.StartCombat();
-            m_allPawnsActive.AddRange(team.ActivePawnsOnTeam);
         }
-        m_pawnsSpawned = new List<CombatPawn>(m_allPawnsActive.ToArray());
     }
 
     /// <summary>
@@ -128,34 +109,6 @@ public class CombatManager : Photon.PunBehaviour {
     public void EndCurrentCombat()
     {
         FindObjectOfType<GameManager>().EndCombat();
-    }
-
-    /// <summary>
-    /// Removes the given player from the combat by removing them from the pawn list and the PawnToMove dictionary
-    /// </summary>
-    /// <param name="playerToRemove">The player to remove</param>
-    public void RemovePlayerFromCombat(CombatPawn playerToRemove)
-    {
-        m_allPawnsActive.Remove(playerToRemove);
-        m_pawnToCombatMove.Remove(playerToRemove);
-    }
-
-    /// <summary>
-    /// Removes the given enemy from the combat by removing them from the enemy list and the PawnToMove dictionary
-    /// </summary>
-    /// <param name="enemyToRemove">The enemy to remove</param>
-    public void RemoveAIFromCombat(CombatAI enemyToRemove)
-    {
-        m_allPawnsActive.Remove(enemyToRemove);
-        m_pawnToCombatMove.Remove(enemyToRemove);
-    }
-
-    /// <summary>
-    /// The number of moves submitted by the players
-    /// </summary>
-    public int MovesSubmitted
-    {
-        get { return m_submittedMoves; }
     }
 
     /// <summary>
@@ -172,11 +125,6 @@ public class CombatManager : Photon.PunBehaviour {
             }
             return allPawns.ToArray();
         }
-    }
-
-    public void SetAllPawns(List<CombatPawn> allPawns)
-    {
-        m_allPawnsActive = allPawns;
     }
 
     /// <summary>
@@ -197,15 +145,6 @@ public class CombatManager : Photon.PunBehaviour {
         get { return m_pawnToCombatMove; }
     }
 
-    /// <summary>
-    /// The list of the enemy pawns to spawn in the combat
-    /// </summary>
-    /// <param name="enemiesToSpawn">The list of enemies that will be spawned</param>
-    public void SetEnemiesToSpawn(CombatPawn[] enemiesToSpawn)
-    {
-        m_enemiesToSpawn = enemiesToSpawn;
-    }
-
     public Transform CameraPos
     {
         get { return m_cameraPos; }
@@ -217,13 +156,14 @@ public class CombatManager : Photon.PunBehaviour {
     }
 
     /// <summary>
-    /// Destroys the game object of all of the pawns that are in the current combat
+    /// Destroys all of the teams in the combat
     /// </summary>
-    public void DestroyAllPawns()
+    public void DestroyAllTeams()
     {
-        foreach(CombatPawn pawn in m_pawnsSpawned)
+        foreach(CombatTeam team in m_teamList)
         {
-            Destroy(pawn.gameObject);
+            team.EndCombat();
+            Destroy(team.gameObject);
         }
     }
 

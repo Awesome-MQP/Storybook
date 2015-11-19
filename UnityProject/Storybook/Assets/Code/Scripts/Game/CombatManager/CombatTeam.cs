@@ -81,8 +81,17 @@ public abstract class CombatTeam : Photon.PunBehaviour {
         foreach(CombatPawn pawn in defeatedPawns)
         {
             RemovePawnFromTeam(pawn);
+            CManager.RemovePawnMove(pawn);
         }
         return defeatedPawns;
+    }
+
+    public virtual void EndCombat()
+    {
+        foreach(CombatPawn pawn in m_allPawnsSpawned)
+        {
+            Destroy(pawn.gameObject);
+        }
     }
 
     /// <summary>

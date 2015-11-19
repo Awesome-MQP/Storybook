@@ -75,7 +75,6 @@ public class GameManager : Photon.PunBehaviour {
             GameObject m_combatInstance = PhotonNetwork.Instantiate("CombatInstance", combatPosition, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
-            combatManager.SetEnemiesToSpawn(m_enemiesForCombat);
             combatManager.SetCombatTeamList(combatTeams);
 
             m_combatInstances.Add(m_combatInstance);
@@ -90,7 +89,7 @@ public class GameManager : Photon.PunBehaviour {
     {
         CombatManager cm = m_combatInstances[0].GetComponent<CombatManager>();
 
-        cm.DestroyAllPawns();
+        cm.DestroyAllTeams();
 
         GameObject currentCombatInstance = m_combatInstances[0];
         m_combatInstances.Remove(currentCombatInstance);

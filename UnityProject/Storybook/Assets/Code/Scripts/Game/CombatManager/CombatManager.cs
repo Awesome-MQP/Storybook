@@ -18,7 +18,7 @@ public class CombatManager : Photon.PunBehaviour {
 
     private int m_submittedMoves = 0;
     private int m_submittedEnemyMoves = 0;
-    private List<CombatPawn> m_allPawns = new List<CombatPawn>();
+    private List<CombatPawn> m_allPawnsActive = new List<CombatPawn>();
     private List<CombatPawn> m_pawnsSpawned = new List<CombatPawn>();
 
     [SerializeField]
@@ -117,9 +117,9 @@ public class CombatManager : Photon.PunBehaviour {
         {
             team.SpawnTeam();
             team.StartCombat();
-            m_allPawns.AddRange(team.PawnsOnTeam);
+            m_allPawnsActive.AddRange(team.ActivePawnsOnTeam);
         }
-        m_pawnsSpawned = new List<CombatPawn>(m_allPawns.ToArray());
+        m_pawnsSpawned = new List<CombatPawn>(m_allPawnsActive.ToArray());
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// <param name="playerToRemove">The player to remove</param>
     public void RemovePlayerFromCombat(CombatPawn playerToRemove)
     {
-        m_allPawns.Remove(playerToRemove);
+        m_allPawnsActive.Remove(playerToRemove);
         m_pawnToCombatMove.Remove(playerToRemove);
     }
 
@@ -146,7 +146,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// <param name="enemyToRemove">The enemy to remove</param>
     public void RemoveAIFromCombat(CombatAI enemyToRemove)
     {
-        m_allPawns.Remove(enemyToRemove);
+        m_allPawnsActive.Remove(enemyToRemove);
         m_pawnToCombatMove.Remove(enemyToRemove);
     }
 
@@ -161,25 +161,22 @@ public class CombatManager : Photon.PunBehaviour {
     /// <summary>
     /// The list of all the pawns in the combat (enemies and players)
     /// </summary>
-    public CombatPawn[] AllPawns
+    public CombatPawn[] AllPawnsActive
     {
         get
         {
-            return m_allPawns.ToArray();
-            /*
             List<CombatPawn> allPawns = new List<CombatPawn>();
             foreach(CombatTeam team in m_teamList)
             {
-                allPawns.AddRange(team.PawnsOnTeam);
+                allPawns.AddRange(team.ActivePawnsOnTeam);
             }
             return allPawns.ToArray();
-            */
         }
     }
 
     public void SetAllPawns(List<CombatPawn> allPawns)
     {
-        m_allPawns = allPawns;
+        m_allPawnsActive = allPawns;
     }
 
     /// <summary>
@@ -230,18 +227,6 @@ public class CombatManager : Photon.PunBehaviour {
         }
     }
 
-    /// <summary>
-    /// Adds a pawn to the list of all pawns if it is not already in the list
-    /// </summary>
-    /// <param name="pawn"></param>
-    public void RegisterPawnLocal(CombatPawn pawn)
-    {
-        if (!m_allPawns.Contains(pawn))
-        {
-            m_allPawns.Add(pawn);
-        }
-    }
-
     public CombatTeam[] TeamList
     {
         get { return m_teamList.ToArray(); }
@@ -250,26 +235,6 @@ public class CombatManager : Photon.PunBehaviour {
     public void SetCombatTeamList(List<CombatTeam> teamList)
     {
         m_teamList = teamList;
-    }
-
-    /// <summary>
-    /// Returns the team that the given pawn is on
-    /// </summary>
-    /// <param name="pawnToGet">The pawn to get the team for</param>
-    /// <returns>The CombatTeam that the given pawn is on</returns>
-    public CombatTeam GetTeamForPawn(CombatPawn pawnToGet)
-    {
-        foreach(CombatTeam team in m_teamList)
-        {
-            foreach(CombatPawn pawn in team.PawnsOnTeam)
-            {
-                if (pawn == pawnToGet)
-                {
-                    return team;
-                }
-            }
-        }
-        return null;
     }
 
     public void RegisterTeamLocal(CombatTeam teamToRegister)

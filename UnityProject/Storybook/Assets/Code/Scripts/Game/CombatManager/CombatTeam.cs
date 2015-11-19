@@ -8,7 +8,7 @@ public abstract class CombatTeam : Photon.PunBehaviour {
 
     private List<CombatPawn> m_allPawnsSpawned = new List<CombatPawn>();
 
-    private List<CombatPawn> m_pawnsOnTeam = new List<CombatPawn>();
+    private List<CombatPawn> m_activePawnsOnTeam = new List<CombatPawn>();
 
     private List<Vector3> m_pawnPositions = new List<Vector3>();
 
@@ -22,7 +22,7 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     /// <param name="pawnToRemove">The pawn to remove from the list</param>
     public virtual void RemovePawnFromTeam(CombatPawn pawnToRemove)
     {
-        m_pawnsOnTeam.Remove(pawnToRemove);
+        m_activePawnsOnTeam.Remove(pawnToRemove);
     }
 
     /// <summary>
@@ -44,15 +44,15 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     /// Returns true if all of the pawns on the team have been defeated, false otherwise
     /// </summary>
     /// <returns>True if all pawns on team defeated, false otherwise</returns>
-    public bool IsTeamDefeated()
+    public virtual bool IsTeamDefeated()
     {
-        if (m_pawnsOnTeam.Count == 0)
+        if (m_activePawnsOnTeam.Count == 0)
         {
             return true;
         }
 
         bool isTeamDefeated = true;
-        foreach (CombatPawn pawn in m_pawnsOnTeam)
+        foreach (CombatPawn pawn in m_activePawnsOnTeam)
         {
             if (pawn.IsAlive)
             {
@@ -68,10 +68,10 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     /// Removes pawn from the list of active pawns if it has been defeated
     /// </summary>
     /// <returns></returns>
-    public List<CombatPawn> CheckForDefeatedPawns()
+    public virtual List<CombatPawn> CheckForDefeatedPawns()
     {
         List<CombatPawn> defeatedPawns = new List<CombatPawn>();
-        foreach (CombatPawn pawn in m_pawnsOnTeam)
+        foreach (CombatPawn pawn in m_activePawnsOnTeam)
         {
             if (!pawn.IsAlive)
             {
@@ -100,7 +100,7 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     /// <param name="pawnToAdd">The pawn to add to the list of pawns on the team</param>
     public void AddPawnToTeam(CombatPawn pawnToAdd)
     {
-        m_pawnsOnTeam.Add(pawnToAdd);
+        m_activePawnsOnTeam.Add(pawnToAdd);
     }
 
     /// <summary>
@@ -112,14 +112,14 @@ public abstract class CombatTeam : Photon.PunBehaviour {
         m_pawnsToSpawn.Add(pawnToSpawn);
     }
 
-    public CombatPawn[] PawnsOnTeam
+    public CombatPawn[] ActivePawnsOnTeam
     {
-        get { return m_pawnsOnTeam.ToArray(); }
+        get { return m_activePawnsOnTeam.ToArray(); }
     }
 
     public void SetPawnsOnTeam(List<CombatPawn> pawnsOnTeam)
     {
-        m_pawnsOnTeam = pawnsOnTeam;
+        m_activePawnsOnTeam = pawnsOnTeam;
     }
 
     public CombatPawn[] AllPawnsSpawned

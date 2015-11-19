@@ -19,7 +19,7 @@ public class EnemyTeam : CombatTeam {
             enemyPawn.RegisterTeam(this);
             AddPawnToSpawned(enemyPawn);
             AddPawnToTeam(enemyPawn);
-            enemyPawn.AddPawnToTeamLocal();
+            enemyPawn.SendPawnTeam();
             i++;
         }
     }
@@ -36,7 +36,7 @@ public class EnemyTeam : CombatTeam {
 
     public override void StartNewTurn()
     {
-        foreach(CombatPawn pawn in PawnsOnTeam)
+        foreach(CombatPawn pawn in ActivePawnsOnTeam)
         {
             pawn.DecrementBoosts();
             if (pawn is CombatAI)

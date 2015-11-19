@@ -25,7 +25,7 @@ public class PlayerTeam : CombatTeam {
             AddPawnToSpawned(playerPawn);
             AddPawnToTeam(playerPawn);
             playerPawn.RegisterTeam(this);
-            playerPawn.AddPawnToTeamLocal();
+            playerPawn.SendPawnTeam();
             i++;
         }
     }
@@ -42,7 +42,7 @@ public class PlayerTeam : CombatTeam {
 
     public override void StartNewTurn()
     {
-        foreach(CombatPawn pawn in PawnsOnTeam)
+        foreach(CombatPawn pawn in ActivePawnsOnTeam)
         {
             pawn.DecrementBoosts();
         }

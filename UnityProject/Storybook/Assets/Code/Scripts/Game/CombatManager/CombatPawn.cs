@@ -36,7 +36,6 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     // Defaults to null because it needs to be able to return null moves
     private CombatMove m_moveForTurn = null;
 
-    [SerializeField]
     private int m_pawnId;
 
     private static PhotonView m_scenePhotonView = null;
@@ -53,10 +52,6 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         DontDestroyOnLoad(this);
         m_combatManager = FindObjectOfType<CombatManager>();
         m_scenePhotonView = GetComponent<PhotonView>();
-        if (!PhotonNetwork.isMasterClient)
-        {
-            m_combatManager.RegisterPawnLocal(this);
-        }
     }
 
     /// <summary>
@@ -243,9 +238,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// <returns>The array of pawns that are on the same team as the current pawn</returns>
     public CombatPawn[] GetPawnsOnTeam()
     {
-        CombatManager combatManager = FindObjectOfType<CombatManager>();
-        CombatTeam pawnTeam = combatManager.GetTeamForPawn(this);
-        return pawnTeam.PawnsOnTeam;
+        return m_pawnTeam.ActivePawnsOnTeam;
     }
 
     /// <summary>
@@ -256,15 +249,14 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public CombatPawn[] GetPawnsOpposing()
     {
         CombatManager combatManager = FindObjectOfType<CombatManager>();
-        CombatTeam pawnTeam = combatManager.GetTeamForPawn(this);
 
         List<CombatPawn> opposingPawns = new List<CombatPawn>();
         CombatTeam[] allTeams = combatManager.TeamList;
         foreach (CombatTeam team in allTeams)
         {
-            if (team != pawnTeam)
+            if (team != m_pawnTeam)
             {
-                opposingPawns.AddRange(team.PawnsOnTeam);
+                opposingPawns.AddRange(team.ActivePawnsOnTeam);
             }
         }
         return opposingPawns.ToArray();
@@ -287,7 +279,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// <summary>
     /// Calls an RPC to add the pawn to the team on all clients
     /// </summary>
-    public void AddPawnToTeamLocal()
+    public void SendPawnTeam()
     {
         m_scenePhotonView = GetComponent<PhotonView>();
         m_scenePhotonView.RPC("RPCAddPawnToTeam", PhotonTargets.Others);

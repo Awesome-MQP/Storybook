@@ -231,7 +231,7 @@ public class NetExecuteState : NetworkState {
         {
             if (!(team is PlayerTeam))
             {
-                foreach (CombatPawn pawn in team.PawnsOnTeam)
+                foreach (CombatPawn pawn in team.ActivePawnsOnTeam)
                 {
                     if (pawn.IsActionComplete)
                     {
@@ -258,7 +258,7 @@ public class NetExecuteState : NetworkState {
 
             else
             {
-                foreach(CombatPawn pawn in team.PawnsOnTeam)
+                foreach(CombatPawn pawn in team.ActivePawnsOnTeam)
                 {
                     // If the pawn's action is already complete, move to the next one
                     if (pawn.IsActionComplete)
@@ -328,7 +328,7 @@ public class NetExecuteState : NetworkState {
 
     private void _resetAllPawns()
     {
-        foreach (CombatPawn pawn in CManager.AllPawns)
+        foreach (CombatPawn pawn in CManager.AllPawnsActive)
         {
             pawn.ResetMove();
             pawn.SetIsActionComplete(false);

@@ -27,7 +27,7 @@ public class NetThinkState : NetworkState {
         bool areAllMovesSubmitted = true;
 
         // Iterate through all of the pawns in the combat and submit their move to the combat manager if they have chosen one
-        foreach (CombatPawn combatPawn in CManager.AllPawns)
+        foreach (CombatPawn combatPawn in CManager.AllPawnsActive)
         {
             if (!combatPawn.HasSubmittedMove)
             {

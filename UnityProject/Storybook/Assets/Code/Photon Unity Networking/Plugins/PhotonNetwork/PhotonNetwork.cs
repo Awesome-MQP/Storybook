@@ -2347,14 +2347,7 @@ public static class PhotonNetwork
 
         view.RebuildRelevance();
 
-        List<PhotonPlayer> relevantPlayerList = new List<PhotonPlayer>(players);
-        for (int i = 0; i < players.Length; i++)
-        {
-            PhotonPlayer photonPlayer = players[i];
-            if (!view.IsRelevantTo(photonPlayer))
-                relevantPlayerList.RemoveAt(i);
-        }
-        PhotonPlayer[] relevantPlayers = relevantPlayerList.ToArray();
+        PhotonPlayer[] relevantPlayers = view.RelevantPlayers;
 
         //find all children that belong to us
         PhotonView[] children = view.GetComponentsInChildren<PhotonView>(true);
@@ -2384,7 +2377,7 @@ public static class PhotonNetwork
         {
             PhotonView child = ownedChildren[i];
 
-            networkingPeer.OnSerializeReliableWrite(child);
+            networkingPeer.OnSerializeReliableWrite(child, true);
             networkingPeer.OnSerializeUnreliableWrite(child);
 
             serializedReliableData[i] = child.reliableSerializedData;
@@ -2493,7 +2486,7 @@ public static class PhotonNetwork
         for (int i = 0; i < players.Length; i++)
         {
             PhotonPlayer photonPlayer = players[i];
-            if (view.IsRelevantTo(photonPlayer))
+            if (view.CheckRelevance(photonPlayer))
                 relevantPlayerList.Add(photonPlayer.ID);
         }
         int[] relevantPlayers = relevantPlayerList.ToArray();
@@ -2571,7 +2564,7 @@ public static class PhotonNetwork
         evData[(byte)5] = root.transform.position;
         evData[(byte)6] = root.transform.rotation;
         evData[(byte)7] = root.ownerId;
-        evData[(byte)8] = root.Controller;
+        evData[(byte)8] = root.ControllerActorNr;
 
         //TODO: Add instantiated data here
 

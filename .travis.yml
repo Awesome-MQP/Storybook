@@ -6,6 +6,7 @@ branches:
   only:
     - master
     - dev
+	-TravisTesting
 
 language: objective-c
 osx_image: xcode61

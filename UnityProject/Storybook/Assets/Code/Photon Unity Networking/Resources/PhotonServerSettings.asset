@@ -45,4 +45,6 @@ MonoBehaviour:
   - StopPlayer
   - TransitionToCombat
   - TransitionToDungeonRPC
+  - RPCAddPawnToTeam
+  - RegisterTeamLocal
   DisableAutoOpenWizard: 1

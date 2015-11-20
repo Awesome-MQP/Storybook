@@ -16,6 +16,7 @@ public class LoseState : CombatState {
         if (PhotonNetwork.isMasterClient)
         {
             m_netLoseStateObject = PhotonNetwork.Instantiate("NetLoseState", Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(m_netLoseStateObject.GetComponent<PhotonView>());
             m_netLoseState = m_netLoseStateObject.GetComponent<NetLoseState>();
         }
     }
@@ -53,7 +54,7 @@ public class LoseState : CombatState {
         // Destroy the NetLoseState when exiting and end the combat
         if (m_netLoseStateObject != null)
         {
-            PhotonNetwork.Destroy(m_netLoseStateObject);
+            Destroy(m_netLoseStateObject);
         }
         m_isExiting = true;
         ResetBools();

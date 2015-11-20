@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class TestEnemy : CombatEnemy
+public class TestAI : CombatAI
 {
 
     public override void OnThink()
@@ -12,7 +12,7 @@ public class TestEnemy : CombatEnemy
         {
             PhotonView m_scenePhontonView = GetComponent<PhotonView>();
             // Randomly select a player pawn to attack
-            EnemyMove moveSelected = CreateMove();
+            AIMove moveSelected = CreateMove();
             SetMoveForTurn(moveSelected);
             SetHasSubmittedMove(true);
             Debug.Log("Enemy submitted move");
@@ -46,7 +46,7 @@ public class TestEnemy : CombatEnemy
     private void SendEnemyMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
         Debug.Log("Other enemy submitted move");
-        EnemyMove chosenMove = EnemyMoves[moveIndex];
+        AIMove chosenMove = EnemyMoves[moveIndex];
         List<CombatPawn> targets = new List<CombatPawn>();
 
         // Determine the targets of the move based on the list of target ids
@@ -56,14 +56,14 @@ public class TestEnemy : CombatEnemy
         if (chosenMove.IsMoveAttack)
         {
             Debug.Log("Enemy move is an attack");
-            possibleTargetList = CManager.PlayerPawnList;
+            possibleTargetList = GetPawnsOpposing();
         }
 
         // If the move is a support move, the other enemies are the possible targets
         else
         {
             Debug.Log("Enemy move is not an attack");
-            possibleTargetList = CManager.EnemyList;
+            possibleTargetList = GetPawnsOnTeam();
         }
 
         // Iterate through the pawns in the possibleTargetList and find the targets

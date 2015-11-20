@@ -15,5 +15,3 @@ before-install:
 - chmod +x Scripts
 install:
 - ./Scripts/install.sh
-script:
-- ./Scripts/build.sh

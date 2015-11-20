@@ -12,5 +12,5 @@ osx_image: xcode61
 rvm:
 - 2.1.2
 install:
-- chmod +x Scripts
+- chmod -R +x Scripts
 - ./Scripts/install.sh

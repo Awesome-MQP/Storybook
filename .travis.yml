@@ -14,7 +14,7 @@ rvm:
 install:
 - chmod -R +x Scripts
 - ./Scripts/install.sh
-build:
+script:
 - chmod -R +x Scripts
 - ./Scripts/build.sh
 cache:

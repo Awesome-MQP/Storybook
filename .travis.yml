@@ -14,3 +14,9 @@ rvm:
 install:
 - chmod -R +x Scripts
 - ./Scripts/install.sh
+build:
+- chmod -R +x Scripts
+- ./Scripts/build.sh
+cache:
+  directories:
+  - /Applications/Unity/Unity.app/Contents/MacOS/

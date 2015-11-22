@@ -6,9 +6,9 @@ using System.Collections;
 public class CombatRoom : RoomObject {
 
 	// Use this for initialization
-	protected override void Start ()
+	protected override void Awake ()
     {
-        base.Start();
+        base.Awake();
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.

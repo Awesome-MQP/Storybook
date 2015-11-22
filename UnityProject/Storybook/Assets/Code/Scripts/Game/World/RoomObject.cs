@@ -41,7 +41,7 @@ public abstract class RoomObject : MonoBehaviour{
     [SerializeField]
     private Transform m_player4Pos;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         DontDestroyOnLoad(this);
     }

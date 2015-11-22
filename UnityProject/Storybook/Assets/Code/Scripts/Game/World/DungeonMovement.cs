@@ -42,7 +42,7 @@ public class DungeonMovement : Photon.PunBehaviour {
             {
                 PhotonNetwork.LoadLevel("DemoCombatScene");
                 m_scenePhotonView.RPC("TransitionToCombat", PhotonTargets.All);
-                FindObjectOfType<GameManager>().StartCombat(null);
+                FindObjectOfType<GameManager>().StartCombat();
             }
         }
     }

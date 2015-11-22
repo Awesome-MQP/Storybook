@@ -366,4 +366,9 @@ public class MapManager : MonoBehaviour {
     {
 
     }
+
+    public void GoToNewFloor()
+    {
+
+    }
 }

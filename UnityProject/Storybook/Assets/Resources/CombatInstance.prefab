@@ -48,7 +48,7 @@ GameObject:
   - 4: {fileID: 400336}
   m_Layer: 0
   m_Name: Combat Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -799,16 +799,18 @@ MonoBehaviour:
   group: 0
   prefixBackup: -1
   observed: {fileID: 0}
-  synchronization: 3
+  shouldSync: 0
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 11411404}
+  - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11430830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1006,7 +1008,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: ObservedComponents.Array.data[0]
       value: 
-      objectReference: {fileID: 11411404}
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
       value: 1
@@ -1038,6 +1040,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: shouldSync
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: MainCamera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

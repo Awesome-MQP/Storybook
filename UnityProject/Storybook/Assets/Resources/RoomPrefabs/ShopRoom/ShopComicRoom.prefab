@@ -464,7 +464,7 @@ GameObject:
   - 4: {fileID: 438262}
   - 114: {fileID: 11478342}
   m_Layer: 0
-  m_Name: EmptyComicRoom
+  m_Name: ShopComicRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

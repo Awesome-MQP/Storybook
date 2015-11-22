@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class TestEnemyBoostMove : EnemyMove {
+public class TestEnemyBoostMove : AIMove {
 
     private bool IS_MOVE_ATTACK = false;
 

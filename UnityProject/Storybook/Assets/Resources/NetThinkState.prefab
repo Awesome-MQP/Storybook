@@ -44,7 +44,7 @@ MonoBehaviour:
   group: 0
   prefixBackup: -1
   observed: {fileID: 0}
-  synchronization: 0
+  shouldSync: 1
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
@@ -52,8 +52,10 @@ MonoBehaviour:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
-  instantiationId: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11454998
 MonoBehaviour:
   m_ObjectHideFlags: 1

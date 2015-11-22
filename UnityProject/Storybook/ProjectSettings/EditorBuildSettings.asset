@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Demo/GameLobby.unity
+    path: Assets/Levels/Demo/GameLobby.unity
   - enabled: 1
-    path: Assets/Scenes/Demo/DemoCombatScene.unity
+    path: Assets/Levels/Demo/DemoCombatScene.unity
   - enabled: 1
-    path: Assets/Scenes/Demo/TestRoomPlacement.unity
+    path: Assets/Levels/Demo/TestRoomPlacement.unity

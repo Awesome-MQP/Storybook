@@ -24,6 +24,7 @@ public class ThinkState : CombatState {
         if (PhotonNetwork.isMasterClient)
         {
             m_netThinkStateObject = PhotonNetwork.Instantiate("NetThinkState", Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(m_netThinkStateObject.GetComponent<PhotonView>());
             m_netThinkState = m_netThinkStateObject.GetComponent<NetThinkState>();
         }
     }
@@ -63,7 +64,7 @@ public class ThinkState : CombatState {
         // Delete the NetThinkState
         if (m_netThinkStateObject != null)
         {
-            PhotonNetwork.Destroy(m_netThinkStateObject);
+            Destroy(m_netThinkStateObject);
         }
         m_netThinkStateObject = null;
         m_netThinkState = null;

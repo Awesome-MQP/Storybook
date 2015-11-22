@@ -40,6 +40,11 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     private static PhotonView m_scenePhotonView = null;
 
+    [SerializeField]
+    private int m_teamId;
+
+    private CombatTeam m_pawnTeam;
+
     public abstract void OnThink();
 
     void Start()
@@ -194,14 +199,26 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
     }
 
+    [SyncProperty]
     public int PawnId
     {
         get { return m_pawnId; }
+        set
+        {
+            m_pawnId = value;
+            PropertyChanged();
+        }
     }
 
-    public void SetPawnId(int newPawnId)
+    [SyncProperty]
+    public int TeamId
     {
-        m_pawnId = newPawnId;
+        get { return m_teamId; }
+        set
+        {
+            m_teamId = value;
+            PropertyChanged();
+        }
     }
 
     public PhotonView ScenePhotonView
@@ -209,17 +226,73 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         get { return m_scenePhotonView;  }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    public void SetTeamId(byte teamId)
     {
-        if (stream.isWriting)
+        m_teamId = teamId;
+    }
+
+    /// <summary>
+    /// Gets an array of all the pawns on the same team as this one
+    /// </summary>
+    /// <param name="pawnsToSearch">The list of pawns to search through</param>
+    /// <returns>The array of pawns that are on the same team as the current pawn</returns>
+    public CombatPawn[] GetPawnsOnTeam()
+    {
+        return m_pawnTeam.ActivePawnsOnTeam;
+    }
+
+    /// <summary>
+    /// Gets an array of all the pawns on the opposing teams of this pawn
+    /// </summary>
+    /// <param name="pawnsToSearch">The list of pawns to search through</param>
+    /// <returns>The array of pawns that are on opposing teams as the current pawn</returns>
+    public CombatPawn[] GetPawnsOpposing()
+    {
+        CombatManager combatManager = FindObjectOfType<CombatManager>();
+
+        List<CombatPawn> opposingPawns = new List<CombatPawn>();
+        CombatTeam[] allTeams = combatManager.TeamList;
+        foreach (CombatTeam team in allTeams)
         {
-            // Send the pawnId to the other clients
-            stream.SendNext(PawnId);
+            if (team != m_pawnTeam)
+            {
+                opposingPawns.AddRange(team.ActivePawnsOnTeam);
+            }
         }
-        else
-        {
-            // Receive the pawnId
-            m_pawnId = (int) stream.ReceiveNext();
-        }
+        return opposingPawns.ToArray();
+    }
+
+
+    /// <summary>
+    /// The team that the pawn is currently a part of
+    /// </summary>
+    protected CombatTeam PawnTeam
+    {
+        get { return m_pawnTeam; }
+    }
+
+    public void RegisterTeam(CombatTeam team)
+    {
+        m_pawnTeam = team;
+    }
+
+    /// <summary>
+    /// Calls an RPC to add the pawn to the team on all clients
+    /// </summary>
+    public void SendPawnTeam()
+    {
+        m_scenePhotonView = GetComponent<PhotonView>();
+        m_scenePhotonView.RPC("RPCAddPawnToTeam", PhotonTargets.Others);
+    }
+
+    /// <summary>
+    /// Adds the pawn to its corresponding team in the combat manager
+    /// </summary>
+    [PunRPC]
+    public void RPCAddPawnToTeam()
+    {
+        CombatManager combatManager = FindObjectOfType<CombatManager>();
+        CombatTeam pawnTeam = combatManager.GetTeamById(m_teamId);
+        pawnTeam.AddPawnToTeam(this);
     }
 }

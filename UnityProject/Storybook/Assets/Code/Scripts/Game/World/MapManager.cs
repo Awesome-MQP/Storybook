@@ -1,13 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MapManager : MonoBehaviour {
 
-    [SerializeField]
-    private int m_worldMaxXSize = 12;
+    struct Point
+    {
+        public int x, y;
+        public Point(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     [SerializeField]
-    private int m_worldMaxYSize = 12;
+    private int m_worldMaxXSize = 5;
+
+    [SerializeField]
+    private int m_worldMaxYSize = 5;
 
     [SerializeField]
     private RoomObject[,] m_worldGrid; // Creates a 2D array to place rooms
@@ -15,13 +26,23 @@ public class MapManager : MonoBehaviour {
     [SerializeField]
     private RoomObject m_roomPrefab;
 
+    [SerializeField]
+    private int m_minRoomsStartToExit = 10;
+
+    private RoomData[,] m_worldMapData;
+
     private int m_defaultRoomSize = 20; // Default room size (in blocks in Unity editor)
+
+    public enum RoomType { Start, Exit, Shop };
+
+    private List<Point> pathFromStartToExit = new List<Point>();
 
     // Initialize
     void Awake()
     {
         DontDestroyOnLoad(this);
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
+        m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
 	
     // Place a new room in the world.
@@ -249,5 +270,100 @@ public class MapManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void GenerateMap()
+    {
+
+    }
+    
+    public void PlaceSpecialRooms()
+    {
+
+    }
+
+    public void PlaceStart()
+    {
+        bool isSpotOccupied = true;
+        int startX = 0;
+        int startY = 0;
+        while (isSpotOccupied)
+        {
+            startX = UnityEngine.Random.Range(0, m_worldMaxXSize - 1);
+            startY = UnityEngine.Random.Range(0, m_worldMaxYSize - 1);
+            if (m_worldMapData[startX, startY] == null)
+            {
+                isSpotOccupied = false;
+            }
+        }
+        bool isNorthDoorActive = true;
+        bool isEastDoorActive = true;
+        bool isSouthDoorActive = true;
+        bool isWestDoorActive = true;
+        if (startY == 0)
+        {
+            isNorthDoorActive = false;
+        }
+        if (startX == m_worldMaxXSize - 1)
+        {
+            isEastDoorActive = false;
+        }
+        if (startY == m_worldMaxYSize - 1)
+        {
+            isSouthDoorActive = false;
+        }
+        if (startX == 0)
+        {
+            isWestDoorActive = false;
+        }
+
+        RoomData startingRoom = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive);
+        startingRoom.RoomType = RoomType.Start;
+        m_worldMapData[startX, startY] = startingRoom;
+    }
+
+    public void PlaceExit()
+    {
+        bool isSpotOccupied = true;
+        int startX = 0;
+        int startY = 0;
+        while (isSpotOccupied)
+        {
+            startX = UnityEngine.Random.Range(0, m_worldMaxXSize - 1);
+            startY = UnityEngine.Random.Range(0, m_worldMaxYSize - 1);
+            if (m_worldMapData[startX, startY] == null)
+            {
+                isSpotOccupied = false;
+            }
+        }
+        bool isNorthDoorActive = true;
+        bool isEastDoorActive = true;
+        bool isSouthDoorActive = true;
+        bool isWestDoorActive = true;
+        if (startY == 0)
+        {
+            isNorthDoorActive = false;
+        }
+        if (startX == m_worldMaxXSize - 1)
+        {
+            isEastDoorActive = false;
+        }
+        if (startY == m_worldMaxYSize - 1)
+        {
+            isSouthDoorActive = false;
+        }
+        if (startX == 0)
+        {
+            isWestDoorActive = false;
+        }
+
+        RoomData startingRoom = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive);
+        startingRoom.RoomType = RoomType.Exit;
+        m_worldMapData[startX, startY] = startingRoom;
+    }
+
+    public void CreatePathFromStartToExit()
+    {
+
     }
 }

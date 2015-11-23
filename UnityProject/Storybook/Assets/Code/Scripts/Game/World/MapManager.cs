@@ -12,13 +12,18 @@ public class MapManager : MonoBehaviour {
             this.x = x;
             this.y = y;
         }
+
+        public override string ToString()
+        {
+            return ("(" + x.ToString() + ", " + y.ToString() + ")");
+        }
     }
 
     [SerializeField]
-    private int m_worldMaxXSize = 5;
+    private int m_worldMaxXSize = 4;
 
     [SerializeField]
-    private int m_worldMaxYSize = 5;
+    private int m_worldMaxYSize = 4;
 
     [SerializeField]
     private RoomObject[,] m_worldGrid; // Creates a 2D array to place rooms
@@ -27,15 +32,18 @@ public class MapManager : MonoBehaviour {
     private RoomObject m_roomPrefab;
 
     [SerializeField]
-    private int m_minRoomsStartToExit = 10;
+    private int m_minRoomsStartToExit = 3;
 
     private RoomData[,] m_worldMapData;
 
     private int m_defaultRoomSize = 20; // Default room size (in blocks in Unity editor)
 
-    public enum RoomType { Start, Exit, Shop };
+    public enum RoomType { None = 0, Start, Combat, Exit, Shop };
 
-    private List<Point> pathFromStartToExit = new List<Point>();
+    private List<Point> m_pathFromStartToExit = new List<Point>();
+
+    private Point m_startPoint;
+    private Point m_exitPoint;
 
     // Initialize
     void Awake()
@@ -44,7 +52,12 @@ public class MapManager : MonoBehaviour {
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
         m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
-	
+
+    void Start()
+    {
+        GenerateMap();
+    }
+
     // Place a new room in the world.
     // The MapMgr is not concerned with the contents of the room, just that it can be placed.
     // 
@@ -53,19 +66,19 @@ public class MapManager : MonoBehaviour {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
-        if ((placeX < 0 || placeX >= m_worldMaxXSize) || 
+        if ((placeX < 0 || placeX >= m_worldMaxXSize) ||
             (placeY < 0 || placeY >= m_worldMaxYSize)) {
             return null;
         }
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
-        if(m_worldGrid[placeX, placeY] != null) {
+        if (m_worldGrid[placeX, placeY] != null) {
             return null;
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
         Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
-        RoomObject room = (RoomObject) Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
+        RoomObject room = (RoomObject)Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
         room.RoomLocation = gridPosition;
         _determineDoorPlacement(gridPosition, room);
         _checkDoorRooms(gridPosition, room);
@@ -203,7 +216,7 @@ public class MapManager : MonoBehaviour {
         int doorIndex;
 
         // Iterate through all of the doors in the room to determine its index
-        for(doorIndex = 0; doorIndex < roomDoors.Length; doorIndex++)
+        for (doorIndex = 0; doorIndex < roomDoors.Length; doorIndex++)
         {
             if (roomDoors[doorIndex] == entryDoor)
             {
@@ -272,17 +285,44 @@ public class MapManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Generates the map for the floor, which includes the start, exit, doors that will be active and the placement of special rooms
+    /// </summary>
     public void GenerateMap()
     {
-
+        Debug.Log("Generating Map");
+        _placeStart();
+        _placeExit();
+        _createPathFromStartToExit();
+        _placeSpecialRooms();
+        Debug.Log("Map Generated");
+        Debug.Log("Start = " + m_startPoint.ToString());
+        Debug.Log("Exit = " + m_exitPoint.ToString());
+        for (int i = 0; i < m_worldMaxXSize; i++)
+        {
+            for (int j = 0; j < m_worldMaxYSize; j++)
+            {
+                Point currentPoint = new Point(i, j);
+                RoomData currentRoom = m_worldMapData[i, j];
+                Debug.Log("Position = " + currentPoint.ToString());
+                Debug.Log("Current Room: NorthDoor = " + currentRoom.IsNorthDoorActive + "| East Door = " + currentRoom.IsEastDoorActive +
+                    "| South Door = " + currentRoom.IsSouthDoorActive + "| West Door = " + currentRoom.IsWestDoorActive);
+            }
+        }
     }
-    
-    public void PlaceSpecialRooms()
+
+    /// <summary>
+    /// Randomly chooses locations for a shop or other special room types
+    /// </summary>
+    private void _placeSpecialRooms()
     {
 
     }
 
-    public void PlaceStart()
+    /// <summary>
+    /// Randomly chooses a point on the map to put the starting room
+    /// </summary>
+    private void _placeStart()
     {
         bool isSpotOccupied = true;
         int startX = 0;
@@ -291,80 +331,139 @@ public class MapManager : MonoBehaviour {
         {
             startX = UnityEngine.Random.Range(0, m_worldMaxXSize - 1);
             startY = UnityEngine.Random.Range(0, m_worldMaxYSize - 1);
-            if (m_worldMapData[startX, startY] == null)
+            if (m_worldMapData[startX, startY].RoomType == RoomType.None)
             {
                 isSpotOccupied = false;
             }
         }
-        bool isNorthDoorActive = true;
-        bool isEastDoorActive = true;
-        bool isSouthDoorActive = true;
-        bool isWestDoorActive = true;
-        if (startY == 0)
-        {
-            isNorthDoorActive = false;
-        }
-        if (startX == m_worldMaxXSize - 1)
-        {
-            isEastDoorActive = false;
-        }
-        if (startY == m_worldMaxYSize - 1)
-        {
-            isSouthDoorActive = false;
-        }
-        if (startX == 0)
-        {
-            isWestDoorActive = false;
-        }
 
-        RoomData startingRoom = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive);
-        startingRoom.RoomType = RoomType.Start;
+        RoomData startingRoom = new RoomData(false, false, false, false, RoomType.Start);
         m_worldMapData[startX, startY] = startingRoom;
+        m_startPoint = new Point(startX, startY);
     }
 
-    public void PlaceExit()
+    /// <summary>
+    /// Randomly chooses a place on the map to place the exit
+    /// </summary>
+    private void _placeExit()
     {
         bool isSpotOccupied = true;
-        int startX = 0;
-        int startY = 0;
+        int exitX = 0;
+        int exitY = 0;
         while (isSpotOccupied)
         {
-            startX = UnityEngine.Random.Range(0, m_worldMaxXSize - 1);
-            startY = UnityEngine.Random.Range(0, m_worldMaxYSize - 1);
-            if (m_worldMapData[startX, startY] == null)
+            exitX = UnityEngine.Random.Range(0, m_worldMaxXSize - 1);
+            exitY = UnityEngine.Random.Range(0, m_worldMaxYSize - 1);
+            if (m_worldMapData[exitX, exitY].RoomType == RoomType.None)
             {
                 isSpotOccupied = false;
             }
         }
-        bool isNorthDoorActive = true;
-        bool isEastDoorActive = true;
-        bool isSouthDoorActive = true;
-        bool isWestDoorActive = true;
-        if (startY == 0)
-        {
-            isNorthDoorActive = false;
-        }
-        if (startX == m_worldMaxXSize - 1)
-        {
-            isEastDoorActive = false;
-        }
-        if (startY == m_worldMaxYSize - 1)
-        {
-            isSouthDoorActive = false;
-        }
-        if (startX == 0)
-        {
-            isWestDoorActive = false;
-        }
 
-        RoomData startingRoom = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive);
-        startingRoom.RoomType = RoomType.Exit;
-        m_worldMapData[startX, startY] = startingRoom;
+        RoomData exitRoom = new RoomData(false, false, false, false, RoomType.Exit);
+        m_worldMapData[exitX, exitY] = exitRoom;
+        m_exitPoint = new Point(exitX, exitY);
     }
 
-    public void CreatePathFromStartToExit()
+    /// <summary>
+    /// Creates the path from the start to the exit as well as the other doors that will be active on the floor
+    /// </summary>
+    private void _createPathFromStartToExit()
     {
+        _depthBranch(0, m_startPoint);
+    }
 
+    private void _depthBranch(int depth, Point position)
+    {
+        Debug.Log("Calling depthBranch on position " + position.ToString() + " , Depth = " + depth);
+        List<Point> validPositions = _getSurroundingPositions(position);
+        while (validPositions.Count > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, validPositions.Count - 1);
+            Point newPos = validPositions[randomIndex];
+            if (_positionCheck(depth, newPos))
+            {
+                RoomData newPosRoomData = new RoomData(false, false, false, false, RoomType.Combat);
+                m_worldMapData[newPos.x, newPos.y] = newPosRoomData;
+                _connectRooms(position, newPos);
+                _depthBranch(depth + 1, newPos);
+            }
+            validPositions.Remove(newPos);
+        }
+    }
+
+    private void _connectRooms(Point currentRoomPos, Point newRoomPos)
+    {
+        RoomData currentRoom = m_worldMapData[currentRoomPos.x, currentRoomPos.y];
+        RoomData newRoom = m_worldMapData[newRoomPos.x, newRoomPos.y];
+        if (newRoomPos.y < currentRoomPos.y)
+        {
+            currentRoom.IsWestDoorActive = true;
+            newRoom.IsEastDoorActive = true;
+        }
+        else if (newRoomPos.y > currentRoomPos.y)
+        {
+            currentRoom.IsEastDoorActive = true;
+            newRoom.IsWestDoorActive = true;
+        }
+        else if (newRoomPos.x < currentRoomPos.x)
+        {
+            currentRoom.IsNorthDoorActive = true;
+            newRoom.IsSouthDoorActive = true;
+        }
+        else if (newRoomPos.x > currentRoomPos.x)
+        {
+            currentRoom.IsSouthDoorActive = true;
+            newRoom.IsNorthDoorActive = true;
+        }
+        m_worldMapData[currentRoomPos.x, currentRoomPos.y] = currentRoom;
+        m_worldMapData[newRoomPos.x, newRoomPos.y] = newRoom;
+    }
+
+    private bool _positionCheck(int depth, Point position)
+    {
+        bool doesPositionPass = true;
+        if (position.x >= m_worldMaxXSize || position.x < 0 || position.y >= m_worldMaxYSize || position.y < 0)
+        {
+            doesPositionPass = false;
+        }
+        RoomData roomAtPos = m_worldMapData[position.x, position.y];
+        if (roomAtPos.RoomType == RoomType.Exit && depth < m_minRoomsStartToExit)
+        {
+            doesPositionPass = false;
+        }
+        if (roomAtPos.RoomType != RoomType.None && roomAtPos.RoomType != RoomType.Exit)
+        {
+            doesPositionPass = false;
+        }
+        return doesPositionPass;
+    }
+
+    private List<Point> _getSurroundingPositions(Point position)
+    {
+        List<Point> surroundingPositions = new List<Point>();
+        if (position.y + 1 < m_worldMaxYSize)
+        {
+            Point validPos = new Point(position.x, position.y + 1);
+            surroundingPositions.Add(validPos);
+        }
+        if (position.y - 1 >= 0)
+        {
+            Point validPos = new Point(position.x, position.y - 1);
+            surroundingPositions.Add(validPos);
+        }
+        if (position.x + 1 < m_worldMaxXSize)
+        {
+            Point validPos = new Point(position.x + 1, position.y);
+            surroundingPositions.Add(validPos);
+        }
+        if (position.x - 1 >= 0)
+        {
+            Point validPos = new Point(position.x - 1, position.y);
+            surroundingPositions.Add(validPos);
+        }
+        Debug.Log("Valid Positions for " + position.ToString() + " = " + surroundingPositions.Count);
+        return surroundingPositions;
     }
 
     public void GoToNewFloor()

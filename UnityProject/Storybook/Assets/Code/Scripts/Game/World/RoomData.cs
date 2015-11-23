@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RoomData : MonoBehaviour {
+public struct RoomData {
 
     private bool m_isNorthDoorActive;
     private bool m_isEastDoorActive;
@@ -9,12 +9,13 @@ public class RoomData : MonoBehaviour {
     private bool m_isWestDoorActive;
     private MapManager.RoomType m_roomType;
 
-    public RoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive)
+    public RoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, MapManager.RoomType roomType)
     {
         m_isNorthDoorActive = isNorthDoorActive;
         m_isEastDoorActive = isEastDoorActive;
         m_isSouthDoorActive = isSouthDoorActive;
         m_isWestDoorActive = isWestDoorActive;
+        m_roomType = roomType;
     }
 
     public MapManager.RoomType RoomType

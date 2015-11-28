@@ -8,6 +8,9 @@ public struct RoomData {
     private bool m_isSouthDoorActive;
     private bool m_isWestDoorActive;
     private MapManager.RoomType m_roomType;
+    private float m_costToHere;
+    private int m_parentX;
+    private int m_parentY;
 
     public RoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, MapManager.RoomType roomType)
     {
@@ -16,6 +19,9 @@ public struct RoomData {
         m_isSouthDoorActive = isSouthDoorActive;
         m_isWestDoorActive = isWestDoorActive;
         m_roomType = roomType;
+        m_costToHere = 0;
+        m_parentX = -1;
+        m_parentY = -1;
     }
 
     public MapManager.RoomType RoomType
@@ -46,5 +52,30 @@ public struct RoomData {
     {
         get { return m_isWestDoorActive; }
         set { m_isWestDoorActive = value; }
+    }
+
+    public float CostToHere
+    {
+        get { return m_costToHere; }
+        set { m_costToHere = value; }
+    }
+
+    public int ParentX
+    {
+        get { return m_parentX; }
+        set { m_parentX = value; }
+    }
+
+    public int ParentY
+    {
+        get { return m_parentY; }
+        set { m_parentY = value; }
+    }
+
+    public void ResetAStarData()
+    {
+        m_costToHere = 0;
+        m_parentX = -1;
+        m_parentY = -1;
     }
 }

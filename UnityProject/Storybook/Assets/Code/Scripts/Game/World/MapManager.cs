@@ -55,7 +55,10 @@ public class MapManager : MonoBehaviour {
     private int m_minRoomsStartToExit = 4;
 
     [SerializeField]
-    private int m_additionalHalls = 2;
+    private int m_additionalHallsMax = 4;
+
+    [SerializeField]
+    private int m_additionalHallsMin = 2;
 
     private RoomData[,] m_worldMapData;
 
@@ -76,10 +79,12 @@ public class MapManager : MonoBehaviour {
         m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
 
+    /*
     void Start()
     {
         GenerateMap();
     }
+    */
 
     // Place a new room in the world.
     // The MapMgr is not concerned with the contents of the room, just that it can be placed.
@@ -295,6 +300,10 @@ public class MapManager : MonoBehaviour {
         Camera.main.transform.position = roomCamNode.transform.position;
     }
 
+    /// <summary>
+    /// Enables or disables all of the room objects currently in the game
+    /// </summary>
+    /// <param name="isLoad">Enables all room objects if this is true, disables if it is false</param>
     public void LoadMap(bool isLoad)
     {
         for (int i = 0; i < m_worldMaxXSize; i++)
@@ -316,13 +325,19 @@ public class MapManager : MonoBehaviour {
     /// </summary>
     public void GenerateMap()
     {
-        Debug.Log("Generating Map");
         _placeStart();
         _placeExit();
         _createPathFromStartToExit();
         _addAdditionalDoors();
         _placeSpecialRooms();
-        Debug.Log("Map Generated");
+        //_printMap();
+    }
+
+    /// <summary>
+    /// Prints out the map data to the console
+    /// </summary>
+    private void _printMap()
+    {
         Debug.Log("Start = " + m_startPoint.ToString());
         Debug.Log("Exit = " + m_exitPoint.ToString());
         for (int i = 0; i < m_worldMaxXSize; i++)
@@ -414,9 +429,13 @@ public class MapManager : MonoBehaviour {
         _depthBranch(0, m_startPoint);
     }
 
+    /// <summary>
+    /// Uses recursion to generate a map that connects all of the rooms in the dungeon
+    /// </summary>
+    /// <param name="depth">The current depth that the function is at</param>
+    /// <param name="position">The current position in the map that it is looking at</param>
     private void _depthBranch(int depth, Point position)
     {
-        Debug.Log("Calling depthBranch on position " + position.ToString() + " , Depth = " + depth);
         List<Point> validPositions = _getSurroundingPositions(position);
         while (validPositions.Count > 0)
         {
@@ -442,6 +461,11 @@ public class MapManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Connects the rooms at the two given points by setting the corresponding doors to true in their RoomData
+    /// </summary>
+    /// <param name="currentRoomPos">The position of the current room in the map</param>
+    /// <param name="newRoomPos">The position of the new room in the map</param>
     private void _connectRooms(Point currentRoomPos, Point newRoomPos)
     {
         RoomData currentRoom = m_worldMapData[currentRoomPos.x, currentRoomPos.y];
@@ -470,6 +494,11 @@ public class MapManager : MonoBehaviour {
         m_worldMapData[newRoomPos.x, newRoomPos.y] = newRoom;
     }
 
+    /// <summary>
+    /// Disconnects the rooms at the two given points by setting the corresponding doors to false in their RoomData
+    /// </summary>
+    /// <param name="currentRoomPos">The position of the current room in the map</param>
+    /// <param name="newRoomPos">The position of the new room in the map</param>
     private void _disconnectRooms(Point currentRoomPos, Point newRoomPos)
     {
         RoomData currentRoom = m_worldMapData[currentRoomPos.x, currentRoomPos.y];
@@ -498,18 +527,30 @@ public class MapManager : MonoBehaviour {
         m_worldMapData[newRoomPos.x, newRoomPos.y] = newRoom;
     }
 
+    /// <summary>
+    /// Checks to see if the position that the maze-generation algorithm is trying to add is valid
+    /// </summary>
+    /// <param name="depth">The current depth of the algorithm</param>
+    /// <param name="position">The position that the algorithm is trying to add</param>
+    /// <returns>True if the position is valid, false otherwise</returns>
     private bool _positionCheck(int depth, Point position)
     {
         bool doesPositionPass = true;
+
+        // If the position is off the map, return false
         if (position.x >= m_worldMaxXSize || position.x < 0 || position.y >= m_worldMaxYSize || position.y < 0)
         {
             doesPositionPass = false;
         }
+
+        // If the position is the exit and the minimum distance from start to exit has not been met, return false
         RoomData roomAtPos = m_worldMapData[position.x, position.y];
         if (roomAtPos.RoomType == RoomType.Exit && depth < m_minRoomsStartToExit)
         {
             doesPositionPass = false;
         }
+
+        // If the room type at the position is not 'None' or 'Exit', return false
         if (roomAtPos.RoomType != RoomType.None && roomAtPos.RoomType != RoomType.Exit)
         {
             doesPositionPass = false;
@@ -517,6 +558,11 @@ public class MapManager : MonoBehaviour {
         return doesPositionPass;
     }
 
+    /// <summary>
+    /// Returns a list of all the valid positions surrounding the given point
+    /// </summary>
+    /// <param name="position">The position to get the surrounding points</param>
+    /// <returns>A list of all the valid positions around the given point</returns>
     private List<Point> _getSurroundingPositions(Point position)
     {
         List<Point> surroundingPositions = new List<Point>();
@@ -540,38 +586,46 @@ public class MapManager : MonoBehaviour {
             Point validPos = new Point(position.x - 1, position.y);
             surroundingPositions.Add(validPos);
         }
-        Debug.Log("Valid Positions for " + position.ToString() + " = " + surroundingPositions.Count);
         return surroundingPositions;
     }
 
+    /// <summary>
+    /// Called after the map is generated, it adds additional connections in the map 
+    /// </summary>
     private void _addAdditionalDoors()
     {
         int addedHalls = 0;
-        while (addedHalls < m_additionalHalls)
+        int additionalHalls = UnityEngine.Random.Range(m_additionalHallsMin, m_additionalHallsMax + 1);
+        Debug.Log(additionalHalls + " halls being added");
+        while (addedHalls < additionalHalls)
         {
             Pair roomPair = _getPairOfAdjacentRooms();
             if (!_isPairConnected(roomPair))
             {
                 _connectRooms(roomPair.pointA, roomPair.pointB);
-                Debug.Log("Pair connected");
-                Debug.Log("RoomA = " + roomPair.pointA.ToString());
-                Debug.Log("RoomB = " + roomPair.pointB.ToString());
                 List<Point> shortestPath = _aStarSearch(m_startPoint, m_exitPoint);
+
+                // If adding this connection causes the minimum distance from start to exit to go below the set distance, disconnect
+                // these two rooms and try again
                 if (shortestPath.Count < m_minRoomsStartToExit)
                 {
                     _disconnectRooms(roomPair.pointA, roomPair.pointB);
-                    Debug.Log("Pair disconnected");
                 }
+
+                // Otherwise, keep these rooms connected and increment the number of added halls
                 else
                 {
                     addedHalls++;
-                    Debug.Log("Additional hall added");
                 }
                 _resetRoomDataAStar();
             }
         }
     }
 
+    /// <summary>
+    /// Randomly selects a pair of adjacent rooms in the map
+    /// </summary>
+    /// <returns>A Pair containing two adjacent rooms</returns>
     private Pair _getPairOfAdjacentRooms()
     {
         int pointX = UnityEngine.Random.Range(0, m_worldMaxXSize);
@@ -614,6 +668,11 @@ public class MapManager : MonoBehaviour {
         return roomPair;
     }
 
+    /// <summary>
+    /// Checks to see if the given pair of rooms is connected
+    /// </summary>
+    /// <param name="roomPair">The pair of rooms to check</param>
+    /// <returns>True if the given pair is connected, false otherwise</returns>
     private bool _isPairConnected(Pair roomPair)
     {
         Point roomAPoint = roomPair.pointA;
@@ -654,8 +713,6 @@ public class MapManager : MonoBehaviour {
         List<Point> closed = new List<Point>();
         List<Point> open = new List<Point>(all);
         List<Point> path = new List<Point>();
-        //float totalCost = 0;
-        //float currentBest = 0;
 
         while (!(open[0].x == destination.x && open[0].y == destination.y))
         {   
@@ -679,14 +736,14 @@ public class MapManager : MonoBehaviour {
             open.Remove(lowest);
             closed.Add(lowest);
 
-            // Iterate through the neighbors of the selected node
+            // Iterate through the neighbors of the selected point
             int lowestNeighborCount = _getConnectedRooms(lowest).Count;
             for (int i = 0; i < lowestNeighborCount; i++)
             {
                 Point currentNeighbor = _getConnectedRooms(lowest)[i];
                 RoomData currentNeighborData = m_worldMapData[currentNeighbor.x, currentNeighbor.y];
 
-                // Calculate the cost as the distance between the current node and the current neighbor
+                // Calculate the cost as the distance between the current point and the current neighbor
                 float cost = 1 + lowestData.CostToHere;
                 if (_doesListContainPoint(open, currentNeighbor) != -1 && cost < currentNeighborData.CostToHere)
                 {
@@ -698,8 +755,6 @@ public class MapManager : MonoBehaviour {
                 }
                 if (_doesListContainPoint(open, currentNeighbor) == -1 && _doesListContainPoint(closed, currentNeighbor) == -1)
                 {
-                    //currentBest = cost;
-
                     // If the open list is empty, add the current neighbor to the open list
                     if (open.Count == 0)
                     {
@@ -735,7 +790,6 @@ public class MapManager : MonoBehaviour {
         }
 
         // Once finished, determine what the path is by looking at the parent nodes and insert them into the path in the proper order
-        // TODO: Gets to here but parent node data is erased (store in RoomData instead of point)
         Point node = destination;
         while (!(node.x == start.x && node.y == start.y))
         {
@@ -747,6 +801,11 @@ public class MapManager : MonoBehaviour {
         return path;
     }
 
+    /// <summary>
+    /// Gets the list of rooms that are connected to the room at the given point
+    /// </summary>
+    /// <param name="roomLoc">The location of the room to check for</param>
+    /// <returns>The list of all the points that the given room is connected to</returns>
     private List<Point> _getConnectedRooms(Point roomLoc)
     {
         RoomData room = m_worldMapData[roomLoc.x, roomLoc.y];
@@ -779,6 +838,12 @@ public class MapManager : MonoBehaviour {
         return connectedRooms;
     }
 
+    /// <summary>
+    /// Checks to see if the given list contains the given point
+    /// </summary>
+    /// <param name="listToSearch">The list to search through</param>
+    /// <param name="pointToSearch">The point to check for</param>
+    /// <returns>True if the given point is in the list, false otherwise</returns>
     private int _doesListContainPoint(List<Point> listToSearch, Point pointToSearch)
     {
         int i = 0;
@@ -793,6 +858,9 @@ public class MapManager : MonoBehaviour {
         return -1;
     }
 
+    /// <summary>
+    /// Resets all the AStar data in the RoomData for all the RoomData in the map
+    /// </summary>
     private void _resetRoomDataAStar()
     {
         for(int i = 0; i < m_worldMaxXSize; i++)

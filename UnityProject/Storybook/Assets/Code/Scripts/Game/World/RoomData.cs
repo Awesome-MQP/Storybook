@@ -72,6 +72,9 @@ public struct RoomData {
         set { m_parentY = value; }
     }
 
+    /// <summary>
+    /// Resets all of the AStar data
+    /// </summary>
     public void ResetAStarData()
     {
         m_costToHere = 0;

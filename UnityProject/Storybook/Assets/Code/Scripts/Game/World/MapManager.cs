@@ -355,8 +355,8 @@ public class MapManager : MonoBehaviour {
                 isSpotCombat = false;
             }
         }
-
-        RoomData shopRoom = new RoomData(false, false, false, false, RoomType.Shop);
+        RoomData currentData = m_worldMapData[shopX, shopY];
+        RoomData shopRoom = new RoomData(currentData.IsNorthDoorActive, currentData.IsEastDoorActive, currentData.IsSouthDoorActive, currentData.IsWestDoorActive, RoomType.Shop);
         m_worldMapData[shopX, shopY] = shopRoom;
     }
 
@@ -553,6 +553,9 @@ public class MapManager : MonoBehaviour {
             if (!_isPairConnected(roomPair))
             {
                 _connectRooms(roomPair.pointA, roomPair.pointB);
+                Debug.Log("Pair connected");
+                Debug.Log("RoomA = " + roomPair.pointA.ToString());
+                Debug.Log("RoomB = " + roomPair.pointB.ToString());
                 List<Point> shortestPath = _aStarSearch(m_startPoint, m_exitPoint);
                 if (shortestPath.Count < m_minRoomsStartToExit)
                 {

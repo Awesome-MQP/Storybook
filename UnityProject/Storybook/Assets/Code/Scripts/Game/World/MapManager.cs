@@ -83,7 +83,7 @@ public class MapManager : MonoBehaviour {
     void Start()
     {
         GenerateMap();
-    }
+    }    
     */
 
     // Place a new room in the world.
@@ -596,7 +596,6 @@ public class MapManager : MonoBehaviour {
     {
         int addedHalls = 0;
         int additionalHalls = UnityEngine.Random.Range(m_additionalHallsMin, m_additionalHallsMax + 1);
-        Debug.Log(additionalHalls + " halls being added");
         while (addedHalls < additionalHalls)
         {
             Pair roomPair = _getPairOfAdjacentRooms();

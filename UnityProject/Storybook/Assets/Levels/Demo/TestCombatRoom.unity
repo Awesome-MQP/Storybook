@@ -231,6 +231,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1 &2047322505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2047322507}
+  - 114: {fileID: 2047322506}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2047322506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2047322505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ddd6f4f9748c245b9a546aade37edf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_combatInstancePrefab: {fileID: 11483406, guid: f51232a1cd84a214fad16f94564b5993,
+    type: 2}
+  m_defaultLocation: {x: 0, y: 0, z: 0}
+  m_enemiesForCombat: []
+  m_enemyTeamForCombat: {fileID: 0}
+  m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
+    type: 2}
+  m_playerPawn: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
+  m_playersInCombat: 1
+--- !u!4 &2047322507
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2047322505}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.5725555, y: 5.83956909, z: 25.2103882}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
 --- !u!1001 &2092913782
 Prefab:
   m_ObjectHideFlags: 0
@@ -307,6 +355,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11413962, guid: b69055b0880d56b42ab399bf301ec564,
         type: 2}
+    - target: {fileID: 11479714, guid: 424ea2c08131cb54080b609136afd6ce, type: 2}
+      propertyPath: m_roomGenre
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 424ea2c08131cb54080b609136afd6ce, type: 2}
   m_IsPrefabParent: 0

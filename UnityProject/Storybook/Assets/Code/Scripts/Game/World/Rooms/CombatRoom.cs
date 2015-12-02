@@ -10,10 +10,10 @@ public class CombatRoom : RoomObject {
     [SerializeField]
     private EnemyTeam m_roomEnemies;
 
-    private List<Object> m_enemyPawns = new List<Object>();
+    private List<GameObject> m_enemyPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
-    private GameManager m_gameManager;
+    private GameManager m_gameManager = null;
 
     private bool m_wonCombat = false;
 
@@ -21,21 +21,27 @@ public class CombatRoom : RoomObject {
 	protected override void Awake ()
     {
         base.Awake();
-        OnRoomEnter();
         m_gameManager = FindObjectOfType<GameManager>();
+        OnRoomEnter();
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
     protected override void OnRoomEnter()
     {
-        // TODO: Spawn monsters
         if (!m_wonCombat)
         {
-            int x = 0, y = 2, z = 1;
-            foreach (GameObject go in m_roomEnemiesOverworld)
+            _chooseEnemyTeam();
+            m_gameManager.EnemyTeamForCombat = m_roomEnemies;
+
+            int x = 0, y = 2, z = 1, i = 0;
+
+            // TODO: Change this to work over network
+            foreach (CombatPawn pawn in m_roomEnemies.PawnsToSpawn)
             {
-                m_enemyPawns.Add(Instantiate(go, new Vector3(x, y, z), Quaternion.identity));
+                m_enemyPawns.Add((GameObject)Instantiate(pawn.gameObject, new Vector3(x, y, z), Quaternion.identity));
+                m_enemyPawns[i].SetActive(true);
                 z-=2;
+                i++;
             }
         }
         return;
@@ -55,10 +61,10 @@ public class CombatRoom : RoomObject {
     // Hint: Nothing.
     protected override void OnRoomExit()
     {
-        foreach(Object o in m_enemyPawns)
+        foreach(GameObject go in m_enemyPawns)
         {
-            m_enemyPawns.Remove(o);
-            Destroy(o);
+            m_enemyPawns.Remove(go);
+            Destroy(go);
         }
         return;
     }
@@ -67,5 +73,31 @@ public class CombatRoom : RoomObject {
     public void SetWonStatus(bool won)
     {
         m_wonCombat = won;
+    }
+
+    private void _chooseEnemyTeam()
+    {
+        Object[] teams = null;
+        switch (RoomGenre)
+        {
+            case Genre.Fantasy:
+                teams = Resources.LoadAll("EnemyTeams/Fantasy");
+                break;
+            case Genre.GraphicNovel:
+                teams = Resources.LoadAll("EnemyTeams/Comic");
+                break;
+            case Genre.Horror:
+                teams = Resources.LoadAll("EnemyTeams/Horror");
+                break;
+            case Genre.SciFi:
+                teams = Resources.LoadAll("EnemyTeams/SciFi");
+                break;
+        }
+
+        if (teams != null)
+        {
+            GameObject enemyTeam = (GameObject) teams[Random.Range(0, teams.Length)];
+            m_roomEnemies = enemyTeam.GetComponent<EnemyTeam>();
+        }
     }
 }

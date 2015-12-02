@@ -117,4 +117,9 @@ public class GameManager : Photon.PunBehaviour {
         dm.TransitionToDungeon();
     }
 
+    public EnemyTeam EnemyTeamForCombat
+    {
+        get { return m_enemyTeamForCombat; }
+        set { m_enemyTeamForCombat = value; }
+    }
 }

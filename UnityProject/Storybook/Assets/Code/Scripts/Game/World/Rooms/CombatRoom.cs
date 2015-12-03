@@ -10,7 +10,7 @@ public class CombatRoom : RoomObject {
     [SerializeField]
     private EnemyTeam m_roomEnemies;
 
-    private List<Object> m_enemyPawns = new List<Object>();
+    private List<GameObject> m_enemyPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
     private GameManager m_gameManager;
@@ -31,10 +31,13 @@ public class CombatRoom : RoomObject {
         // TODO: Spawn monsters
         if (!m_wonCombat)
         {
+            GameObject pawn; // placeholder
+
             int x = 0, y = 2, z = 1;
             foreach (GameObject go in m_roomEnemiesOverworld)
             {
-                m_enemyPawns.Add(Instantiate(go, new Vector3(x, y, z), Quaternion.identity));
+                pawn = Instantiate(go, new Vector3(x, y, z), Quaternion.identity) as GameObject;
+                m_enemyPawns.Add(pawn);
                 z-=2;
             }
         }
@@ -55,7 +58,7 @@ public class CombatRoom : RoomObject {
     // Hint: Nothing.
     protected override void OnRoomExit()
     {
-        foreach(Object o in m_enemyPawns)
+        foreach(GameObject o in m_enemyPawns)
         {
             m_enemyPawns.Remove(o);
             Destroy(o);

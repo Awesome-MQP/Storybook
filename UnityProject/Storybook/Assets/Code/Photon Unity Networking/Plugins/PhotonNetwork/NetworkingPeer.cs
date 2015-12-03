@@ -1847,24 +1847,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     break;
                 }
             case PunEvent.ControllerTransfer:
-                int[] transferUserData = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
-                int viewId = transferUserData[0];
-                int playerId = transferUserData[1];
-
-                PhotonView view = PhotonView.Find(viewId);
-                if (!view)
-                {
-                    break;
-                }
-
-                if (originatingPlayer == view.owner || !view.isOwnerActive && originatingPlayer.isMasterClient)
-                {
-                    view.controllerId = playerId;
-                    if(playerId == PhotonNetwork.player.ID)
-                        view.SendMessage("OnStartController", false, SendMessageOptions.DontRequireReceiver);
-                }
-
+            {
+                _HandleControllerTransfer(photonEvent, originatingPlayer);
                 break;
+            }
+            case PunEvent.ParentChanged:
+            {
+                _HandleParentChange(photonEvent, originatingPlayer);
+                break;
+            }
             case EventCode.GameList:
                 {
                     this.mGameList = new Dictionary<string, RoomInfo>();
@@ -2091,6 +2082,52 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
 
         //this.externalListener.OnEvent(photonEvent);
+    }
+
+    private static void _HandleParentChange(EventData photonEvent, PhotonPlayer originatingPlayer)
+    {
+        int[] transferData = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
+
+        int viewId = transferData[0];
+        int parentId = transferData[1];
+
+        PhotonView view = PhotonView.Find(viewId);
+        if (!view)
+        {
+            Debug.LogError("Could not change parent of view that does not exist.");
+            return;
+        }
+
+        if ((view.isOwnerActive && view.owner == originatingPlayer) ||
+            (view.OwnerActorNr == 0 && originatingPlayer.isMasterClient))
+            return;
+
+        PhotonView parent = PhotonView.Find(parentId);
+
+        if (parent)
+            view.transform.parent = parent.transform;
+        else
+            view.transform.parent = null;
+    }
+
+    private static void _HandleControllerTransfer(EventData photonEvent, PhotonPlayer originatingPlayer)
+    {
+        int[] transferUserData = (int[]) photonEvent.Parameters[ParameterCode.CustomEventContent];
+        int viewId = transferUserData[0];
+        int playerId = transferUserData[1];
+
+        PhotonView view = PhotonView.Find(viewId);
+        if (!view)
+        {
+            return;
+        }
+
+        if (originatingPlayer == view.owner || !view.isOwnerActive && originatingPlayer.isMasterClient)
+        {
+            view.controllerId = playerId;
+            if (playerId == PhotonNetwork.player.ID)
+                view.SendMessage("OnStartController", false, SendMessageOptions.DontRequireReceiver);
+        }
     }
 
     internal void OnCreateRoom()
@@ -3080,6 +3117,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     internal void RPC(PhotonView view, string methodName, PhotonPlayer player, bool encrypt, params object[] parameters)
     {
+        RPC(view, methodName, new[] {player}, encrypt, parameters);
+    }
+
+    internal void RPC(PhotonView view, string methodName, PhotonPlayer[] players, bool encrypt, params object[] parameters)
+    {
         if (this.blockSendingGroups.Contains(view.group))
         {
             return; // Block sending on this group
@@ -3088,11 +3130,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         if (view.viewID < 1)    //TODO: check why 0 should be illegal
         {
             Debug.LogError("Illegal view ID:" + view.viewID + " method: " + methodName + " GO:" + view.gameObject.name);
-        }
-
-        if (PhotonNetwork.logLevel >= PhotonLogLevel.Full)
-        {
-            Debug.Log("Sending RPC \"" + methodName + "\" to player[" + player + "]");
         }
 
 
@@ -3121,15 +3158,27 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             rpcEvent[(byte) 4] = (object[]) parameters;
         }
 
-        if (this.mLocalActor == player)
+        bool isMine = view.isMine;
+        bool isController = view.isController;
+        bool allowFullCom = view.AllowFullCommunication;
+        PhotonPlayer owner = view.owner;
+
+        List<int> playerIds = new List<int>(players.Length);
+        foreach (PhotonPlayer player in players)
         {
-            this.ExecuteRpc(rpcEvent, player);
+            if (isMine && (player.isLocal || view.CheckRelevance(player)))
+                playerIds.Add(player.ID);
+            else if(!isMine)
+            {
+                if (allowFullCom)
+                    playerIds.Add(player.ID);
+                else if (isController && owner == player)
+                    playerIds.Add(player.ID);
+            }
         }
-        else
-        {
-            RaiseEventOptions options = new RaiseEventOptions() { TargetActors = new int[] { player.ID }, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-        }
+
+        RaiseEventOptions options = new RaiseEventOptions() { TargetActors = playerIds.ToArray(), Encrypt = encrypt };
+        this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
     }
 
     /// RPC Hashtable Structure
@@ -3187,29 +3236,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         // Check scoping
         if (target == PhotonTargets.All)
         {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-
-            // Execute local
-            this.ExecuteRpc(rpcEvent, this.mLocalActor);
+            RPC(view, methodName, PhotonNetwork.playerList, encrypt, parameters);
         }
         else if (target == PhotonTargets.Others)
         {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
+            RPC(view, methodName, PhotonNetwork.otherPlayers, encrypt, parameters);
         }
         else if (target == PhotonTargets.AllBuffered)
         {
-            RaiseEventOptions options = new RaiseEventOptions() { CachingOption = EventCaching.AddToRoomCache, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-
-            // Execute local
-            this.ExecuteRpc(rpcEvent, this.mLocalActor);
+            Debug.LogError("Buffered RPCs have been deprecated.");
         }
         else if (target == PhotonTargets.OthersBuffered)
         {
-            RaiseEventOptions options = new RaiseEventOptions() { CachingOption = EventCaching.AddToRoomCache, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
+            Debug.LogError("Buffered RPCs have been deprecated.");
         }
         else if (target == PhotonTargets.MasterClient)
         {

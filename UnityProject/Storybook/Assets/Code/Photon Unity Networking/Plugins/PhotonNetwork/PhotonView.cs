@@ -874,6 +874,44 @@ public class PhotonView : Photon.MonoBehaviour
     }
 
     /// <summary>
+    /// Call an RPC on all players except a specified one.
+    /// </summary>
+    /// <param name="methodName">The method to call.</param>
+    /// <param name="excludePlayer">The player to exclude.</param>
+    /// <param name="parameters">The call parameters.</param>
+    public void RpcAllExcept(string methodName, PhotonPlayer excludePlayer, params object[] parameters)
+    {
+        HashSet<PhotonPlayer> players = new HashSet<PhotonPlayer>(PhotonNetwork.playerList);
+        players.Remove(excludePlayer);
+
+        PhotonNetwork.RPC(this, methodName, players.ToArray(), false, parameters);
+    }
+
+    /// <summary>
+    /// Call an RPC on all other players except a specified one.
+    /// </summary>
+    /// <param name="methodName">The method to call.</param>
+    /// <param name="excludePlayer">The player to exclude.</param>
+    /// <param name="parameters">The call parameters.</param>
+    public void RpcOthersExcept(string methodName, PhotonPlayer excludePlayer, params object[] parameters)
+    {
+        HashSet<PhotonPlayer> players = new HashSet<PhotonPlayer>(PhotonNetwork.otherPlayers);
+        players.Remove(excludePlayer);
+
+        PhotonNetwork.RPC(this, methodName, players.ToArray(), false, parameters);
+    }
+
+    /// <summary>
+    /// Sends an RPC to all players who are peers for this object.
+    /// </summary>
+    /// <param name="methodName">The method to call.</param>
+    /// <param name="parameters">The call parameters.</param>
+    public void RpcPeers(string methodName, params object[] parameters)
+    {
+        RpcOthersExcept(methodName, Controller, parameters);
+    }
+
+    /// <summary>
     /// Call a RPC on this object on the owner connection.
     /// </summary>
     /// <param name="methodName">The name of the method to call.</param>
@@ -948,8 +986,12 @@ public class PhotonView : Photon.MonoBehaviour
 
     private void OnTransformParentChanged()
     {
-        BuildParent();
-        RebuildNetworkRelavance();
+        if (isMine)
+        {
+            BuildParent();
+            RebuildNetworkRelavance();
+            PhotonNetwork.UpdateViewParent(this);
+        }
     }
 
     private void BuildParent()

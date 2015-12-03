@@ -100,6 +100,8 @@ public class PhotonViewInspector : Editor
         }
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("shouldSync"), new GUIContent("Should Sync? "));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("allowFullCommunication"),
+            new GUIContent("Allow Full COmmunication? "));
 
         if (m_Target.shouldSync &&
             m_Target.ObservedComponents.FindAll(item => item != null).Count == 0)

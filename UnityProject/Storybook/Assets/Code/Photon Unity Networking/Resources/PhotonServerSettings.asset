@@ -45,4 +45,8 @@ MonoBehaviour:
   - StopPlayer
   - TransitionToCombat
   - TransitionToDungeonRPC
+  - _ApproveCommit
+  - _RecieveCommit
+  - _RejectCommit
+  - _RequestCommit
   DisableAutoOpenWizard: 1

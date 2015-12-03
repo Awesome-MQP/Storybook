@@ -47,4 +47,8 @@ MonoBehaviour:
   - TransitionToDungeonRPC
   - RPCAddPawnToTeam
   - RegisterTeamLocal
+  - _ApproveCommit
+  - _RecieveCommit
+  - _RejectCommit
+  - _RequestCommit
   DisableAutoOpenWizard: 1

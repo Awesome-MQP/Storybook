@@ -494,6 +494,31 @@ namespace Photon
     // the documentation for the interface methods becomes inherited when Doxygen builds it.
     public class PunBehaviour : Photon.MonoBehaviour, IPunCallbacks
     {
+        public bool IsMine
+        {
+            get { return photonView.isMine; }
+        }
+
+        public bool IsController
+        {
+            get { return photonView.isController; }
+        }
+
+        public PhotonPlayer Owner
+        {
+            get { return photonView.owner; }
+        }
+
+        public PhotonPlayer Controller
+        {
+            get { return photonView.Controller; }
+        }
+
+        public bool IsMasterClient
+        {
+            get { return PhotonNetwork.isMasterClient; }
+        }
+
         protected virtual void Awake()
         {
             BuildPropertyInfo();
@@ -1270,6 +1295,7 @@ internal class PunEvent
     public const byte SpawnObject = 212;
     public const byte DespawnObject = 213;
     public const byte ControllerTransfer = 214;
+    public const byte ParentChanged = 215;
 }
 
 /// <summary>

@@ -2574,6 +2574,33 @@ public static class PhotonNetwork
         RaiseEvent(PunEvent.Create, evData, true, options);
     }
 
+    public static void UpdateViewParent(PhotonView view)
+    {
+        if (!view.isMine || view.instantiationId != view.viewID)
+            return;
+
+        int[] evData = new int[2];
+        evData[0] = view.viewID;
+
+        PhotonView parent = null;
+        if (view.transform)
+            parent = view.transform.GetComponent<PhotonView>();
+
+        evData[1] = parent ? parent.viewID : 0;
+
+        PhotonPlayer[] relevantPlayers = view.RelevantPlayers;
+        int[] relevantPlayerIds = new int[relevantPlayers.Length];
+        for (int i = 0; i < relevantPlayers.Length; i++)
+        {
+            PhotonPlayer photonPlayer = relevantPlayers[i];
+            relevantPlayerIds[i] = photonPlayer.ID;
+        }
+
+        RaiseEventOptions options = new RaiseEventOptions {TargetActors = relevantPlayerIds};
+
+        RaiseEvent(PunEvent.ParentChanged, evData, true, options);
+    }
+
     /// <summary>
     /// The current roundtrip time to the photon server.
     /// </summary>
@@ -2883,10 +2910,15 @@ public static class PhotonNetwork
         }
     }
 
+    internal static void RPC(PhotonView view, string methodName, PhotonPlayer player, bool encrypt, params object[] parameters)
+    {
+        RPC(view, methodName, new[] {player}, encrypt, parameters);
+    }
+
     /// <summary>
     /// Internal to send an RPC on given PhotonView. Do not call this directly but use: PhotonView.RPC!
     /// </summary>
-    internal static void RPC(PhotonView view, string methodName, PhotonPlayer targetPlayer, bool encrpyt, params object[] parameters)
+    internal static void RPC(PhotonView view, string methodName, PhotonPlayer[] targetPlayers, bool encrpyt, params object[] parameters)
     {
         if (!VerifyCanUseNetwork())
         {
@@ -2906,7 +2938,7 @@ public static class PhotonNetwork
 
         if (networkingPeer != null)
         {
-            networkingPeer.RPC(view, methodName, targetPlayer, encrpyt, parameters);
+            networkingPeer.RPC(view, methodName, targetPlayers, encrpyt, parameters);
         }
         else
         {

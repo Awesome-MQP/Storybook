@@ -140,6 +140,16 @@ public class PhotonPlayer
         return (pp != null && this.GetHashCode() == pp.GetHashCode());
     }
 
+    public static bool operator ==(PhotonPlayer left, PhotonPlayer right)
+    {
+        return left.ID == right.ID;
+    }
+
+    public static bool operator !=(PhotonPlayer left, PhotonPlayer right)
+    {
+        return !(left == right);
+    }
+
     public override int GetHashCode()
     {
         return this.ID;

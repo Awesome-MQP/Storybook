@@ -36,11 +36,12 @@ public class CombatRoom : RoomObject {
             int x = 0, y = 2, z = 1, i = 0;
 
             // TODO: Change this to work over network
+            
             foreach (CombatPawn pawn in m_roomEnemies.PawnsToSpawn)
             {
                 m_enemyPawns.Add((GameObject)Instantiate(pawn.gameObject, new Vector3(x, y, z), Quaternion.identity));
                 m_enemyPawns[i].SetActive(true);
-                z-=2;
+                z -= 2;
                 i++;
             }
         }

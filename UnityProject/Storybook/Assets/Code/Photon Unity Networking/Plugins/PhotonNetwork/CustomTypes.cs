@@ -18,6 +18,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using ExitGames.Client.Photon;
 using System;
+using Photon;
 using UnityEngine;
 
 
@@ -31,6 +32,7 @@ internal static class CustomTypes
     /// <summary>Register</summary>
     internal static void Register()
     {
+        PhotonPeer.RegisterType(typeof (PhotonView), (byte) 'B', SerializePhotonView, DeserializePhotonView);
         PhotonPeer.RegisterType(typeof(Vector2), (byte)'W', SerializeVector2, DeserializeVector2);
         PhotonPeer.RegisterType(typeof(Vector3), (byte)'V', SerializeVector3, DeserializeVector3);
         PhotonPeer.RegisterType(typeof(Quaternion), (byte)'Q', SerializeQuaternion, DeserializeQuaternion);
@@ -203,6 +205,44 @@ internal static class CustomTypes
         }
 
         return (uint) intVal;
+    }
+
+    public static readonly byte[] memPhotonView = new byte[4];
+    private static short SerializePhotonView(MemoryStream outStream, object customObject)
+    {
+        lock (memPhotonView)
+        {
+            byte[] bytes = memPhotonView;
+            int off = 0;
+
+            PhotonView photonView = customObject as PhotonView;
+
+            Protocol.Serialize(photonView == null ? 0 : photonView.viewID, bytes, ref off);
+
+            outStream.Write(bytes, 0, 4);
+
+            return 4;
+        }
+    }
+
+    private static object DeserializePhotonView(MemoryStream inStream, short length)
+    {
+        int viewId;
+
+        lock (memPhotonView)
+        {
+            inStream.Read(memPhotonView, 0, 4);
+
+            int off = 0;
+
+            Protocol.Deserialize(out viewId, memPhotonView, ref off);
+        }
+
+        if (viewId == 0)
+            return null;
+
+        PhotonView view = PhotonView.Find(viewId);
+        return view;
     }
 
     #endregion

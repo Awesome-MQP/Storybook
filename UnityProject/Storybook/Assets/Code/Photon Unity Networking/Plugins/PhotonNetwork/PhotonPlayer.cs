@@ -142,7 +142,10 @@ public class PhotonPlayer
 
     public static bool operator ==(PhotonPlayer left, PhotonPlayer right)
     {
-        return left.ID == right.ID;
+        if (left != null && right != null)
+            return left.ID == right.ID;
+        else
+            return left == null && right == null;
     }
 
     public static bool operator !=(PhotonPlayer left, PhotonPlayer right)

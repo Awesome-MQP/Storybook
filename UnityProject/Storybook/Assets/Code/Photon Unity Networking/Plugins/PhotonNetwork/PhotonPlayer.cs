@@ -140,12 +140,15 @@ public class PhotonPlayer
         return (pp != null && this.GetHashCode() == pp.GetHashCode());
     }
 
+    /// <summary>
+    /// Makes PhotonPlayer comparable
+    /// </summary>
     public static bool operator ==(PhotonPlayer left, PhotonPlayer right)
     {
-        if (left != null && right != null)
+        if (!left.Equals(null) && !right.Equals(null))
             return left.ID == right.ID;
         else
-            return left == null && right == null;
+            return left.Equals(null) && right.Equals(null);
     }
 
     public static bool operator !=(PhotonPlayer left, PhotonPlayer right)

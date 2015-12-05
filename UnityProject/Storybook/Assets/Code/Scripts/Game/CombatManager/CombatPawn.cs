@@ -234,7 +234,6 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// <summary>
     /// Gets an array of all the pawns on the same team as this one
     /// </summary>
-    /// <param name="pawnsToSearch">The list of pawns to search through</param>
     /// <returns>The array of pawns that are on the same team as the current pawn</returns>
     public CombatPawn[] GetPawnsOnTeam()
     {
@@ -294,5 +293,6 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         CombatManager combatManager = FindObjectOfType<CombatManager>();
         CombatTeam pawnTeam = combatManager.GetTeamById(m_teamId);
         pawnTeam.AddPawnToTeam(this);
+        RegisterTeam(pawnTeam);
     }
 }

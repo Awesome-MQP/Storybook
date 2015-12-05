@@ -59,6 +59,7 @@ public class WinState : CombatState {
         // Delete the NetWinState from all clients
         if (m_netWinStateObject != null)
         {
+            PhotonNetwork.Destroy(m_netWinStateObject);
             Destroy(m_netWinStateObject);
         }
         m_isExiting = true;

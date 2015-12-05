@@ -148,7 +148,7 @@ public class PhotonPlayer
         object leftObj = left;
         object rightObj = right;
 
-        return leftObj == rightObj || left.ID == right.ID;
+        return leftObj == rightObj || (leftObj != null && rightObj != null && left.ID == right.ID);
     }
 
     public static bool operator !=(PhotonPlayer left, PhotonPlayer right)

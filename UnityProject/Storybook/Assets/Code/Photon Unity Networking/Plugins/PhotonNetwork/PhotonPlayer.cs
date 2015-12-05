@@ -145,10 +145,13 @@ public class PhotonPlayer
     /// </summary>
     public static bool operator ==(PhotonPlayer left, PhotonPlayer right)
     {
-        if (!left.Equals(null) && !right.Equals(null))
+        object leftObj = left;
+        object rightObj = right;
+
+        if (leftObj != null && rightObj != null)
             return left.ID == right.ID;
         else
-            return left.Equals(null) && right.Equals(null);
+            return leftObj == null && rightObj == null;
     }
 
     public static bool operator !=(PhotonPlayer left, PhotonPlayer right)

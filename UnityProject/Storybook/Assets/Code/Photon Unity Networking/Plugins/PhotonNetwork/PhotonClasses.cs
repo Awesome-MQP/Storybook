@@ -442,6 +442,7 @@ public interface IPunPrefabPool
 
 namespace Photon
 {
+    using UnityEngine.Assertions;
     using Hashtable = ExitGames.Client.Photon.Hashtable;
 
     /// <summary>
@@ -973,7 +974,7 @@ namespace Photon
                     continue;
 
                 PropertyInfo propertyInfo = m_propertiesByNumber[i];
-                stream.SendNext(propertyInfo.GetValue(this, null));
+                stream.SendNext(SerializeProperty(propertyInfo));
             }
 
             if(!isInit)
@@ -993,7 +994,7 @@ namespace Photon
                     continue;
 
                 PropertyInfo propertyInfo = m_propertiesByNumber[i];
-                propertyInfo.SetValue(this, stream.ReceiveNext(), null);
+                DeserializeProperty(stream.ReceiveNext(), propertyInfo);
             }
         }
 
@@ -1004,7 +1005,7 @@ namespace Photon
 
             foreach (PropertyInfo property in m_unreliableProperties)
             {
-                stream.SendNext(property.GetValue(this, null));
+                stream.SendNext(SerializeProperty(property));
             }
         }
 
@@ -1015,8 +1016,98 @@ namespace Photon
 
             foreach (PropertyInfo property in m_unreliableProperties)
             {
-                property.SetValue(this, stream.ReceiveNext(), null);
+                DeserializeProperty(stream.ReceiveNext(), property);
             }
+        }
+
+        private object SerializeProperty(PropertyInfo info)
+        {
+            object value = info.GetValue(this, null);
+            if (value == null)
+                return null;
+
+            if(info.GetType().IsAssignableFrom(typeof(Component)))
+            {
+                Component component = value as Component;
+                Assert.IsNotNull(component);
+
+                PhotonView view = component.GetComponent<PhotonView>();
+                Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
+
+                return view;
+            }
+            else if(info.GetType().IsArray && info.GetType().GetElementType().IsAssignableFrom(typeof(Component)))
+            {
+                Component[] componetns = value as Component[];
+                Assert.IsNotNull(componetns);
+
+                PhotonView[] views = new PhotonView[componetns.Length];
+
+                for(int i = 0; i < componetns.Length; i++)
+                {
+                    Component component = value as Component;
+                    if (component == null)
+                        views[i] = null;
+                    else
+                    {
+                        PhotonView view = component.GetComponent<PhotonView>();
+                        Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
+
+                        views[i] = view;
+                    }
+                }
+
+                return views;
+            }
+
+            return value;
+        }
+
+        private void DeserializeProperty(object value, PropertyInfo info)
+        {
+            if (info.GetType().IsAssignableFrom(typeof(Component)))
+            {
+                PhotonView view = value as PhotonView;
+                if (!view)
+                {
+                    info.SetValue(this, null, null);
+                    return;
+                }
+
+                Component component = view.GetComponent(info.PropertyType);
+                Assert.IsNotNull(component);
+
+                info.SetValue(this, component, null);
+                return;
+            }
+            else if (info.GetType().IsArray && info.GetType().GetElementType().IsAssignableFrom(typeof(Component)))
+            {
+                PhotonView[] views = value as PhotonView[];
+                Assert.IsNotNull(views);
+
+                Array array = Array.CreateInstance(info.PropertyType.GetElementType(), views.Length);
+
+                for(int i = 0; i < views.Length; i++)
+                {
+                    PhotonView view = views[i];
+                    if (!view)
+                    {
+                        array.SetValue(null, i);
+                        continue; ;
+                    }
+
+                    Component component = view.GetComponent(info.PropertyType.GetElementType());
+                    Assert.IsNotNull(component);
+
+                    array.SetValue(component, i);
+                }
+
+                info.SetValue(this, array, null);
+
+                return;
+            }
+
+            info.SetValue(this, value, null);
         }
 
         public virtual bool IsRelevantTo(PhotonPlayer player)

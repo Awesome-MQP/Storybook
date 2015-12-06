@@ -41,8 +41,11 @@ public class Page : Item  {
 
     private int m_numberOfTargets;
 
-    // Use this for initialization
-    protected override void Awake () {
+    [SerializeField]
+    private PlayerMove m_playerCombatMove;
+
+	// Use this for initialization
+	protected override void Awake () {
         base.Awake();
     }
 
@@ -272,5 +275,10 @@ public class Page : Item  {
     {
         get { return m_numberOfTargets; }
         set { m_numberOfTargets = value; }
+    }
+
+    public PlayerMove PlayerCombatMove
+    {
+        get { return m_playerCombatMove; }
     }
 }

@@ -51,4 +51,5 @@ MonoBehaviour:
   - _RecieveCommit
   - _RejectCommit
   - _RequestCommit
+  - RPCSendDeckIds
   DisableAutoOpenWizard: 1

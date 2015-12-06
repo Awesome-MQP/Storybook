@@ -17,21 +17,19 @@ public class TestCombatPawn : CombatPlayer
             Debug.Log("Space bar pressed");
             List<CombatPawn> targetList = new List<CombatPawn>();
             targetList.Add(GetPawnsOpposing()[0]);
-
-            PlayerMove chosenMove = PlayerHand[0];
+            
+            Page chosenPage = PlayerHand[0];
+            PlayerMove chosenMove = chosenPage.PlayerCombatMove;
+            RemovePageFromHand(chosenPage);
+            
             chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
             chosenMove.InitializeMove(); 
             SetMoveForTurn(chosenMove);
             SetHasSubmittedMove(true);
-
-            Page p = new Page();
-            p.Rarity = chosenMove.MoveRarity;
-            p.PageGenre = chosenMove.MoveGenre;
-            p.PageLevel = chosenMove.MoveLevel;
-            p.PageOwner = this;
+            
             PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
-            pm.construct(p);
+            pm.construct(chosenPage);
 
             int[] targetIds = new int[4];
             for (int i = 0; i < pm.NumberOfTargets; i++)
@@ -41,7 +39,7 @@ public class TestCombatPawn : CombatPlayer
             }
             int moveIndex = 0;
 
-            m_scenePhotonView.RPC("SendPlayerMoveOverNetwork", PhotonTargets.All, PawnId, targetIds, moveIndex);
+            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.All, PawnId, targetIds, moveIndex);
         }
     }
 
@@ -55,7 +53,7 @@ public class TestCombatPawn : CombatPlayer
     private void SendPlayerMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
         Debug.Log("Other player submitted move");
-        PlayerMove chosenMove = PlayerHand[moveIndex];
+        PlayerMove chosenMove = PlayerHand[moveIndex].PlayerCombatMove;
         List<CombatPawn> targets = new List<CombatPawn>();
 
         // Determine the targets of the move based on the list of target ids

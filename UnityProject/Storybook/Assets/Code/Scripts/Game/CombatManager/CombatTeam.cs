@@ -81,6 +81,7 @@ public abstract class CombatTeam : Photon.PunBehaviour {
         foreach(CombatPawn pawn in defeatedPawns)
         {
             RemovePawnFromTeam(pawn);
+            m_combatManager = FindObjectOfType<CombatManager>();
             CManager.RemovePawnMove(pawn);
         }
         return defeatedPawns;
@@ -175,6 +176,5 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         m_teamId = teamId;
         FindObjectOfType<CombatManager>().RegisterTeamLocal(this);
-        Debug.Log("Registering team");
     }
 }

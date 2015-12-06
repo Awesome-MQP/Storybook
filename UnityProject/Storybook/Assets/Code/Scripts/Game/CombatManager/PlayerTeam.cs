@@ -4,6 +4,9 @@ using System;
 
 public class PlayerTeam : CombatTeam {
 
+    [SerializeField]
+    Page m_pageToUse;
+
     public override void SpawnTeam()
     {
         GetComponent<PhotonView>().RPC("RegisterTeamLocal", PhotonTargets.Others, TeamId);
@@ -26,6 +29,17 @@ public class PlayerTeam : CombatTeam {
             AddPawnToTeam(playerPawn);
             playerPawn.RegisterTeam(this);
             playerPawn.SendPawnTeam();
+
+            if (playerPawn is CombatPlayer)
+            {
+                CombatDeck pawnDeck = _initializePlayerDeck();
+                CombatPlayer player = (CombatPlayer)playerPawn;
+                int[] pageViewIds = pawnDeck.GetPageViewIds();
+                player.PlayerDeck = pawnDeck;
+                player.DrawStartingHand();
+                player.SendDeckPageViewIds(pageViewIds);
+            }
+            
             i++;
         }
     }
@@ -45,6 +59,30 @@ public class PlayerTeam : CombatTeam {
         foreach(CombatPawn pawn in ActivePawnsOnTeam)
         {
             pawn.DecrementBoosts();
+            
+            if (pawn is CombatPlayer)
+            {
+                CombatPlayer playerPawn = (CombatPlayer)pawn;
+                playerPawn.DrawPageForTurn();
+            }
         }
+    }
+
+    //TODO: Get the player inventory from the given PlayerEntity
+    private CombatDeck _initializePlayerDeck(/*PlayerEntity playerToCreateFor*/)
+    {
+        Debug.Log("Initializing player deck");
+        List<Page> deckPages = new List<Page>();
+        for (int i = 0; i < 20; i++)
+        {
+            GameObject pageObject = PhotonNetwork.Instantiate(m_pageToUse.name, Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
+            Page page = pageObject.GetComponent<Page>();
+            int pageViewId = pageObject.GetComponent<PhotonView>().viewID;
+            deckPages.Add(page);
+        }
+        CombatDeck playerDeck = new CombatDeck(deckPages);
+        playerDeck.ShuffleDeck();
+        return playerDeck;
     }
 }

@@ -82,6 +82,7 @@ public class ExecuteState : CombatState
 
         if (m_netExecuteStateObject != null)
         {
+            PhotonNetwork.Destroy(m_netExecuteStateObject);
             Destroy(m_netExecuteStateObject);
         }
         

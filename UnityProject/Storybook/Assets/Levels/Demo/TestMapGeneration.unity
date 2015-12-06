@@ -113,9 +113,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_worldMaxXSize: 4
-  m_worldMaxYSize: 4
+  m_worldMaxYSize: 5
   m_roomPrefab: {fileID: 0}
-  m_minRoomsStartToExit: 5
+  m_minRoomsStartToExit: 6
+  m_additionalHallsMax: 5
+  m_additionalHallsMin: 3
 --- !u!4 &647438510
 Transform:
   m_ObjectHideFlags: 0

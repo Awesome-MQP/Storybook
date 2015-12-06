@@ -30,6 +30,9 @@ public class Page : Item {
     [SerializeField]
     private int m_defenseMod = 0;
 
+    [SerializeField]
+    private PlayerMove m_playerCombatMove;
+
 	// Use this for initialization
 	protected override void Awake () {
         base.Awake();
@@ -53,5 +56,10 @@ public class Page : Item {
     protected override void OnMoved()
     {
         throw new NotImplementedException();
+    }
+
+    public PlayerMove PlayerCombatMove
+    {
+        get { return m_playerCombatMove; }
     }
 }

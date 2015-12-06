@@ -17,7 +17,14 @@ public class TestCombatPawn : CombatPlayer
             Debug.Log("Space bar pressed");
             List<CombatPawn> targetList = new List<CombatPawn>();
             targetList.Add(GetPawnsOpposing()[0]);
-            PlayerMove chosenMove = PlayerHand[0];
+
+            // TODO: Use the actual hand
+            //PlayerMove chosenMove = TestHand[0];
+
+            Page chosenPage = PlayerHand[0];
+            PlayerMove chosenMove = chosenPage.PlayerCombatMove;
+            RemovePageFromHand(chosenPage);
+
             chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
             chosenMove.InitializeMove();
@@ -46,7 +53,10 @@ public class TestCombatPawn : CombatPlayer
     private void SendPlayerMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
     {
         Debug.Log("Other player submitted move");
-        PlayerMove chosenMove = PlayerHand[moveIndex];
+
+        Page chosenPage = PlayerHand[moveIndex];
+        PlayerMove chosenMove = chosenPage.PlayerCombatMove;
+
         List<CombatPawn> targets = new List<CombatPawn>();
 
         // Determine the targets of the move based on the list of target ids

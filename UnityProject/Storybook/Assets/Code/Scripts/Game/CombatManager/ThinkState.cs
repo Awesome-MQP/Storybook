@@ -64,6 +64,7 @@ public class ThinkState : CombatState {
         // Delete the NetThinkState
         if (m_netThinkStateObject != null)
         {
+            PhotonNetwork.Destroy(m_netThinkStateObject);
             Destroy(m_netThinkStateObject);
         }
         m_netThinkStateObject = null;

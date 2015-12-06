@@ -124,7 +124,7 @@ public abstract class CombatAI : CombatPawn {
 
         while (chosenMove == null)
         {
-            int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
+            int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count);
             currentMove = possibleMoves[moveIndex];
             int willSelectMove = UnityEngine.Random.Range(0, 100);
             if (willSelectMove <= currentMove.MoveFrequency * 100)

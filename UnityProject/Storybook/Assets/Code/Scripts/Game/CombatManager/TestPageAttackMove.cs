@@ -4,9 +4,6 @@ using System;
 
 public class TestPageAttackMove : PageMove {
 
-    [SerializeField]
-    private int m_moveDamage = 3;
-
     private const bool IS_MOVE_ATTACK = true;
 
     void Awake()
@@ -22,7 +19,7 @@ public class TestPageAttackMove : PageMove {
     {
         foreach (CombatPawn enemyPawn in MoveTargets)
         {
-            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, enemyPawn.PawnGenre, MoveGenre, MoveOwner.Attack, enemyPawn.Defense);
+            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, enemyPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, enemyPawn.Defense);
             enemyPawn.DealDamageToPawn(moveDamage);
         }
     }

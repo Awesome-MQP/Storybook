@@ -122,9 +122,9 @@ public abstract class CombatTeam : Photon.PunBehaviour {
         m_pawnsToSpawn.Add(pawnToSpawn);
     }
 
-    public CombatPawn[] ActivePawnsOnTeam
+    public List<CombatPawn> ActivePawnsOnTeam
     {
-        get { return m_activePawnsOnTeam.ToArray(); }
+        get { return m_activePawnsOnTeam; }
     }
 
     public void SetPawnsOnTeam(List<CombatPawn> pawnsOnTeam)

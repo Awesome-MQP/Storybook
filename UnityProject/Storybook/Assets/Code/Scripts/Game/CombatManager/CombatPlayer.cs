@@ -147,4 +147,29 @@ public abstract class CombatPlayer : CombatPawn {
         SetMoveForTurn(chosenMove);
         SetHasSubmittedMove(true);
     }
+
+    // Set the stat mods from pages in a player's hand to their stats
+    public void CalculateStatMods()
+    {
+        foreach(Page p in m_playerHand)
+        {
+            switch(p.PageGenre)
+            {
+                case Genre.Horror:
+                    AttackMod = (AttackMod + p.PageLevel);
+                    break;
+                case Genre.SciFi:
+                    DefenseMod = (DefenseMod + p.PageLevel);
+                    break;
+                case Genre.GraphicNovel:
+                    SpeedMod = (SpeedMod + p.PageLevel);
+                    break;
+                case Genre.Fantasy:
+                    HitpointsMod = (HitpointsMod + p.PageLevel);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

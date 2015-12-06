@@ -32,6 +32,24 @@ public abstract class CombatMove : MonoBehaviour{
     [SerializeField]
     private Genre m_moveGenre;
 
+    ///<summary>
+    /// The type of the move
+    /// </summary>
+    [SerializeField]
+    private MoveType m_moveType;
+
+    /// <summary>
+    /// The level of the move
+    /// </summary>
+    [SerializeField]
+    private int m_moveLevel;
+
+    /// <summary>
+    /// The rarity of the move
+    /// </summary>
+    [SerializeField]
+    private bool m_moveRarity;
+
     /// <summary>
     /// True if the move targets the pawns of the opposing side, false if it effects pawns of the same side
     /// Ex: true if it is a player move that deals damage to an enemy
@@ -172,5 +190,23 @@ public abstract class CombatMove : MonoBehaviour{
     public Genre MoveGenre
     {
         get { return m_moveGenre; }
+    }
+
+    public MoveType MoveType
+    {
+        get { return m_moveType; }
+        set { m_moveType = value; }
+    }
+
+    public int MoveLevel
+    {
+        get { return m_moveLevel; }
+        set { m_moveLevel = value; }
+    }
+
+    public bool MoveRarity
+    {
+        get { return m_moveRarity; }
+        set { m_moveRarity = value; }
     }
 }

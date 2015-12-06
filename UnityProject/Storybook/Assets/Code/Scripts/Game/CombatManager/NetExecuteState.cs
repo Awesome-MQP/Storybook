@@ -350,13 +350,17 @@ public class NetExecuteState : NetworkState {
         Material currentPawnMaterial = m_currentCombatPawn.GetComponent<Renderer>().material;
         if (isStartingAttack)
         {
-            if (m_currentCombatPawn.MoveForTurn.IsMoveAttack)
+            if (m_currentCombatPawn.MoveForTurn.MoveType == MoveType.Attack)
             {
                 currentPawnMaterial.SetColor("_Color", Color.red);
             }
-            else
+            else if(m_currentCombatPawn.MoveForTurn.MoveType == MoveType.Boost)
             {
                 currentPawnMaterial.SetColor("_Color", Color.blue);
+            }
+            else // status
+            {
+                currentPawnMaterial.SetColor("_Color", Color.magenta);
             }
         }
         else if (!m_currentCombatPawn.IsAlive)

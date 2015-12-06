@@ -176,6 +176,5 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         m_teamId = teamId;
         FindObjectOfType<CombatManager>().RegisterTeamLocal(this);
-        Debug.Log("Registering team");
     }
 }

@@ -47,7 +47,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     public abstract void OnThink();
 
-    void Start()
+    public void Start()
     {
         DontDestroyOnLoad(this);
         m_combatManager = FindObjectOfType<CombatManager>();

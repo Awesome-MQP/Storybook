@@ -82,6 +82,7 @@ public class ExecuteState : CombatState
 
         if (m_netExecuteStateObject != null)
         {
+            // TODO: Change back to just calling Destroy when that is fixed
             PhotonNetwork.Destroy(m_netExecuteStateObject);
             Destroy(m_netExecuteStateObject);
         }

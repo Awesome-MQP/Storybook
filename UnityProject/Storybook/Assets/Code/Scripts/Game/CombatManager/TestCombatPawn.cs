@@ -17,15 +17,24 @@ public class TestCombatPawn : CombatPlayer
             Debug.Log("Space bar pressed");
             List<CombatPawn> targetList = new List<CombatPawn>();
             targetList.Add(GetPawnsOpposing()[0]);
+
             PlayerMove chosenMove = PlayerHand[0];
             chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
-            chosenMove.InitializeMove();
+            chosenMove.InitializeMove(); 
             SetMoveForTurn(chosenMove);
             SetHasSubmittedMove(true);
 
+            Page p = new Page();
+            p.Rarity = chosenMove.MoveRarity;
+            p.PageGenre = chosenMove.MoveGenre;
+            p.PageLevel = chosenMove.MoveLevel;
+            p.PageOwner = this;
+            PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
+            pm.construct(p);
+
             int[] targetIds = new int[4];
-            for (int i = 0; i < chosenMove.MoveTargets.Length; i++)
+            for (int i = 0; i < pm.NumberOfTargets; i++)
             {
                 CombatPawn target = chosenMove.MoveTargets[i];
                 targetIds[i] = target.PawnId;
@@ -52,10 +61,10 @@ public class TestCombatPawn : CombatPlayer
         // Determine the targets of the move based on the list of target ids
         CombatPawn[] possibleTargetList = null;
 
-        // If the move is an attack, the possible targets are the enemy list
-        if (chosenMove.IsMoveAttack)
+        // If the move is an attack or status, the possible targets are the enemy list
+        if ((chosenMove.MoveType == MoveType.Attack) || (chosenMove.MoveType == MoveType.Status))
         {
-            Debug.Log("Move is an attack");
+            Debug.Log("Move is an attack/status");
             possibleTargetList = GetPawnsOpposing();
         }
 

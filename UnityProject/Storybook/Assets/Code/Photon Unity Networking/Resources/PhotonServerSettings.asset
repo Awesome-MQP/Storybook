@@ -52,4 +52,7 @@ MonoBehaviour:
   - _RejectCommit
   - _RequestCommit
   - RPCSendDeckIds
+  - _OnNetworkEnter
+  - _OnNetworkLeave
+  - _RPCArrive
   DisableAutoOpenWizard: 1

@@ -39,6 +39,13 @@ public class MapManager : MonoBehaviour {
         }
     }
 
+    private static MapManager s_instance;
+
+    public static MapManager Instance
+    {
+        get { return s_instance; }
+    }
+
     [SerializeField]
     private int m_worldMaxXSize = 4;
 
@@ -75,6 +82,7 @@ public class MapManager : MonoBehaviour {
     void Awake()
     {
         DontDestroyOnLoad(this);
+        s_instance = this;
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
         m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
@@ -117,6 +125,12 @@ public class MapManager : MonoBehaviour {
     // Get a room from the world
     public RoomObject GetRoom(Location roomLoc)
     {
+        if (roomLoc.X < 0 || roomLoc.X > m_worldGrid.GetLength(0))
+            return null;
+
+        if (roomLoc.Y < 0 || roomLoc.Y > m_worldGrid.GetLength(1))
+            return null;
+
         return m_worldGrid[roomLoc.X, roomLoc.Y];
     }
 

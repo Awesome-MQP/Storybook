@@ -2456,7 +2456,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             ParameterInfo info = callMethodParameters[i];
 
-            if(info.ParameterType.IsAssignableFrom(typeof(UnityEngine.Component)))
+            if(!info.ParameterType.IsAssignableFrom(typeof(PhotonView)) && info.ParameterType.IsAssignableFrom(typeof(UnityEngine.Component)))
             {
                 object parameter = parameters[i];
                 if (parameters == null)
@@ -2470,7 +2470,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
                 parameters[i] = component;
             }
-            else if(info.ParameterType.IsArray && info.ParameterType.GetElementType().IsAssignableFrom(typeof(UnityEngine.Component)))
+            else if(info.ParameterType.IsArray && !info.ParameterType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.ParameterType.GetElementType().IsAssignableFrom(typeof(UnityEngine.Component)))
             {
                 object parameterArray = parameters[i];
                 if (parameterArray == null)
@@ -3209,7 +3209,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
                 Type parameterType = parameter.GetType();
 
-                if(parameterType.IsAssignableFrom(typeof(Component)))
+                if(!parameterType.IsAssignableFrom(typeof(PhotonView)) && parameterType.IsAssignableFrom(typeof(Component)))
                 {
                     Component component = parameter as Component;
                     Assert.IsNotNull(component);
@@ -3221,7 +3221,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
                     parameters[i] = parameterView;
                 }
-                else if(parameterType.IsArray && parameterType.GetElementType().IsAssignableFrom(typeof(Component)))
+                else if(parameterType.IsArray && !parameterType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && parameterType.GetElementType().IsAssignableFrom(typeof(Component)))
                 {
                     Component[] components = parameter as Component[];
                     Assert.IsNotNull(components);
@@ -3284,46 +3284,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     internal void RPC(PhotonView view, string methodName, PhotonTargets target, bool encrypt, params object[] parameters)
     {
-        if (this.blockSendingGroups.Contains(view.group))
-        {
-            return; // Block sending on this group
-        }
-
-        if (view.viewID < 1)
-        {
-            Debug.LogError("Illegal view ID:" + view.viewID + " method: " + methodName + " GO:" + view.gameObject.name);
-        }
-
-        if (PhotonNetwork.logLevel >= PhotonLogLevel.Full)
-            Debug.Log("Sending RPC \"" + methodName + "\" to " + target);
-
-
-        //ts: changed RPCs to a one-level hashtable as described in internal.txt
-        Hashtable rpcEvent = new Hashtable();
-        rpcEvent[(byte)0] = (int)view.viewID; // LIMITS NETWORKVIEWS&PLAYERS
-        if (view.prefix > 0)
-        {
-            rpcEvent[(byte)1] = (short)view.prefix;
-        }
-        rpcEvent[(byte)2] = this.ServerTimeInMilliSeconds;
-
-
-        // send name or shortcut (if available)
-        int shortcut = 0;
-        if (rpcShortcuts.TryGetValue(methodName, out shortcut))
-        {
-            rpcEvent[(byte)5] = (byte)shortcut; // LIMITS RPC COUNT
-        }
-        else
-        {
-            rpcEvent[(byte)3] = methodName;
-        }
-
-        if (parameters != null && parameters.Length > 0)
-        {
-            rpcEvent[(byte)4] = (object[])parameters;
-        }
-
         // Check scoping
         if (target == PhotonTargets.All)
         {
@@ -3333,47 +3293,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             RPC(view, methodName, PhotonNetwork.otherPlayers, encrypt, parameters);
         }
-        else if (target == PhotonTargets.AllBuffered)
+        else if(target == PhotonTargets.MasterClient)
         {
-            Debug.LogError("Buffered RPCs have been deprecated.");
-        }
-        else if (target == PhotonTargets.OthersBuffered)
-        {
-            Debug.LogError("Buffered RPCs have been deprecated.");
-        }
-        else if (target == PhotonTargets.MasterClient)
-        {
-            if (this.mMasterClientId == this.mLocalActor.ID)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-            else
-            {
-                RaiseEventOptions options = new RaiseEventOptions() { Receivers = ReceiverGroup.MasterClient, Encrypt = encrypt };
-                this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            }
-        }
-        else if (target == PhotonTargets.AllViaServer)
-        {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Receivers = ReceiverGroup.All, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            if (PhotonNetwork.offlineMode)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-        }
-        else if (target == PhotonTargets.AllBufferedViaServer)
-        {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Receivers = ReceiverGroup.All, CachingOption = EventCaching.AddToRoomCache, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            if (PhotonNetwork.offlineMode)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-        }
-        else
-        {
-            Debug.LogError("Unsupported target enum: " + target);
+            RPC(view, methodName, PhotonNetwork.masterClient, encrypt, parameters);
         }
     }
 

@@ -1026,7 +1026,7 @@ namespace Photon
             if (value == null)
                 return null;
 
-            if(info.GetType().IsAssignableFrom(typeof(Component)))
+            if(!info.PropertyType.GetType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
             {
                 Component component = value as Component;
                 Assert.IsNotNull(component);
@@ -1036,7 +1036,7 @@ namespace Photon
 
                 return view;
             }
-            else if(info.GetType().IsArray && info.GetType().GetElementType().IsAssignableFrom(typeof(Component)))
+            else if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
             {
                 Component[] componetns = value as Component[];
                 Assert.IsNotNull(componetns);
@@ -1065,7 +1065,7 @@ namespace Photon
 
         private void DeserializeProperty(object value, PropertyInfo info)
         {
-            if (info.GetType().IsAssignableFrom(typeof(Component)))
+            if (!info.PropertyType.GetType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
             {
                 PhotonView view = value as PhotonView;
                 if (!view)
@@ -1080,7 +1080,7 @@ namespace Photon
                 info.SetValue(this, component, null);
                 return;
             }
-            else if (info.GetType().IsArray && info.GetType().GetElementType().IsAssignableFrom(typeof(Component)))
+            else if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
             {
                 PhotonView[] views = value as PhotonView[];
                 Assert.IsNotNull(views);

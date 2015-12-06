@@ -22,6 +22,8 @@ public class CombatRoom : RoomObject {
     {
         base.Awake();
         m_gameManager = FindObjectOfType<GameManager>();
+        // CombatTeam.m_activePawnsOnTeam is the list of all combat pawns
+        m_enemyPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
         OnRoomEnter();
 	}
 

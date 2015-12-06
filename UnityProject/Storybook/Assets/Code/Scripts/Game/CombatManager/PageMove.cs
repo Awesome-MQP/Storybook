@@ -6,8 +6,21 @@ public abstract class PageMove : PlayerMove {
     /// <summary>
     /// The enum int value for the genre of the page
     /// </summary>
-    private int m_pageGenre;
+    [SerializeField]
+    private Genre m_pageGenre;
 
-    private int m_pageType;
+    [SerializeField]
+    private MoveType m_pageType;
 
+    public Genre PageGenre
+    {
+        get { return m_pageGenre; }
+        set { m_pageGenre = value; }
+    }
+
+    public MoveType PageType
+    {
+        get { return m_pageType; }
+        set { m_pageType = value; }
+    }
 }

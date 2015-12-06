@@ -42,7 +42,13 @@ public abstract class CombatMove : MonoBehaviour{
     /// The level of the move
     /// </summary>
     [SerializeField]
-    private float m_moveLevel;
+    private int m_moveLevel;
+
+    /// <summary>
+    /// The rarity of the move
+    /// </summary>
+    [SerializeField]
+    private bool m_moveRarity;
 
     /// <summary>
     /// True if the move targets the pawns of the opposing side, false if it effects pawns of the same side
@@ -192,9 +198,15 @@ public abstract class CombatMove : MonoBehaviour{
         set { m_moveType = value; }
     }
 
-    public float MoveLevel
+    public int MoveLevel
     {
         get { return m_moveLevel; }
         set { m_moveLevel = value; }
+    }
+
+    public bool MoveRarity
+    {
+        get { return m_moveRarity; }
+        set { m_moveRarity = value; }
     }
 }

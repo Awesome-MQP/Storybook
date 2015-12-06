@@ -226,6 +226,12 @@ public class Page : Item  {
         set { m_hitpointsMod = value; }
     }
 
+    public bool Rarity
+    {
+        get { return m_isRare; }
+        set { m_isRare = value; }
+    }
+
     public MoveType PageType
     {
         get { return m_pageMoveType; }

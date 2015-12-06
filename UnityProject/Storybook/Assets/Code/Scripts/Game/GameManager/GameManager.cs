@@ -122,4 +122,10 @@ public class GameManager : Photon.PunBehaviour {
         get { return m_enemyTeamForCombat; }
         set { m_enemyTeamForCombat = value; }
     }
+
+    public PlayerTeam PlayerTeamForCombat
+    {
+        get { return m_playerTeamForCombat; }
+        set { m_playerTeamForCombat = value; }
+    }
 }

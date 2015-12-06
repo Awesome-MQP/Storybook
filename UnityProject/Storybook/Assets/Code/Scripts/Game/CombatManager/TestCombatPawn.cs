@@ -25,8 +25,16 @@ public class TestCombatPawn : CombatPlayer
             SetMoveForTurn(chosenMove);
             SetHasSubmittedMove(true);
 
+            Page p = new Page();
+            p.Rarity = chosenMove.MoveRarity;
+            p.PageGenre = chosenMove.MoveGenre;
+            p.PageLevel = chosenMove.MoveLevel;
+            p.PageOwner = this;
+            PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
+            pm.construct(p);
+
             int[] targetIds = new int[4];
-            for (int i = 0; i < chosenMove.MoveTargets.Length; i++)
+            for (int i = 0; i < pm.NumberOfTargets; i++)
             {
                 CombatPawn target = chosenMove.MoveTargets[i];
                 targetIds[i] = target.PawnId;

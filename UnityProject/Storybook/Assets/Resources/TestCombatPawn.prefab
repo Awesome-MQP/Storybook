@@ -92,9 +92,7 @@ MonoBehaviour:
   m_attack: 80
   m_genre: 2
   m_teamId: 1
-  m_playerHand:
-  - {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
-  - {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
+  m_pageToUse: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
 --- !u!114 &11493674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -122,7 +120,7 @@ MonoBehaviour:
   instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
-  allowFullCommunication: 0
+  allowFullCommunication: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -130,6 +128,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_testHand.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_playerHand.Array.size
       value: 2
@@ -141,7 +143,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+      objectReference: {fileID: 4300000, guid: 22091e9c10c668d46892c760554653fe, type: 3}
     - target: {fileID: 0}
       propertyPath: m_LocalScale.x
       value: 1
@@ -220,6 +222,20 @@ Prefab:
       propertyPath: shouldSync
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_testHand.Array.data[0]
+      value: 
+      objectReference: {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: allowFullCommunication
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_pageToUse
+      value: 
+      objectReference: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 124672}

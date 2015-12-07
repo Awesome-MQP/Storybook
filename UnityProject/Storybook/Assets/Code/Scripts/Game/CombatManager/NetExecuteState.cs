@@ -162,7 +162,7 @@ public class NetExecuteState : NetworkState {
         // Otherwise, all the combat pawns have done their move, so exit the execute state
         else
         {
-            Debug.Log("Combat is also complete");
+            Debug.Log("Combat is complete");
             sceneView.RPC("IncrementPlayersReady", PhotonTargets.All);
             m_isClientReady = true;
             m_isTurnComplete = true;

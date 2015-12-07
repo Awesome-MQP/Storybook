@@ -5,11 +5,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using ExitGames.Client.Photon;
+using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = UnityEngine.Object;
 
@@ -2333,7 +2335,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         for (int componentsIndex = 0; componentsIndex < photonNetview.RpcMonoBehaviours.Length; componentsIndex++)
         {
-            MonoBehaviour monob = photonNetview.RpcMonoBehaviours[componentsIndex];
+            UnityEngine.MonoBehaviour monob = photonNetview.RpcMonoBehaviours[componentsIndex];
             if (monob == null)
             {
                 Debug.LogError("ERROR You have missing MonoBehaviours on your gameobjects!");
@@ -2376,11 +2378,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         if (this.CheckTypeMatch(pArray, argTypes))
                         {
                             receivers++;
-                            object result = mInfo.Invoke((object)monob, inMethodParameters);
-                            if (mInfo.ReturnType == typeof(IEnumerator))
-                            {
-                                monob.StartCoroutine((IEnumerator)result);
-                            }
+                            InvokeRpcMethod(monob, mInfo, inMethodParameters);
                         }
                     }
                     else if ((pArray.Length - 1) == argTypes.Length)
@@ -2397,22 +2395,14 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                                 inMethodParameters.CopyTo(deParamsWithInfo, 0);
                                 deParamsWithInfo[deParamsWithInfo.Length - 1] = new PhotonMessageInfo(sender, sendTime, photonNetview);
 
-                                object result = mInfo.Invoke((object)monob, deParamsWithInfo);
-                                if (mInfo.ReturnType == typeof(IEnumerator))
-                                {
-                                    monob.StartCoroutine((IEnumerator)result);
-                                }
+                                InvokeRpcMethod(monob, mInfo, deParamsWithInfo);
                             }
                         }
                     }
                     else if (pArray.Length == 1 && pArray[0].ParameterType.IsArray)
                     {
                         receivers++;
-                        object result = mInfo.Invoke((object)monob, new object[] { inMethodParameters });
-                        if (mInfo.ReturnType == typeof(IEnumerator))
-                        {
-                            monob.StartCoroutine((IEnumerator)result);
-                        }
+                        InvokeRpcMethod(monob, mInfo, new object[] { inMethodParameters });
                     }
                 }
             }
@@ -2458,6 +2448,57 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
     }
 
+    private void InvokeRpcMethod(UnityEngine.MonoBehaviour target, MethodInfo methodInfo, object[] parameters)
+    {
+        ParameterInfo[] callMethodParameters = methodInfo.GetParameters();
+
+        for(int i = 0; i < callMethodParameters.Length; i++)
+        {
+            ParameterInfo info = callMethodParameters[i];
+
+            if(!info.ParameterType.IsAssignableFrom(typeof(PhotonView)) && info.ParameterType.IsAssignableFrom(typeof(UnityEngine.Component)))
+            {
+                object parameter = parameters[i];
+                if (parameters == null)
+                    continue;
+
+                PhotonView view = parameter as PhotonView;
+                Assert.IsNotNull(view, "View was null when it should not have been.");
+
+                Component component = view.GetComponent(info.ParameterType);
+                Assert.IsNotNull(component);
+
+                parameters[i] = component;
+            }
+            else if(info.ParameterType.IsArray && !info.ParameterType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.ParameterType.GetElementType().IsAssignableFrom(typeof(UnityEngine.Component)))
+            {
+                object parameterArray = parameters[i];
+                if (parameterArray == null)
+                    continue;
+
+                PhotonView[] views = parameterArray as PhotonView[];
+                Assert.IsNotNull(views);
+
+                Array components = Array.CreateInstance(info.ParameterType.GetElementType(), views.Length); ;
+
+                for(int j = 0; j < views.Length; j++)
+                {
+                    PhotonView view = views[j];
+                    if (!view)
+                        components.SetValue(null, j);
+                    else
+                        components.SetValue(view.GetComponent(info.ParameterType.GetElementType()), j);
+                }
+            }
+        }
+
+        object result = methodInfo.Invoke(target, parameters);
+        if (methodInfo.ReturnType == typeof(IEnumerator))
+        {
+            target.StartCoroutine((IEnumerator)result);
+        }
+    }
+
     /// <summary>
     /// Check if all types match with parameters. We can have more paramters then types (allow last RPC type to be different).
     /// </summary>
@@ -2475,7 +2516,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             Type type = methodParameters[index].ParameterType;
             //todo: check metro type usage
-            if (callParameterTypes[index] != null && !type.Equals(callParameterTypes[index]))
+            if(type.IsAssignableFrom(typeof(Component)))
+            {
+                if (callParameterTypes[index] != null && !callParameterTypes[index].IsAssignableFrom(typeof(PhotonView)))
+                    return false;
+            }
+            else if (callParameterTypes[index] != null && !type.Equals(callParameterTypes[index]))
             {
                 return false;
             }
@@ -3155,6 +3201,51 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         if (parameters != null && parameters.Length > 0)
         {
+            for(int i = 0; i < parameters.Length; i++)
+            {
+                object parameter = parameters[i];
+                if (parameter == null)
+                    continue;
+
+                Type parameterType = parameter.GetType();
+
+                if(!parameterType.IsAssignableFrom(typeof(PhotonView)) && parameterType.IsAssignableFrom(typeof(Component)))
+                {
+                    Component component = parameter as Component;
+                    Assert.IsNotNull(component);
+
+                    PhotonView parameterView = component.GetComponent<PhotonView>();
+                    if(!parameterView)
+                        Debug.LogError("Components must be attatched to an object iwth a photon view in order to be sent over the network.");
+
+
+                    parameters[i] = parameterView;
+                }
+                else if(parameterType.IsArray && !parameterType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && parameterType.GetElementType().IsAssignableFrom(typeof(Component)))
+                {
+                    Component[] components = parameter as Component[];
+                    Assert.IsNotNull(components);
+
+                    PhotonView[] parameterViews = new PhotonView[components.Length];
+                    for(int j = 0; j < components.Length; j++)
+                    {
+                        Component component = components[j];
+                        if(component == null)
+                        {
+                            parameterViews[j] = null;
+                        }
+                        else
+                        {
+                            PhotonView parameterElementView = component.GetComponent<PhotonView>();
+                            if(!parameterElementView)
+                                Debug.LogError("Components must be attatched to an object iwth a photon view in order to be sent over the network.");
+
+                            parameterViews[j] = parameterElementView;
+                        }
+                    }
+                }
+            }
+
             rpcEvent[(byte) 4] = (object[]) parameters;
         }
 
@@ -3193,46 +3284,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     internal void RPC(PhotonView view, string methodName, PhotonTargets target, bool encrypt, params object[] parameters)
     {
-        if (this.blockSendingGroups.Contains(view.group))
-        {
-            return; // Block sending on this group
-        }
-
-        if (view.viewID < 1)
-        {
-            Debug.LogError("Illegal view ID:" + view.viewID + " method: " + methodName + " GO:" + view.gameObject.name);
-        }
-
-        if (PhotonNetwork.logLevel >= PhotonLogLevel.Full)
-            Debug.Log("Sending RPC \"" + methodName + "\" to " + target);
-
-
-        //ts: changed RPCs to a one-level hashtable as described in internal.txt
-        Hashtable rpcEvent = new Hashtable();
-        rpcEvent[(byte)0] = (int)view.viewID; // LIMITS NETWORKVIEWS&PLAYERS
-        if (view.prefix > 0)
-        {
-            rpcEvent[(byte)1] = (short)view.prefix;
-        }
-        rpcEvent[(byte)2] = this.ServerTimeInMilliSeconds;
-
-
-        // send name or shortcut (if available)
-        int shortcut = 0;
-        if (rpcShortcuts.TryGetValue(methodName, out shortcut))
-        {
-            rpcEvent[(byte)5] = (byte)shortcut; // LIMITS RPC COUNT
-        }
-        else
-        {
-            rpcEvent[(byte)3] = methodName;
-        }
-
-        if (parameters != null && parameters.Length > 0)
-        {
-            rpcEvent[(byte)4] = (object[])parameters;
-        }
-
         // Check scoping
         if (target == PhotonTargets.All)
         {
@@ -3242,47 +3293,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             RPC(view, methodName, PhotonNetwork.otherPlayers, encrypt, parameters);
         }
-        else if (target == PhotonTargets.AllBuffered)
+        else if(target == PhotonTargets.MasterClient)
         {
-            Debug.LogError("Buffered RPCs have been deprecated.");
-        }
-        else if (target == PhotonTargets.OthersBuffered)
-        {
-            Debug.LogError("Buffered RPCs have been deprecated.");
-        }
-        else if (target == PhotonTargets.MasterClient)
-        {
-            if (this.mMasterClientId == this.mLocalActor.ID)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-            else
-            {
-                RaiseEventOptions options = new RaiseEventOptions() { Receivers = ReceiverGroup.MasterClient, Encrypt = encrypt };
-                this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            }
-        }
-        else if (target == PhotonTargets.AllViaServer)
-        {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Receivers = ReceiverGroup.All, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            if (PhotonNetwork.offlineMode)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-        }
-        else if (target == PhotonTargets.AllBufferedViaServer)
-        {
-            RaiseEventOptions options = new RaiseEventOptions() { InterestGroup = (byte)view.group, Receivers = ReceiverGroup.All, CachingOption = EventCaching.AddToRoomCache, Encrypt = encrypt };
-            this.OpRaiseEvent(PunEvent.RPC, rpcEvent, true, options);
-            if (PhotonNetwork.offlineMode)
-            {
-                this.ExecuteRpc(rpcEvent, this.mLocalActor);
-            }
-        }
-        else
-        {
-            Debug.LogError("Unsupported target enum: " + target);
+            RPC(view, methodName, PhotonNetwork.masterClient, encrypt, parameters);
         }
     }
 
@@ -3884,7 +3897,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         return true;
     }
 
-    internal protected static bool GetMethod(MonoBehaviour monob, string methodType, out MethodInfo mi)
+    internal protected static bool GetMethod(UnityEngine.MonoBehaviour monob, string methodType, out MethodInfo mi)
     {
         mi = null;
 

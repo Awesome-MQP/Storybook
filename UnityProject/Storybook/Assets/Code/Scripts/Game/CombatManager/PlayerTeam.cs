@@ -4,6 +4,9 @@ using System;
 
 public class PlayerTeam : CombatTeam {
 
+    [SerializeField]
+    Page m_pageToUse;
+
     public override void SpawnTeam()
     {
         GetComponent<PhotonView>().RPC("RegisterTeamLocal", PhotonTargets.Others, TeamId);
@@ -14,7 +17,6 @@ public class PlayerTeam : CombatTeam {
             GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, Quaternion.identity, 0);
             if ((i + 1) != PhotonNetwork.player.ID)
             {
-                Debug.Log("Transferring control");
                 playerObject.GetComponent<PhotonView>().TransferController(i + 1);
             }
             PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
@@ -45,6 +47,12 @@ public class PlayerTeam : CombatTeam {
         foreach(CombatPawn pawn in ActivePawnsOnTeam)
         {
             pawn.DecrementBoosts();
+            
+            if (pawn is CombatPlayer)
+            {
+                CombatPlayer playerPawn = (CombatPlayer)pawn;
+                playerPawn.DrawPageForTurn();
+            }
         }
     }
 }

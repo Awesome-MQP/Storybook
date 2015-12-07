@@ -189,10 +189,8 @@ public class CombatManager : Photon.PunBehaviour {
     /// <returns>The team with the given ID or null if no team with that ID exists</returns>
     public CombatTeam GetTeamById(int teamId)
     {
-        Debug.Log("Looking for team " + teamId);
         foreach(CombatTeam team in m_teamList)
         {
-            Debug.Log("TeamId = " + team.TeamId);
             if (team.TeamId == teamId)
             {
                 return team;

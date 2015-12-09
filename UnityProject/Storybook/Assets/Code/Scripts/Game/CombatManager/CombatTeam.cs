@@ -91,6 +91,8 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         foreach(CombatPawn pawn in m_allPawnsSpawned)
         {
+            // TODO: Change back to just calling Destroy when that is fixed
+            PhotonNetwork.Destroy(pawn.gameObject);
             Destroy(pawn.gameObject);
         }
     }

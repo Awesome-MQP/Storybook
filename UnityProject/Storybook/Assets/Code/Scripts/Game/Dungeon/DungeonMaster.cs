@@ -122,6 +122,7 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel);
             page.Rarity = _getIsPageRare(roomLevel);
             page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
             return page;
         }
 
@@ -131,6 +132,7 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 1);
             page.Rarity = _getIsPageRare(roomLevel + 1);
             page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
             return page;
         }
 
@@ -140,10 +142,12 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 2);
             page.Rarity = _getIsPageRare(roomLevel + 2);
             page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
             return page;
         }
 
         // If it does not create a page, return null
+        Debug.Log("Dungeon Master returning a null page");
         return null;
     }
 

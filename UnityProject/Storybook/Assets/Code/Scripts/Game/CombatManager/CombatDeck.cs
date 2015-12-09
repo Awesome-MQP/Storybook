@@ -34,7 +34,6 @@ public class CombatDeck {
         {
             Page nextPage = m_deckContents[0];
             m_deckContents.Remove(nextPage);
-            Debug.Log("Got page, deck contents = " + m_deckContents.Count);
             return nextPage;
         }
         else
@@ -55,7 +54,6 @@ public class CombatDeck {
     public void AddPageToGraveyard(Page pageToAdd)
     {
         m_graveyardContents.Add(pageToAdd);
-        Debug.Log("Graveyard size = " + m_graveyardContents.Count);
     }
 
     public Page[] DeckContents

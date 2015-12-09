@@ -260,6 +260,7 @@ MonoBehaviour:
     type: 2}
   m_playerPawn: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
   m_playersInCombat: 1
+  m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
 --- !u!23 &1900037248
 MeshRenderer:
   m_ObjectHideFlags: 0

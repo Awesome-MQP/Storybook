@@ -9,17 +9,28 @@ public class TestCombatPawn : CombatPlayer
     // Waits for input of a move
     public override void OnThink()
     {
+        int numPressed = _getButtonPress();
+
         // If the player hits the space bar and this pawn is the client's, submit a move
-        if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.player.ID == PawnId)
+        if (numPressed > -1 && PhotonNetwork.player.ID == PawnId)
         {
+            Debug.Log("Submitted page " + numPressed);
+
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();
-            Debug.Log(m_scenePhotonView.viewID);
-            Debug.Log("Space bar pressed");
-            List<CombatPawn> targetList = new List<CombatPawn>();
-            targetList.Add(GetPawnsOpposing()[0]);
             
-            Page chosenPage = PlayerHand[0];
+            Page chosenPage = PlayerHand[numPressed];
             PlayerMove chosenMove = chosenPage.PlayerCombatMove;
+
+            List<CombatPawn> targetList = new List<CombatPawn>();
+            if (chosenPage.PageType == MoveType.Attack)
+            {
+                targetList.Add(GetPawnsOpposing()[0]);
+            }
+            else if (chosenPage.PageType == MoveType.Boost)
+            {
+                targetList.Add(GetPawnsOnTeam()[0]);
+            }
+
             RemovePageFromHand(chosenPage);
             
             chosenMove.SetMoveOwner(this);
@@ -37,9 +48,34 @@ public class TestCombatPawn : CombatPlayer
                 CombatPawn target = chosenMove.MoveTargets[i];
                 targetIds[i] = target.PawnId;
             }
-            int moveIndex = 0;
 
-            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.All, PawnId, targetIds, moveIndex);
+            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, numPressed);
         }
+    }
+
+    private int _getButtonPress()
+    {
+        int numPressed = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            numPressed = 0;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            numPressed = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            numPressed = 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            numPressed = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            numPressed = 4;
+        }
+        return numPressed;
     }
 }

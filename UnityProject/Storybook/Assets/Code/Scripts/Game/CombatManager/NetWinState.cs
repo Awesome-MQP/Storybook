@@ -21,6 +21,7 @@ public class NetWinState : NetworkState {
             if (m_trigger > 250)
             {
                 m_isClientReady = true;
+                _getPageDrop();
                 GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
             }
         }
@@ -47,7 +48,25 @@ public class NetWinState : NetworkState {
     [PunRPC]
     private void IncrementPlayersReady()
     {
+        Debug.Log("Another player is ready");
         m_playersReady += 1;
     }
 
+    private void _getPageDrop()
+    {
+        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+        Page pageDrop = dm.GetPageDropFromCombat(Genre.GraphicNovel, 1);
+        if (pageDrop != null)
+        {
+            Debug.Log("Got a page drop!");
+            Debug.Log("Page genre = " + pageDrop.PageGenre);
+            Debug.Log("Page level = " + pageDrop.PageLevel);
+            Debug.Log("Page type = " + pageDrop.PageType);
+            Debug.Log("Is the page rare = " + pageDrop.Rarity);
+        }
+        else
+        {
+            Debug.Log("No page was dropped");
+        }
+    }
 }

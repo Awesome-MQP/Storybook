@@ -5,10 +5,13 @@ using System.Collections.Generic;
 public abstract class CombatPlayer : CombatPawn {
 
     [SerializeField]
-    private static int m_handSize = 5;
+    private static int m_handSize = 4;
 
     [SerializeField]
     private Page m_pageToUse;
+
+    [SerializeField]
+    private Page m_otherPageToUse;
 
     private List<Page> m_playerHand = new List<Page>();
 
@@ -39,7 +42,6 @@ public abstract class CombatPlayer : CombatPawn {
 
     public void RemovePageFromHand(Page pageToRemove)
     {
-        Debug.Log("Removing page from hand");
         m_playerHand.Remove(pageToRemove);
         m_playerDeck.AddPageToGraveyard(pageToRemove);
     }
@@ -47,6 +49,7 @@ public abstract class CombatPlayer : CombatPawn {
     public void DrawPageForTurn()
     {
         Page currentPage = m_playerDeck.GetNextPage();
+        m_playerHand.Add(currentPage);
     }
 
     public CombatDeck PlayerDeck
@@ -79,7 +82,15 @@ public abstract class CombatPlayer : CombatPawn {
         List<Page> deckPages = new List<Page>();
         for (int i = 0; i < 20; i++)
         {
-            GameObject pageObject = PhotonNetwork.Instantiate(m_pageToUse.name, Vector3.zero, Quaternion.identity, 0);
+            GameObject pageObject;
+            if (i < 10)
+            {
+                pageObject = PhotonNetwork.Instantiate(m_pageToUse.name, Vector3.zero, Quaternion.identity, 0);
+            }
+            else
+            {
+                pageObject = PhotonNetwork.Instantiate(m_otherPageToUse.name, Vector3.zero, Quaternion.identity, 0);
+            }
             PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
             Page page = pageObject.GetComponent<Page>();
             int pageViewId = pageObject.GetComponent<PhotonView>().viewID;
@@ -112,6 +123,8 @@ public abstract class CombatPlayer : CombatPawn {
 
         Page chosenPage = PlayerHand[moveIndex];
         PlayerMove chosenMove = chosenPage.PlayerCombatMove;
+
+        RemovePageFromHand(chosenPage);
 
         List<CombatPawn> targets = new List<CombatPawn>();
 
@@ -170,6 +183,24 @@ public abstract class CombatPlayer : CombatPawn {
                 default:
                     break;
             }
+        }
+    }
+
+    public void PrintPlayerHand()
+    {
+        string move = "";
+        for (int i = 0; i < m_playerHand.Count; i++)
+        {
+            Page p = m_playerHand[i];
+            if (p.PageType == MoveType.Attack)
+            {
+                move = "Attack";
+            }
+            else if (p.PageType == MoveType.Boost)
+            {
+                move = "Boost";
+            }
+            Debug.Log("Page " + i + " = " + move);
         }
     }
 }

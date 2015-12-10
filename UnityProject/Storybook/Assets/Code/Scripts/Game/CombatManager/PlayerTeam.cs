@@ -52,6 +52,10 @@ public class PlayerTeam : CombatTeam {
             {
                 CombatPlayer playerPawn = (CombatPlayer)pawn;
                 playerPawn.DrawPageForTurn();
+                if (playerPawn.PawnId == PhotonNetwork.player.ID)
+                {
+                    playerPawn.PrintPlayerHand();
+                }
             }
         }
     }

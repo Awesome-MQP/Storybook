@@ -163,7 +163,20 @@ public class CombatManager : Photon.PunBehaviour {
         foreach(CombatTeam team in m_teamList)
         {
             team.EndCombat();
+            // TODO: Change back to just calling Destroy when that is fixed]
+            PhotonNetwork.Destroy(team.gameObject);
             Destroy(team.gameObject);
+        }
+    }
+
+    public void DestroyAllPages()
+    {
+        Page[] listOfAllPages = FindObjectsOfType<Page>();
+        foreach(Page p in listOfAllPages)
+        {
+            // TODO: Change back to just calling Destroy when that is fixed
+            PhotonNetwork.Destroy(p.gameObject);
+            Destroy(p.gameObject);
         }
     }
 

@@ -14,7 +14,10 @@ public class PlayerTeam : CombatTeam {
         List<PlayerPositionNode> positionNodes = new List<PlayerPositionNode>(FindObjectsOfType<PlayerPositionNode>());
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
-            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, Quaternion.identity, 0);
+            Quaternion rotation = Quaternion.identity;
+            rotation.y = 120;
+            rotation.w = 120;
+            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, rotation, 0);
             if ((i + 1) != PhotonNetwork.player.ID)
             {
                 playerObject.GetComponent<PhotonView>().TransferController(i + 1);

@@ -14,6 +14,8 @@ public class TestCombatPawn : CombatPlayer
         // If the player hits the space bar and this pawn is the client's, submit a move
         if (numPressed > -1 && PhotonNetwork.player.ID == PawnId)
         {
+            SelectedPageIndex = numPressed;
+
             Debug.Log("Submitted page " + numPressed);
 
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();

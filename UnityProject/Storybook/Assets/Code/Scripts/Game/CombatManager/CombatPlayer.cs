@@ -20,11 +20,20 @@ public abstract class CombatPlayer : CombatPawn {
     private bool m_canSelectMove = false;
 
     private Vector3 m_page1Pos = new Vector3(1586, 1185, 1044);
-    //private Vector3 m_page1Pos = new Vector3(-10, -5, 8);
     private Vector3 m_page2Pos = new Vector3(1591, 1185, 1044);
     private Vector3 m_page3Pos = new Vector3(1596, 1185, 1044);
     private Vector3 m_page4Pos = new Vector3(1601, 1185, 1044);
     private Vector3 m_page5Pos = new Vector3(1606, 1185, 1044);
+
+    private GameObject[] m_displayedPages = new GameObject[5];
+
+    private int m_selectedPageIndex;
+
+    public int SelectedPageIndex
+    {
+        get { return m_selectedPageIndex; }
+        set { m_selectedPageIndex = value; }
+    }
 
     public void Start()
     {
@@ -47,7 +56,12 @@ public abstract class CombatPlayer : CombatPawn {
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
             Debug.Log("Draw a card");
-            DrawPageOnScreen(currentPage, i);
+            
+            if(PhotonNetwork.player.ID == PawnId)
+            {
+                Debug.Log("hello");
+                DrawPageOnScreen(currentPage, i);
+            }
         }
     }
     
@@ -80,19 +94,73 @@ public abstract class CombatPlayer : CombatPawn {
         GameObject go = Instantiate(Resources.Load(pathToPage), posToUse, Quaternion.identity) as GameObject;
         GameObject goLevel = go.transform.GetChild(1).gameObject;
         goLevel.GetComponent<TextMesh>().text = "Level " + thePage.PageLevel + "\n" + thePage.PageType.ToString();
+        m_displayedPages[pageCounter] = go;
     }
 
     public void RemovePageFromHand(Page pageToRemove)
     {
         m_playerHand.Remove(pageToRemove);
+
+        if (PhotonNetwork.player.ID == PawnId)
+        {
+            Destroy(m_displayedPages[SelectedPageIndex]);
+            ShiftPages(SelectedPageIndex);
+        }
+
         m_playerDeck.AddPageToGraveyard(pageToRemove);
+    }
+
+    public void ShiftPages(int removedSlot)
+    {
+        switch (removedSlot)
+        {
+            case 0:
+                m_displayedPages[0] = m_displayedPages[1];
+                m_displayedPages[0].transform.position = m_page1Pos;
+                m_displayedPages[1] = m_displayedPages[2];
+                m_displayedPages[1].transform.position = m_page2Pos;
+                m_displayedPages[2] = m_displayedPages[3];
+                m_displayedPages[2].transform.position = m_page3Pos;
+                m_displayedPages[3] = m_displayedPages[4];
+                m_displayedPages[3].transform.position = m_page4Pos;
+                m_displayedPages[4] = null;
+                break;
+            case 1:
+                m_displayedPages[1] = m_displayedPages[2];
+                m_displayedPages[1].transform.position = m_page2Pos;
+                m_displayedPages[2] = m_displayedPages[3];
+                m_displayedPages[2].transform.position = m_page3Pos;
+                m_displayedPages[3] = m_displayedPages[4];
+                m_displayedPages[3].transform.position = m_page4Pos;
+                m_displayedPages[4] = null;
+                break;
+            case 2:
+                m_displayedPages[2] = m_displayedPages[3];
+                m_displayedPages[2].transform.position = m_page3Pos;
+                m_displayedPages[3] = m_displayedPages[4];
+                m_displayedPages[3].transform.position = m_page4Pos;
+                m_displayedPages[4] = null;
+                break;
+            case 3:
+                m_displayedPages[3] = m_displayedPages[4];
+                m_displayedPages[3].transform.position = m_page4Pos;
+                m_displayedPages[4] = null;
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
     }
 
     public void DrawPageForTurn()
     {
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
-        DrawPageOnScreen(currentPage, 4);
+        if (PhotonNetwork.player.ID == PawnId)
+        {
+            DrawPageOnScreen(currentPage, 4);
+        }
     }
 
     public CombatDeck PlayerDeck

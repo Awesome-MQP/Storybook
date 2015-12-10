@@ -17,6 +17,15 @@ public abstract class CombatPlayer : CombatPawn {
 
     private CombatDeck m_playerDeck;
 
+    private bool m_canSelectMove = false;
+
+    private Vector3 m_page1Pos = new Vector3(1586, 1185, 1044);
+    //private Vector3 m_page1Pos = new Vector3(-10, -5, 8);
+    private Vector3 m_page2Pos = new Vector3(1591, 1185, 1044);
+    private Vector3 m_page3Pos = new Vector3(1596, 1185, 1044);
+    private Vector3 m_page4Pos = new Vector3(1601, 1185, 1044);
+    private Vector3 m_page5Pos = new Vector3(1606, 1185, 1044);
+
     public void Start()
     {
         base.Start();
@@ -37,7 +46,40 @@ public abstract class CombatPlayer : CombatPawn {
         {
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
+            Debug.Log("Draw a card");
+            DrawPageOnScreen(currentPage, i);
         }
+    }
+    
+    public void DrawPageOnScreen(Page thePage, int pageCounter)
+    {
+        string pageName = thePage.PageGenre.ToString();
+        string pathToPage = "Pages/" + pageName + "Page";
+        Debug.Log("Card #: " + pageCounter + " is " + pageName);
+        Vector3 posToUse = Vector3.zero;
+        switch (pageCounter)
+        {
+            case 0:
+                posToUse = m_page1Pos;
+                break;
+            case 1:
+                posToUse = m_page2Pos;
+                break;
+            case 2:
+                posToUse = m_page3Pos;
+                break;
+            case 3:
+                posToUse = m_page4Pos;
+                break;
+            case 4:
+                posToUse = m_page5Pos;
+                break;
+            default:
+                break;
+        }
+        GameObject go = Instantiate(Resources.Load(pathToPage), posToUse, Quaternion.identity) as GameObject;
+        GameObject goLevel = go.transform.GetChild(1).gameObject;
+        goLevel.GetComponent<TextMesh>().text = "Level " + thePage.PageLevel + "\n" + thePage.PageType.ToString();
     }
 
     public void RemovePageFromHand(Page pageToRemove)
@@ -50,6 +92,7 @@ public abstract class CombatPlayer : CombatPawn {
     {
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
+        DrawPageOnScreen(currentPage, 4);
     }
 
     public CombatDeck PlayerDeck

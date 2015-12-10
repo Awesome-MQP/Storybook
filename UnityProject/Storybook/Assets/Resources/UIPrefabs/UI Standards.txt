@@ -1,0 +1,10 @@
+UI Standards
+------------------------------------
+Name is Bold, font size 20. Hitpoints is Bold, font size 18.
+
+Player 1's info is in the top-left of the screen.
+Icon is 12px down from top border, 12px in from left border.
+Name is at left: 104, top: 0, right: -106, bottom: 68.
+HP is at left: 104, top: 30, right: -106, bottom: 38.
+
+The next Player's info is at (((player_number - 1) * (screen_width/4)) + 12)px from the left border, and 12px from the top.

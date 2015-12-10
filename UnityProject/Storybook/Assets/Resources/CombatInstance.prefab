@@ -269,7 +269,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 109304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 575.145569, y: 188.152298, z: 64.3600006}
+  m_LocalPosition: {x: 575.145569, y: 183.779999, z: 64.3600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 441906}
@@ -305,7 +305,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 162236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 585.650024, y: 188.152298, z: 64.3600006}
+  m_LocalPosition: {x: 585.650024, y: 183.779999, z: 64.3600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 441906}
@@ -345,7 +345,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 181272}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 578.539978, y: 188.152298, z: 64.3600006}
+  m_LocalPosition: {x: 578.539978, y: 183.779999, z: 64.3600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 441906}
@@ -381,7 +381,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 154568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -47.2678185, y: 8.62324142, z: -36.3238564}
+  m_LocalPosition: {x: 2764.05957, y: 1568.83093, z: 1163.55786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 434462}
@@ -397,7 +397,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 129038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 582.159973, y: 188.152298, z: 64.3600006}
+  m_LocalPosition: {x: 582.159973, y: 183.779999, z: 64.3600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 441906}
@@ -877,9 +877,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d635ea7bf0ab640925464effe51bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_combatPawnPrefab: {fileID: 11474058, guid: 63e366343f7ee3f4bbe6aa03d489e035, type: 2}
-  m_enemyPawnPrefab: {fileID: 11487484, guid: e0fa81d364840e04cb1312e5604dc30d, type: 2}
   m_cameraPos: {fileID: 400336}
+  m_teamList: []
 --- !u!135 &13500524
 SphereCollider:
   m_ObjectHideFlags: 1

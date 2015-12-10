@@ -2188,6 +2188,20 @@ public static class PhotonNetwork
         }
     }
 
+    public static T Instantiate<T>(ResourceAsset prefab, Vector3 position, Quaternion rotation, int group) where T : UnityEngine.Component
+    {
+        GameObject obj = Instantiate(prefab.AssetName, position, rotation, group);
+        if (!obj)
+            return null;
+
+        return obj.GetComponent<T>();
+    }
+
+    public static GameObject Instantiate(ResourceAsset prefab, Vector3 position, Quaternion rotation, int group)
+    {
+        return Instantiate(prefab.AssetName, position, rotation, group);
+    }
+
     /// <summary>
     /// Instantiate a prefab over the network. This prefab needs to be located in the root of a "Resources" folder.
     /// </summary>

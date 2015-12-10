@@ -9,86 +9,73 @@ public class TestCombatPawn : CombatPlayer
     // Waits for input of a move
     public override void OnThink()
     {
+        int numPressed = _getButtonPress();
+
         // If the player hits the space bar and this pawn is the client's, submit a move
-        if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.player.ID == PawnId)
+        if (numPressed > -1 && PhotonNetwork.player.ID == PawnId)
         {
+            Debug.Log("Submitted page " + numPressed);
+
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();
-            Debug.Log(m_scenePhotonView.viewID);
-            Debug.Log("Space bar pressed");
-            List<CombatPawn> targetList = new List<CombatPawn>();
-            targetList.Add(GetPawnsOpposing()[0]);
-
-            // TODO: Use the actual hand
-            //PlayerMove chosenMove = TestHand[0];
-
-            Page chosenPage = PlayerHand[0];
+            
+            Page chosenPage = PlayerHand[numPressed];
             PlayerMove chosenMove = chosenPage.PlayerCombatMove;
-            RemovePageFromHand(chosenPage);
 
+            List<CombatPawn> targetList = new List<CombatPawn>();
+            if (chosenPage.PageType == MoveType.Attack)
+            {
+                targetList.Add(GetPawnsOpposing()[0]);
+            }
+            else if (chosenPage.PageType == MoveType.Boost)
+            {
+                targetList.Add(GetPawnsOnTeam()[0]);
+            }
+
+            RemovePageFromHand(chosenPage);
+            
             chosenMove.SetMoveOwner(this);
             chosenMove.SetMoveTargets(targetList);
-            chosenMove.InitializeMove();
+            chosenMove.InitializeMove(); 
             SetMoveForTurn(chosenMove);
             SetHasSubmittedMove(true);
+            
+            PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
+            pm.construct(chosenPage);
 
             int[] targetIds = new int[4];
-            for (int i = 0; i < chosenMove.MoveTargets.Length; i++)
+            for (int i = 0; i < pm.NumberOfTargets; i++)
             {
                 CombatPawn target = chosenMove.MoveTargets[i];
                 targetIds[i] = target.PawnId;
             }
-            int moveIndex = 0;
 
-            m_scenePhotonView.RPC("SendPlayerMoveOverNetwork", PhotonTargets.All, PawnId, targetIds, moveIndex);
+            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, numPressed);
         }
     }
 
-    /// <summary>
-    /// Sends the player move over network to the corresponding pawn in all clients
-    /// </summary>
-    /// <param name="playerId">The PawnID of the player submitting the move</param>
-    /// <param name="targetIds">The PawnID of the targets of the selected move</param>
-    /// <param name="moveIndex">The index of the move in the player's hand of moves</param>
-    [PunRPC]
-    private void SendPlayerMoveOverNetwork(int playerId, int[] targetIds, int moveIndex)
+    private int _getButtonPress()
     {
-        Debug.Log("Other player submitted move");
-
-        Page chosenPage = PlayerHand[moveIndex];
-        PlayerMove chosenMove = chosenPage.PlayerCombatMove;
-
-        List<CombatPawn> targets = new List<CombatPawn>();
-
-        // Determine the targets of the move based on the list of target ids
-        CombatPawn[] possibleTargetList = null;
-
-        // If the move is an attack, the possible targets are the enemy list
-        if (chosenMove.IsMoveAttack)
+        int numPressed = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            Debug.Log("Move is an attack");
-            possibleTargetList = GetPawnsOpposing();
+            numPressed = 0;
         }
-
-        // If the move is a support move, the possible targets are the player list
-        else
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("Move is not an attack");
-            possibleTargetList = GetPawnsOnTeam();
+            numPressed = 1;
         }
-
-        // Iterate through the possible targets and find the targets based on the targetIds
-        foreach (CombatPawn pawn in possibleTargetList)
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (targetIds.Contains(pawn.PawnId))
-            {
-                targets.Add(pawn);
-            }
+            numPressed = 2;
         }
-
-        chosenMove.SetMoveOwner(this);
-        chosenMove.SetMoveTargets(targets);
-        chosenMove.InitializeMove();
-        SetMoveForTurn(chosenMove);
-        SetHasSubmittedMove(true);
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            numPressed = 3;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            numPressed = 4;
+        }
+        return numPressed;
     }
 }

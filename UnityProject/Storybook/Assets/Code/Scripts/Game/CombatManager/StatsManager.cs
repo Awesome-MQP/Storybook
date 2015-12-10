@@ -19,12 +19,12 @@ public static class StatsManager {
     /// <param name="attackerStr">The base Str stat of the attacker.</param>
     /// <param name="defenderDef">The base Def stat of the defender.</param>
     /// <returns></returns>
-    public static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float attackerStr, float defenderDef)
+    public static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float pageLevel, float attackerStr, float defenderDef)
     {
         float sameTypeMoveBonus = GetSameTypeBonus(attackerGenre, attackerMoveGenre);
         float typeAdvantageBonus = GetTypeAdvantageBonus(attackerMoveGenre, defenderGenre);
 
-        float totalDmg = attackerStr * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
+        float totalDmg = (pageLevel + attackerStr) * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
 
         if (totalDmg < 0)
         { return 0; }

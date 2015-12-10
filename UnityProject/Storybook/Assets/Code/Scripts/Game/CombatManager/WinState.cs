@@ -23,13 +23,12 @@ public class WinState : CombatState {
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("Win state update");
-        
         // If it is the master client and the NetWinState says to exit the combat, call ExitState()
         if (PhotonNetwork.isMasterClient)
         {
             if (m_netWinState.ExitCombat && !m_isExiting)
             {
+                Debug.Log("Exiting win state");
                 ExitState();
             }
         }
@@ -59,6 +58,7 @@ public class WinState : CombatState {
         // Delete the NetWinState from all clients
         if (m_netWinStateObject != null)
         {
+            // TODO: Change back to just calling Destroy when that is fixed
             PhotonNetwork.Destroy(m_netWinStateObject);
             Destroy(m_netWinStateObject);
         }

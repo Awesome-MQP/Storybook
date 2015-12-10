@@ -24,6 +24,9 @@ public class GameManager : Photon.PunBehaviour {
     [SerializeField]
     private int m_playersInCombat;
 
+    [SerializeField]
+    private DungeonMaster m_dungeonMaster;
+
     private List<GameObject> m_combatInstances = new List<GameObject>();
     private float m_timeElapsed = 0;
 
@@ -52,6 +55,9 @@ public class GameManager : Photon.PunBehaviour {
 
         if (PhotonNetwork.isMasterClient)
         {
+            GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMaster.name, Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
+
             GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
             GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
@@ -90,9 +96,13 @@ public class GameManager : Photon.PunBehaviour {
         CombatManager cm = m_combatInstances[0].GetComponent<CombatManager>();
 
         cm.DestroyAllTeams();
+        cm.DestroyAllPages();
 
         GameObject currentCombatInstance = m_combatInstances[0];
         m_combatInstances.Remove(currentCombatInstance);
+
+        // TODO: Change back to just calling Destroy when that is fixed
+        PhotonNetwork.Destroy(currentCombatInstance);
         Destroy(currentCombatInstance);
 
         //_returnToDungeon();
@@ -121,5 +131,11 @@ public class GameManager : Photon.PunBehaviour {
     {
         get { return m_enemyTeamForCombat; }
         set { m_enemyTeamForCombat = value; }
+    }
+
+    public PlayerTeam PlayerTeamForCombat
+    {
+        get { return m_playerTeamForCombat; }
+        set { m_playerTeamForCombat = value; }
     }
 }

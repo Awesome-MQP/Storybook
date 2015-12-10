@@ -54,6 +54,7 @@ public class LoseState : CombatState {
         // Destroy the NetLoseState when exiting and end the combat
         if (m_netLoseStateObject != null)
         {
+            // TODO: Change back to just calling Destroy when that is fixed
             PhotonNetwork.Destroy(m_netLoseStateObject);
             Destroy(m_netLoseStateObject);
         }

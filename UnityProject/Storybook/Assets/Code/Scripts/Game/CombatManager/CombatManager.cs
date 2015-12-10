@@ -163,7 +163,20 @@ public class CombatManager : Photon.PunBehaviour {
         foreach(CombatTeam team in m_teamList)
         {
             team.EndCombat();
+            // TODO: Change back to just calling Destroy when that is fixed]
+            PhotonNetwork.Destroy(team.gameObject);
             Destroy(team.gameObject);
+        }
+    }
+
+    public void DestroyAllPages()
+    {
+        Page[] listOfAllPages = FindObjectsOfType<Page>();
+        foreach(Page p in listOfAllPages)
+        {
+            // TODO: Change back to just calling Destroy when that is fixed
+            PhotonNetwork.Destroy(p.gameObject);
+            Destroy(p.gameObject);
         }
     }
 
@@ -189,10 +202,8 @@ public class CombatManager : Photon.PunBehaviour {
     /// <returns>The team with the given ID or null if no team with that ID exists</returns>
     public CombatTeam GetTeamById(int teamId)
     {
-        Debug.Log("Looking for team " + teamId);
         foreach(CombatTeam team in m_teamList)
         {
-            Debug.Log("TeamId = " + team.TeamId);
             if (team.TeamId == teamId)
             {
                 return team;

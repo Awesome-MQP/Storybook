@@ -5,8 +5,8 @@ using System.IO;
 
 // Dungeon Master class is the handler for all statistics, as well as handling
 // the location of all room prefabs.
-public class DungeonMaster : MonoBehaviour{
-    
+public class DungeonMaster : MonoBehaviour {
+
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
     [SerializeField]
@@ -22,10 +22,31 @@ public class DungeonMaster : MonoBehaviour{
     private float m_pageLevelPlus2Probability = 0.05f;
 
     [SerializeField]
+    private float m_levelCurveValue = 0.025f;
+
+    [SerializeField]
     private float m_pageSameGenreProbability = 0.75f;
 
-	// When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
-	void Awake () {
+    [SerializeField]
+    private float m_rarePageProbability = 0.05f;
+
+    [SerializeField]
+    private float m_rarePageLevelIncrease = 0.025f;
+
+    [SerializeField]
+    private Page m_pagePrefab;
+
+    [SerializeField]
+    private float m_isPageAttackProbability = 0.4f;
+
+    [SerializeField]
+    private float m_isPageSupportProbability = 0.3f;
+
+    [SerializeField]
+    private float m_isPageStatusProbability = 0.3f;
+
+    // When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
+    void Awake() {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
     }
 
@@ -42,17 +63,17 @@ public class DungeonMaster : MonoBehaviour{
         List<RoomObject> goodRooms = new List<RoomObject>();
 
         // Check each room to see if there is a match
-        foreach(RoomObject r in m_rooms)
+        foreach (RoomObject r in m_rooms)
         {
-            if(r.RoomSize != size)
+            if (r.RoomSize != size)
             {
                 continue;
             }
-            else if(r.RoomGenre != genre)
+            else if (r.RoomGenre != genre)
             {
                 continue;
             }
-            else if(r.RoomFeature != feature)
+            else if (r.RoomFeature != feature)
             {
                 continue;
             }
@@ -63,7 +84,7 @@ public class DungeonMaster : MonoBehaviour{
             }
         }
         // How many matches did we get?
-        if(goodRooms.Count == 0)
+        if (goodRooms.Count == 0)
         {
             return null;
         }
@@ -92,29 +113,42 @@ public class DungeonMaster : MonoBehaviour{
     /// </summary>
     /// <param name="roomGenre">The genre of the room that was cleared</param>
     /// <param name="roomLevel">The level of the room that was cleared</param>
-    public void GetPageDropFromCombat(Genre roomGenre, int roomLevel)
+    public Page GetPageDropFromCombat(Genre roomGenre, int roomLevel)
     {
         Genre pageGenre = _getPageGenre(roomGenre);
         float isPageSameLevel = Random.Range(0.00f, 1.00f);
-        if (isPageSameLevel <= m_pageSameLevelProbability)
+        if (isPageSameLevel <= (m_pageSameLevelProbability - (m_levelCurveValue * roomLevel)))
         {
-            //TODO: Create a page of the same level and return it
-            return;
+            Page page = _spawnPageOnNetwork(pageGenre, roomLevel);
+            page.Rarity = _getIsPageRare(roomLevel);
+            page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
+            return page;
         }
 
         float isPageLevelPlus1 = Random.Range(0, 1);
-        if (isPageLevelPlus1 <= m_pageLevelPlus1Probability)
+        if (isPageLevelPlus1 <= (m_pageLevelPlus1Probability + (m_levelCurveValue * roomLevel)))
         {
-            //TODO: Create a page with one level higher than the given room level
-            return;
+            Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 1);
+            page.Rarity = _getIsPageRare(roomLevel + 1);
+            page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
+            return page;
         }
 
         float isPageLevelPlus2 = Random.Range(0, 1);
-        if (isPageLevelPlus2 <= m_pageLevelPlus2Probability)
+        if (isPageLevelPlus2 <= (m_pageLevelPlus2Probability + (m_levelCurveValue * roomLevel)))
         {
-            //TODO: Create a page with two levels higher than the given room level
-            return;
+            Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 2);
+            page.Rarity = _getIsPageRare(roomLevel + 2);
+            page.PageType = _getPageMoveType();
+            Debug.Log("Dungeon Master returning a page");
+            return page;
         }
+
+        // If it does not create a page, return null
+        Debug.Log("Dungeon Master returning a null page");
+        return null;
     }
 
     /// <summary>
@@ -147,5 +181,47 @@ public class DungeonMaster : MonoBehaviour{
         }
 
         return pageGenre;
+    }
+
+    private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel)
+    {
+        GameObject pageObject = PhotonNetwork.Instantiate(m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
+        Page page = pageObject.GetComponent<Page>();
+        page.PageLevel = pageLevel;
+        page.PageGenre = pageGenre;
+        return page;
+    }
+
+    private bool _getIsPageRare(int pageLevel)
+    {
+        float isPageRareValue = Random.Range(0.00f, 1.00f);
+        float rareProbability = m_rarePageProbability + (m_rarePageLevelIncrease * pageLevel);
+        bool isPageRare = false;
+        if (isPageRareValue <= rareProbability)
+        {
+            isPageRare = true;
+        }
+        return isPageRare;
+    }
+
+    private MoveType _getPageMoveType()
+    {
+        MoveType pageMoveType;
+        float pageMoveTypeValue = Random.Range(0.00f, 1.00f);
+        if (pageMoveTypeValue <= m_isPageAttackProbability)
+        {
+            pageMoveType = MoveType.Attack;
+        }
+        else if (pageMoveTypeValue <= m_isPageStatusProbability + m_isPageAttackProbability)
+        {
+            pageMoveType = MoveType.Status;
+        }
+        else
+        {
+            pageMoveType = MoveType.Boost;
+        }
+
+        return pageMoveType;
     }
 }

@@ -10,7 +10,7 @@ public class CombatRoom : RoomObject {
     [SerializeField]
     private EnemyTeam m_roomEnemies;
 
-    private List<GameObject> m_enemyPawns = new List<GameObject>();
+    private List<CombatPawn> m_enemyPawns = new List<CombatPawn>();
 
     private CombatManager m_combatManager;
     private GameManager m_gameManager = null;
@@ -22,6 +22,8 @@ public class CombatRoom : RoomObject {
     {
         base.Awake();
         m_gameManager = FindObjectOfType<GameManager>();
+        // CombatTeam.m_activePawnsOnTeam is the list of all combat pawns
+        m_enemyPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
         OnRoomEnter();
 	}
 
@@ -39,8 +41,8 @@ public class CombatRoom : RoomObject {
             
             foreach (CombatPawn pawn in m_roomEnemies.PawnsToSpawn)
             {
-                m_enemyPawns.Add((GameObject)Instantiate(pawn.gameObject, new Vector3(x, y, z), Quaternion.identity));
-                m_enemyPawns[i].SetActive(true);
+                m_enemyPawns[i] = (CombatPawn) Instantiate(pawn.gameObject, new Vector3(x, y, z), Quaternion.identity);
+                m_enemyPawns[i].gameObject.SetActive(true);
                 z -= 2;
                 i++;
             }
@@ -62,7 +64,7 @@ public class CombatRoom : RoomObject {
     // Hint: Nothing.
     protected override void OnRoomExit()
     {
-        foreach(GameObject go in m_enemyPawns)
+        foreach(CombatPawn go in m_enemyPawns)
         {
             m_enemyPawns.Remove(go);
             Destroy(go);

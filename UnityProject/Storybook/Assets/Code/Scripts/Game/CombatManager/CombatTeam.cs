@@ -91,6 +91,8 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         foreach(CombatPawn pawn in m_allPawnsSpawned)
         {
+            // TODO: Change back to just calling Destroy when that is fixed
+            PhotonNetwork.Destroy(pawn.gameObject);
             Destroy(pawn.gameObject);
         }
     }
@@ -122,9 +124,9 @@ public abstract class CombatTeam : Photon.PunBehaviour {
         m_pawnsToSpawn.Add(pawnToSpawn);
     }
 
-    public CombatPawn[] ActivePawnsOnTeam
+    public List<CombatPawn> ActivePawnsOnTeam
     {
-        get { return m_activePawnsOnTeam.ToArray(); }
+        get { return m_activePawnsOnTeam; }
     }
 
     public void SetPawnsOnTeam(List<CombatPawn> pawnsOnTeam)
@@ -176,6 +178,5 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         m_teamId = teamId;
         FindObjectOfType<CombatManager>().RegisterTeamLocal(this);
-        Debug.Log("Registering team");
     }
 }

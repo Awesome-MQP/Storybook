@@ -32,6 +32,7 @@ internal static class CustomTypes
     /// <summary>Register</summary>
     internal static void Register()
     {
+        PhotonPeer.RegisterType(typeof (PhotonStream), (byte) 'S', SerializePhotonStream, DeserializePhotonStream);
         PhotonPeer.RegisterType(typeof (PhotonView), (byte) 'B', SerializePhotonView, DeserializePhotonView);
         PhotonPeer.RegisterType(typeof(Vector2), (byte)'W', SerializeVector2, DeserializeVector2);
         PhotonPeer.RegisterType(typeof(Vector3), (byte)'V', SerializeVector3, DeserializeVector3);
@@ -243,6 +244,44 @@ internal static class CustomTypes
 
         PhotonView view = PhotonView.Find(viewId);
         return view;
+    }
+
+    private static short SerializePhotonStream(MemoryStream outStream, object customObject)
+    {
+        PhotonStream stream = (PhotonStream)customObject;
+        object[] data = stream.data.ToArray();
+
+        outStream.WriteByte((byte) data.Length);
+
+        short byteCount = 1;
+        foreach (object o in data)
+        {
+            byte[] serializedData = Protocol.Serialize(o);
+            outStream.WriteByte((byte)serializedData.Length);
+            outStream.Write(serializedData, 0, serializedData.Length);
+
+            byteCount += (short)(serializedData.Length + 1);
+        }
+
+        return byteCount;
+    }
+
+    private static object DeserializePhotonStream(MemoryStream inStream, short length)
+    {
+        int objectCount = inStream.ReadByte();
+        object[] data = new object[objectCount];
+
+        for (int i = 0; i < objectCount; i++)
+        {
+            int objectByteCount = inStream.ReadByte();
+            byte[] serializedObject = new byte[objectByteCount];
+
+            inStream.Read(serializedObject, 0, objectByteCount);
+
+            data[i] = Protocol.Deserialize(serializedObject);
+        }
+
+        return new PhotonStream(false, data);
     }
 
     #endregion

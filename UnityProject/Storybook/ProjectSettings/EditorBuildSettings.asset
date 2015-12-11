@@ -11,3 +11,5 @@ EditorBuildSettings:
     path: Assets/Levels/Demo/DemoCombatScene.unity
   - enabled: 1
     path: Assets/Levels/Demo/TestRoomPlacement.unity
+  - enabled: 1
+    path: Assets/Levels/Demo/TestInventory.unity

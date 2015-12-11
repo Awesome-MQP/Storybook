@@ -52,6 +52,8 @@ public abstract class Item : PunBehaviour
         if(m_inventory)
             throw new InvalidOperationException("Cannot be picked up by two inventories at once.");
 
+        m_inventory = inventory;
+
         Renderer renderComponent = GetComponent<Renderer>();
         if (renderComponent != null)
             renderComponent.enabled = false;
@@ -78,9 +80,6 @@ public abstract class Item : PunBehaviour
     /// </summary>
     public void DropedFromCurrent()
     {
-        if (!m_inventory)
-            throw new InvalidOperationException("Cannot be dropped when not belonging to an inventory.");
-
         m_inventory = null;
         m_index = -1;
 

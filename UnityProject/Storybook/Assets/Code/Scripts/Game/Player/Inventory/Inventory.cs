@@ -539,7 +539,12 @@ public abstract class Inventory : PunBehaviour
             return false;
 
         InventoryAddCommit addCommit = new InventoryAddCommit(m_commitCounter++, (short)index, item);
-        return _PushCommit(addCommit);
+        bool wasAdded = _PushCommit(addCommit);
+        if (wasAdded)
+        {
+            item.PickedupWithInventory(this, index);
+        }
+        return wasAdded;
     }
 
     /// <summary>
@@ -672,7 +677,7 @@ public abstract class Inventory : PunBehaviour
 
         if (_InsertOnLocked(commit))
         {
-            PhotonStream data = new PhotonStream(false, null);
+            PhotonStream data = new PhotonStream(true, null);
             _SerializeCommitToStream(data, commit);
 
             photonView.RPC("_RecieveCommit", PhotonTargets.Others, data);

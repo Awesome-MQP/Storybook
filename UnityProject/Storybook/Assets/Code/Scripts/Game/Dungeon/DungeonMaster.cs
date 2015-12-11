@@ -108,6 +108,20 @@ public class DungeonMaster : MonoBehaviour {
     }
 
     /// <summary>
+    /// Generates a basic page: level 1, non-rare, attack for page type and having a random genre
+    /// </summary>
+    /// <returns>The page object generated</returns>
+    public Page GetBasicPage()
+    {
+        Genre pageGenre = _getRandomGenre();
+        int pageLevel = 1;
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+        page.Rarity = false;
+        page.PageType = MoveType.Attack;
+        return page;
+    }
+
+    /// <summary>
     /// Function for getting the random page drop from clearing a combat against regular enemies
     /// TODO: Return a page item once that is created
     /// </summary>
@@ -181,6 +195,13 @@ public class DungeonMaster : MonoBehaviour {
         }
 
         return pageGenre;
+    }
+
+    private Genre _getRandomGenre()
+    {
+        Genre[] allGenresArray = { Genre.Fantasy, Genre.GraphicNovel, Genre.Horror, Genre.SciFi };
+        int genreIndex = Random.Range(0, allGenresArray.Length);
+        return allGenresArray[genreIndex];
     }
 
     private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel)

@@ -49,6 +49,12 @@ public abstract class Item : PunBehaviour
     /// <param name="index">The index in the inventory where we were placed at.</param>
     public void PickedupWithInventory(Inventory inventory, int index)
     {
+        if (m_inventory == inventory)
+        {
+            Debug.Log("Item already belongs to that inventory");
+            return;
+        }
+
         if(m_inventory)
             throw new InvalidOperationException("Cannot be picked up by two inventories at once.");
 

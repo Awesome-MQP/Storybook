@@ -605,7 +605,7 @@ public abstract class Inventory : PunBehaviour
     protected abstract bool CanMoveItem(int fromIndex, int toIndex);
 
     [PunRPC]
-    private void _RequestCommit(PhotonStream data, PhotonMessageInfo messageInfo)
+    public void _RequestCommit(PhotonStream data, PhotonMessageInfo messageInfo)
     {
         if (!IsMine)
             return;
@@ -623,7 +623,7 @@ public abstract class Inventory : PunBehaviour
     }
 
     [PunRPC]
-    private void _RecieveCommit(PhotonStream data, PhotonMessageInfo messageInfo)
+    public void _RecieveCommit(PhotonStream data, PhotonMessageInfo messageInfo)
     {
         if (messageInfo.sender != Owner)
             return;
@@ -632,9 +632,9 @@ public abstract class Inventory : PunBehaviour
 
         _InsertOnLocked(newCommit);
     }
-
+    
     [PunRPC]
-    private void _ApproveCommit(short commitId, PhotonMessageInfo messageInfo)
+    public void _ApproveCommit(short commitId, PhotonMessageInfo messageInfo)
     {
         if (messageInfo.sender != Owner)
             return;
@@ -643,7 +643,7 @@ public abstract class Inventory : PunBehaviour
     }
 
     [PunRPC]
-    private void _RejectCommit(short commitId, PhotonMessageInfo messageInfo)
+    public void _RejectCommit(short commitId, PhotonMessageInfo messageInfo)
     {
         if (messageInfo.sender != Owner)
             return;
@@ -721,6 +721,8 @@ public abstract class Inventory : PunBehaviour
 
     private bool _InsertOnLocked(InventoryCommit commit)
     {
+        commit.Data.PickedupWithInventory(this, commit.Index);
+
         //Revert back to the head
         LinkedListNode<InventoryCommit> node;
         for (node = m_commits.Last;

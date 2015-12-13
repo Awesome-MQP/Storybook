@@ -7,8 +7,11 @@ using Photon;
 /// </summary>
 public class NetworkMover : PunBehaviour
 {
+
+    [SerializeField]
     private Vector3 m_targetPosition;
 
+    [SerializeField]
     private bool m_isAtTarget;
 
     [SerializeField]
@@ -71,9 +74,9 @@ public class NetworkMover : PunBehaviour
         Vector3 newPosition = Vector3.MoveTowards(currentPosition, m_targetPosition, m_maxSpeed * Time.deltaTime);
         if (Vector3.Distance(newPosition, m_targetPosition) <= m_atTargetThreashHold)
         {
+            m_isAtTarget = true;
             OnArrive();
             photonView.RPC("_RPCArrive", PhotonTargets.Others);
-            m_isAtTarget = true;
         }
 
         transform.position = newPosition;
@@ -83,5 +86,11 @@ public class NetworkMover : PunBehaviour
     private void _RPCArrive()
     {
         OnArrive();
+    }
+
+    public bool IsAtTarget
+    {
+        get { return m_isAtTarget; }
+        set { m_isAtTarget = value; }
     }
 }

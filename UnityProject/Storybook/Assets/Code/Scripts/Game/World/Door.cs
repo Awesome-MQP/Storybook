@@ -4,7 +4,7 @@ using System.Collections;
 public class Door : MonoBehaviour {
 
     [SerializeField]
-    private DoorSpawnNode m_doorNode;
+    private DoorNode m_doorNode;
 
     private bool m_isDoorEnabled = true;
     private bool m_isDoorRoomSpawned = false;
@@ -62,7 +62,7 @@ public class Door : MonoBehaviour {
     /// <summary>
     /// The door node that corresponds to this door
     /// </summary>
-    public DoorSpawnNode DoorNode
+    public DoorNode DoorNode
     {
         get { return m_doorNode; }
     }

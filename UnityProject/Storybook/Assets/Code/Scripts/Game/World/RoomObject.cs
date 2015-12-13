@@ -30,16 +30,16 @@ public abstract class RoomObject : MonoBehaviour{
     private string m_roomFeature;
 
     [SerializeField]
-    private Transform m_player1Pos;
+    private MovementNode m_player1Pos;
 
     [SerializeField]
-    private Transform m_player2Pos;
+    private MovementNode m_player2Pos;
 
     [SerializeField]
-    private Transform m_player3Pos;
+    private MovementNode m_player3Pos;
 
     [SerializeField]
-    private Transform m_player4Pos;
+    private MovementNode m_player4Pos;
 
     protected virtual void Awake()
     {
@@ -103,22 +103,22 @@ public abstract class RoomObject : MonoBehaviour{
         get { return m_cameraNode; }
     }
 
-    public Transform Player1Node
+    public MovementNode Player1Node
     {
         get { return m_player1Pos; }
     }
 
-    public Transform Player2Node
+    public MovementNode Player2Node
     {
         get { return m_player2Pos; }
     }
 
-    public Transform Player3Node
+    public MovementNode Player3Node
     {
         get { return m_player3Pos; }
     }
 
-    public Transform Player4Node
+    public MovementNode Player4Node
     {
         get { return m_player4Pos; }
     }

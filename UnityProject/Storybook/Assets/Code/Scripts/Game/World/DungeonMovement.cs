@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class DungeonMovement : Photon.PunBehaviour {
 
+    /*
+
     [SerializeField]
     private GameObject m_characterPrefab;
 
@@ -280,4 +282,6 @@ public class DungeonMovement : Photon.PunBehaviour {
         Camera.main.transform.position = m_currentRoom.CameraNode.transform.position;
         Camera.main.transform.rotation = m_dungeonRotation;
     }
+
+    */
 }

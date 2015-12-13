@@ -112,7 +112,7 @@ public class CharacterMovement : MonoBehaviour {
             {             
                 // Find the door that is paired to the one being entered
                 Door exitDoor = mapManager.GetDoorPartner(m_playerLoc, d);
-                DoorSpawnNode doorNode = exitDoor.DoorNode;
+                DoorNode doorNode = exitDoor.DoorNode;
                 transform.position = doorNode.transform.position;
                 m_playerLoc = d.RoomThroughDoorLoc;
                 mapManager.MoveCamera(m_playerLoc);

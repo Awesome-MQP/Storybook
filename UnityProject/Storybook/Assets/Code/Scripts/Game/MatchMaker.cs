@@ -24,6 +24,10 @@ public class MatchMaker : Photon.PunBehaviour {
             PhotonNetwork.LoadLevel("DemoCombatScene");
             Destroy(this);
         }
+        if (isFirst && GUILayout.Button("Start World Movement"))
+        {
+            PhotonNetwork.LoadLevel("WorldMovementTest");
+        }
     }
 
     /// <summary>

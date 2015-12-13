@@ -40,7 +40,7 @@ public class GameManager : Photon.PunBehaviour {
         // Only call StartCombat on the master client
         if (PhotonNetwork.isMasterClient)
         {
-            StartCombat();
+            StartGame();
         }
     }
 
@@ -87,6 +87,19 @@ public class GameManager : Photon.PunBehaviour {
         }
     }
 
+    public void StartGame()
+    {
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.GenerateMap();
+        RoomObject startRoom = mapManager.PlaceStartRoom();
+        PlayerMover playerMover = FindObjectOfType<PlayerMover>();
+        List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
+        playerMover.WorldPlayers = players;
+        Camera.main.transform.position = startRoom.CameraNode.transform.position;
+        Camera.main.transform.rotation = startRoom.CameraNode.transform.rotation;
+        playerMover.SpawnInRoom(startRoom);
+    }
+
     /// <summary>
     /// Ends the combat instance that has the given CombatManager
     /// </summary>
@@ -120,12 +133,14 @@ public class GameManager : Photon.PunBehaviour {
         return allPlayersList;
     }
 
+    /*
     private void _returnToDungeon()
     {
         DungeonMovement dm = FindObjectOfType<DungeonMovement>();
         dm.enabled = true;
         dm.TransitionToDungeon();
     }
+    */
 
     public EnemyTeam EnemyTeamForCombat
     {

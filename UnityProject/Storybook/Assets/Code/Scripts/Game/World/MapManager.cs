@@ -69,7 +69,7 @@ public class MapManager : MonoBehaviour {
 
     private RoomData[,] m_worldMapData;
 
-    private int m_defaultRoomSize = 20; // Default room size (in blocks in Unity editor)
+    private int m_defaultRoomSize = 50; // Default room size (in blocks in Unity editor)
 
     public enum RoomType { None = 0, Start, Combat, Exit, Shop };
 
@@ -104,17 +104,21 @@ public class MapManager : MonoBehaviour {
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
         if ((placeX < 0 || placeX >= m_worldMaxXSize) ||
             (placeY < 0 || placeY >= m_worldMaxYSize)) {
+            Debug.Log("Returning null");
             return null;
         }
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
         if (m_worldGrid[placeX, placeY] != null) {
+            Debug.Log("Returning null");
             return null;
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
         Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
-        RoomObject room = (RoomObject)Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
+        GameObject roomGameObject = PhotonNetwork.Instantiate(m_roomPrefab.name, roomGridLocation, new Quaternion(), 0);
+        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
+        RoomObject room = roomGameObject.GetComponent<RoomObject>();
         room.RoomLocation = gridPosition;
         _determineDoorPlacement(gridPosition, room);
         _checkDoorRooms(gridPosition, room);
@@ -885,5 +889,11 @@ public class MapManager : MonoBehaviour {
                 m_worldMapData[i, j] = currentRoom;
             }
         }
+    }
+
+    public RoomObject PlaceStartRoom()
+    {
+        Location start = new Location(m_startPoint.x, m_startPoint.y);
+        return PlaceRoom(start);
     }
 }

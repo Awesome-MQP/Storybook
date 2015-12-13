@@ -84,6 +84,8 @@ public class GameManager : Photon.PunBehaviour {
             combatManager.SetCombatTeamList(combatTeams);
 
             m_combatInstances.Add(m_combatInstance);
+            CameraManager m_camManager = FindObjectOfType<CameraManager>();
+            m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
         }
     }
 
@@ -104,6 +106,8 @@ public class GameManager : Photon.PunBehaviour {
         // TODO: Change back to just calling Destroy when that is fixed
         PhotonNetwork.Destroy(currentCombatInstance);
         Destroy(currentCombatInstance);
+        CameraManager m_camManager = FindObjectOfType<CameraManager>();
+        m_camManager.SwitchToOverworldCamera(); // Switch to the overworld camera.
 
         //_returnToDungeon();
     }

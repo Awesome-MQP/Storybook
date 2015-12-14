@@ -83,7 +83,7 @@ public class NetworkMover : PunBehaviour
     }
 
     [PunRPC]
-    private void _RPCArrive()
+    public void _RPCArrive()
     {
         OnArrive();
     }

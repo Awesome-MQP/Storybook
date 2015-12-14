@@ -92,69 +92,72 @@ public class PlayerMover : NetworkMover
 
     void OnGUI()
     {
-        Door northDoor = m_currentRoom.RoomDoors[m_currentRoom.NORTH_DOOR_INDEX];
-        Door westDoor = m_currentRoom.RoomDoors[m_currentRoom.WEST_DOOR_INDEX];
-        Door eastDoor = m_currentRoom.RoomDoors[m_currentRoom.EAST_DOOR_INDEX];
-        Door southDoor = m_currentRoom.RoomDoors[m_currentRoom.SOUTH_DOOR_INDEX];
-
-        // Only allow the player to select a door if the door is enabled for the current room 
-        if (northDoor.IsDoorEnabled && GUILayout.Button("Move Up"))
+        if (PhotonNetwork.isMasterClient)
         {
-            Location m_newRoomLoc = new Location(m_currentRoomLoc.X + 1, m_currentRoomLoc.Y);
+            Door northDoor = m_currentRoom.RoomDoors[m_currentRoom.NORTH_DOOR_INDEX];
+            Door westDoor = m_currentRoom.RoomDoors[m_currentRoom.WEST_DOOR_INDEX];
+            Door eastDoor = m_currentRoom.RoomDoors[m_currentRoom.EAST_DOOR_INDEX];
+            Door southDoor = m_currentRoom.RoomDoors[m_currentRoom.SOUTH_DOOR_INDEX];
 
-            // If the selected door's room has not been spawned, create the room
-            if (!northDoor.IsDoorRoomSpawned)
+            // Only allow the player to select a door if the door is enabled for the current room 
+            if (northDoor.IsDoorEnabled && GUILayout.Button("Move Up"))
             {
-                photonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
-                northDoor.SetIsDoorRoomSpawned(true);
+                Location m_newRoomLoc = new Location(m_currentRoomLoc.X + 1, m_currentRoomLoc.Y);
+
+                // If the selected door's room has not been spawned, create the room
+                if (!northDoor.IsDoorRoomSpawned)
+                {
+                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
+                    northDoor.SetIsDoorRoomSpawned(true);
+                }
+
+                MoveThroughDoor(northDoor, false);
             }
 
-            MoveThroughDoor(northDoor, false);
-        }
-
-        // Only allow the player to select a door if the door is enabled for the current room 
-        if (westDoor.IsDoorEnabled && GUILayout.Button("Move Left"))
-        {
-            Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y - 1);
-
-            // If the selected door's room has not been spawned, create the room
-            if (!westDoor.IsDoorRoomSpawned)
+            // Only allow the player to select a door if the door is enabled for the current room 
+            if (westDoor.IsDoorEnabled && GUILayout.Button("Move Left"))
             {
-                photonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
-                westDoor.SetIsDoorRoomSpawned(true);
+                Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y - 1);
+
+                // If the selected door's room has not been spawned, create the room
+                if (!westDoor.IsDoorRoomSpawned)
+                {
+                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
+                    westDoor.SetIsDoorRoomSpawned(true);
+                }
+
+                MoveThroughDoor(westDoor, false);
             }
 
-            MoveThroughDoor(westDoor, false);
-        }
-
-        // Only allow the player to select a door if the door is enabled for the current room 
-        if (eastDoor.IsDoorEnabled && GUILayout.Button("Move Right"))
-        {
-            Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y + 1);
-
-            // If the selected door's room has not been spawned, create the room
-            if (!eastDoor.IsDoorRoomSpawned)
+            // Only allow the player to select a door if the door is enabled for the current room 
+            if (eastDoor.IsDoorEnabled && GUILayout.Button("Move Right"))
             {
-                photonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
-                eastDoor.SetIsDoorRoomSpawned(true);
+                Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y + 1);
+
+                // If the selected door's room has not been spawned, create the room
+                if (!eastDoor.IsDoorRoomSpawned)
+                {
+                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
+                    eastDoor.SetIsDoorRoomSpawned(true);
+                }
+
+                MoveThroughDoor(eastDoor, false);
             }
 
-            MoveThroughDoor(eastDoor, false);
-        }
-
-        // Only allow the player to select a door if the door is enabled for the current room 
-        if (southDoor.IsDoorEnabled && GUILayout.Button("Move Down"))
-        {
-            Location m_newRoomLoc = new Location(m_currentRoomLoc.X - 1, m_currentRoomLoc.Y);
-
-            // If the selected door's room has not been spawned, create the room
-            if (!southDoor.IsDoorRoomSpawned)
+            // Only allow the player to select a door if the door is enabled for the current room 
+            if (southDoor.IsDoorEnabled && GUILayout.Button("Move Down"))
             {
-                photonView.RPC("CreateNewRoom", PhotonTargets.All, m_newRoomLoc.X, m_newRoomLoc.Y);
-                southDoor.SetIsDoorRoomSpawned(true);
-            }
+                Location m_newRoomLoc = new Location(m_currentRoomLoc.X - 1, m_currentRoomLoc.Y);
 
-            MoveThroughDoor(southDoor, false);
+                // If the selected door's room has not been spawned, create the room
+                if (!southDoor.IsDoorRoomSpawned)
+                {
+                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
+                    southDoor.SetIsDoorRoomSpawned(true);
+                }
+
+                MoveThroughDoor(southDoor, false);
+            }
         }
     }
 

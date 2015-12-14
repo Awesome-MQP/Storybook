@@ -12,7 +12,11 @@ public class DoorNode : MovementNode
     {
         Debug.Log("Entering door node");
         PlayerMover playerMover = FindObjectOfType<PlayerMover>();
-        playerMover.MoveThroughDoor(m_nodeDoor, true);
+
+        if (PhotonNetwork.isMasterClient)
+        {
+            playerMover.MoveThroughDoor(m_nodeDoor, true);
+        }
     }
 
     protected override void OnLeave(NetworkNodeMover mover)

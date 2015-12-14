@@ -31,14 +31,14 @@ public abstract class MovementNode : PunBehaviour
     protected abstract void OnLeave(NetworkNodeMover mover);
 
     [PunRPC]
-    private void _OnNetworkEnter(int networkNodeMoverId)
+    public void _OnNetworkEnter(int networkNodeMoverId)
     {
         PhotonView view = PhotonView.Find(networkNodeMoverId);
         OnEnter(view.GetComponent<NetworkNodeMover>());
     }
 
     [PunRPC]
-    private void _OnNetworkLeave(int networkNodeMoverId)
+    public void _OnNetworkLeave(int networkNodeMoverId)
     {
         PhotonView view = PhotonView.Find(networkNodeMoverId);
         OnLeave(view.GetComponent<NetworkNodeMover>());

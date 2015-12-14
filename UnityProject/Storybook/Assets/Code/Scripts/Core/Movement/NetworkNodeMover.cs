@@ -56,17 +56,21 @@ public class NetworkNodeMover : NetworkMover
 
     protected override void OnArrive()
     {
-        if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
-            m_node.Enter(this);
+        if (m_node != null) {
+            if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
+                m_node.Enter(this);
 
-        OnArriveAtNode(m_node);
+            OnArriveAtNode(m_node);
+        }
     }
 
     protected override void OnLeave()
     {
-        if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
-            m_node.Leave(this);
+        if (m_node != null) {
+            if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
+                m_node.Leave(this);
 
-        OnLeaveNode(m_node);
+            OnLeaveNode(m_node);
+        }
     }
 }

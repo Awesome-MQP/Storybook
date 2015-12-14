@@ -34,7 +34,6 @@ public class NetworkNodeMover : NetworkMover
         get { return m_node; }
         set
         {
-            Debug.Log("Setting target node");
             m_node = value;
 
             if (m_node)

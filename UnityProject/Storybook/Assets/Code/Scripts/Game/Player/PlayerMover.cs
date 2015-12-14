@@ -13,7 +13,13 @@ public class PlayerMover : NetworkMover
     private Location m_currentRoomLoc;
     private List<NetworkNodeMover> m_worldPlayers = new List<NetworkNodeMover>();
     private int m_leaderId = 1;
+    private bool m_areButtonsEnabled = false;
 
+    /// <summary>
+    /// Spawns all the players in the given room object
+    /// Called only to place the players in the starting room of the floor
+    /// </summary>
+    /// <param name="room">The room to spawn the players in</param>
     public void SpawnInRoom(RoomObject room)
     {
         m_currentRoom = room;
@@ -50,10 +56,19 @@ public class PlayerMover : NetworkMover
             m_worldPlayers[3].transform.position = room.Player4Node.transform.position;
             m_worldPlayers[3].TargetNode = room.Player4Node;
         }
+
+        AreButtonsEnabled = true;
     }
 
+    /// <summary>
+    /// Moves all of the players through the given door
+    /// It is a coroutine so that it can update the player positions once they reach the door
+    /// </summary>
+    /// <param name="door">The door for the players to go through</param>
+    /// <returns></returns>
     public IEnumerator MoveThroughDoor(Door door)
     {
+        AreButtonsEnabled = false;
         ChooseNewLeader();
         foreach (NetworkNodeMover player in m_worldPlayers)
         {
@@ -75,9 +90,9 @@ public class PlayerMover : NetworkMover
             yield return new WaitForSeconds(0.1f);
         }
 
-        Debug.Log("Switching rooms");
         Location newRoomLoc = door.RoomThroughDoorLoc;
         MapManager mapManager = FindObjectOfType<MapManager>();
+
         RoomObject nextRoom = mapManager.GetRoom(newRoomLoc);
         RoomData nextRoomData = mapManager.GetRoomData(newRoomLoc.X, newRoomLoc.Y);
         Door newDoor = mapManager.GetDoorPartner(m_currentRoomLoc, door);
@@ -85,7 +100,6 @@ public class PlayerMover : NetworkMover
         foreach (NetworkNodeMover player in m_worldPlayers)
         {
             player.Position = newDoor.DoorNode.transform.position;
-            Debug.Log(newDoor.DoorNode.transform.position);
         }
 
         photonView.RPC("SwitchCameraRoom", PhotonTargets.All, nextRoom.CameraNode.transform.position, nextRoom.CameraNode.transform.rotation);
@@ -98,6 +112,7 @@ public class PlayerMover : NetworkMover
         photonView.RPC("SendRoomLoc", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
 
         _SetTargetNodesForPlayers();
+        AreButtonsEnabled = true;
     }
 
     /// <summary>
@@ -107,7 +122,6 @@ public class PlayerMover : NetworkMover
     /// <param name="newRoomLocY">The Y coordinate of the room to create</param>
     private void CreateNewRoom(int newRoomLocX, int newRoomLocY)
     {
-        Debug.Log("Creating new room");
         MapManager mapManager = FindObjectOfType<MapManager>();
         Location newRoomLoc = new Location(newRoomLocX, newRoomLocY);
         mapManager.PlaceRoom(newRoomLoc);
@@ -115,7 +129,8 @@ public class PlayerMover : NetworkMover
 
     void OnGUI()
     {
-        if (m_leaderId == PhotonNetwork.player.ID)
+        // Only allow the leader to choose the direction when the buttons are enabled
+        if (m_leaderId == PhotonNetwork.player.ID && AreButtonsEnabled)
         {
             bool isNorthDoorEnabled = m_currentRoomData.IsNorthDoorActive;
             bool isEastDoorEnabled = m_currentRoomData.IsEastDoorActive;
@@ -125,18 +140,17 @@ public class PlayerMover : NetworkMover
             // Only allow the player to select a door if the door is enabled for the current room 
             if (isNorthDoorEnabled && GUILayout.Button("Move Up"))
             {
-                int newRoomLocX = m_currentRoomLoc.X + 1;
+                int newRoomLocX = m_currentRoomLoc.X - 1;
                 int newRoomLocY = m_currentRoomLoc.Y;
-                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 0);
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, RoomObject.DoorIndex.NorthDoor);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
             if (isWestDoorEnabled && GUILayout.Button("Move Left"))
             {
-                Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y - 1);
                 int newRoomLocX = m_currentRoomLoc.X;
                 int newRoomLocY = m_currentRoomLoc.Y - 1;
-                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 3);
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, RoomObject.DoorIndex.WestDoor);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
@@ -144,26 +158,31 @@ public class PlayerMover : NetworkMover
             {
                 int newRoomLocX = m_currentRoomLoc.X;
                 int newRoomLocY = m_currentRoomLoc.Y + 1;
-                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 1);
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, RoomObject.DoorIndex.EastDoor);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
             if (isSouthDoorEnabled && GUILayout.Button("Move Down"))
             {
-                Location m_newRoomLoc = new Location(m_currentRoomLoc.X - 1, m_currentRoomLoc.Y);
-                int newRoomLocX = m_currentRoomLoc.X - 1;
+                int newRoomLocX = m_currentRoomLoc.X + 1;
                 int newRoomLocY = m_currentRoomLoc.Y;
-                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 2);
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, RoomObject.DoorIndex.SouthDoor);
             }
         }
     }
 
+    /// <summary>
+    /// The list of players that are currently in the dungeon
+    /// </summary>
     public List<NetworkNodeMover> WorldPlayers
     {
         get { return m_worldPlayers; }
         set { m_worldPlayers = value; }
     }
 
+    /// <summary>
+    /// Sets the target nodes of the all the players to the corresponding player nodes
+    /// </summary>
     private void _SetTargetNodesForPlayers()
     {
         if (m_worldPlayers.Count >= 1)
@@ -188,6 +207,12 @@ public class PlayerMover : NetworkMover
         }
     }
 
+    /// <summary>
+    /// Moves the camera to the new position and rotation
+    /// Called when the players switch rooms
+    /// </summary>
+    /// <param name="newCamPos">The new position for the camera</param>
+    /// <param name="newCamRot">The new rotation for the camera</param>
     [PunRPC]
     public void SwitchCameraRoom(Vector3 newCamPos, Quaternion newCamRot)
     {
@@ -195,33 +220,37 @@ public class PlayerMover : NetworkMover
         Camera.main.transform.rotation = newCamRot;
     }
 
-    [PunRPC]
-    public void RegisterCurrentRoom(int roomLocX, int roomLocY)
-    {
-        MapManager mapManager = FindObjectOfType<MapManager>();
-        Location roomLoc = new Location(roomLocX, roomLocY);
-        m_currentRoomData = mapManager.GetRoomData(roomLocX, roomLocY);
-        m_currentRoomLoc = roomLoc;
-    }
-
-    public IEnumerator SendRoom()
-    {
-        yield return new WaitForSeconds(2.0f);
-        photonView.RPC("RegisterCurrentRoom", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
-    }
-
+    /// <summary>
+    /// Sends the current room data to the clients
+    /// </summary>
+    /// <param name="isNorthDoorActive">True if the north door is active for the current room, false otherwise</param>
+    /// <param name="isEastDoorActive">True if the east door is active for the current room, false otherwise</param>
+    /// <param name="isSouthDoorActive">True if the south door is active for the current room, false otherwise</param>
+    /// <param name="isWestDoorActive">True if the west door is active for the current room, false otherwise</param>
+    /// <param name="roomType">The type of the room (MapManager.RoomType)</param>
     [PunRPC]
     public void SendRoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, int roomType)
     {
         m_currentRoomData = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive, (MapManager.RoomType) roomType);
     }
 
+    /// <summary>
+    /// Sends the location of the current room to the clients
+    /// </summary>
+    /// <param name="roomLocX">The x-coordinate of the current room</param>
+    /// <param name="roomLocY">The y-coordinate of the current room</param>
     [PunRPC]
     public void SendRoomLoc(int roomLocX, int roomLocY)
     {
         m_currentRoomLoc = new Location(roomLocX, roomLocY);
     }
 
+    /// <summary>
+    /// Called on clients to create a room on the server
+    /// </summary>
+    /// <param name="roomLocX">The x-coordinate of the room to create</param>
+    /// <param name="roomLocY">The y-coordinate of the room to create</param>
+    /// <param name="doorIndex">The door that was selected by the client</param>
     [PunRPC]
     public void CreateRoomOnMaster(int roomLocX, int roomLocY, int doorIndex)
     {
@@ -237,23 +266,73 @@ public class PlayerMover : NetworkMover
         StartCoroutine(MoveThroughDoor(selectedDoor));
     }
 
+    /// <summary>
+    /// The photon player id of the current leader
+    /// </summary>
+    [SyncProperty]
+    public int LeaderId
+    {
+        get { return m_leaderId; }
+        set
+        {
+            m_leaderId = value;
+            PropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// True when the players are waiting in the center of the room, false while they are moving
+    /// If it is true, the buttons will appear to the leader, if it false, they will not appear
+    /// </summary>
+    [SyncProperty]
+    public bool AreButtonsEnabled
+    {
+        get { return m_areButtonsEnabled; }
+        set
+        {
+            m_areButtonsEnabled = value;
+            PropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Chooses a new party leader to select the door of the current room
+    /// </summary>
     public void ChooseNewLeader()
     {
         if (m_leaderId < PhotonNetwork.playerList.Length)
         {
-            m_leaderId++;
+            LeaderId = m_leaderId + 1;
         }
         else
         {
-            m_leaderId = 1;
+            LeaderId = 1;
         }
-
-        photonView.RPC("SendNewLeader", PhotonTargets.Others, m_leaderId);
     }
 
+    /*
+    /// <summary>
+    /// Registers the current room on local clients from the given coordinates
+    /// </summary>
+    /// <param name="roomLocX">The x-coordinate of the room to register</param>
+    /// <param name="roomLocY">The y-coordinate of the room to register</param>
     [PunRPC]
-    public void SendNewLeader(int newLeaderId)
+    public void RegisterCurrentRoom(int roomLocX, int roomLocY)
     {
-        m_leaderId = newLeaderId;
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        Location roomLoc = new Location(roomLocX, roomLocY);
+        m_currentRoomData = mapManager.GetRoomData(roomLocX, roomLocY);
+        m_currentRoomLoc = roomLoc;
     }
+
+    /// <summary>
+    /// Calls register current room on the clients after some waiting
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator SendRoom()
+    {
+        yield return new WaitForSeconds(2.0f);
+        photonView.RPC("RegisterCurrentRoom", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
+    }
+    */
 }

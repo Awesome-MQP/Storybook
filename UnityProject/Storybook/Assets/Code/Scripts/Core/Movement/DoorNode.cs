@@ -10,11 +10,11 @@ public class DoorNode : MovementNode
 
     protected override void OnEnter(NetworkNodeMover mover)
     {
-        Debug.Log("Entering door node");
+        //Debug.Log("Entering door node");
     }
 
     protected override void OnLeave(NetworkNodeMover mover)
     {
-        Debug.Log("Exiting door node");
+        //Debug.Log("Exiting door node");
     }
 }

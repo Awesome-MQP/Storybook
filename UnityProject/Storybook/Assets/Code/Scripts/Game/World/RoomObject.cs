@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//TODO: 
+public abstract class RoomObject : MonoBehaviour {
 
-public abstract class RoomObject : MonoBehaviour{
+    public enum DoorIndex {NorthDoor = 0, EastDoor, SouthDoor, WestDoor };
 
+    /*
     public readonly int NORTH_DOOR_INDEX = 0;
     public readonly int EAST_DOOR_INDEX = 1;
     public readonly int SOUTH_DOOR_INDEX = 2;
     public readonly int WEST_DOOR_INDEX = 3;
+    */
 
     [SerializeField]
     Transform m_cameraNode;

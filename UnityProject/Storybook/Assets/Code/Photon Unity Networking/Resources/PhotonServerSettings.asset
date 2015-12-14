@@ -61,4 +61,5 @@ MonoBehaviour:
   - RegisterCurrentRoom
   - CreateRoomOnMaster
   - SendRoomLoc
+  - SendNewLeader
   DisableAutoOpenWizard: 1

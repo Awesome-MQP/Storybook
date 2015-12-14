@@ -5,12 +5,12 @@ public class RoomCenterNode : MovementNode {
 
     protected override void OnEnter(NetworkNodeMover mover)
     {
-        Debug.Log("Entering node");
+        //Debug.Log("Entering node");
     }
 
     protected override void OnLeave(NetworkNodeMover mover)
     {
-        Debug.Log("Exiting node");
+        //Debug.Log("Exiting node");
     }
 
 }

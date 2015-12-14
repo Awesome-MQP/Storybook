@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
-  m_maxSpeed: 10
+  m_maxSpeed: 25
   m_atTargetThreashHold: .100000001
   m_node: {fileID: 0}
 --- !u!114 &11468586
@@ -139,6 +139,10 @@ Prefab:
       propertyPath: ObservedComponents.Array.data[1]
       value: 
       objectReference: {fileID: 419984}
+    - target: {fileID: 0}
+      propertyPath: m_maxSpeed
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 132416}

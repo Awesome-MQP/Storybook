@@ -9,13 +9,21 @@ public class PlayerMover : NetworkMover
 {
 
     private RoomObject m_currentRoom;
+    private RoomData m_currentRoomData;
     private Location m_currentRoomLoc;
     private List<NetworkNodeMover> m_worldPlayers = new List<NetworkNodeMover>();
+    private int m_leaderId = 1;
 
     public void SpawnInRoom(RoomObject room)
     {
         m_currentRoom = room;
         m_currentRoomLoc = room.RoomLocation;
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        m_currentRoomData = mapManager.GetRoomData(room.RoomLocation.X, room.RoomLocation.Y);
+
+        photonView.RPC("SendRoomData", PhotonTargets.Others, m_currentRoomData.IsNorthDoorActive, m_currentRoomData.IsEastDoorActive,
+            m_currentRoomData.IsSouthDoorActive, m_currentRoomData.IsWestDoorActive, m_currentRoomData.RoomType);
+        photonView.RPC("SendRoomLoc", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
 
         foreach(NetworkNodeMover player in m_worldPlayers)
         {
@@ -46,6 +54,7 @@ public class PlayerMover : NetworkMover
 
     public IEnumerator MoveThroughDoor(Door door)
     {
+        ChooseNewLeader();
         foreach (NetworkNodeMover player in m_worldPlayers)
         {
             player.TargetNode = door.DoorNode;
@@ -70,6 +79,7 @@ public class PlayerMover : NetworkMover
         Location newRoomLoc = door.RoomThroughDoorLoc;
         MapManager mapManager = FindObjectOfType<MapManager>();
         RoomObject nextRoom = mapManager.GetRoom(newRoomLoc);
+        RoomData nextRoomData = mapManager.GetRoomData(newRoomLoc.X, newRoomLoc.Y);
         Door newDoor = mapManager.GetDoorPartner(m_currentRoomLoc, door);
     
         foreach (NetworkNodeMover player in m_worldPlayers)
@@ -81,6 +91,12 @@ public class PlayerMover : NetworkMover
         photonView.RPC("SwitchCameraRoom", PhotonTargets.All, nextRoom.CameraNode.transform.position, nextRoom.CameraNode.transform.rotation);
         m_currentRoomLoc = newRoomLoc;
         m_currentRoom = nextRoom;
+        m_currentRoomData = nextRoomData;
+
+        photonView.RPC("SendRoomData", PhotonTargets.Others, m_currentRoomData.IsNorthDoorActive, m_currentRoomData.IsEastDoorActive,
+            m_currentRoomData.IsSouthDoorActive, m_currentRoomData.IsWestDoorActive, m_currentRoomData.RoomType);
+        photonView.RPC("SendRoomLoc", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
+
         _SetTargetNodesForPlayers();
     }
 
@@ -89,7 +105,6 @@ public class PlayerMover : NetworkMover
     /// </summary>
     /// <param name="newRoomLocX">The X coordinate of the room to create</param>
     /// <param name="newRoomLocY">The Y coordinate of the room to create</param>
-    [PunRPC]
     private void CreateNewRoom(int newRoomLocX, int newRoomLocY)
     {
         Debug.Log("Creating new room");
@@ -100,71 +115,45 @@ public class PlayerMover : NetworkMover
 
     void OnGUI()
     {
-        if (PhotonNetwork.isMasterClient)
+        if (m_leaderId == PhotonNetwork.player.ID)
         {
-            Door northDoor = m_currentRoom.RoomDoors[m_currentRoom.NORTH_DOOR_INDEX];
-            Door westDoor = m_currentRoom.RoomDoors[m_currentRoom.WEST_DOOR_INDEX];
-            Door eastDoor = m_currentRoom.RoomDoors[m_currentRoom.EAST_DOOR_INDEX];
-            Door southDoor = m_currentRoom.RoomDoors[m_currentRoom.SOUTH_DOOR_INDEX];
+            bool isNorthDoorEnabled = m_currentRoomData.IsNorthDoorActive;
+            bool isEastDoorEnabled = m_currentRoomData.IsEastDoorActive;
+            bool isSouthDoorEnabled = m_currentRoomData.IsSouthDoorActive;
+            bool isWestDoorEnabled = m_currentRoomData.IsWestDoorActive;
 
             // Only allow the player to select a door if the door is enabled for the current room 
-            if (northDoor.IsDoorEnabled && GUILayout.Button("Move Up"))
+            if (isNorthDoorEnabled && GUILayout.Button("Move Up"))
             {
-                Location m_newRoomLoc = new Location(m_currentRoomLoc.X + 1, m_currentRoomLoc.Y);
-
-                // If the selected door's room has not been spawned, create the room
-                if (!northDoor.IsDoorRoomSpawned)
-                {
-                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
-                    northDoor.SetIsDoorRoomSpawned(true);
-                }
-
-                StartCoroutine(MoveThroughDoor(northDoor));
+                int newRoomLocX = m_currentRoomLoc.X + 1;
+                int newRoomLocY = m_currentRoomLoc.Y;
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 0);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
-            if (westDoor.IsDoorEnabled && GUILayout.Button("Move Left"))
+            if (isWestDoorEnabled && GUILayout.Button("Move Left"))
             {
                 Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y - 1);
-
-                // If the selected door's room has not been spawned, create the room
-                if (!westDoor.IsDoorRoomSpawned)
-                {
-                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
-                    westDoor.SetIsDoorRoomSpawned(true);
-                }
-
-                StartCoroutine(MoveThroughDoor(westDoor));
+                int newRoomLocX = m_currentRoomLoc.X;
+                int newRoomLocY = m_currentRoomLoc.Y - 1;
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 3);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
-            if (eastDoor.IsDoorEnabled && GUILayout.Button("Move Right"))
+            if (isEastDoorEnabled && GUILayout.Button("Move Right"))
             {
-                Location m_newRoomLoc = new Location(m_currentRoomLoc.X, m_currentRoomLoc.Y + 1);
-
-                // If the selected door's room has not been spawned, create the room
-                if (!eastDoor.IsDoorRoomSpawned)
-                {
-                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
-                    eastDoor.SetIsDoorRoomSpawned(true);
-                }
-
-                StartCoroutine(MoveThroughDoor(eastDoor));
+                int newRoomLocX = m_currentRoomLoc.X;
+                int newRoomLocY = m_currentRoomLoc.Y + 1;
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 1);
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
-            if (southDoor.IsDoorEnabled && GUILayout.Button("Move Down"))
+            if (isSouthDoorEnabled && GUILayout.Button("Move Down"))
             {
                 Location m_newRoomLoc = new Location(m_currentRoomLoc.X - 1, m_currentRoomLoc.Y);
-
-                // If the selected door's room has not been spawned, create the room
-                if (!southDoor.IsDoorRoomSpawned)
-                {
-                    photonView.RPC("CreateNewRoom", PhotonTargets.MasterClient, m_newRoomLoc.X, m_newRoomLoc.Y);
-                    southDoor.SetIsDoorRoomSpawned(true);
-                }
-
-                StartCoroutine(MoveThroughDoor(southDoor));
+                int newRoomLocX = m_currentRoomLoc.X - 1;
+                int newRoomLocY = m_currentRoomLoc.Y;
+                photonView.RPC("CreateRoomOnMaster", PhotonTargets.MasterClient, newRoomLocX, newRoomLocY, 2);
             }
         }
     }
@@ -204,5 +193,67 @@ public class PlayerMover : NetworkMover
     {
         Camera.main.transform.position = newCamPos;
         Camera.main.transform.rotation = newCamRot;
+    }
+
+    [PunRPC]
+    public void RegisterCurrentRoom(int roomLocX, int roomLocY)
+    {
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        Location roomLoc = new Location(roomLocX, roomLocY);
+        m_currentRoomData = mapManager.GetRoomData(roomLocX, roomLocY);
+        m_currentRoomLoc = roomLoc;
+    }
+
+    public IEnumerator SendRoom()
+    {
+        yield return new WaitForSeconds(2.0f);
+        photonView.RPC("RegisterCurrentRoom", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
+    }
+
+    [PunRPC]
+    public void SendRoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, int roomType)
+    {
+        m_currentRoomData = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive, (MapManager.RoomType) roomType);
+    }
+
+    [PunRPC]
+    public void SendRoomLoc(int roomLocX, int roomLocY)
+    {
+        m_currentRoomLoc = new Location(roomLocX, roomLocY);
+    }
+
+    [PunRPC]
+    public void CreateRoomOnMaster(int roomLocX, int roomLocY, int doorIndex)
+    {
+        Door selectedDoor = m_currentRoom.RoomDoors[doorIndex];
+
+        // If the selected door's room has not been spawned, create the room
+        if (!selectedDoor.IsDoorRoomSpawned)
+        {
+            CreateNewRoom(roomLocX, roomLocY);
+            selectedDoor.SetIsDoorRoomSpawned(true);
+        }
+
+        StartCoroutine(MoveThroughDoor(selectedDoor));
+    }
+
+    public void ChooseNewLeader()
+    {
+        if (m_leaderId < PhotonNetwork.playerList.Length)
+        {
+            m_leaderId++;
+        }
+        else
+        {
+            m_leaderId = 1;
+        }
+
+        photonView.RPC("SendNewLeader", PhotonTargets.Others, m_leaderId);
+    }
+
+    [PunRPC]
+    public void SendNewLeader(int newLeaderId)
+    {
+        m_leaderId = newLeaderId;
     }
 }

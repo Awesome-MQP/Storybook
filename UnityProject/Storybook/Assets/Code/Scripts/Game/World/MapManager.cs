@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapManager : MonoBehaviour {
+public class MapManager : Photon.PunBehaviour {
 
     struct Point
     {
@@ -67,6 +67,7 @@ public class MapManager : MonoBehaviour {
     [SerializeField]
     private int m_additionalHallsMin = 2;
 
+    [SerializeField]
     private RoomData[,] m_worldMapData;
 
     private int m_defaultRoomSize = 50; // Default room size (in blocks in Unity editor)
@@ -77,6 +78,7 @@ public class MapManager : MonoBehaviour {
 
     private Point m_startPoint;
     private Point m_exitPoint;
+    private int m_roomDataReceived = 0;
 
     // Initialize
     void Awake()
@@ -101,6 +103,7 @@ public class MapManager : MonoBehaviour {
     {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
+
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
         if ((placeX < 0 || placeX >= m_worldMaxXSize) ||
             (placeY < 0 || placeY >= m_worldMaxYSize)) {
@@ -348,6 +351,7 @@ public class MapManager : MonoBehaviour {
         _createPathFromStartToExit();
         _addAdditionalDoors();
         _placeSpecialRooms();
+        _sendMap();
         //_printMap();
     }
 
@@ -895,5 +899,45 @@ public class MapManager : MonoBehaviour {
     {
         Location start = new Location(m_startPoint.x, m_startPoint.y);
         return PlaceRoom(start);
+    }
+
+    private void _sendMap()
+    {
+        for (int i = 0; i < m_worldMaxXSize; i++)
+        {
+            for (int j = 0; j < m_worldMaxYSize; j++)
+            {
+                RoomData rd = m_worldMapData[i, j];
+                photonView.RPC("SendRoomData", PhotonTargets.Others, i, j, rd.IsNorthDoorActive, rd.IsEastDoorActive, rd.IsSouthDoorActive,
+                    rd.IsWestDoorActive, rd.RoomType);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void SendRoomData(int roomLocX, int roomLocY, bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, 
+        bool isWestDoorActive, int roomType)
+    {
+        RoomData roomData = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive, (RoomType) roomType);
+        m_worldMapData[roomLocX, roomLocY] = roomData;
+        m_roomDataReceived += 1;
+        if (isAllDataReceived())
+        {
+            Debug.Log("All data received");
+        }
+    }
+
+    public bool isAllDataReceived()
+    {
+        if (m_roomDataReceived >= (m_worldMaxXSize * m_worldMaxYSize))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public RoomData GetRoomData(int roomDataX, int roomDataY)
+    {
+        return m_worldMapData[roomDataX, roomDataY];
     }
 }

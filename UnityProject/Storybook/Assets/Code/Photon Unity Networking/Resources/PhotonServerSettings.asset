@@ -56,4 +56,9 @@ MonoBehaviour:
   - _OnNetworkLeave
   - _RPCArrive
   - SendCameraPosRot
+  - SwitchCameraRoom
+  - SendRoomData
+  - RegisterCurrentRoom
+  - CreateRoomOnMaster
+  - SendRoomLoc
   DisableAutoOpenWizard: 1

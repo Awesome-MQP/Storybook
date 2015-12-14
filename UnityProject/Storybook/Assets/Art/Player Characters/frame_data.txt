@@ -1,0 +1,19 @@
+Storybook Animation Frame Data
+
+
+Fantasy Hero
+- Walk : 11-39
+- Idle : 41-69
+- Bored : 71-139
+
+Sci-Fi Hero
+- Walk : 6-34
+- Idle : 36-64
+
+Horro Hero
+- Walk : 6-34
+- Idle : 36-64
+
+Comic Hero
+- Walk : 6-34
+- Idle : 36-64

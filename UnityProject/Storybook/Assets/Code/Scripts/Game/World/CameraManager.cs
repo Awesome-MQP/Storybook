@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour {
 
 
     // Move the combatCamera to the top of the camera stack, effectively rendering it "above" the other cameras
-    void SwitchToCombatCamera()
+    public void SwitchToCombatCamera()
     {
         Debug.Log("Switching to CombatCamera");
         m_combatCamera.depth = 1;
@@ -32,7 +32,7 @@ public class CameraManager : MonoBehaviour {
     }
 
     // Move the overworldCamera to the top of the camera stack, effectively rendering it "above" the other cameras
-    void SwitchToOverworldCamera()
+    public void SwitchToOverworldCamera()
     {
         Debug.Log("Switching to OverworldCamera");
         m_combatCamera.depth = 0;

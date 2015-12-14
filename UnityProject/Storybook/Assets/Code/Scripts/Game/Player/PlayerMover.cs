@@ -44,36 +44,44 @@ public class PlayerMover : NetworkMover
         }
     }
 
-    public void MoveThroughDoor(Door door, bool arePlayersAtDoor)
+    public IEnumerator MoveThroughDoor(Door door)
     {
-        if (!arePlayersAtDoor)
+        foreach (NetworkNodeMover player in m_worldPlayers)
         {
+            player.TargetNode = door.DoorNode;
+            player.IsAtTarget = false;
+        }
+
+        bool areAllPlayersAtDoor = false;
+        while (!areAllPlayersAtDoor)
+        {
+            areAllPlayersAtDoor = true;
             foreach (NetworkNodeMover player in m_worldPlayers)
             {
-                player.TargetNode = door.DoorNode;
-                player.IsAtTarget = false;
+                if (!player.IsAtTarget)
+                {
+                    areAllPlayersAtDoor = false;
+                }
             }
+            yield return new WaitForSeconds(0.1f);
         }
-        else
+
+        Debug.Log("Switching rooms");
+        Location newRoomLoc = door.RoomThroughDoorLoc;
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        RoomObject nextRoom = mapManager.GetRoom(newRoomLoc);
+        Door newDoor = mapManager.GetDoorPartner(m_currentRoomLoc, door);
+    
+        foreach (NetworkNodeMover player in m_worldPlayers)
         {
-            Debug.Log("Switching rooms");
-            Location newRoomLoc = door.RoomThroughDoorLoc;
-            MapManager mapManager = FindObjectOfType<MapManager>();
-            RoomObject nextRoom = mapManager.GetRoom(newRoomLoc);
-            Door newDoor = mapManager.GetDoorPartner(m_currentRoomLoc, door);
-
-            foreach (NetworkNodeMover player in m_worldPlayers)
-            {
-                player.transform.position = newDoor.DoorNode.transform.position;
-                Debug.Log(newDoor.DoorNode.transform.position);
-            }
-
-            Camera.main.transform.position = nextRoom.CameraNode.transform.position;
-            Camera.main.transform.rotation = nextRoom.CameraNode.transform.rotation;
-            m_currentRoomLoc = newRoomLoc;
-            m_currentRoom = nextRoom;
-            _SetTargetNodesForPlayers();
+            player.Position = newDoor.DoorNode.transform.position;
+            Debug.Log(newDoor.DoorNode.transform.position);
         }
+
+        photonView.RPC("SwitchCameraRoom", PhotonTargets.All, nextRoom.CameraNode.transform.position, nextRoom.CameraNode.transform.rotation);
+        m_currentRoomLoc = newRoomLoc;
+        m_currentRoom = nextRoom;
+        _SetTargetNodesForPlayers();
     }
 
     /// <summary>
@@ -111,7 +119,7 @@ public class PlayerMover : NetworkMover
                     northDoor.SetIsDoorRoomSpawned(true);
                 }
 
-                MoveThroughDoor(northDoor, false);
+                StartCoroutine(MoveThroughDoor(northDoor));
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
@@ -126,7 +134,7 @@ public class PlayerMover : NetworkMover
                     westDoor.SetIsDoorRoomSpawned(true);
                 }
 
-                MoveThroughDoor(westDoor, false);
+                StartCoroutine(MoveThroughDoor(westDoor));
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
@@ -141,7 +149,7 @@ public class PlayerMover : NetworkMover
                     eastDoor.SetIsDoorRoomSpawned(true);
                 }
 
-                MoveThroughDoor(eastDoor, false);
+                StartCoroutine(MoveThroughDoor(eastDoor));
             }
 
             // Only allow the player to select a door if the door is enabled for the current room 
@@ -156,7 +164,7 @@ public class PlayerMover : NetworkMover
                     southDoor.SetIsDoorRoomSpawned(true);
                 }
 
-                MoveThroughDoor(southDoor, false);
+                StartCoroutine(MoveThroughDoor(southDoor));
             }
         }
     }
@@ -189,5 +197,12 @@ public class PlayerMover : NetworkMover
             m_worldPlayers[3].TargetNode = m_currentRoom.Player4Node;
             m_worldPlayers[3].IsAtTarget = false;
         }
+    }
+
+    [PunRPC]
+    public void SwitchCameraRoom(Vector3 newCamPos, Quaternion newCamRot)
+    {
+        Camera.main.transform.position = newCamPos;
+        Camera.main.transform.rotation = newCamRot;
     }
 }

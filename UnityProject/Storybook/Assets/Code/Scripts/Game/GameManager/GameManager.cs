@@ -95,8 +95,7 @@ public class GameManager : Photon.PunBehaviour {
         PlayerMover playerMover = FindObjectOfType<PlayerMover>();
         List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
         playerMover.WorldPlayers = players;
-        Camera.main.transform.position = startRoom.CameraNode.transform.position;
-        Camera.main.transform.rotation = startRoom.CameraNode.transform.rotation;
+        photonView.RPC("SendCameraPosRot", PhotonTargets.All, startRoom.CameraNode.transform.position, startRoom.CameraNode.transform.rotation);
         playerMover.SpawnInRoom(startRoom);
     }
 
@@ -152,5 +151,12 @@ public class GameManager : Photon.PunBehaviour {
     {
         get { return m_playerTeamForCombat; }
         set { m_playerTeamForCombat = value; }
+    }
+
+    [PunRPC]
+    public void SendCameraPosRot(Vector3 position, Quaternion rotation)
+    {
+        Camera.main.transform.position = position;
+        Camera.main.transform.rotation = rotation;
     }
 }

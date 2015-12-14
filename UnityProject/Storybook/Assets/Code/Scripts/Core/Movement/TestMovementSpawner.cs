@@ -12,6 +12,8 @@ public class TestMovementSpawner : MonoBehaviour {
     [SerializeField]
     private PlayerMover m_playerGroup;
 
+    [SerializeField]
+    private GameManager m_gameManager;
 
 
 	// Use this for initialization
@@ -27,6 +29,9 @@ public class TestMovementSpawner : MonoBehaviour {
 
         GameObject playerGroup = PhotonNetwork.Instantiate(m_playerGroup.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(playerGroup.GetComponent<PhotonView>());
+
+        GameObject gameManager = PhotonNetwork.Instantiate(m_gameManager.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(gameManager.GetComponent<PhotonView>());
 	}
 	
 }

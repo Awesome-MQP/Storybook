@@ -117,12 +117,12 @@ public class MapManager : MonoBehaviour {
         // Place the room.
         Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
         GameObject roomGameObject = PhotonNetwork.Instantiate(m_roomPrefab.name, roomGridLocation, new Quaternion(), 0);
-        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
         room.RoomLocation = gridPosition;
-        _determineDoorPlacement(gridPosition, room);
-        _checkDoorRooms(gridPosition, room);
+        room = _determineDoorPlacement(gridPosition, room);
+        room = _checkDoorRooms(gridPosition, room);
         m_worldGrid[placeX, placeY] = room;
+        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
     }
 

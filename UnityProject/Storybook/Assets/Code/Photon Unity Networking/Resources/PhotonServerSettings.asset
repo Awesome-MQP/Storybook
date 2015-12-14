@@ -55,4 +55,5 @@ MonoBehaviour:
   - _OnNetworkEnter
   - _OnNetworkLeave
   - _RPCArrive
+  - SendCameraPosRot
   DisableAutoOpenWizard: 1

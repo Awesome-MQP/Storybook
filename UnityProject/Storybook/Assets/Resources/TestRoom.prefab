@@ -85,6 +85,7 @@ GameObject:
   - 136: {fileID: 13671312}
   - 23: {fileID: 2350360}
   - 114: {fileID: 11433530}
+  - 114: {fileID: 11483782}
   m_Layer: 0
   m_Name: East Door
   m_TagString: Untagged
@@ -100,6 +101,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 448158}
+  - 114: {fileID: 11495766}
   m_Layer: 0
   m_Name: Doors
   m_TagString: Untagged
@@ -119,6 +121,7 @@ GameObject:
   - 136: {fileID: 13607962}
   - 23: {fileID: 2337006}
   - 114: {fileID: 11433876}
+  - 114: {fileID: 11450078}
   m_Layer: 0
   m_Name: North Door
   m_TagString: Untagged
@@ -243,6 +246,7 @@ GameObject:
   - 136: {fileID: 13651018}
   - 23: {fileID: 2320638}
   - 114: {fileID: 11456338}
+  - 114: {fileID: 11410380}
   m_Layer: 0
   m_Name: West Door
   m_TagString: Untagged
@@ -330,6 +334,7 @@ GameObject:
   - 136: {fileID: 13620270}
   - 23: {fileID: 2321804}
   - 114: {fileID: 11445792}
+  - 114: {fileID: 11435146}
   m_Layer: 0
   m_Name: South Door
   m_TagString: Untagged
@@ -482,7 +487,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 125500}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 56.6851082, y: 116.534927, z: 276.056091}
+  m_LocalPosition: {x: 400.055023, y: 86.8502197, z: 250.111679}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 448158}
@@ -1163,6 +1168,33 @@ MonoBehaviour:
   m_player2Pos: {fileID: 11487298}
   m_player3Pos: {fileID: 11481298}
   m_player4Pos: {fileID: 11449036}
+--- !u!114 &11410380
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 169536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  shouldSync: 1
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11456338}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11421104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1279,6 +1311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_doorNode: {fileID: 11449404}
+  m_isDoorEnabled: 1
 --- !u!114 &11433876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1291,6 +1324,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_doorNode: {fileID: 11497424}
+  m_isDoorEnabled: 1
+--- !u!114 &11435146
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  shouldSync: 1
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11445792}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11438544
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1357,6 +1418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_doorNode: {fileID: 11421104}
+  m_isDoorEnabled: 1
 --- !u!114 &11449036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1380,6 +1442,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nodeDoor: {fileID: 11433530}
+--- !u!114 &11450078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  shouldSync: 1
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11433876}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11451126
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1446,6 +1535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_doorNode: {fileID: 11459448}
+  m_isDoorEnabled: 1
 --- !u!114 &11457636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1466,7 +1556,7 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 446578}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -1523,6 +1613,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11483782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  shouldSync: 1
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 11433530}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11487298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1534,6 +1651,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11495766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 133748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  shouldSync: 1
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  isRuntimeInstantiated: 0
+  prefabName: 
+  allowFullCommunication: 0
 --- !u!114 &11497424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1652,7 +1796,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 446578}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125500}

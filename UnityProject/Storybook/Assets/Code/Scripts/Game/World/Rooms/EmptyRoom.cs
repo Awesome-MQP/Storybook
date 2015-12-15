@@ -12,22 +12,25 @@ public class EmptyRoom : RoomObject {
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
-    protected override void OnRoomEnter()
+    public override void OnRoomEnter()
     {
+        Debug.Log("Room entered");
         return;
     }
 
     // What do we do when all players reach the center of the room?
     // Most likely nothing, but that may change.
-    protected override void OnRoomEvent()
+    public override void OnRoomEvent()
     {
+        Debug.Log("Room event");
         return;
     }
 
     // What happens when the players leave this room?
     // Hint: Nothing.
-    protected override void OnRoomExit()
+    public override void OnRoomExit()
     {
+        Debug.Log("Room exited");
         return;
     }
 }

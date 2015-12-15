@@ -249,17 +249,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ddd6f4f9748c245b9a546aade37edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_combatInstancePrefab: {fileID: 0}
+  m_combatInstancePrefab: {fileID: 11483406, guid: f51232a1cd84a214fad16f94564b5993,
+    type: 2}
   m_defaultLocation: {x: 1000, y: 1000, z: 1000}
-  m_enemiesForCombat:
-  - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
-  - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
   m_enemyTeamForCombat: {fileID: 11479944, guid: 2318e80628f177d42b16ef20eadc4eff,
     type: 2}
   m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
     type: 2}
   m_playerPawn: {fileID: 11416324, guid: 2c12ccaba825fb74a9da2a0779734106, type: 2}
-  m_playersInCombat: 1
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
 --- !u!23 &1900037248
 MeshRenderer:

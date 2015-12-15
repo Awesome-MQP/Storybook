@@ -10,6 +10,9 @@ public class CombatRoom : RoomObject {
     [SerializeField]
     private EnemyTeam m_roomEnemies;
 
+    [SerializeField]
+    private List<Transform> m_enemyPosList = new List<Transform>();
+
     private List<CombatPawn> m_enemyPawns = new List<CombatPawn>();
 
     private CombatManager m_combatManager;
@@ -24,52 +27,49 @@ public class CombatRoom : RoomObject {
         m_gameManager = FindObjectOfType<GameManager>();
         // CombatTeam.m_activePawnsOnTeam is the list of all combat pawns
         m_enemyPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
-        OnRoomEnter();
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
-    protected override void OnRoomEnter()
+    public override void OnRoomEnter()
     {
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
             m_gameManager.EnemyTeamForCombat = m_roomEnemies;
 
-            int x = 0, y = 2, z = 1, i = 0;
+            int i = 0;
 
             // TODO: Change this to work over network
-            
+            /*
             foreach (CombatPawn pawn in m_roomEnemies.PawnsToSpawn)
             {
-                m_enemyPawns[i] = (CombatPawn) Instantiate(pawn.gameObject, new Vector3(x, y, z), Quaternion.identity);
-                m_enemyPawns[i].gameObject.SetActive(true);
-                z -= 2;
+                Vector3 currentEnemyPos = m_enemyPosList[i].position;
+                GameObject pawnGameObject = PhotonNetwork.Instantiate(pawn.name, currentEnemyPos, Quaternion.identity, 0);
+                PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
+                m_enemyPawns.Add(pawnGameObject.GetComponent<CombatPawn>());
                 i++;
             }
+            */
         }
         return;
     }
 
-    // What do we do when all players reach the center of the room?
-    // Most likely nothing, but that may change.
-    protected override void OnRoomEvent()
+    public override void OnRoomEvent()
     {
-        // TODO: Transition into Combat.
-        // Use DungeonMovement for this.
-        m_gameManager.StartCombat();
+        m_gameManager.TransitionToCombat();
         return;
     }
 
-    // What happens when the players leave this room?
-    // Hint: Nothing.
-    protected override void OnRoomExit()
+    public override void OnRoomExit()
     {
+        /*
         foreach(CombatPawn go in m_enemyPawns)
         {
             m_enemyPawns.Remove(go);
             Destroy(go);
         }
         return;
+        */
     }
 
     // Change the value of the room's "won" status

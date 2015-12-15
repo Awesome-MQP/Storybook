@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapManager : MonoBehaviour {
+public class MapManager : Photon.PunBehaviour {
 
     struct Point
     {
@@ -39,6 +39,13 @@ public class MapManager : MonoBehaviour {
         }
     }
 
+    private static MapManager s_instance;
+
+    public static MapManager Instance
+    {
+        get { return s_instance; }
+    }
+
     [SerializeField]
     private int m_worldMaxXSize = 4;
 
@@ -60,9 +67,10 @@ public class MapManager : MonoBehaviour {
     [SerializeField]
     private int m_additionalHallsMin = 2;
 
+    [SerializeField]
     private RoomData[,] m_worldMapData;
 
-    private int m_defaultRoomSize = 20; // Default room size (in blocks in Unity editor)
+    private int m_defaultRoomSize = 50; // Default room size (in blocks in Unity editor)
 
     public enum RoomType { None = 0, Start, Combat, Exit, Shop };
 
@@ -70,11 +78,13 @@ public class MapManager : MonoBehaviour {
 
     private Point m_startPoint;
     private Point m_exitPoint;
+    private int m_roomDataReceived = 0;
 
     // Initialize
     void Awake()
     {
         DontDestroyOnLoad(this);
+        s_instance = this;
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
         m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
@@ -93,30 +103,41 @@ public class MapManager : MonoBehaviour {
     {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
+
         // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
         if ((placeX < 0 || placeX >= m_worldMaxXSize) ||
             (placeY < 0 || placeY >= m_worldMaxYSize)) {
+            Debug.Log("Returning null");
             return null;
         }
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
         if (m_worldGrid[placeX, placeY] != null) {
+            Debug.Log("Returning null");
             return null;
         }
         // If we got here, then the location is assumed to be valid.
         // Place the room.
-        Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, m_defaultRoomSize * placeX);
-        RoomObject room = (RoomObject)Instantiate(m_roomPrefab, roomGridLocation, new Quaternion());
+        Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, -m_defaultRoomSize * placeX);
+        GameObject roomGameObject = PhotonNetwork.Instantiate(m_roomPrefab.name, roomGridLocation, new Quaternion(), 0);
+        RoomObject room = roomGameObject.GetComponent<RoomObject>();
         room.RoomLocation = gridPosition;
-        _determineDoorPlacement(gridPosition, room);
-        _checkDoorRooms(gridPosition, room);
+        room = _determineDoorPlacement(gridPosition, room);
+        room = _checkDoorRooms(gridPosition, room);
         m_worldGrid[placeX, placeY] = room;
+        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
     }
 
     // Get a room from the world
     public RoomObject GetRoom(Location roomLoc)
     {
+        if (roomLoc.X < 0 || roomLoc.X > m_worldGrid.GetLength(0))
+            return null;
+
+        if (roomLoc.Y < 0 || roomLoc.Y > m_worldGrid.GetLength(1))
+            return null;
+
         return m_worldGrid[roomLoc.X, roomLoc.Y];
     }
 
@@ -154,29 +175,29 @@ public class MapManager : MonoBehaviour {
         RoomData currentRoomData = m_worldMapData[gridPosition.X, gridPosition.Y];
 
         // Initialize the room through door locations
-        theRoom.RoomDoors[theRoom.NORTH_DOOR_INDEX].SetRoomThroughDoorLoc(new Location(gridPosition.X + 1, gridPosition.Y));
-        theRoom.RoomDoors[theRoom.EAST_DOOR_INDEX].SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y + 1));
-        theRoom.RoomDoors[theRoom.SOUTH_DOOR_INDEX].SetRoomThroughDoorLoc(new Location(gridPosition.X - 1, gridPosition.Y));
-        theRoom.RoomDoors[theRoom.WEST_DOOR_INDEX].SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y - 1));
+        theRoom.RoomDoors[(int)RoomObject.DoorIndex.NorthDoor].SetRoomThroughDoorLoc(new Location(gridPosition.X - 1, gridPosition.Y));
+        theRoom.RoomDoors[(int)RoomObject.DoorIndex.EastDoor].SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y + 1));
+        theRoom.RoomDoors[(int)RoomObject.DoorIndex.SouthDoor].SetRoomThroughDoorLoc(new Location(gridPosition.X + 1, gridPosition.Y));
+        theRoom.RoomDoors[(int)RoomObject.DoorIndex.WestDoor].SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y - 1));
 
         if (!currentRoomData.IsSouthDoorActive)
         {
-            theRoom.RoomDoors[theRoom.SOUTH_DOOR_INDEX].DisableDoor();
+            theRoom.RoomDoors[(int)RoomObject.DoorIndex.SouthDoor].DisableDoor();
         }
 
         if (!currentRoomData.IsNorthDoorActive)
         {
-            theRoom.RoomDoors[theRoom.NORTH_DOOR_INDEX].DisableDoor();
+            theRoom.RoomDoors[(int)RoomObject.DoorIndex.NorthDoor].DisableDoor();
         }
 
         if (!currentRoomData.IsWestDoorActive)
         {
-            theRoom.RoomDoors[theRoom.WEST_DOOR_INDEX].DisableDoor();
+            theRoom.RoomDoors[(int)RoomObject.DoorIndex.WestDoor].DisableDoor();
         }
 
         if (!currentRoomData.IsEastDoorActive)
         {
-            theRoom.RoomDoors[theRoom.EAST_DOOR_INDEX].DisableDoor();
+            theRoom.RoomDoors[(int)RoomObject.DoorIndex.EastDoor].DisableDoor();
         }
 
         return theRoom;
@@ -191,29 +212,29 @@ public class MapManager : MonoBehaviour {
     /// <returns></returns>
     private RoomObject _checkDoorRooms(Location roomLoc, RoomObject currentRoom)
     {
-        Location northDoorLoc = new Location(roomLoc.X + 1, roomLoc.Y);
+        Location northDoorLoc = new Location(roomLoc.X - 1, roomLoc.Y);
         Location eastDoorLoc = new Location(roomLoc.X, roomLoc.Y + 1);
-        Location southDoorLoc = new Location(roomLoc.X - 1, roomLoc.Y);
+        Location southDoorLoc = new Location(roomLoc.X + 1, roomLoc.Y);
         Location westDoorLoc = new Location(roomLoc.X, roomLoc.Y - 1);
 
         if (_isLocationOccupied(northDoorLoc))
         {
-            currentRoom.RoomDoors[currentRoom.NORTH_DOOR_INDEX].SetIsDoorRoomSpawned(true);
+            currentRoom.RoomDoors[(int)RoomObject.DoorIndex.NorthDoor].SetIsDoorRoomSpawned(true);
         }
 
         if (_isLocationOccupied(eastDoorLoc))
         {
-            currentRoom.RoomDoors[currentRoom.EAST_DOOR_INDEX].SetIsDoorRoomSpawned(true);
+            currentRoom.RoomDoors[(int)RoomObject.DoorIndex.EastDoor].SetIsDoorRoomSpawned(true);
         }
 
         if (_isLocationOccupied(southDoorLoc))
         {
-            currentRoom.RoomDoors[currentRoom.SOUTH_DOOR_INDEX].SetIsDoorRoomSpawned(true);
+            currentRoom.RoomDoors[(int)RoomObject.DoorIndex.SouthDoor].SetIsDoorRoomSpawned(true);
         }
 
         if (_isLocationOccupied(westDoorLoc))
         {
-            currentRoom.RoomDoors[currentRoom.WEST_DOOR_INDEX].SetIsDoorRoomSpawned(true);
+            currentRoom.RoomDoors[(int)RoomObject.DoorIndex.WestDoor].SetIsDoorRoomSpawned(true);
         }
 
         return currentRoom;
@@ -257,32 +278,32 @@ public class MapManager : MonoBehaviour {
 
         Door exitDoor = null;
 
-        if (doorIndex == currentRoom.NORTH_DOOR_INDEX)
-        {
-            Location exitDoorLoc = new Location(currentLoc.X + 1, currentLoc.Y);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.RoomDoors[exitRoom.SOUTH_DOOR_INDEX];
-        }
-
-        else if (doorIndex == currentRoom.EAST_DOOR_INDEX)
-        {
-            Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y + 1);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.RoomDoors[exitRoom.WEST_DOOR_INDEX];
-        }
-
-        else if (doorIndex == currentRoom.SOUTH_DOOR_INDEX)
+        if (doorIndex == (int)RoomObject.DoorIndex.NorthDoor)
         {
             Location exitDoorLoc = new Location(currentLoc.X - 1, currentLoc.Y);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.RoomDoors[exitRoom.NORTH_DOOR_INDEX];
+            exitDoor = exitRoom.RoomDoors[(int)RoomObject.DoorIndex.SouthDoor];
         }
 
-        else if (doorIndex == currentRoom.WEST_DOOR_INDEX)
+        else if (doorIndex == (int)RoomObject.DoorIndex.EastDoor)
+        {
+            Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y + 1);
+            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
+            exitDoor = exitRoom.RoomDoors[(int)RoomObject.DoorIndex.WestDoor];
+        }
+
+        else if (doorIndex == (int)RoomObject.DoorIndex.SouthDoor)
+        {
+            Location exitDoorLoc = new Location(currentLoc.X + 1, currentLoc.Y);
+            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
+            exitDoor = exitRoom.RoomDoors[(int)RoomObject.DoorIndex.NorthDoor];
+        }
+
+        else if (doorIndex == (int)RoomObject.DoorIndex.WestDoor)
         {
             Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y - 1);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.RoomDoors[exitRoom.EAST_DOOR_INDEX];
+            exitDoor = exitRoom.RoomDoors[(int)RoomObject.DoorIndex.EastDoor];
         }
 
         return exitDoor;
@@ -330,6 +351,7 @@ public class MapManager : MonoBehaviour {
         _createPathFromStartToExit();
         _addAdditionalDoors();
         _placeSpecialRooms();
+        _sendMap();
         //_printMap();
     }
 
@@ -871,5 +893,51 @@ public class MapManager : MonoBehaviour {
                 m_worldMapData[i, j] = currentRoom;
             }
         }
+    }
+
+    public RoomObject PlaceStartRoom()
+    {
+        Location start = new Location(m_startPoint.x, m_startPoint.y);
+        return PlaceRoom(start);
+    }
+
+    private void _sendMap()
+    {
+        for (int i = 0; i < m_worldMaxXSize; i++)
+        {
+            for (int j = 0; j < m_worldMaxYSize; j++)
+            {
+                RoomData rd = m_worldMapData[i, j];
+                photonView.RPC("SendRoomData", PhotonTargets.Others, i, j, rd.IsNorthDoorActive, rd.IsEastDoorActive, rd.IsSouthDoorActive,
+                    rd.IsWestDoorActive, rd.RoomType);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void SendRoomData(int roomLocX, int roomLocY, bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, 
+        bool isWestDoorActive, int roomType)
+    {
+        RoomData roomData = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive, (RoomType) roomType);
+        m_worldMapData[roomLocX, roomLocY] = roomData;
+        m_roomDataReceived += 1;
+        if (isAllDataReceived())
+        {
+            Debug.Log("All data received");
+        }
+    }
+
+    public bool isAllDataReceived()
+    {
+        if (m_roomDataReceived >= (m_worldMaxXSize * m_worldMaxYSize))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public RoomData GetRoomData(int roomDataX, int roomDataY)
+    {
+        return m_worldMapData[roomDataX, roomDataY];
     }
 }

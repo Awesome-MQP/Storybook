@@ -89,6 +89,7 @@ public class PlayerMover : NetworkMover
             }
             yield return new WaitForSeconds(0.1f);
         }
+        m_currentRoom.OnRoomExit();
 
         Location newRoomLoc = door.RoomThroughDoorLoc;
         MapManager mapManager = FindObjectOfType<MapManager>();
@@ -111,7 +112,17 @@ public class PlayerMover : NetworkMover
             m_currentRoomData.IsSouthDoorActive, m_currentRoomData.IsWestDoorActive, m_currentRoomData.RoomType);
         photonView.RPC("SendRoomLoc", PhotonTargets.Others, m_currentRoomLoc.X, m_currentRoomLoc.Y);
 
+        m_currentRoom.OnRoomEnter();
+
         _SetTargetNodesForPlayers();
+
+        while (!_areAllPlayersAtTarget())
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        m_currentRoom.OnRoomEvent();
+
         AreButtonsEnabled = true;
     }
 
@@ -308,6 +319,23 @@ public class PlayerMover : NetworkMover
         {
             LeaderId = 1;
         }
+    }
+
+    private bool _areAllPlayersAtTarget()
+    {
+        foreach(NetworkNodeMover player in m_worldPlayers)
+        {
+            if (!player.IsAtTarget)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void ReturnCameraToDungeon()
+    {
+        photonView.RPC("SwitchCameraRoom", PhotonTargets.All, m_currentRoom.CameraNode.transform.position, m_currentRoom.CameraNode.transform.rotation);
     }
 
     /*

@@ -45,6 +45,7 @@ public class GameManager : Photon.PunBehaviour {
 
             GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
+
             GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(enemyTeam.GetComponent<PhotonView>());
 
@@ -67,9 +68,8 @@ public class GameManager : Photon.PunBehaviour {
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetCombatTeamList(combatTeams);
             
-            CameraManager m_camManager = FindObjectOfType<CameraManager>();
-            m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
-            
+            //CameraManager m_camManager = FindObjectOfType<CameraManager>();
+            //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
         }
     }
 
@@ -85,6 +85,19 @@ public class GameManager : Photon.PunBehaviour {
         playerMover.SpawnInRoom(startRoom);
     }
 
+    public void TransitionToCombat()
+    {
+        Debug.Log("Transitioning to combat");
+        photonView.RPC("EnableMovementComponents", PhotonTargets.All, false);
+        StartCombat();
+    }
+
+    private void _TransitionToOverworld()
+    {
+        Debug.Log("Transitioning to overworld");
+        photonView.RPC("EnableMovementComponents", PhotonTargets.All, true);
+    }
+
     /// <summary>
     /// Ends the combat instance that has the given CombatManager
     /// </summary>
@@ -92,17 +105,27 @@ public class GameManager : Photon.PunBehaviour {
     {
         CombatManager cm = m_combatInstance.GetComponent<CombatManager>();
 
+        Debug.Log("Destroying all teams");
+
         cm.DestroyAllTeams();
+
+        Debug.Log("Destroying all pages");
+
         cm.DestroyAllPages();
+
+        Debug.Log("Destroying combat instance");
 
         GameObject currentCombatInstance = m_combatInstance;
 
         PhotonNetwork.Destroy(currentCombatInstance);
         Destroy(currentCombatInstance);
 
+        _TransitionToOverworld();
+
+        /*
         CameraManager m_camManager = FindObjectOfType<CameraManager>();
         m_camManager.SwitchToOverworldCamera(); // Switch to the overworld camera.
-        
+        */
     }
 
     /// <summary>
@@ -116,15 +139,6 @@ public class GameManager : Photon.PunBehaviour {
         Debug.Log("Adding " + allPlayers.Length.ToString() + " players");
         return allPlayersList;
     }
-
-    /*
-    private void _returnToDungeon()
-    {
-        DungeonMovement dm = FindObjectOfType<DungeonMovement>();
-        dm.enabled = true;
-        dm.TransitionToDungeon();
-    }
-    */
 
     public EnemyTeam EnemyTeamForCombat
     {
@@ -143,5 +157,44 @@ public class GameManager : Photon.PunBehaviour {
     {
         Camera.main.transform.position = position;
         Camera.main.transform.rotation = rotation;
+    }
+
+    [PunRPC]
+    protected void EnableMovementComponents(bool isEnable)
+    {
+        Debug.Log("Disabling movement components");
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.LoadMap(isEnable);
+        mapManager.enabled = isEnable;
+
+        Debug.Log("Map manager disabled");
+
+        NetworkNodeMover[] allWorldPawns = FindObjectsOfType<NetworkNodeMover>();
+        foreach(NetworkNodeMover worldPlayer in allWorldPawns)
+        {
+            worldPlayer.enabled = isEnable;
+        }
+
+        Debug.Log("Network node movers disabled");
+
+        PlayerMover playerMover = FindObjectOfType<PlayerMover>();
+        playerMover.enabled = isEnable;
+
+        if (isEnable)
+        {
+            playerMover.ReturnCameraToDungeon();
+        }
+
+        Debug.Log("Player mover disabled");
+
+        /*
+        CombatPawn[] worldEnemyPawns = FindObjectsOfType<CombatPawn>();
+        foreach(CombatPawn worldEnemy in worldEnemyPawns)
+        {
+            worldEnemy.enabled = false;
+        }
+
+        Debug.Log("World combat pawn disabled");
+        */
     }
 }

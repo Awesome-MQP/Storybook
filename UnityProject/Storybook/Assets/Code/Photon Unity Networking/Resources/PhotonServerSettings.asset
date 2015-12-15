@@ -62,4 +62,6 @@ MonoBehaviour:
   - CreateRoomOnMaster
   - SendRoomLoc
   - SendNewLeader
+  - DisableMovementComponents
+  - EnableMovementComponents
   DisableAutoOpenWizard: 1

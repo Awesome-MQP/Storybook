@@ -52,4 +52,14 @@ MonoBehaviour:
   - _RejectCommit
   - _RequestCommit
   - RPCSendDeckIds
+  - _OnNetworkEnter
+  - _OnNetworkLeave
+  - _RPCArrive
+  - SendCameraPosRot
+  - SwitchCameraRoom
+  - SendRoomData
+  - RegisterCurrentRoom
+  - CreateRoomOnMaster
+  - SendRoomLoc
+  - SendNewLeader
   DisableAutoOpenWizard: 1

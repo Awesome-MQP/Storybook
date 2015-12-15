@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Door : MonoBehaviour {
+public class Door : Photon.PunBehaviour {
 
     [SerializeField]
-    private DoorSpawnNode m_doorNode;
+    private DoorNode m_doorNode;
 
+    [SerializeField]
     private bool m_isDoorEnabled = true;
+
     private bool m_isDoorRoomSpawned = false;
 
     private Location m_roomThroughDoorLoc;
+
+    void Update()
+    {
+        if (!m_isDoorEnabled)
+        {
+            DisableDoor();
+        }
+    }
 
     // TODO : Add implementation for passing through doors.
     //        (Requires world manager and more complete level-building stuff first.)
@@ -22,7 +32,7 @@ public class Door : MonoBehaviour {
     {
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
-        m_isDoorEnabled = false;
+        IsDoorEnabled = false;
     }
 
     /// <summary>
@@ -54,15 +64,21 @@ public class Door : MonoBehaviour {
     /// <summary>
     /// True if the door is enabled in the room, false otherwise
     /// </summary>
+    [SyncProperty]
     public bool IsDoorEnabled
     {
         get { return m_isDoorEnabled; }
+        set
+        {
+            m_isDoorEnabled = value;
+            PropertyChanged();
+        }
     }
 
     /// <summary>
     /// The door node that corresponds to this door
     /// </summary>
-    public DoorSpawnNode DoorNode
+    public DoorNode DoorNode
     {
         get { return m_doorNode; }
     }

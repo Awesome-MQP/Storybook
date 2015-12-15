@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//TODO: 
+public abstract class RoomObject : MonoBehaviour {
 
-public abstract class RoomObject : MonoBehaviour{
+    public enum DoorIndex {NorthDoor = 0, EastDoor, SouthDoor, WestDoor };
 
+    /*
     public readonly int NORTH_DOOR_INDEX = 0;
     public readonly int EAST_DOOR_INDEX = 1;
     public readonly int SOUTH_DOOR_INDEX = 2;
     public readonly int WEST_DOOR_INDEX = 3;
+    */
 
     [SerializeField]
     Transform m_cameraNode;
@@ -30,16 +32,16 @@ public abstract class RoomObject : MonoBehaviour{
     private string m_roomFeature;
 
     [SerializeField]
-    private Transform m_player1Pos;
+    private MovementNode m_player1Pos;
 
     [SerializeField]
-    private Transform m_player2Pos;
+    private MovementNode m_player2Pos;
 
     [SerializeField]
-    private Transform m_player3Pos;
+    private MovementNode m_player3Pos;
 
     [SerializeField]
-    private Transform m_player4Pos;
+    private MovementNode m_player4Pos;
 
     protected virtual void Awake()
     {
@@ -103,22 +105,22 @@ public abstract class RoomObject : MonoBehaviour{
         get { return m_cameraNode; }
     }
 
-    public Transform Player1Node
+    public MovementNode Player1Node
     {
         get { return m_player1Pos; }
     }
 
-    public Transform Player2Node
+    public MovementNode Player2Node
     {
         get { return m_player2Pos; }
     }
 
-    public Transform Player3Node
+    public MovementNode Player3Node
     {
         get { return m_player3Pos; }
     }
 
-    public Transform Player4Node
+    public MovementNode Player4Node
     {
         get { return m_player4Pos; }
     }

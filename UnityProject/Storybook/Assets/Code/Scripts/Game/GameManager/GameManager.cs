@@ -29,7 +29,7 @@ public class GameManager : Photon.PunBehaviour {
         // Only call StartCombat on the master client
         if (PhotonNetwork.isMasterClient)
         {
-            StartCombat();
+            StartGame();
         }
     }
 
@@ -73,6 +73,18 @@ public class GameManager : Photon.PunBehaviour {
         }
     }
 
+    public void StartGame()
+    {
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.GenerateMap();
+        RoomObject startRoom = mapManager.PlaceStartRoom();
+        PlayerMover playerMover = FindObjectOfType<PlayerMover>();
+        List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
+        playerMover.WorldPlayers = players;
+        photonView.RPC("SendCameraPosRot", PhotonTargets.All, startRoom.CameraNode.transform.position, startRoom.CameraNode.transform.rotation);
+        playerMover.SpawnInRoom(startRoom);
+    }
+
     /// <summary>
     /// Ends the combat instance that has the given CombatManager
     /// </summary>
@@ -105,12 +117,14 @@ public class GameManager : Photon.PunBehaviour {
         return allPlayersList;
     }
 
+    /*
     private void _returnToDungeon()
     {
         DungeonMovement dm = FindObjectOfType<DungeonMovement>();
         dm.enabled = true;
         dm.TransitionToDungeon();
     }
+    */
 
     public EnemyTeam EnemyTeamForCombat
     {
@@ -122,5 +136,12 @@ public class GameManager : Photon.PunBehaviour {
     {
         get { return m_playerTeamForCombat; }
         set { m_playerTeamForCombat = value; }
+    }
+
+    [PunRPC]
+    public void SendCameraPosRot(Vector3 position, Quaternion rotation)
+    {
+        Camera.main.transform.position = position;
+        Camera.main.transform.rotation = rotation;
     }
 }

@@ -27,6 +27,12 @@ public class MatchMaker : Photon.PunBehaviour {
         if (isFirst && GUILayout.Button("Start World Movement"))
         {
             PhotonNetwork.LoadLevel("WorldMovementTest");
+            Destroy(this);
+        }
+        if (isFirst && GUILayout.Button("Start Inventory"))
+        {
+            PhotonNetwork.LoadLevel("TestInventory");
+            Destroy(this);
         }
     }
 

@@ -178,18 +178,17 @@ public class Page : Item  {
     //=INHERITED CLASSES FROM ITEM================================================================
     protected override void OnPickup()
     {
-        throw new NotImplementedException();
         // TODO in Player (I think), make the player set itself as the owner of this page.
     }
 
     protected override void OnDrop()
     {
-        throw new NotImplementedException();
+        //TODO
     }
 
     protected override void OnMoved()
     {
-        throw new NotImplementedException();
+        //TODO
     }
 
     //=PROPERTIES=================================================================================

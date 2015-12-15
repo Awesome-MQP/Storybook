@@ -85,6 +85,40 @@ NavMeshSettings:
     cellSize: .166666672
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &11698529 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 113400, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+  m_PrefabInternal: {fileID: 387940346}
+--- !u!114 &11698530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 11698529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 480730845}
+          m_MethodName: OpenPanel
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1486076393}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Animator, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!95 &133914642 stripped
 Animator:
   m_PrefabParentObject: {fileID: 9555332, guid: b14cc705e86c2964d9a878da2c87b609,
@@ -278,6 +312,26 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 98418d4f4cc8d324e8d564cc012306a8, type: 2}
+    - target: {fileID: 11497744, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11455374, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474096, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11474096, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446260, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
   m_IsPrefabParent: 0
@@ -436,7 +490,7 @@ Prefab:
     - target: {fileID: 11468514, guid: 673d28b5345ba0140aef7868b1b80cab, type: 2}
       propertyPath: initiallyOpen
       value: 
-      objectReference: {fileID: 133914642}
+      objectReference: {fileID: 1588949642}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 673d28b5345ba0140aef7868b1b80cab, type: 2}
   m_IsPrefabParent: 0
@@ -445,6 +499,40 @@ Animator:
   m_PrefabParentObject: {fileID: 9577984, guid: 7c67d420c7d090c4097a21cbcc2af4fc,
     type: 2}
   m_PrefabInternal: {fileID: 1139221908}
+--- !u!1 &1111307758 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 163840, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+  m_PrefabInternal: {fileID: 387940346}
+--- !u!114 &1111307759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1111307758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 480730845}
+          m_MethodName: OpenPanel
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1486076393}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Animator, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1001 &1139221908
 Prefab:
   m_ObjectHideFlags: 0
@@ -542,7 +630,7 @@ Prefab:
       objectReference: {fileID: 133914642}
     - target: {fileID: 147228, guid: 7c67d420c7d090c4097a21cbcc2af4fc, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11478860, guid: 7c67d420c7d090c4097a21cbcc2af4fc, type: 2}
       propertyPath: m_Sprite
@@ -884,6 +972,40 @@ Animator:
   m_PrefabParentObject: {fileID: 9595312, guid: 98783fae23c23024eb935385464a586a,
     type: 2}
   m_PrefabInternal: {fileID: 474607891}
+--- !u!1 &1536102239 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 161102, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+  m_PrefabInternal: {fileID: 387940346}
+--- !u!114 &1536102240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1536102239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 480730845}
+          m_MethodName: OpenPanel
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1559029069}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Animator, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!95 &1559029069 stripped
 Animator:
   m_PrefabParentObject: {fileID: 9571428, guid: a2628ef5b91f304459fc3a158d36d709,
@@ -1040,6 +1162,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1 &1789143247 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 107662, guid: 36f2e7636e86f43468e6e68051f02da8, type: 2}
+  m_PrefabInternal: {fileID: 387940346}
+--- !u!114 &1789143248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1789143247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 480730845}
+          m_MethodName: OpenPanel
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1486076393}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Animator, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1001 &2018900629
 Prefab:
   m_ObjectHideFlags: 0

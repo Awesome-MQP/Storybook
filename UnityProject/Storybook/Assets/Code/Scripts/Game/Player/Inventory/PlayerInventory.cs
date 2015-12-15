@@ -2,48 +2,40 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerInventory : MonoBehaviour {
+public class PlayerInventory : Inventory {
 
-    //[SerializeField]
-    //private List<InventoryItem> m_Inventory = new List<InventoryItem>(); // List for all equipment and active items
-    //^^^Uncomment when Items are added back in.
-    //[SerializeField]
-    //private List<Page> Pages = new List<Page>(); // List for all pages the player has
-    //^^^Uncomment when Pages are added back in.
     [SerializeField]
-    private const int DEFAULT_INVENTORY_SPACE = 4;
-    [SerializeField]
-    private const int DEFAULT_MAX_PAGES = 99;
-    [SerializeField]
-    private int m_ItemsInInventory = 0; // Current items in the player's inventory
-    [SerializeField]
-    private int m_PagesHeld = 0; // Number of pages the players has
+    private Page m_testPage;
 
-    // Add an item to the Inventory, but only if there is enough space
-    /*
-    public void AddToInventory(InventoryItem TheItem)
+    void Start()
     {
-        if (m_Inventory.Count < DEFAULT_INVENTORY_SPACE)
+        if (PhotonNetwork.isMasterClient)
         {
-            m_Inventory.Add(TheItem);
-            m_ItemsInInventory = m_Inventory.Count;
-            // TODO : Notify player that the item is in their inventory
-            // TODO : Code that removes the item from the room
-        }
-        else
-        {
-            // TODO : Notify the player that inventory is full
-            // TODO : Code that drops the item on the floor (?)
+            GameObject pageObject = PhotonNetwork.Instantiate(m_testPage.name, Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
+            Page testPage = pageObject.GetComponent<Page>();
+            bool wasItemAdded = Add(testPage, 0);
+            Debug.Log(ContainsItem(testPage));
+            Debug.Log(this[0].SlotItem.Owner);
+            Move(0, 2);
+            Debug.Log(this[2].SlotItem);
+            Drop(0);
+            Debug.Log(ContainsItem(testPage));
         }
     }
 
-    // Removes a specific item from the Inventory, using the List.Remove method to remove the first instance of a specific item.
-    // This way, only one of an item is removed if the player has more than one.
-    public void RemoveFromInventory(InventoryItem TheItem)
+    protected override bool CanAddItem(Item item, int index)
     {
-        m_Inventory.Remove(TheItem);
-        m_ItemsInInventory = m_Inventory.Count;
+        return true;
     }
-    */
-    // ^^^ Uncomment once Items are back in.
+
+    protected override bool CanRemoveItem(int index)
+    {
+        return true;
+    }
+
+    protected override bool CanMoveItem(int fromIndex, int toIndex)
+    {
+        return true;
+    }
 }

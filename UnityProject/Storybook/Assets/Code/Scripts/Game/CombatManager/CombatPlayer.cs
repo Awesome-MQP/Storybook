@@ -19,11 +19,11 @@ public abstract class CombatPlayer : CombatPawn {
 
     private bool m_canSelectMove = false;
 
-    private Vector3 m_page1Pos = new Vector3(1586, 1185, 1044);
-    private Vector3 m_page2Pos = new Vector3(1591, 1185, 1044);
-    private Vector3 m_page3Pos = new Vector3(1596, 1185, 1044);
-    private Vector3 m_page4Pos = new Vector3(1601, 1185, 1044);
-    private Vector3 m_page5Pos = new Vector3(1606, 1185, 1044);
+    private Vector3 m_page1Pos = new Vector3(2585, 2184, 2046);
+    private Vector3 m_page2Pos = new Vector3(2590, 2184, 2046);
+    private Vector3 m_page3Pos = new Vector3(2595, 2184, 2046);
+    private Vector3 m_page4Pos = new Vector3(2600, 2184, 2046);
+    private Vector3 m_page5Pos = new Vector3(2605, 2184, 2046);
 
     private GameObject[] m_displayedPages = new GameObject[5];
 
@@ -59,7 +59,7 @@ public abstract class CombatPlayer : CombatPawn {
             
             if(PhotonNetwork.player.ID == PawnId)
             {
-                //DrawPageOnScreen(currentPage, i);
+                DrawPageOnScreen(currentPage, i);
             }
         }
     }
@@ -100,13 +100,13 @@ public abstract class CombatPlayer : CombatPawn {
     {
         m_playerHand.Remove(pageToRemove);
 
-        /*
+        
         if (PhotonNetwork.player.ID == PawnId)
         {
             Destroy(m_displayedPages[SelectedPageIndex]);
             ShiftPages(SelectedPageIndex);
         }
-        */
+        
 
         m_playerDeck.AddPageToGraveyard(pageToRemove);
     }
@@ -160,7 +160,7 @@ public abstract class CombatPlayer : CombatPawn {
         m_playerHand.Add(currentPage);
         if (PhotonNetwork.player.ID == PawnId)
         {
-            //DrawPageOnScreen(currentPage, 4);
+            DrawPageOnScreen(currentPage, 4);
         }
     }
 

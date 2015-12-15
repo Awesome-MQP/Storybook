@@ -12,21 +12,21 @@ public class ExitRoom : RoomObject {
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
-    protected override void OnRoomEnter()
+    public override void OnRoomEnter()
     {
         return;
     }
 
     // What do we do when all players reach the center of the room?
     // Most likely nothing, but that may change.
-    protected override void OnRoomEvent()
+    public override void OnRoomEvent()
     {
         return;
     }
 
     // What happens when the players leave this room?
     // Hint: Nothing.
-    protected override void OnRoomExit()
+    public override void OnRoomExit()
     {
         // TODO: Load next level; or clear current level, generate new start position, and move players there.
         return;

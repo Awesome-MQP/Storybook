@@ -12,7 +12,7 @@ public class ShopRoom : RoomObject {
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
-    protected override void OnRoomEnter()
+    public override void OnRoomEnter()
     {
         // TODO: spawn shopkeeper
         Debug.Log("Welcome to the shop!");
@@ -21,7 +21,7 @@ public class ShopRoom : RoomObject {
 
     // What do we do when all players reach the center of the room?
     // Most likely nothing, but that may change.
-    protected override void OnRoomEvent()
+    public override void OnRoomEvent()
     {
         // TODO: open the shop UI.
         Debug.Log("Whaddya buyin'?");
@@ -30,7 +30,7 @@ public class ShopRoom : RoomObject {
 
     // What happens when the players leave this room?
     // Hint: Nothing.
-    protected override void OnRoomExit()
+    public override void OnRoomExit()
     {
         return;
     }

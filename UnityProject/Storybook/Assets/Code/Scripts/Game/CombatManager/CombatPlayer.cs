@@ -59,8 +59,7 @@ public abstract class CombatPlayer : CombatPawn {
             
             if(PhotonNetwork.player.ID == PawnId)
             {
-                Debug.Log("hello");
-                DrawPageOnScreen(currentPage, i);
+                //DrawPageOnScreen(currentPage, i);
             }
         }
     }
@@ -101,11 +100,13 @@ public abstract class CombatPlayer : CombatPawn {
     {
         m_playerHand.Remove(pageToRemove);
 
+        /*
         if (PhotonNetwork.player.ID == PawnId)
         {
             Destroy(m_displayedPages[SelectedPageIndex]);
             ShiftPages(SelectedPageIndex);
         }
+        */
 
         m_playerDeck.AddPageToGraveyard(pageToRemove);
     }
@@ -159,7 +160,7 @@ public abstract class CombatPlayer : CombatPawn {
         m_playerHand.Add(currentPage);
         if (PhotonNetwork.player.ID == PawnId)
         {
-            DrawPageOnScreen(currentPage, 4);
+            //DrawPageOnScreen(currentPage, 4);
         }
     }
 

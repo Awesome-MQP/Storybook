@@ -49,19 +49,19 @@ public abstract class RoomObject : MonoBehaviour {
     }
 
     // What do we do immediately upon entering the room?
-    protected virtual void OnRoomEnter()
+    public virtual void OnRoomEnter()
     {
         return;
     }
 
     // What do we do as soon as all players reach the center of the room?
-    protected virtual void OnRoomEvent()
+    public virtual void OnRoomEvent()
     {
         return;
     }
 
     // What do we do immediately upon leaving the room?
-    protected virtual void OnRoomExit()
+    public virtual void OnRoomExit()
     {
         return;
     }

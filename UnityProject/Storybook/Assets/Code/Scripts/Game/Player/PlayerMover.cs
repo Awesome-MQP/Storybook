@@ -76,6 +76,8 @@ public class PlayerMover : NetworkMover
             player.IsAtTarget = false;
         }
 
+        _SwitchCharactersToWalking();
+
         bool areAllPlayersAtDoor = false;
         while (!areAllPlayersAtDoor)
         {
@@ -120,6 +122,8 @@ public class PlayerMover : NetworkMover
         {
             yield return new WaitForSeconds(0.1f);
         }
+
+        _SwitchCharactersToIdle();
 
         m_currentRoom.OnRoomEvent();
 
@@ -345,6 +349,30 @@ public class PlayerMover : NetworkMover
             Debug.Log("Clearing room");
             CombatRoom combatRoom = (CombatRoom)m_currentRoom;
             combatRoom.DestroyEnemyWorldPawns();
+        }
+    }
+
+    private void _SwitchCharactersToWalking()
+    {
+        foreach (NetworkNodeMover player in m_worldPlayers)
+        {
+            if (player is WorldPlayer)
+            {
+                WorldPlayer worldPlayer = (WorldPlayer)player;
+                worldPlayer.SwitchCharacterToWalking();
+            }
+        }
+    }
+
+    public void _SwitchCharactersToIdle()
+    {
+        foreach (NetworkNodeMover player in m_worldPlayers)
+        {
+            if (player is WorldPlayer)
+            {
+                WorldPlayer worldPlayer = (WorldPlayer)player;
+                worldPlayer.SwitchCharacterToIdle();
+            }
         }
     }
 

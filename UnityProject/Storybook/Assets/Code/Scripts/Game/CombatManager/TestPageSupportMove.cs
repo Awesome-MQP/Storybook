@@ -32,9 +32,9 @@ public class TestPageSupportMove : PageMove {
         if (!m_isMoveStarted)
         {
             playerAnimator.SetBool("IdleToIdle", false);
-            playerAnimator.SetBool("WalkToWalk", true);
             playerAnimator.SetBool("WalkToIdle", false);
-            playerAnimator.SetBool("IdleToWalk", true);
+            playerAnimator.SetBool("AttackToIdle", false);
+            playerAnimator.SetBool("IdleToAttack", true);
             m_isMoveStarted = true;
         }
         SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
@@ -43,15 +43,15 @@ public class TestPageSupportMove : PageMove {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= 5)
+        else if (TimeSinceMoveStarted >= 1.2f)
         {
             Debug.Log("Page move is complete");
-            playerAnimator.SetBool("WalkToIdle", true);
-            playerAnimator.SetBool("WalkToWalk", false);
+            playerAnimator.SetBool("IdleToAttack", false);
+            playerAnimator.SetBool("AttackToIdle", true);
             playerAnimator.SetBool("IdleToIdle", true);
-            playerAnimator.SetBool("IdleToWalk", false);
             SetIsMoveComplete(true);
             m_isMoveStarted = false;
+            SetTimeSinceMoveStarted(0);
         }
     }
 }

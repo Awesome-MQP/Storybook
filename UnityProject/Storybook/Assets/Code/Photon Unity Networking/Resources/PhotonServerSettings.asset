@@ -64,4 +64,8 @@ MonoBehaviour:
   - SendNewLeader
   - DisableMovementComponents
   - EnableMovementComponents
+  - SwitchCharactersToIdle
+  - SwitchCharactersToWalking
+  - RPCSwitchCharacterToIdle
+  - RPCSwitchCharacterToWalking
   DisableAutoOpenWizard: 1

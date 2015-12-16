@@ -256,7 +256,7 @@ MonoBehaviour:
     type: 2}
   m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
     type: 2}
-  m_playerPawn: {fileID: 11416324, guid: 2c12ccaba825fb74a9da2a0779734106, type: 2}
+  m_playerPawn: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94, type: 2}
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
 --- !u!23 &1900037248
 MeshRenderer:

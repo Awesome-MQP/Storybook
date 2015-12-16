@@ -28,7 +28,8 @@ public class TestPageAttackMove : PageMove {
 
     public override void ExecuteMove()
     {
-        Animator playerAnimator = MoveOwner.GetComponent<Animator>();
+        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
+        Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
         if (!m_isMoveStarted)
         {
             playerAnimator.SetBool("IdleToIdle", false);

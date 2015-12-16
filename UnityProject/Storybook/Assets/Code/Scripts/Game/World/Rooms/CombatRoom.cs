@@ -13,7 +13,7 @@ public class CombatRoom : RoomObject {
     [SerializeField]
     private List<Transform> m_enemyPosList = new List<Transform>();
 
-    private List<CombatPawn> m_enemyPawns = new List<CombatPawn>();
+    private List<GameObject> m_enemyWorldPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
     private GameManager m_gameManager = null;
@@ -26,7 +26,7 @@ public class CombatRoom : RoomObject {
         base.Awake();
         m_gameManager = FindObjectOfType<GameManager>();
         // CombatTeam.m_activePawnsOnTeam is the list of all combat pawns
-        m_enemyPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
+        // m_enemyWorldPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
@@ -40,16 +40,15 @@ public class CombatRoom : RoomObject {
             int i = 0;
 
             // TODO: Change this to work over network
-            /*
             foreach (CombatPawn pawn in m_roomEnemies.PawnsToSpawn)
             {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 GameObject pawnGameObject = PhotonNetwork.Instantiate(pawn.name, currentEnemyPos, Quaternion.identity, 0);
+                pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
-                m_enemyPawns.Add(pawnGameObject.GetComponent<CombatPawn>());
+                m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-            */
         }
         return;
     }
@@ -62,14 +61,16 @@ public class CombatRoom : RoomObject {
 
     public override void OnRoomExit()
     {
-        /*
-        foreach(CombatPawn go in m_enemyPawns)
+        return;
+    }
+
+    public void DestroyEnemyWorldPawns()
+    {
+        foreach (GameObject go in m_enemyWorldPawns)
         {
-            m_enemyPawns.Remove(go);
+            PhotonNetwork.Destroy(go);
             Destroy(go);
         }
-        return;
-        */
     }
 
     // Change the value of the room's "won" status

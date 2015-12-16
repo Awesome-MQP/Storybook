@@ -55,7 +55,6 @@ public abstract class CombatPlayer : CombatPawn {
         {
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
-            Debug.Log("Draw a card");
             
             if(PhotonNetwork.player.ID == PawnId)
             {
@@ -185,6 +184,15 @@ public abstract class CombatPlayer : CombatPawn {
             deckList.Add(page);
         }
         m_playerDeck = new CombatDeck(deckList);
+        StartCoroutine(_waitForPawnId());
+    }
+
+    private IEnumerator _waitForPawnId()
+    {
+        while (PawnId == -1)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
         DrawStartingHand();
     }
 
@@ -313,6 +321,14 @@ public abstract class CombatPlayer : CombatPawn {
                 move = "Boost";
             }
             Debug.Log("Page " + i + " = " + move);
+        }
+    }
+
+    public void DestroyAllDisplayedPages()
+    {
+        foreach(GameObject go in m_displayedPages)
+        {
+            Destroy(go);
         }
     }
 }

@@ -338,6 +338,16 @@ public class PlayerMover : NetworkMover
         photonView.RPC("SwitchCameraRoom", PhotonTargets.All, m_currentRoom.CameraNode.transform.position, m_currentRoom.CameraNode.transform.rotation);
     }
 
+    public void ClearRoomAfterWin()
+    {
+        if (m_currentRoom is CombatRoom)
+        {
+            Debug.Log("Clearing room");
+            CombatRoom combatRoom = (CombatRoom)m_currentRoom;
+            combatRoom.DestroyEnemyWorldPawns();
+        }
+    }
+
     /*
     /// <summary>
     /// Registers the current room on local clients from the given coordinates

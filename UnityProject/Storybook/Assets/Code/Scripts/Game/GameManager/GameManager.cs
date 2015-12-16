@@ -183,6 +183,7 @@ public class GameManager : Photon.PunBehaviour {
         if (isEnable)
         {
             playerMover.ReturnCameraToDungeon();
+            playerMover.ClearRoomAfterWin();
         }
 
         Debug.Log("Player mover disabled");

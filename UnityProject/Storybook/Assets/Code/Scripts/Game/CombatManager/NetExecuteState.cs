@@ -294,6 +294,7 @@ public class NetExecuteState : NetworkState {
         // If all the players have been defeated, exit this state and enter the lose state
         if (_areAllPlayersDefeated())
         {
+            ClearPlayerHands();
             m_executeToLose = true;
         }
 
@@ -302,6 +303,7 @@ public class NetExecuteState : NetworkState {
         else if (_areAllAIDefeated())
         {
             Debug.Log("NetExecute going to win");
+            ClearPlayerHands();
             m_executeToWin = true;
         }
 
@@ -310,6 +312,18 @@ public class NetExecuteState : NetworkState {
         {
             Debug.Log("Net Execute going to think");
             m_executeToThink = true;
+        }
+    }
+
+    private void ClearPlayerHands()
+    {
+        foreach (CombatPawn pawn in CManager.AllPawnsActive)
+        {
+            if (pawn is CombatPlayer)
+            {
+                CombatPlayer playerPawn = (CombatPlayer)pawn;
+                playerPawn.DestroyAllDisplayedPages();
+            }
         }
     }
 

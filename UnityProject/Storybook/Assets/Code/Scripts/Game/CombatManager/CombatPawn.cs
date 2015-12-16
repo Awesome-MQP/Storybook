@@ -41,7 +41,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     // Defaults to null because it needs to be able to return null moves
     private CombatMove m_moveForTurn = null;
 
-    private int m_pawnId;
+    private int m_pawnId = -1;
 
     private static PhotonView m_scenePhotonView = null;
 

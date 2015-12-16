@@ -11,7 +11,7 @@ public class EnemyTeam : CombatTeam {
         List<EnemyPositionNode> positionNodes = new List<EnemyPositionNode>(FindObjectsOfType<EnemyPositionNode>()); 
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
-            GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, Quaternion.identity, 0);
+            GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, positionNodes[i].transform.rotation, 0);
             PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
             enemyPawn.PawnId = i + 1;

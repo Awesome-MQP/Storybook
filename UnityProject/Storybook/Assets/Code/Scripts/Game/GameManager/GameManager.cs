@@ -29,7 +29,7 @@ public class GameManager : Photon.PunBehaviour {
         // Only call StartCombat on the master client
         if (PhotonNetwork.isMasterClient)
         {
-            StartCombat();
+            StartGame();
         }
     }
 

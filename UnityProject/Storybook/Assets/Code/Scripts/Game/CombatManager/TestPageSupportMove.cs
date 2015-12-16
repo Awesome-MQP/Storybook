@@ -28,7 +28,8 @@ public class TestPageSupportMove : PageMove {
 
     public override void ExecuteMove()
     {
-        Animator playerAnimator = MoveOwner.GetComponent<Animator>();
+        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
+        Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
         if (!m_isMoveStarted)
         {
             playerAnimator.SetBool("IdleToIdle", false);
@@ -43,7 +44,7 @@ public class TestPageSupportMove : PageMove {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= 1.2f)
+        else if (TimeSinceMoveStarted >= 1.8f)
         {
             Debug.Log("Page move is complete");
             playerAnimator.SetBool("IdleToAttack", false);

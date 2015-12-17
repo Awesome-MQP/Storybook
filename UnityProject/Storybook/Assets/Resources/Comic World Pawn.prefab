@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
-  m_maxSpeed: 20
+  m_maxSpeed: 15
   m_atTargetThreashHold: .100000001
   m_node: {fileID: 0}
 --- !u!114 &11490002
@@ -1404,7 +1404,7 @@ Prefab:
       objectReference: {fileID: 11422944}
     - target: {fileID: 0}
       propertyPath: m_maxSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: allowFullCommunication

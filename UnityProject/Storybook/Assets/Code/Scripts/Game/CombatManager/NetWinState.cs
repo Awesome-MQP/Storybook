@@ -18,7 +18,7 @@ public class NetWinState : NetworkState {
         if (!m_isClientReady)
         {
             m_trigger += 1;
-            if (m_trigger > 250)
+            if (m_trigger > 20)
             {
                 m_isClientReady = true;
                 _getPageDrop();

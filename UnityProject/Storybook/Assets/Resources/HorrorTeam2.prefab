@@ -68,9 +68,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pawnsToSpawn:
-  - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
-  - {fileID: 11480760, guid: 6feb368be48c0e348a67e8378b0fd4bb, type: 2}
-  - {fileID: 11489222, guid: fed698b65ae20124f8edbf0a278d25ea, type: 2}
+  - {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4, type: 2}
+  - {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4, type: 2}
+  - {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -82,6 +82,21 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[0]
+      value: 
+      objectReference: {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[1]
+      value: 
+      objectReference: {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[2]
+      value: 
+      objectReference: {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 183178}

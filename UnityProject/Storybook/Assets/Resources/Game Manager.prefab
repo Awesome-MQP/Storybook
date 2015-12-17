@@ -8,9 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 428082}
-  - 33: {fileID: 3313944}
-  - 65: {fileID: 6558870}
-  - 23: {fileID: 2337998}
   - 114: {fileID: 11465666}
   - 114: {fileID: 11473206}
   m_Layer: 0
@@ -32,49 +29,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2337998
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 138782}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &3313944
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 138782}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6558870
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 138782}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11465666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,7 +47,7 @@ MonoBehaviour:
     type: 2}
   m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
     type: 2}
-  m_playerPawn: {fileID: 11416324, guid: 2c12ccaba825fb74a9da2a0779734106, type: 2}
+  m_playerPawn: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94, type: 2}
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
 --- !u!114 &11473206
 MonoBehaviour:
@@ -147,7 +101,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_playerPawn
       value: 
-      objectReference: {fileID: 11416324, guid: 2c12ccaba825fb74a9da2a0779734106,
+      objectReference: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_dungeonMaster

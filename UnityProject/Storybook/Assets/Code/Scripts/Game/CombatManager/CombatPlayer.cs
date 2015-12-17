@@ -274,7 +274,14 @@ public abstract class CombatPlayer : CombatPawn {
             }
         }
 
-        chosenMove.SetMoveOwner(this);
+        foreach(CombatPawn pawn in GetPawnsOnTeam())
+        {
+            if (pawn.PawnId == playerId && pawn is CombatPlayer)
+            {
+                chosenMove.SetMoveOwner(pawn);
+            }
+        }
+
         chosenMove.SetMoveTargets(targets);
         chosenMove.InitializeMove();
         SetMoveForTurn(chosenMove);

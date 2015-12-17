@@ -351,6 +351,11 @@ public class NetExecuteState : NetworkState {
         get { return m_executeToThink; }
     }
 
+    public CombatPawn CurrentCombatPawn
+    {
+        get { return m_currentCombatPawn; }
+    }
+
     [PunRPC]
     private void IncrementPlayersReady()
     {

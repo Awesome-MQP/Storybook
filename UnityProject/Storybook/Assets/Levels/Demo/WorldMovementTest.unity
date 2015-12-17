@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mapManager: {fileID: 11496410, guid: 0254bbb1db9437c43b8b058d3ffb750d, type: 2}
-  m_worldPlayer: {fileID: 11407322, guid: 57ee913d022a63e4bb3406d026951356, type: 2}
+  m_worldPlayer: {fileID: 11422944, guid: f0636000f59b1a54981eac0888b54710, type: 2}
   m_playerGroup: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292, type: 2}
   m_gameManager: {fileID: 11465666, guid: 6a7cd2a7332445748a5e8161a9c245e8, type: 2}
 --- !u!4 &119488694

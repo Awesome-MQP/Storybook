@@ -57,12 +57,16 @@ public class CombatRoom : RoomObject {
 
     public override void OnRoomEvent()
     {
-        m_gameManager.TransitionToCombat();
-        return;
+        if (!m_wonCombat)
+        {
+            m_gameManager.TransitionToCombat();
+            return;
+        }
     }
 
     public override void OnRoomExit()
     {
+        m_wonCombat = true;
         return;
     }
 

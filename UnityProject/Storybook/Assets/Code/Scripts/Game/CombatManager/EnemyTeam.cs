@@ -19,7 +19,7 @@ public class EnemyTeam : CombatTeam {
             enemyPawn.RegisterTeam(this);
             AddPawnToSpawned(enemyPawn);
             AddPawnToTeam(enemyPawn);
-            enemyPawn.SendPawnTeam();
+            enemyPawn.SendPawnTeam(TeamId);
             i++;
         }
     }

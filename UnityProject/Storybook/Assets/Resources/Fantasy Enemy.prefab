@@ -1161,7 +1161,7 @@ MonoBehaviour:
   m_defense: 1
   m_attack: 1
   m_genre: 3
-  m_teamId: 2
+  m_teamId: -1
   m_aggressionValue: 100
   m_currentMana: 4
   m_manaPerTurn: 2
@@ -1263,7 +1263,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_teamId
-      value: 2
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

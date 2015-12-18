@@ -45,7 +45,6 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     private static PhotonView m_scenePhotonView = null;
 
-    [SerializeField]
     private int m_teamId;
 
     private CombatTeam m_pawnTeam;
@@ -345,19 +344,20 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// <summary>
     /// Calls an RPC to add the pawn to the team on all clients
     /// </summary>
-    public void SendPawnTeam()
+    public void SendPawnTeam(int teamId)
     {
         m_scenePhotonView = GetComponent<PhotonView>();
-        m_scenePhotonView.RPC("RPCAddPawnToTeam", PhotonTargets.Others);
+        m_scenePhotonView.RPC("RPCAddPawnToTeam", PhotonTargets.Others, teamId);
     }
 
     /// <summary>
     /// Adds the pawn to its corresponding team in the combat manager
     /// </summary>
     [PunRPC]
-    public void RPCAddPawnToTeam()
+    public void RPCAddPawnToTeam(int teamId)
     {
         CombatManager combatManager = FindObjectOfType<CombatManager>();
+        TeamId = teamId;
         CombatTeam pawnTeam = combatManager.GetTeamById(m_teamId);
         pawnTeam.AddPawnToTeam(this);
         RegisterTeam(pawnTeam);

@@ -96,10 +96,13 @@ public class CombatManager : Photon.PunBehaviour {
 
     private void _spawnTeams()
     {
+        int teamId = 0;
         foreach (CombatTeam team in m_teamList)
         {
+            team.TeamId = teamId;
             team.SpawnTeam();
             team.StartCombat();
+            teamId++;
         }
     }
 

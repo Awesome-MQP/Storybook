@@ -30,7 +30,7 @@ public class PlayerTeam : CombatTeam {
             AddPawnToSpawned(playerPawn);
             AddPawnToTeam(playerPawn);
             playerPawn.RegisterTeam(this);
-            playerPawn.SendPawnTeam();
+            playerPawn.SendPawnTeam(TeamId);
             i++;
         }
     }

@@ -269,7 +269,7 @@ public class PlayerMover : NetworkMover
     [PunRPC]
     public void CreateRoomOnMaster(int roomLocX, int roomLocY, int doorIndex)
     {
-        Door selectedDoor = m_currentRoom.RoomDoors[doorIndex];
+        Door selectedDoor = m_currentRoom.GetDoorByIndex((RoomObject.DoorIndex)doorIndex);
 
         // If the selected door's room has not been spawned, create the room
         if (!selectedDoor.IsDoorRoomSpawned)

@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+// CLASS IS DEPRECATED
+
 public class CharacterMovement : MonoBehaviour {
+
+    /*
 
 	[SerializeField]
 	private float m_speed = 20.0F;
@@ -251,5 +255,7 @@ public class CharacterMovement : MonoBehaviour {
         }
         return null;
     }
+
+    */
 	
 }

@@ -3,31 +3,20 @@ using System.Collections;
 
 public abstract class RoomObject : MonoBehaviour {
 
-    public enum DoorIndex {NorthDoor = 0, EastDoor, SouthDoor, WestDoor };
-
-    /*
-    public readonly int NORTH_DOOR_INDEX = 0;
-    public readonly int EAST_DOOR_INDEX = 1;
-    public readonly int SOUTH_DOOR_INDEX = 2;
-    public readonly int WEST_DOOR_INDEX = 3;
-    */
+    public enum DoorIndex { NorthDoor = 0, EastDoor, SouthDoor, WestDoor };
 
     [SerializeField]
     Transform m_cameraNode;
 
     [SerializeField]
-    private Door[] m_roomDoors;
-                         // Ordering for indices should be clockwise, starting from the north.
-                         // In a standard 1x1 room, it would be like:
-                         // 0 - North, 1 - East, 2 - South, 3 - West.
-                         // In a larger room, it would probably be more like 0-N, 1-N, 2-E, 3-S, 4-S, and so on.
-                         // If a door does not exist here, just use "null"
-    [SerializeField]
     private Location m_roomLocation;
+
     [SerializeField]
     private int m_roomSize; // Can be x1, x2, x4.
+
     [SerializeField]
     private Genre m_roomGenre;
+
     [SerializeField]
     private string m_roomFeature;
 
@@ -42,6 +31,18 @@ public abstract class RoomObject : MonoBehaviour {
 
     [SerializeField]
     private MovementNode m_player4Pos;
+
+    [SerializeField]
+    private Door m_northDoor;
+
+    [SerializeField]
+    private Door m_eastDoor;
+
+    [SerializeField]
+    private Door m_southDoor;
+
+    [SerializeField]
+    private Door m_westDoor;
 
     protected virtual void Awake()
     {
@@ -73,11 +74,65 @@ public abstract class RoomObject : MonoBehaviour {
         set { m_roomLocation = value; }
     }
 
-    // The list of room doors
-    public Door[] RoomDoors
+    public Door[] AllDoors
     {
-        get { return m_roomDoors; }
-        set { m_roomDoors = value; }
+        get
+        {
+            Door[] doorArray = new Door[4];
+            doorArray[0] = m_northDoor;
+            doorArray[1] = m_eastDoor;
+            doorArray[2] = m_southDoor;
+            doorArray[3] = m_westDoor;
+            return doorArray;
+        }
+    }
+
+    public Door NorthDoor
+    {
+        get { return m_northDoor; }
+        set { m_northDoor = value; }
+    }
+
+    public Door EastDoor
+    {
+        get { return m_eastDoor; }
+        set { m_eastDoor = value; }
+    }
+
+    public Door SouthDoor
+    {
+        get { return m_southDoor; }
+        set { m_southDoor = value; }
+    }
+
+    public Door WestDoor
+    {
+        get { return m_westDoor; }
+        set { m_westDoor = value; }
+    }
+
+    public Door GetDoorByIndex (DoorIndex doorIndex)
+    {
+        Door doorToReturn = null;
+        switch (doorIndex)
+        {
+            case DoorIndex.NorthDoor:
+                doorToReturn = m_northDoor;
+                break;
+
+            case DoorIndex.EastDoor:
+                doorToReturn = m_eastDoor;
+                break;
+
+            case DoorIndex.SouthDoor:
+                doorToReturn = m_southDoor;
+                break;
+
+            case DoorIndex.WestDoor:
+                doorToReturn = m_westDoor;
+                break;
+        }
+        return doorToReturn;
     }
 
     // Property for the size of a room

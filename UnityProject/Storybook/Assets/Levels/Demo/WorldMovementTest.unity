@@ -116,6 +116,10 @@ MonoBehaviour:
   m_worldPlayer: {fileID: 11422944, guid: f0636000f59b1a54981eac0888b54710, type: 2}
   m_playerGroup: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292, type: 2}
   m_gameManager: {fileID: 11465666, guid: 6a7cd2a7332445748a5e8161a9c245e8, type: 2}
+  m_playerInventoryPrefab: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e,
+    type: 2}
+  m_dungeonMasterPrefab: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d,
+    type: 2}
 --- !u!4 &119488694
 Transform:
   m_ObjectHideFlags: 0

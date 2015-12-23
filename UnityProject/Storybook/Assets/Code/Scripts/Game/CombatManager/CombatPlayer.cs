@@ -38,10 +38,12 @@ public abstract class CombatPlayer : CombatPawn {
     public void Start()
     {
         base.Start();
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             _createDeck();
         }
+        */
     }
     
     public Page[] PlayerHand
@@ -197,23 +199,12 @@ public abstract class CombatPlayer : CombatPawn {
     }
 
     //TODO: Get the player inventory from the given PlayerEntity
-    private CombatDeck _initializePlayerDeck(/*PlayerEntity playerToCreateFor*/)
+    private CombatDeck _initializePlayerDeck(PlayerInventory playerInventory)
     {
         List<Page> deckPages = new List<Page>();
         for (int i = 0; i < 20; i++)
         {
-            GameObject pageObject;
-            if (i < 10)
-            {
-                pageObject = PhotonNetwork.Instantiate(m_pageToUse.name, Vector3.zero, Quaternion.identity, 0);
-            }
-            else
-            {
-                pageObject = PhotonNetwork.Instantiate(m_otherPageToUse.name, Vector3.zero, Quaternion.identity, 0);
-            }
-            PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
-            Page page = pageObject.GetComponent<Page>();
-            int pageViewId = pageObject.GetComponent<PhotonView>().viewID;
+            Page page = (Page) playerInventory[i].SlotItem;
             deckPages.Add(page);
         }
         CombatDeck playerDeck = new CombatDeck(deckPages);
@@ -221,9 +212,9 @@ public abstract class CombatPlayer : CombatPawn {
         return playerDeck;
     }
 
-    private void _createDeck()
+    public void CreateDeck(PlayerInventory playerInventory)
     {
-        CombatDeck pawnDeck = _initializePlayerDeck();
+        CombatDeck pawnDeck = _initializePlayerDeck(playerInventory);
         int[] pageViewIds = pawnDeck.GetPageViewIds();
         m_playerDeck = pawnDeck;
         DrawStartingHand();

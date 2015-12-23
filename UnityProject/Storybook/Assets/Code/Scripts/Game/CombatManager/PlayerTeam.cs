@@ -27,6 +27,14 @@ public class PlayerTeam : CombatTeam {
             playerPawn.PawnId = i + 1;
 
             playerPawn.TeamId = TeamId;
+
+            if (playerPawn is CombatPlayer)
+            {
+                CombatPlayer player = (CombatPlayer)playerPawn;
+                PlayerInventory currentPlayerInventory = _findPlayerInventory(playerPawn.TeamId);
+                player.CreateDeck(currentPlayerInventory);
+            }
+
             AddPawnToSpawned(playerPawn);
             AddPawnToTeam(playerPawn);
             playerPawn.RegisterTeam(this);
@@ -61,5 +69,18 @@ public class PlayerTeam : CombatTeam {
                 }
             }
         }
+    }
+
+    private PlayerInventory _findPlayerInventory(int pawnId)
+    {
+        PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
+        foreach(PlayerInventory inventory in allInventories)
+        {
+            if (inventory.PlayerId == pawnId)
+            {
+                return inventory;
+            }
+        }
+        return null;
     }
 }

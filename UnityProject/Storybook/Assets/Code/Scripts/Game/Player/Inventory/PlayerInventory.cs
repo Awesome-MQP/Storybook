@@ -7,8 +7,11 @@ public class PlayerInventory : Inventory {
     [SerializeField]
     private Page m_testPage;
 
+    private int m_playerId;
+
     void Start()
     {
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             GameObject pageObject = PhotonNetwork.Instantiate(m_testPage.name, Vector3.zero, Quaternion.identity, 0);
@@ -22,6 +25,7 @@ public class PlayerInventory : Inventory {
             Drop(0);
             Debug.Log(ContainsItem(testPage));
         }
+        */
     }
 
     protected override bool CanAddItem(Item item, int index)
@@ -37,5 +41,11 @@ public class PlayerInventory : Inventory {
     protected override bool CanMoveItem(int fromIndex, int toIndex)
     {
         return true;
+    }
+
+    public int PlayerId
+    {
+        get { return m_playerId; }
+        set { m_playerId = value; }
     }
 }

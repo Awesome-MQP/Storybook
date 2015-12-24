@@ -3,6 +3,8 @@ using System.Collections;
 
 public class StartRoom : RoomObject
 {
+    [SerializeField]
+    private AudioClip m_roomMusic;
 
     protected override void Awake()
     {

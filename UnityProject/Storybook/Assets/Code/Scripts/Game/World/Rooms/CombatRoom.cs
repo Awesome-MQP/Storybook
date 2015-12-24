@@ -4,6 +4,8 @@ using System.Collections.Generic;
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
 public class CombatRoom : RoomObject {
+    [SerializeField]
+    private AudioClip m_roomMusic;
 
     [SerializeField]
     private List<GameObject> m_roomEnemiesOverworld = new List<GameObject>();

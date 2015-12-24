@@ -4,9 +4,11 @@ using System.Collections;
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
 public class ShopRoom : RoomObject {
+    [SerializeField]
+    private AudioClip m_roomMusic;
 
-	// Use this for initialization
-	protected override void Awake ()
+    // Use this for initialization
+    protected override void Awake ()
     {
         base.Awake();
 	}

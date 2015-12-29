@@ -13,14 +13,6 @@ public class Door : Photon.PunBehaviour {
 
     private Location m_roomThroughDoorLoc;
 
-    void Update()
-    {
-        if (!m_isDoorEnabled)
-        {
-            DisableDoor();
-        }
-    }
-
     // TODO : Add implementation for passing through doors.
     //        (Requires world manager and more complete level-building stuff first.)
 
@@ -28,6 +20,8 @@ public class Door : Photon.PunBehaviour {
     /// <summary>
     /// Disables the collider and renderer on the door, as well as setting the enabled boolean to false
     /// </summary>
+    
+    [PunRPC]
     public void DisableDoor()
     {
         GetComponent<CapsuleCollider>().enabled = false;
@@ -71,6 +65,10 @@ public class Door : Photon.PunBehaviour {
         set
         {
             m_isDoorEnabled = value;
+            if (!m_isDoorEnabled)
+            {
+                photonView.RPC("DisableDoor", PhotonTargets.All);
+            }
             PropertyChanged();
         }
     }

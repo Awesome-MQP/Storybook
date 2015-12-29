@@ -40,7 +40,7 @@ public class MusicManager : MonoBehaviour {
         // Button to test FadeIn
         if (GUI.Button(new Rect(20, 520, 130, 20), "Fade In"))
         {
-            FadeIn(m_currentMusicTrack, 5, true);
+            FadeIn(m_currentMusicTrack, m_musicVolume, true);
         }
 
         // Button to test FadeOut
@@ -55,6 +55,7 @@ public class MusicManager : MonoBehaviour {
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {
+            Debug.Log("no clip/clip is the same as the one we already have");
             return;
         }
 

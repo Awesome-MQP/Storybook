@@ -35,6 +35,7 @@ public class MusicManager : MonoBehaviour {
     }
 
     // GUI to test the music
+    /*
     void OnGUI()
     {
         GUI.Box(new Rect(10, 500, 150, 100), "Music Test Menu");
@@ -51,10 +52,11 @@ public class MusicManager : MonoBehaviour {
             Fade(testAudio, m_musicVolume, true);
         }
     }
+    */
     
     // Fade in to a music track
     // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
-    void Fade(AudioClip clip, float volume, bool loop)
+    public void Fade(AudioClip clip, float volume, bool loop)
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {

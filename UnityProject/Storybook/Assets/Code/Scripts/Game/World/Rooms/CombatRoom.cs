@@ -8,6 +8,9 @@ public class CombatRoom : RoomObject {
     private AudioClip m_roomMusic;
 
     [SerializeField]
+    private AudioClip m_fightMusic;
+
+    [SerializeField]
     private List<GameObject> m_roomEnemiesOverworld = new List<GameObject>();
     [SerializeField]
     private EnemyTeam m_roomEnemies;
@@ -18,6 +21,7 @@ public class CombatRoom : RoomObject {
     private List<GameObject> m_enemyWorldPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
+    private MusicManager m_musicManager;
     private GameManager m_gameManager = null;
 
     private bool m_wonCombat = false;
@@ -29,11 +33,13 @@ public class CombatRoom : RoomObject {
         m_gameManager = FindObjectOfType<GameManager>();
         // CombatTeam.m_activePawnsOnTeam is the list of all combat pawns
         // m_enemyWorldPawns = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam;
+        m_musicManager = FindObjectOfType<MusicManager>();
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
+        m_musicManager.Fade(m_roomMusic, 5, true);
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -53,6 +59,7 @@ public class CombatRoom : RoomObject {
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
+
         }
         return;
     }
@@ -61,8 +68,13 @@ public class CombatRoom : RoomObject {
     {
         if (!m_wonCombat)
         {
+            m_musicManager.Fade(m_fightMusic, 5, true);
             m_gameManager.TransitionToCombat();
             return;
+        }
+        if(m_wonCombat)
+        {
+            m_musicManager.Fade(m_roomMusic, 5, true);
         }
     }
 

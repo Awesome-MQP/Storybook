@@ -69,7 +69,7 @@ public class GameManager : Photon.PunBehaviour {
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetCombatTeamList(combatTeams);
-            
+
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
         }

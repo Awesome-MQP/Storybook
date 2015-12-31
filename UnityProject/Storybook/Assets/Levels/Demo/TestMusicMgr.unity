@@ -264,6 +264,7 @@ MonoBehaviour:
   FadeSpeed: .5
   m_musicSource: {fileID: 0}
   m_musicVolume: 3
+  testAudio: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
 --- !u!4 &1744113101
 Transform:
   m_ObjectHideFlags: 0

@@ -26,6 +26,8 @@ public class MusicManager : MonoBehaviour {
 
     public enum FadeState { none, fadeIn, fadeOut };
 
+    public AudioClip testAudio = null;
+
     void Awake()
     {
         m_musicSource = GetComponent<AudioSource>();
@@ -40,18 +42,19 @@ public class MusicManager : MonoBehaviour {
         // Button to test FadeIn
         if (GUI.Button(new Rect(20, 520, 130, 20), "Fade In"))
         {
-            FadeIn(m_currentMusicTrack, m_musicVolume, true);
+            Fade(m_currentMusicTrack, m_musicVolume, true);
         }
 
         // Button to test FadeOut
         if (GUI.Button(new Rect(20, 550, 130, 20), "Fade Out"))
         {
-            //FadeOut();
+            Fade(testAudio, m_musicVolume, true);
         }
     }
     
     // Fade in to a music track
-    void FadeIn(AudioClip clip, float volume, bool loop)
+    // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
+    void Fade(AudioClip clip, float volume, bool loop)
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {

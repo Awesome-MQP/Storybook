@@ -192,16 +192,26 @@ public class Page : Item  {
     }
 
     //=PROPERTIES=================================================================================
+    [SyncProperty]
     public int PageLevel
     {
         get { return m_pageLevel; }
-        set { m_pageLevel = value; }
+        set
+        {
+            m_pageLevel = value;
+            PropertyChanged();
+        }
     }
     
+    [SyncProperty]
     public Genre PageGenre
     {
         get { return m_pageGenre; }
-        set { m_pageGenre = value; }
+        set
+        {
+            m_pageGenre = value;
+            PropertyChanged();
+        }
     }
     
     public int StrengthMod
@@ -228,16 +238,26 @@ public class Page : Item  {
         set { m_hitpointsMod = value; }
     }
 
+    [SyncProperty]
     public bool Rarity
     {
         get { return m_isRare; }
-        set { m_isRare = value; }
+        set
+        {
+            m_isRare = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public MoveType PageType
     {
         get { return m_pageMoveType; }
-        set { m_pageMoveType = value; }
+        set
+        {
+            m_pageMoveType = value;
+            PropertyChanged();
+        }
     }
 
     public float TimeSinceMoveStarted

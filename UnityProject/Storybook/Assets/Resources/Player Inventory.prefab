@@ -67,8 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0ed8b272d8d2dc46a5ac0194bc3d3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_staticSize: 20
-  m_dynamicSize: 20
+  m_staticSize: 30
+  m_dynamicSize: 30
   m_testPage: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
 --- !u!1001 &100100000
 Prefab:
@@ -76,7 +76,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_staticSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_dynamicSize
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 107170}

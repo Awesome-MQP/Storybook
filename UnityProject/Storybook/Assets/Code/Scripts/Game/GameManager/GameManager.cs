@@ -40,8 +40,10 @@ public class GameManager : Photon.PunBehaviour {
     {
         if (PhotonNetwork.isMasterClient)
         {
+            /*
             GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMaster.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
+            */
 
             GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
@@ -108,10 +110,6 @@ public class GameManager : Photon.PunBehaviour {
         Debug.Log("Destroying all teams");
 
         cm.DestroyAllTeams();
-
-        Debug.Log("Destroying all pages");
-
-        cm.DestroyAllPages();
 
         Debug.Log("Destroying combat instance");
 

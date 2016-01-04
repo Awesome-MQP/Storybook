@@ -28,31 +28,29 @@ public class MusicManager : MonoBehaviour {
 
     public AudioClip testAudio = null;
 
+    private AudioClip m_roomMusic;
+    private AudioClip m_fightMusic;
+
+    // ====PROPERTIES====
+    public AudioClip RoomMusic
+    {
+        get { return m_roomMusic; }
+        set { m_roomMusic = value; }
+    }
+
+    public AudioClip FightMusic
+    {
+        get { return m_fightMusic; }
+        set { m_fightMusic = value; }
+    }
+
+    // ====METHODS====
     void Awake()
     {
         m_musicSource = GetComponent<AudioSource>();
         m_musicSource.volume = 0f;
     }
 
-    // GUI to test the music
-    /*
-    void OnGUI()
-    {
-        GUI.Box(new Rect(10, 500, 150, 100), "Music Test Menu");
-
-        // Button to test FadeIn
-        if (GUI.Button(new Rect(20, 520, 130, 20), "Fade In"))
-        {
-            Fade(m_currentMusicTrack, m_musicVolume, true);
-        }
-
-        // Button to test FadeOut
-        if (GUI.Button(new Rect(20, 550, 130, 20), "Fade Out"))
-        {
-            Fade(testAudio, m_musicVolume, true);
-        }
-    }
-    */
     
     // Fade in to a music track
     // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
@@ -136,12 +134,14 @@ public class MusicManager : MonoBehaviour {
         {
             if (m_musicSource.volume > this.FadeOutThreshold)
             {
+                Debug.Log("Fading out. vol= " + m_musicSource.volume);
                 // Fade out current clip.
                 m_musicSource.volume -= this.FadeSpeed * Time.deltaTime;
             }
             else
             {
                 // Start fading in next clip.
+                Debug.Log("Fading in...");
                 this.FadeToNextClip();
             }
         }
@@ -159,4 +159,37 @@ public class MusicManager : MonoBehaviour {
             }
         }
     }
+
+    // A call to switch to the fight music.
+    public void switchToFightMusic()
+    {
+        Fade(FightMusic, 5, true);
+    }
+
+    // A call to switch back to the room music.
+    // This is primarily used when exiting combat.
+    public void switchToRoomMusic()
+    {
+        Fade(RoomMusic, 5, true);
+    }
+
+    // GUI to test the music
+    /*
+    void OnGUI()
+    {
+        GUI.Box(new Rect(10, 500, 150, 100), "Music Test Menu");
+
+        // Button to test FadeIn
+        if (GUI.Button(new Rect(20, 520, 130, 20), "Fade In"))
+        {
+            Fade(m_currentMusicTrack, m_musicVolume, true);
+        }
+
+        // Button to test FadeOut
+        if (GUI.Button(new Rect(20, 550, 130, 20), "Fade Out"))
+        {
+            Fade(testAudio, m_musicVolume, true);
+        }
+    }
+    */
 }

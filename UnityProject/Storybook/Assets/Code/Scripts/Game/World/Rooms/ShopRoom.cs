@@ -22,6 +22,7 @@ public class ShopRoom : RoomObject {
         // TODO: spawn shopkeeper
         Debug.Log("Welcome to the shop!");
         m_musicManager.Fade(m_roomMusic, 5, true);
+        m_musicManager.RoomMusic = m_roomMusic;
         return;
     }
 

@@ -39,6 +39,8 @@ public class CombatRoom : RoomObject {
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
+        m_musicManager.FightMusic = m_fightMusic;
+        m_musicManager.RoomMusic = m_roomMusic;
         m_musicManager.Fade(m_roomMusic, 5, true);
         if (!m_wonCombat)
         {
@@ -68,13 +70,13 @@ public class CombatRoom : RoomObject {
     {
         if (!m_wonCombat)
         {
-            m_musicManager.Fade(m_fightMusic, 5, true);
+            //m_musicManager.Fade(m_fightMusic, 5, true);
             m_gameManager.TransitionToCombat();
             return;
         }
         if(m_wonCombat)
         {
-            m_musicManager.Fade(m_roomMusic, 5, true);
+            //m_musicManager.Fade(m_roomMusic, 5, true);
         }
     }
 

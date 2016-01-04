@@ -20,6 +20,7 @@ public class EmptyRoom : RoomObject {
     public override void OnRoomEnter()
     {
         m_musicManager.Fade(m_roomMusic, 5, true);
+        m_musicManager.RoomMusic = m_roomMusic;
         Debug.Log("Room entered");
         return;
     }

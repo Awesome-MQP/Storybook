@@ -20,6 +20,7 @@ public class ExitRoom : RoomObject {
     public override void OnRoomEnter()
     {
         m_musicManager.Fade(m_roomMusic, 5, true);
+        m_musicManager.RoomMusic = m_roomMusic;
         return;
     }
 

@@ -11,12 +11,14 @@ public class StartRoom : RoomObject
     protected override void Awake()
     {
         m_musicManager = FindObjectOfType<MusicManager>();
+        m_musicManager.RoomMusic = m_roomMusic;
         m_musicManager.Fade(m_roomMusic, 5, true);
         base.Awake();
     }
 
     public override void OnRoomEnter()
     {
+        m_musicManager.RoomMusic = m_roomMusic;
         m_musicManager.Fade(m_roomMusic, 5, true);
         return;
     }

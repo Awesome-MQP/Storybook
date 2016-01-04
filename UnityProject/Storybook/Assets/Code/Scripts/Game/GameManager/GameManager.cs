@@ -22,6 +22,7 @@ public class GameManager : Photon.PunBehaviour {
     private DungeonMaster m_dungeonMaster;
 
     private GameObject m_combatInstance;
+    private MusicManager m_musicMgr;
 
 	void Start () {
         DontDestroyOnLoad(this);
@@ -31,6 +32,8 @@ public class GameManager : Photon.PunBehaviour {
         {
             StartGame();
         }
+
+        m_musicMgr = FindObjectOfType<MusicManager>();
     }
 
     /// <summary>
@@ -72,6 +75,8 @@ public class GameManager : Photon.PunBehaviour {
 
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
+
+            m_musicMgr.switchToFightMusic();
         }
     }
 
@@ -117,6 +122,8 @@ public class GameManager : Photon.PunBehaviour {
 
         PhotonNetwork.Destroy(currentCombatInstance);
         Destroy(currentCombatInstance);
+
+        m_musicMgr.switchToRoomMusic();
 
         _TransitionToOverworld();
 

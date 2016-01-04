@@ -7,6 +7,9 @@ public class TestMovementSpawner : MonoBehaviour {
     private MapManager m_mapManager;
 
     [SerializeField]
+    private MusicManager m_musicManager;
+
+    [SerializeField]
     private NetworkNodeMover m_worldPlayer;
 
     [SerializeField]
@@ -27,7 +30,10 @@ public class TestMovementSpawner : MonoBehaviour {
         PhotonNetwork.Spawn(mapObject.GetComponent<PhotonView>());
 
         GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMasterPrefab.name, Vector3.zero, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());        
+        PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
+
+        GameObject musicManager = PhotonNetwork.Instantiate(m_musicManager.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(musicManager.GetComponent<PhotonView>());
 
         for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
         {

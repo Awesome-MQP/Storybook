@@ -4,10 +4,15 @@ using System.Collections;
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
 public class ShopRoom : RoomObject {
+    [SerializeField]
+    private AudioClip m_roomMusic;
 
-	// Use this for initialization
-	protected override void Awake ()
+    private MusicManager m_musicManager;
+
+    // Use this for initialization
+    protected override void Awake ()
     {
+        m_musicManager = FindObjectOfType<MusicManager>();
         base.Awake();
 	}
 
@@ -16,6 +21,8 @@ public class ShopRoom : RoomObject {
     {
         // TODO: spawn shopkeeper
         Debug.Log("Welcome to the shop!");
+        m_musicManager.Fade(m_roomMusic, 5, true);
+        m_musicManager.RoomMusic = m_roomMusic;
         return;
     }
 

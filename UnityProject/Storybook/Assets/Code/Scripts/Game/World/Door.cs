@@ -1,58 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using UnityEngine.Assertions;
+using Random = System.Random;
 
-public class Door : Photon.PunBehaviour {
+public class Door : MovementNode
+{
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West,
+        Unknown
+    }
 
-    [SerializeField]
-    private DoorNode m_doorNode;
-
-    [SerializeField]
     private bool m_isDoorEnabled = true;
 
-    private bool m_isDoorRoomSpawned = false;
+    private bool m_isDoorOpen;
 
-    private Location m_roomThroughDoorLoc;
+    private RoomObject m_parentRoomObject;
 
-    // TODO : Add implementation for passing through doors.
-    //        (Requires world manager and more complete level-building stuff first.)
+    private Direction m_direction = Direction.Unknown;
 
-    //TODO: This can be changed to just disable the entire object
-    /// <summary>
-    /// Disables the collider and renderer on the door, as well as setting the enabled boolean to false
-    /// </summary>
-    
-    [PunRPC]
-    public void DisableDoor()
+    private Location m_nextRoomLocation;
+
+    protected override void Awake()
     {
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<MeshRenderer>().enabled = false;
-        IsDoorEnabled = false;
-    }
+        m_parentRoomObject = this.GetComponentInParent<RoomObject>(true);
 
-    /// <summary>
-    /// The grid location of the room that is through the door
-    /// </summary>
-    public Location RoomThroughDoorLoc
-    {
-        get { return m_roomThroughDoorLoc; }
-    }
-
-    public void SetRoomThroughDoorLoc(Location newRoomThroughDoorLoc)
-    {
-        m_roomThroughDoorLoc = newRoomThroughDoorLoc;
-    }
-
-    /// <summary>
-    /// True if the room that the door leads to has spawned, false otherwise
-    /// </summary>
-    public bool IsDoorRoomSpawned
-    {
-        get { return m_isDoorRoomSpawned; }
-    }
-
-    public void SetIsDoorRoomSpawned(bool newIsDoorRoomSpawned)
-    {
-        m_isDoorRoomSpawned = newIsDoorRoomSpawned;
+        base.Awake();
     }
 
     /// <summary>
@@ -65,19 +42,119 @@ public class Door : Photon.PunBehaviour {
         set
         {
             m_isDoorEnabled = value;
-            if (!m_isDoorEnabled)
-            {
-                photonView.RPC("DisableDoor", PhotonTargets.All);
-            }
+            GetComponent<CapsuleCollider>().enabled = value;
+            GetComponent<MeshRenderer>().enabled = value;
             PropertyChanged();
         }
     }
 
     /// <summary>
-    /// The door node that corresponds to this door
+    /// If true then the door is open and useable, otherwise false.
     /// </summary>
-    public DoorNode DoorNode
+    [SyncProperty]
+    public bool IsDoorOpen
     {
-        get { return m_doorNode; }
+        get { return m_isDoorOpen; }
+        protected set
+        {
+            m_isDoorOpen = value;
+
+            if (m_isDoorOpen)
+            {
+                OnDoorOpen();
+            }
+            else
+            {
+                OnDoorClose();
+            }
+
+            PropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// The direction that this door goes in.
+    /// </summary>
+    [SyncProperty]
+    public Direction DoorDirection
+    {
+        get { return m_direction; }
+        set
+        {
+            Assert.AreEqual(Direction.Unknown, m_direction);
+
+            m_direction = value;
+            m_nextRoomLocation += m_direction;
+
+            PropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// The room object that owns this door.
+    /// </summary>
+    public RoomObject ParentRoom
+    {
+        get { return m_parentRoomObject; }
+    }
+
+    /// <summary>
+    /// The next location to go to.
+    /// </summary>
+    public Location NextRoomLocation
+    {
+        get { return m_nextRoomLocation; }
+    }
+
+    /// <summary>
+    /// The door that this door links to.
+    /// </summary>
+    public Door LinkedDoor
+    {
+        get { return MapManager.Instance.GetDoorPartner(ParentRoom.RoomLocation, this); }
+    }
+
+    /// <summary>
+    /// Disables the collider and renderer on the door, as well as setting the enabled boolean to false
+    /// </summary>
+    public void DisableDoor()
+    {
+        IsDoorEnabled = false;
+    }
+
+    public void OpenDoor()
+    {
+        if (IsMine)
+        {
+            IsDoorOpen = true;
+        }
+    }
+
+    public void CloseDoor()
+    {
+        if (IsMine)
+        {
+            IsDoorOpen = false;
+        }
+    }
+
+    protected void OnDoorOpen()
+    {
+#if UNITY_EDITOR
+        Debug.Log("Door open {0}.", this);
+#endif
+    }
+
+    protected void OnDoorClose()
+    {
+        
+    }
+
+    protected override void OnEnter(NetworkNodeMover mover)
+    { 
+    }
+
+    protected override void OnLeave(NetworkNodeMover mover)
+    {
     }
 }

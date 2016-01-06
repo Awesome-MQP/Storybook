@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public struct RoomData {
-
+public struct RoomData
+{
     private bool m_isNorthDoorActive;
     private bool m_isEastDoorActive;
     private bool m_isSouthDoorActive;
@@ -11,9 +11,13 @@ public struct RoomData {
     private float m_costToHere;
     private int m_parentX;
     private int m_parentY;
+    private int m_x;
+    private int m_y;
 
-    public RoomData(bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, MapManager.RoomType roomType)
+    public RoomData(int x, int y, bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, bool isWestDoorActive, MapManager.RoomType roomType)
     {
+        m_x = x;
+        m_y = y;
         m_isNorthDoorActive = isNorthDoorActive;
         m_isEastDoorActive = isEastDoorActive;
         m_isSouthDoorActive = isSouthDoorActive;
@@ -22,6 +26,16 @@ public struct RoomData {
         m_costToHere = 0;
         m_parentX = -1;
         m_parentY = -1;
+    }
+
+    public int X
+    {
+        get { return m_x; }
+    }
+
+    public int Y
+    {
+        get { return m_y; }
     }
 
     public MapManager.RoomType RoomType

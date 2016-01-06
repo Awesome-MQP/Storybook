@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.Code.Scripts.Game.Player;
+using ExitGames.Client.Photon;
+using Mono.Collections.Generic;
 using Photon;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
@@ -83,9 +86,21 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         get { return m_photonPlayer; }
         protected set
         {
+            s_playerLookup.Remove(m_photonPlayer);
             m_photonPlayer = value;
+            s_playerLookup.Add(m_photonPlayer, this);
+            s_playerQueue.AddLast(this);
             PropertyChanged();
         }
+    }
+
+    public static PlayerEntity GetPlayerEntity(PhotonPlayer player)
+    {
+        PlayerEntity entity;
+        if(s_playerLookup.TryGetValue(player, out entity))
+            return entity;
+
+        return null;
     }
 
     public void Construct(PhotonPlayer player)
@@ -93,15 +108,15 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         Assert.IsTrue(IsMine);
         Assert.IsFalse(m_hasConstructed);
 
-        m_photonPlayer = player;
-        PlayerManager.Instance.RegisterPlayer(this);
+        RepresentedPlayer = player;
 
-        PhotonNetwork.Spawn(photonView);
+        m_hasConstructed = true;
     }
 
     protected virtual void OnDestroy()
     {
-        PlayerManager.Instance.UnregisterPlayer(this);
+        s_playerLookup.Remove(m_photonPlayer);
+        s_playerQueue.Remove(this);
     }
 
     [SerializeField]
@@ -127,5 +142,8 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
 
     private PhotonPlayer m_photonPlayer;
 
-    public bool m_hasConstructed;
+    private bool m_hasConstructed;
+
+    private static Dictionary<PhotonPlayer, PlayerEntity> s_playerLookup = new Dictionary<PhotonPlayer, PlayerEntity>();
+    private static LinkedList<PlayerEntity> s_playerQueue = new LinkedList<PlayerEntity>();
 }

@@ -35,6 +35,11 @@ namespace Assets.Code.Scripts.Game.Player
             }
         }
 
+        public PlayerEntity this[int playerId]
+        {
+            get { return this[PhotonPlayer.Find(playerId)]; }
+        }
+
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
         {
             if (!IsMine)

@@ -1,11 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 public class MapManager : Photon.PunBehaviour {
 
     struct Point
     {
+        public bool Equals(Point other)
+        {
+            return x == other.x && y == other.y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+                return false;
+            return obj is Point && Equals((Point) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (x * 397) ^ y;
+            }
+        }
+
         public int x, y;
         public Point(int x, int y)
         {
@@ -20,12 +41,12 @@ public class MapManager : Photon.PunBehaviour {
 
         public static bool operator ==(Point p1, Point p2)
         {
-            return p1.Equals(p2);
+            return p1.x == p2.x && p1.y == p2.y;
         }
 
         public static bool operator !=(Point p1, Point p2)
         {
-            return !p1.Equals(p2);
+            return !(p1 == p2);
         }
     }
 
@@ -52,7 +73,6 @@ public class MapManager : Photon.PunBehaviour {
     [SerializeField]
     private int m_worldMaxYSize = 4;
 
-    [SerializeField]
     private RoomObject[,] m_worldGrid; // Creates a 2D array to place rooms
 
     [SerializeField]
@@ -79,9 +99,9 @@ public class MapManager : Photon.PunBehaviour {
     [SerializeField]
     private int m_additionalHallsMin = 2;
 
-    [SerializeField]
     private RoomData[,] m_worldMapData;
 
+    [SerializeField]
     private int m_defaultRoomSize = 50; // Default room size (in blocks in Unity editor)
 
     public enum RoomType { None = 0, Start, Combat, Exit, Shop };
@@ -93,9 +113,13 @@ public class MapManager : Photon.PunBehaviour {
     private Point m_shopPoint;
     private int m_roomDataReceived = 0;
 
+    private HashSet<RoomObject> m_registeredRooms = new HashSet<RoomObject>(); 
+
     // Initialize
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         DontDestroyOnLoad(this);
         s_instance = this;
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
@@ -117,36 +141,68 @@ public class MapManager : Photon.PunBehaviour {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
 
-        // First, check to make sure the location is valid! Can't have rooms hanging off the edge of the map.
-        if ((placeX < 0 || placeX >= m_worldMaxXSize) ||
-            (placeY < 0 || placeY >= m_worldMaxYSize)) {
-            Debug.Log("Returning null");
-            return null;
-        }
+        // Cannot have a piece hanging off
+        Assert.IsFalse((placeX < 0 || placeX >= m_worldMaxXSize) ||
+                       (placeY < 0 || placeY >= m_worldMaxYSize));
+
         // Now check to make sure there isn't a room already in the spot.
         // The player cannot overwrite rooms that have already been placed.
-        if (m_worldGrid[placeX, placeY] != null) {
+        if (m_worldGrid[placeX, placeY] != null)
+        {
             Debug.Log("Returning null");
             return null;
         }
-        // If we got here, then the location is assumed to be valid.
-        // Place the room.
-        Vector3 roomGridLocation = new Vector3(m_defaultRoomSize * placeY, 0, -m_defaultRoomSize * placeX);
+        Vector3 roomGridLocation = _getWorldLocationFromGrid(placeX, placeY);
 
         RoomData currentRoomData = m_worldMapData[placeX, placeY];
         RoomObject roomPrefab = _getRoomPrefab(currentRoomData);
 
         GameObject roomGameObject = PhotonNetwork.Instantiate(roomPrefab.name, roomGridLocation, new Quaternion(), 0);
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
-        room.RoomLocation = gridPosition;
-        room = _determineDoorPlacement(gridPosition, room);
-        room = _checkDoorRooms(gridPosition, room);
-        m_worldGrid[placeX, placeY] = room;
+        room.Construct(currentRoomData);
         PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
     }
 
-    // Get a room from the world
+    /// <summary>
+    /// Registers an existing room with a grid location.
+    /// </summary>
+    /// <param name="room">The room to register.</param>
+    public void RegisterRoom(RoomObject room)
+    {
+        Location gridPosition = room.RoomLocation;
+
+        int placeX = gridPosition.X;
+        int placeY = gridPosition.Y;
+
+        // Cannot register a room twice
+        Assert.IsFalse(ContainsRoom(room));
+
+        // Cannot have a piece hanging off
+        Assert.IsFalse((placeX < 0 || placeX >= m_worldMaxXSize) ||
+                       (placeY < 0 || placeY >= m_worldMaxYSize));
+
+        // Cannot register over a room that already exists.
+        Assert.IsNull(m_worldGrid[placeX, placeY]);
+
+        m_worldGrid[placeX, placeY] = room;
+    }
+
+    /// <summary>
+    /// Checks to see if a room is contained in the grid.
+    /// </summary>
+    /// <param name="room">The room to check for.</param>
+    /// <returns>True if the room is in the grid, otherwise false.</returns>
+    public bool ContainsRoom(RoomObject room)
+    {
+        return m_registeredRooms.Contains(room);
+    }
+
+    /// <summary>
+    /// Get a room from a grid location.
+    /// </summary>
+    /// <param name="roomLoc">The grid location to get from.</param>
+    /// <returns>The room at that location, null if there is none.</returns>
     public RoomObject GetRoom(Location roomLoc)
     {
         if (roomLoc.X < 0 || roomLoc.X > m_worldGrid.GetLength(0))
@@ -159,6 +215,7 @@ public class MapManager : Photon.PunBehaviour {
     }
 
     // Tests the Map Manager code. Called once on startup.
+
     void TestMapMgr()
     {
         Location OOB_X = new Location(-1, 0);
@@ -181,80 +238,11 @@ public class MapManager : Photon.PunBehaviour {
         GameObject aBlankRoom = GameObject.Find("TestRoom");
     }
 
-    /// <summary>
-    /// Determines which of the doors of the room need to appear based on the room's position in the grid
-    /// </summary>
-    /// <param name="gridPosition">The position of the room in the grid</param>
-    /// <param name="theRoom">The room object being placed</param>
-    /// <returns>Returns the room object with the altered doors</returns>
-    private RoomObject _determineDoorPlacement(Location gridPosition, RoomObject theRoom)
+    private Vector3 _getWorldLocationFromGrid(int placeX, int placeY)
     {
-        RoomData currentRoomData = m_worldMapData[gridPosition.X, gridPosition.Y];
-
-        // Initialize the room through door locations
-        theRoom.NorthDoor.SetRoomThroughDoorLoc(new Location(gridPosition.X - 1, gridPosition.Y));
-        theRoom.EastDoor.SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y + 1));
-        theRoom.SouthDoor.SetRoomThroughDoorLoc(new Location(gridPosition.X + 1, gridPosition.Y));
-        theRoom.WestDoor.SetRoomThroughDoorLoc(new Location(gridPosition.X, gridPosition.Y - 1));
-
-        if (!currentRoomData.IsSouthDoorActive)
-        {
-            theRoom.SouthDoor.DisableDoor();
-        }
-
-        if (!currentRoomData.IsNorthDoorActive)
-        {
-            theRoom.NorthDoor.DisableDoor();
-        }
-
-        if (!currentRoomData.IsWestDoorActive)
-        {
-            theRoom.WestDoor.DisableDoor();
-        }
-
-        if (!currentRoomData.IsEastDoorActive)
-        {
-            theRoom.EastDoor.DisableDoor();
-        }
-
-        return theRoom;
-    }
-
-    /// <summary>
-    /// Checks to see if the rooms that correspond to the doors have been spawned already and sets the DoorRoomSpawned
-    /// variables accordingly
-    /// </summary>
-    /// <param name="roomLoc">The location of the room doors to be checked</param>
-    /// <param name="currentRoom">The room with the doors to be checked</param>
-    /// <returns></returns>
-    private RoomObject _checkDoorRooms(Location roomLoc, RoomObject currentRoom)
-    {
-        Location northDoorLoc = new Location(roomLoc.X - 1, roomLoc.Y);
-        Location eastDoorLoc = new Location(roomLoc.X, roomLoc.Y + 1);
-        Location southDoorLoc = new Location(roomLoc.X + 1, roomLoc.Y);
-        Location westDoorLoc = new Location(roomLoc.X, roomLoc.Y - 1);
-
-        if (_isLocationOccupied(northDoorLoc))
-        {
-            currentRoom.NorthDoor.SetIsDoorRoomSpawned(true);
-        }
-
-        if (_isLocationOccupied(eastDoorLoc))
-        {
-            currentRoom.EastDoor.SetIsDoorRoomSpawned(true);
-        }
-
-        if (_isLocationOccupied(southDoorLoc))
-        {
-            currentRoom.SouthDoor.SetIsDoorRoomSpawned(true);
-        }
-
-        if (_isLocationOccupied(westDoorLoc))
-        {
-            currentRoom.WestDoor.SetIsDoorRoomSpawned(true);
-        }
-
-        return currentRoom;
+        // If we got here, then the location is assumed to be valid.
+        // Place the room.
+        return new Vector3(m_defaultRoomSize * placeY, 0, -m_defaultRoomSize * placeX);
     }
 
     /// <summary>
@@ -295,28 +283,28 @@ public class MapManager : Photon.PunBehaviour {
 
         Door exitDoor = null;
 
-        if (doorIndex == (int)RoomObject.DoorIndex.NorthDoor)
+        if (doorIndex == (int)Door.Direction.North)
         {
             Location exitDoorLoc = new Location(currentLoc.X - 1, currentLoc.Y);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
             exitDoor = exitRoom.SouthDoor;
         }
 
-        else if (doorIndex == (int)RoomObject.DoorIndex.EastDoor)
+        else if (doorIndex == (int)Door.Direction.East)
         {
             Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y + 1);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
             exitDoor = exitRoom.WestDoor;
         }
 
-        else if (doorIndex == (int)RoomObject.DoorIndex.SouthDoor)
+        else if (doorIndex == (int)Door.Direction.South)
         {
             Location exitDoorLoc = new Location(currentLoc.X + 1, currentLoc.Y);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
             exitDoor = exitRoom.NorthDoor;
         }
 
-        else if (doorIndex == (int)RoomObject.DoorIndex.WestDoor)
+        else if (doorIndex == (int)Door.Direction.West)
         {
             Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y - 1);
             RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
@@ -368,7 +356,6 @@ public class MapManager : Photon.PunBehaviour {
         _createPathFromStartToExit();
         _addAdditionalDoors();
         _placeSpecialRooms();
-        _sendMap();
         _printMap();
     }
 
@@ -377,11 +364,12 @@ public class MapManager : Photon.PunBehaviour {
     /// </summary>
     private void _printMap()
     {
+#if false
         Debug.Log("Start = " + m_startPoint.ToString());
         Debug.Log("Exit = " + m_exitPoint.ToString());
         Debug.Log("Shop = " + m_shopPoint.ToString());
         Debug.Log("Is Actually exit = " + m_worldMapData[m_exitPoint.x, m_exitPoint.y].RoomType);
-       
+
         for (int i = 0; i < m_worldMaxXSize; i++)
         {
             for (int j = 0; j < m_worldMaxYSize; j++)
@@ -392,7 +380,8 @@ public class MapManager : Photon.PunBehaviour {
                 Debug.Log("Current Room: NorthDoor = " + currentRoom.IsNorthDoorActive + "| East Door = " + currentRoom.IsEastDoorActive +
                     "| South Door = " + currentRoom.IsSouthDoorActive + "| West Door = " + currentRoom.IsWestDoorActive);
             }
-        }
+        } 
+#endif
     }
 
     /// <summary>
@@ -413,7 +402,7 @@ public class MapManager : Photon.PunBehaviour {
             }
         }
         RoomData currentData = m_worldMapData[shopX, shopY];
-        RoomData shopRoom = new RoomData(currentData.IsNorthDoorActive, currentData.IsEastDoorActive, currentData.IsSouthDoorActive, currentData.IsWestDoorActive, RoomType.Shop);
+        RoomData shopRoom = new RoomData(shopX, shopY, currentData.IsNorthDoorActive, currentData.IsEastDoorActive, currentData.IsSouthDoorActive, currentData.IsWestDoorActive, RoomType.Shop);
         m_worldMapData[shopX, shopY] = shopRoom;
         m_shopPoint = new Point(shopX, shopY);
     }
@@ -436,7 +425,7 @@ public class MapManager : Photon.PunBehaviour {
             }
         }
 
-        RoomData startingRoom = new RoomData(false, false, false, false, RoomType.Start);
+        RoomData startingRoom = new RoomData(startX, startY, false, false, false, false, RoomType.Start);
         m_worldMapData[startX, startY] = startingRoom;
         m_startPoint = new Point(startX, startY);
     }
@@ -459,7 +448,7 @@ public class MapManager : Photon.PunBehaviour {
             }
         }
 
-        RoomData exitRoom = new RoomData(false, false, false, false, RoomType.Exit);
+        RoomData exitRoom = new RoomData(exitX, exitY, false, false, false, false, RoomType.Exit);
         m_worldMapData[exitX, exitY] = exitRoom;
         Debug.Log("Is actually exit = " + m_worldMapData[exitX, exitY].RoomType);
         m_exitPoint = new Point(exitX, exitY);
@@ -496,7 +485,7 @@ public class MapManager : Photon.PunBehaviour {
                 
                 if (isEmptyRoom)
                 {
-                    RoomData newPosRoomData = new RoomData(false, false, false, false, RoomType.Combat);
+                    RoomData newPosRoomData = new RoomData(newPos.x, newPos.y, false, false, false, false, RoomType.Combat);
                     m_worldMapData[newPos.x, newPos.y] = newPosRoomData;
                 }
 
@@ -926,32 +915,6 @@ public class MapManager : Photon.PunBehaviour {
     {
         Location start = new Location(m_startPoint.x, m_startPoint.y);
         return PlaceRoom(start);
-    }
-
-    private void _sendMap()
-    {
-        for (int i = 0; i < m_worldMaxXSize; i++)
-        {
-            for (int j = 0; j < m_worldMaxYSize; j++)
-            {
-                RoomData rd = m_worldMapData[i, j];
-                photonView.RPC("SendRoomData", PhotonTargets.Others, i, j, rd.IsNorthDoorActive, rd.IsEastDoorActive, rd.IsSouthDoorActive,
-                    rd.IsWestDoorActive, rd.RoomType);
-            }
-        }
-    }
-
-    [PunRPC]
-    public void SendRoomData(int roomLocX, int roomLocY, bool isNorthDoorActive, bool isEastDoorActive, bool isSouthDoorActive, 
-        bool isWestDoorActive, int roomType)
-    {
-        RoomData roomData = new RoomData(isNorthDoorActive, isEastDoorActive, isSouthDoorActive, isWestDoorActive, (RoomType) roomType);
-        m_worldMapData[roomLocX, roomLocY] = roomData;
-        m_roomDataReceived += 1;
-        if (isAllDataReceived())
-        {
-            Debug.Log("All data received");
-        }
     }
 
     public bool isAllDataReceived()

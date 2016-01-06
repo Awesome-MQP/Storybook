@@ -13,7 +13,7 @@ public class TestMovementSpawner : MonoBehaviour {
     private NetworkNodeMover m_worldPlayer;
 
     [SerializeField]
-    private PlayerMover m_playerGroup;
+    private RoomMover m_playerGroup;
 
     [SerializeField]
     private GameManager m_gameManager;

@@ -348,6 +348,22 @@ public class PhotonView : Photon.MonoBehaviour
         this.didAwake = true;
     }
 
+    private void OnEnable()
+    {
+        if (isMine && HasSpawned)
+        {
+            RebuildNetworkRelavance();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (isMine && HasSpawned)
+        {
+            RebuildNetworkRelavance();
+        }
+    }
+
     internal bool DoesExistOnPlayer(PhotonPlayer player)
     {
         return isMine && !isSceneView && existsOn.Contains(player);
@@ -422,12 +438,12 @@ public class PhotonView : Photon.MonoBehaviour
 
     public void TransferController(PhotonPlayer player)
     {
-        TransferOwnership(player.ID);
+        TransferController(player.ID);
     }
 
     public void TransferController(int newControllerId)
     {
-        if (isMine)
+        if (isMine && CheckRelevance(PhotonPlayer.Find(newControllerId)))
         {
             if(HasSpawned)
                 PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
@@ -516,16 +532,25 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks to see if this object is relevant to the specified player.
+    /// </summary>
+    /// <param name="player">The player to check.</param>
+    /// <returns>True if this object is relevant to the player.</returns>
     public bool CheckRelevance(PhotonPlayer player)
     {
         return trueRelevance.Contains(player);
     }
 
+    //If true then this object was relevant to this player before the last network event.
     public bool WasRelevant(PhotonPlayer player)
     {
         return wasRelevantTo.Contains(player);
     }
 
+    /// <summary>
+    /// Rebuilds the network relevance for this object.
+    /// </summary>
     public void RebuildNetworkRelavance()
     {
         BuildRelevance();
@@ -570,7 +595,7 @@ public class PhotonView : Photon.MonoBehaviour
         PhotonPlayer[] otherPlayers = PhotonNetwork.otherPlayers;
         foreach (PhotonPlayer player in otherPlayers)
         {
-            if (IsRelevantTo(player))
+            if (_IsRelevantTo(player))
                 relevantTo.Add(player);
         }
 
@@ -938,7 +963,7 @@ public class PhotonView : Photon.MonoBehaviour
         RPC(methodName, Controller, parameters);
     }
 
-    public virtual bool IsRelevantTo(PhotonPlayer targetPlayer)
+    private bool _IsRelevantTo(PhotonPlayer targetPlayer)
     {
         foreach (Component component in ObservedComponents)
         {

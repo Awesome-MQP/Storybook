@@ -1,7 +1,34 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
-public struct Location {
+public struct Location : INetworkSerializeable
+{
+    private static Location s_north = new Location(-1, 0);
+    private static Location s_east = new Location(0, 1);
+    private static Location s_south = new Location(1, 0);
+    private static Location s_west = new Location(0, -1);
+
+    public static Location North
+    {
+        get { return s_north; }
+    }
+
+    public static Location East
+    {
+        get { return s_east; }
+    }
+
+    public static Location South
+    {
+        get { return s_south; }
+    }
+
+    public static Location West
+    {
+        get { return s_west; }
+    }
+
     // Location used to give RoomObjects a sense of where they are in the world.
     [SerializeField]
     private int m_x;
@@ -9,10 +36,10 @@ public struct Location {
     [SerializeField]
     private int m_y;
 
-    public Location(int LocX, int LocY)
+    public Location(int locX, int locY)
     {
-        m_x = LocX;
-        m_y = LocY;
+        m_x = locX;
+        m_y = locY;
     }
 
     public int X
@@ -43,11 +70,40 @@ public struct Location {
         return new Location(DiffX, DiffY);
     }
 
+    public static Location operator +(Location loc1, Door.Direction direction)
+    {
+        switch (direction)
+        {
+            case Door.Direction.North:
+                return loc1 + North;
+            case Door.Direction.East:
+                return loc1 + East;
+            case Door.Direction.South:
+                return loc1 + South;
+            case Door.Direction.West:
+                return loc1 + West;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+        }
+    }
+
     // Gets the straight line distance between 2 locations.
     public static float Distance(Location Loc1, Location Loc2)
     {
         float XminusA = Loc1.X - Loc2.X;
         float YminusB = Loc1.Y - Loc2.Y;
         return Mathf.Sqrt((XminusA * XminusA) - (YminusB * YminusB));
+    }
+
+    public void OnSerialize(PhotonStream stream)
+    {
+        stream.SendNext(m_x);
+        stream.SendNext(m_y);
+    }
+
+    public void OnDeserialize(PhotonStream stream)
+    {
+        m_x = (int) stream.ReceiveNext();
+        m_y = (int) stream.ReceiveNext();
     }
 }

@@ -2359,10 +2359,6 @@ public static class PhotonNetwork
             return;
         }
 
-        view.RebuildRelevance();
-
-        PhotonPlayer[] relevantPlayers = view.RelevantPlayers;
-
         //find all children that belong to us
         PhotonView[] children = view.GetComponentsInChildren<PhotonView>(true);
         List<PhotonView> childrenList = new List<PhotonView>(children);
@@ -2381,6 +2377,15 @@ public static class PhotonNetwork
             PhotonView child = ownedChildren[i];
             ownedChildrenId[i] = child.viewID;
         }
+
+        foreach (PhotonView child in ownedChildren)
+        {
+            child.OnSpawn();
+        }
+
+        view.RebuildRelevance();
+
+        PhotonPlayer[] relevantPlayers = view.RelevantPlayers;
 
         InternalTryCreateOnPlayers(ownedChildren, relevantPlayers);
 
@@ -2421,11 +2426,6 @@ public static class PhotonNetwork
         options.TargetActors = relevantPlayerIds;
 
         RaiseEvent(PunEvent.SpawnObject, evData, true, options);
-
-        foreach (PhotonView child in ownedChildren)
-        {
-            child.OnSpawn();
-        }
 
         //Children that are not part of the prefab will not be spawned, so we go through
         foreach (PhotonView child in children)

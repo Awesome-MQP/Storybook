@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 
+[Obsolete]
 public class DoorNode : MovementNode
 {
 

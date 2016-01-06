@@ -515,6 +515,16 @@ namespace Photon
             get { return photonView.Controller; }
         }
 
+        protected bool IsReading
+        {
+            get { return m_isDeserializing; }
+        }
+
+        protected bool ShouldBeChanging
+        {
+            get { return IsMine || IsReading;}
+        }
+
         public bool IsMasterClient
         {
             get { return PhotonNetwork.isMasterClient; }
@@ -534,9 +544,8 @@ namespace Photon
                             GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             int propCount = 0;
-            for (int i = 0; i < properties.Length; i++)
+            foreach (PropertyInfo propertyInfo in properties)
             {
-                PropertyInfo propertyInfo = properties[i];
                 bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), true);
                 bool hasGetAndSet = propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null;
 
@@ -986,6 +995,8 @@ namespace Photon
             if(!m_hasBuildProperties)
                 BuildPropertyInfo();
 
+            m_isDeserializing = true;
+
             m_dirtyBits = (uint)stream.ReceiveNext();
 
             for (int i = 0; i < m_propertiesByNumber.Count; i++)
@@ -996,6 +1007,8 @@ namespace Photon
                 PropertyInfo propertyInfo = m_propertiesByNumber[i];
                 DeserializeProperty(stream.ReceiveNext(), propertyInfo);
             }
+
+            m_isDeserializing = false;
         }
 
         public virtual void OnSerializeUnreliable(PhotonStream stream, PhotonMessageInfo info)
@@ -1026,88 +1039,155 @@ namespace Photon
             if (value == null)
                 return null;
 
-            if(!info.PropertyType.GetType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
+            //Check to see that we are a component that is not a photon view
+            if(!info.PropertyType.IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
             {
-                Component component = value as Component;
-                Assert.IsNotNull(component);
-
-                PhotonView view = component.GetComponent<PhotonView>();
-                Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
-
-                return view;
+                return SerializeComponentProperty(value, info);
             }
-            else if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
+
+            //Check to see that we are an array of components that is not an array of photon views
+            if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
             {
-                Component[] componetns = value as Component[];
-                Assert.IsNotNull(componetns);
-
-                PhotonView[] views = new PhotonView[componetns.Length];
-
-                for(int i = 0; i < componetns.Length; i++)
-                {
-                    Component component = value as Component;
-                    if (component == null)
-                        views[i] = null;
-                    else
-                    {
-                        PhotonView view = component.GetComponent<PhotonView>();
-                        Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
-
-                        views[i] = view;
-                    }
-                }
-
-                return views;
+                return SerializeComponentArrayProperty(value, info);
+            }
+            
+            //Check to see if we are a custom struct
+            if (value is INetworkSerializeable)
+            {
+                return SerializeNetworkObjectProperty(value, info);
             }
 
             return value;
         }
 
+        private object SerializeComponentProperty(object value, PropertyInfo info)
+        {
+            Component component = value as Component;
+            Assert.IsNotNull(component);
+
+            PhotonView view = component.GetComponent<PhotonView>();
+            Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
+
+            return view;
+        }
+
+        private object SerializeComponentArrayProperty(object value, PropertyInfo info)
+        {
+            Component[] componetns = value as Component[];
+            Assert.IsNotNull(componetns);
+
+            PhotonView[] views = new PhotonView[componetns.Length];
+
+            for (int i = 0; i < componetns.Length; i++)
+            {
+                Component component = value as Component;
+                if (component == null)
+                    views[i] = null;
+                else
+                {
+                    PhotonView view = component.GetComponent<PhotonView>();
+                    Assert.IsNotNull(view, "You cannot send a component with no attached photon view.");
+
+                    views[i] = view;
+                }
+            }
+
+            return views;
+        }
+
+        private object SerializeNetworkObjectProperty(object value, PropertyInfo info)
+        {
+            MethodInfo serializeMethod = value.GetType()
+                .GetMethod("OnSerialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                    new[] {typeof (PhotonStream)}, null);
+
+            Assert.IsNotNull(serializeMethod, "No serialize method found on struct being sent over the network.");
+
+            PhotonStream stream = new PhotonStream(true, null);
+            serializeMethod.Invoke(value, new object[] {stream});
+
+            return stream;
+        }
+
         private void DeserializeProperty(object value, PropertyInfo info)
         {
-            if (!info.PropertyType.GetType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
+            if (!info.PropertyType.IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
             {
-                PhotonView view = value as PhotonView;
-                if (!view)
-                {
-                    info.SetValue(this, null, null);
-                    return;
-                }
-
-                Component component = view.GetComponent(info.PropertyType);
-                Assert.IsNotNull(component);
-
-                info.SetValue(this, component, null);
-                return;
+                DeserializeComponentProperty(value, info);
             }
             else if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
             {
-                PhotonView[] views = value as PhotonView[];
-                Assert.IsNotNull(views);
+                DeserializeComponentArrayProperty(value, info);
+            }
+            else if (typeof(INetworkSerializeable).IsAssignableFrom(info.PropertyType))
+            {
+                DeserializeNetworkObjectProperty(value, info);
+            }
+            else
+            {
+                info.SetValue(this, value, null);
+            }
+        }
 
-                Array array = Array.CreateInstance(info.PropertyType.GetElementType(), views.Length);
-
-                for(int i = 0; i < views.Length; i++)
-                {
-                    PhotonView view = views[i];
-                    if (!view)
-                    {
-                        array.SetValue(null, i);
-                        continue; ;
-                    }
-
-                    Component component = view.GetComponent(info.PropertyType.GetElementType());
-                    Assert.IsNotNull(component);
-
-                    array.SetValue(component, i);
-                }
-
-                info.SetValue(this, array, null);
-
+        private void DeserializeComponentProperty(object value, PropertyInfo info)
+        {
+            PhotonView view = value as PhotonView;
+            if (!view)
+            {
+                info.SetValue(this, null, null);
                 return;
             }
 
-            info.SetValue(this, value, null);
+            Component component = view.GetComponent(info.PropertyType);
+            Assert.IsNotNull(component);
+
+            info.SetValue(this, component, null);
+        }
+
+        private void DeserializeComponentArrayProperty(object value, PropertyInfo info)
+        {
+            PhotonView[] views = value as PhotonView[];
+            Assert.IsNotNull(views);
+
+            Array array = Array.CreateInstance(info.PropertyType.GetElementType(), views.Length);
+
+            for (int i = 0; i < views.Length; i++)
+            {
+                PhotonView view = views[i];
+                if (!view)
+                {
+                    array.SetValue(null, i);
+                    continue; ;
+                }
+
+                Component component = view.GetComponent(info.PropertyType.GetElementType());
+                Assert.IsNotNull(component);
+
+                array.SetValue(component, i);
+            }
+
+            info.SetValue(this, array, null);
+        }
+
+        private void DeserializeNetworkObjectProperty(object value, PropertyInfo info)
+        {
+            if (value == null)
+            {
+                info.SetValue(this, null, null);
+                return;
+            }
+
+            object propertyValue = info.GetValue(this, null);
+            if(propertyValue == null)
+                propertyValue = Activator.CreateInstance(info.PropertyType);
+
+            MethodInfo deserializeMethod = propertyValue.GetType()
+                .GetMethod("OnDeserialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                    new[] {typeof (PhotonStream)}, null);
+
+            Assert.IsNotNull(deserializeMethod, "No deserialize method on struct being sent over the network.");
+
+            deserializeMethod.Invoke(propertyValue, new[] {value});
         }
 
         public virtual bool IsRelevantTo(PhotonPlayer player)
@@ -1138,7 +1218,9 @@ namespace Photon
 
         private bool m_hasBuildProperties;
 
-        private List<PropertyInfo> m_unreliableProperties = new List<PropertyInfo>(); 
+        private List<PropertyInfo> m_unreliableProperties = new List<PropertyInfo>();
+
+        private bool m_isDeserializing;
     }
 }
 

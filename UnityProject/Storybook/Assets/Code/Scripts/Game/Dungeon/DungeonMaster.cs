@@ -55,9 +55,9 @@ public class DungeonMaster : MonoBehaviour {
     /// </summary>
     /// <param name="size">The specified size of the room to search for.</param>
     /// <param name="genre">The specified Genre of the room to search for.</param>
-    /// <param name="feature">The specified Feature of the room to search for.</param>
+    /// <param name="features">The specified features of the room to search for.</param>
     /// <returns>The room if a match is found, or null if no match is found.</returns>
-    RoomObject GetRoomPrefab(int size, Genre genre, string feature)
+    RoomObject GetRoomPrefab(int size, Genre genre, params string[] features)
     {
         // List of "good" rooms - ones that match the criteria passed in.
         List<RoomObject> goodRooms = new List<RoomObject>();
@@ -73,7 +73,7 @@ public class DungeonMaster : MonoBehaviour {
             {
                 continue;
             }
-            else if (r.RoomFeature != feature)
+            else if (r.ContainsFeatures(features))
             {
                 continue;
             }

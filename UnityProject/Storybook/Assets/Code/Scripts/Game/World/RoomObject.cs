@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Photon;
+using System;
+using UnityEngine.Assertions;
 
-public abstract class RoomObject : MonoBehaviour {
-
-    public enum DoorIndex { NorthDoor = 0, EastDoor, SouthDoor, WestDoor };
+public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
+{
+    private HashSet<string> m_featureSet;
 
     [SerializeField]
     Transform m_cameraNode;
@@ -12,25 +16,14 @@ public abstract class RoomObject : MonoBehaviour {
     private Location m_roomLocation;
 
     [SerializeField]
+    [Obsolete("We no longer use room size with rooms.")]
     private int m_roomSize; // Can be x1, x2, x4.
 
     [SerializeField]
     private Genre m_roomGenre;
 
     [SerializeField]
-    private string m_roomFeature;
-
-    [SerializeField]
-    private MovementNode m_player1Pos;
-
-    [SerializeField]
-    private MovementNode m_player2Pos;
-
-    [SerializeField]
-    private MovementNode m_player3Pos;
-
-    [SerializeField]
-    private MovementNode m_player4Pos;
+    private string[] m_roomFeatures = new string[0];
 
     [SerializeField]
     private Door m_northDoor;
@@ -44,9 +37,30 @@ public abstract class RoomObject : MonoBehaviour {
     [SerializeField]
     private Door m_westDoor;
 
-    protected virtual void Awake()
+    [SerializeField]
+    private MovementNode m_centerNode;
+
+    protected override void Awake()
     {
-        DontDestroyOnLoad(this);
+        base.Awake();
+
+        m_featureSet = new HashSet<string>();
+        foreach (string feature in m_roomFeatures)
+        {
+            m_featureSet.Add(feature.ToUpper());
+        }
+    }
+
+    public void Construct(RoomData room)
+    {
+        Assert.IsTrue(IsMine);
+
+        RoomLocation = new Location(room.X, room.Y);
+
+        m_northDoor.IsDoorEnabled = room.IsNorthDoorActive;
+        m_eastDoor.IsDoorEnabled = room.IsEastDoorActive;
+        m_southDoor.IsDoorEnabled = room.IsSouthDoorActive;
+        m_westDoor.IsDoorEnabled = room.IsWestDoorActive;
     }
 
     // What do we do immediately upon entering the room?
@@ -68,21 +82,29 @@ public abstract class RoomObject : MonoBehaviour {
     }
 
     // Property for a Room's Location
+    [SyncProperty]
     public Location RoomLocation
     {
         get { return m_roomLocation; }
-        set { m_roomLocation = value; }
+        protected set
+        {
+            m_roomLocation = value;
+            MapManager.Instance.RegisterRoom(this);
+            PropertyChanged();
+        }
     }
 
+    //TODO: Array allocation every time this is used, might be better to just have getters.
     public Door[] AllDoors
     {
         get
         {
-            Door[] doorArray = new Door[4];
-            doorArray[0] = m_northDoor;
-            doorArray[1] = m_eastDoor;
-            doorArray[2] = m_southDoor;
-            doorArray[3] = m_westDoor;
+            Door[] doorArray = {
+                m_northDoor,
+                m_eastDoor,
+                m_southDoor,
+                m_westDoor
+            };
             return doorArray;
         }
     }
@@ -90,69 +112,38 @@ public abstract class RoomObject : MonoBehaviour {
     public Door NorthDoor
     {
         get { return m_northDoor; }
-        set { m_northDoor = value; }
     }
 
     public Door EastDoor
     {
         get { return m_eastDoor; }
-        set { m_eastDoor = value; }
     }
 
     public Door SouthDoor
     {
         get { return m_southDoor; }
-        set { m_southDoor = value; }
     }
 
     public Door WestDoor
     {
         get { return m_westDoor; }
-        set { m_westDoor = value; }
-    }
-
-    public Door GetDoorByIndex (DoorIndex doorIndex)
-    {
-        Door doorToReturn = null;
-        switch (doorIndex)
-        {
-            case DoorIndex.NorthDoor:
-                doorToReturn = m_northDoor;
-                break;
-
-            case DoorIndex.EastDoor:
-                doorToReturn = m_eastDoor;
-                break;
-
-            case DoorIndex.SouthDoor:
-                doorToReturn = m_southDoor;
-                break;
-
-            case DoorIndex.WestDoor:
-                doorToReturn = m_westDoor;
-                break;
-        }
-        return doorToReturn;
     }
 
     // Property for the size of a room
+    [Obsolete]
     public int RoomSize
     {
         get { return m_roomSize; }
-        set { m_roomSize = value; }
     }
 
     public Genre RoomGenre
     {
         get { return m_roomGenre; }
-        set { m_roomGenre = value; }
     }
 
-    // Get Feature of a room
-    public string RoomFeature
+    public MovementNode CenterNode
     {
-        get { return m_roomFeature; }
-        set { m_roomFeature = value; }
+        get { return m_centerNode; }
     }
 
     public Transform CameraNode
@@ -160,23 +151,62 @@ public abstract class RoomObject : MonoBehaviour {
         get { return m_cameraNode; }
     }
 
-    public MovementNode Player1Node
+    /// <summary>
+    /// Get the door in a direction.
+    /// </summary>
+    /// <param name="direction">The direction to get a door in.</param>
+    /// <returns>The door in that direction, or null if there is no door in that direction.</returns>
+    public Door GetDoorByDirection (Door.Direction direction)
     {
-        get { return m_player1Pos; }
+        Door doorToReturn;
+        switch (direction)
+        {
+            case Door.Direction.North:
+                doorToReturn = m_northDoor;
+                break;
+
+            case Door.Direction.East:
+                doorToReturn = m_eastDoor;
+                break;
+
+            case Door.Direction.South:
+                doorToReturn = m_southDoor;
+                break;
+
+            case Door.Direction.West:
+                doorToReturn = m_westDoor;
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException("direction", direction, null);
+        }
+
+        return doorToReturn.IsDoorEnabled ? doorToReturn : null;
     }
 
-    public MovementNode Player2Node
+    /// <summary>
+    /// Checks to see if the room contains a feature.
+    /// </summary>
+    /// <param name="feature">The feature to check for.</param>
+    /// <returns>True if the room contains this feature, false otherwise.</returns>
+    public bool ContainsFeature(string feature)
     {
-        get { return m_player2Pos; }
+        return feature == null || m_featureSet.Contains(feature.ToUpper());
     }
 
-    public MovementNode Player3Node
+    /// <summary>
+    /// Checks to see if the room contains a list of features.
+    /// </summary>
+    /// <param name="features">The list of features to check for.</param>
+    /// <returns>True if all features are contained, otherwise false.</returns>
+    public bool ContainsFeatures(params string[] features)
     {
-        get { return m_player3Pos; }
-    }
+        foreach (string feature in features)
+        {
+            if (!ContainsFeature(feature))
+                return false;
+        }
 
-    public MovementNode Player4Node
-    {
-        get { return m_player4Pos; }
+        return true;
     }
 }

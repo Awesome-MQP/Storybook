@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameManager : Photon.PunBehaviour {
+public class GameManager : Photon.PunBehaviour
+{
 
     [SerializeField]
     private CombatManager m_combatInstancePrefab;
@@ -24,11 +25,12 @@ public class GameManager : Photon.PunBehaviour {
     private GameObject m_combatInstance;
     private MusicManager m_musicMgr;
 
-	void Start () {
+	void Start ()
+    {
         DontDestroyOnLoad(this);
 
         // Only call StartCombat on the master client
-        if (PhotonNetwork.isMasterClient)
+        if (IsMine)
         {
             StartGame();
         }
@@ -62,9 +64,11 @@ public class GameManager : Photon.PunBehaviour {
             playerTeam.GetComponent<CombatTeam>().TeamId = 1;
             enemyTeam.GetComponent<CombatTeam>().TeamId = 2;
 
-            List<CombatTeam> combatTeams = new List<CombatTeam>();
-            combatTeams.Add(playerTeam.GetComponent<CombatTeam>());
-            combatTeams.Add(enemyTeam.GetComponent<CombatTeam>());
+            List<CombatTeam> combatTeams = new List<CombatTeam>
+            {
+                playerTeam.GetComponent<CombatTeam>(),
+                enemyTeam.GetComponent<CombatTeam>()
+            };
 
             List<PlayerEntity> playersEnteringCombat = new List<PlayerEntity>(FindObjectsOfType<PlayerEntity>());
             Vector3 combatPosition = new Vector3(m_defaultLocation.x + 1000, m_defaultLocation.y + 1000, m_defaultLocation.z + 1000);
@@ -85,10 +89,8 @@ public class GameManager : Photon.PunBehaviour {
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.GenerateMap();
         RoomObject startRoom = mapManager.PlaceStartRoom();
-        PlayerMover playerMover = FindObjectOfType<PlayerMover>();
+        RoomMover playerMover = FindObjectOfType<RoomMover>();
         List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
-        playerMover.WorldPlayers = players;
-        photonView.RPC("SendCameraPosRot", PhotonTargets.All, startRoom.CameraNode.transform.position, startRoom.CameraNode.transform.rotation);
         playerMover.SpawnInRoom(startRoom);
     }
 
@@ -155,52 +157,5 @@ public class GameManager : Photon.PunBehaviour {
     {
         get { return m_playerTeamForCombat; }
         set { m_playerTeamForCombat = value; }
-    }
-
-    [PunRPC]
-    public void SendCameraPosRot(Vector3 position, Quaternion rotation)
-    {
-        Camera.main.transform.position = position;
-        Camera.main.transform.rotation = rotation;
-    }
-
-    [PunRPC]
-    protected void EnableMovementComponents(bool isEnable)
-    {
-        Debug.Log("Disabling movement components");
-        MapManager mapManager = FindObjectOfType<MapManager>();
-        mapManager.LoadMap(isEnable);
-        mapManager.enabled = isEnable;
-
-        Debug.Log("Map manager disabled");
-
-        NetworkNodeMover[] allWorldPawns = FindObjectsOfType<NetworkNodeMover>();
-        foreach(NetworkNodeMover worldPlayer in allWorldPawns)
-        {
-            worldPlayer.enabled = isEnable;
-        }
-
-        Debug.Log("Network node movers disabled");
-
-        PlayerMover playerMover = FindObjectOfType<PlayerMover>();
-        playerMover.enabled = isEnable;
-
-        if (isEnable)
-        {
-            playerMover.ReturnCameraToDungeon();
-            playerMover.ClearRoomAfterWin();
-        }
-
-        Debug.Log("Player mover disabled");
-
-        /*
-        CombatPawn[] worldEnemyPawns = FindObjectsOfType<CombatPawn>();
-        foreach(CombatPawn worldEnemy in worldEnemyPawns)
-        {
-            worldEnemy.enabled = false;
-        }
-
-        Debug.Log("World combat pawn disabled");
-        */
     }
 }

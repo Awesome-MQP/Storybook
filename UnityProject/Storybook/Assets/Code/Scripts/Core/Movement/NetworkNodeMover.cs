@@ -29,6 +29,7 @@ public class NetworkNodeMover : NetworkMover
     /// <summary>
     /// The node to move towards.
     /// </summary>
+    [SyncProperty]
     public MovementNode TargetNode
     {
         get { return m_node; }
@@ -40,6 +41,8 @@ public class NetworkNodeMover : NetworkMover
                 base.TargetPosition = m_node.transform.position;
             else
                 base.TargetPosition = transform.position;
+
+            PropertyChanged();
         }
     }
 
@@ -53,7 +56,7 @@ public class NetworkNodeMover : NetworkMover
 
     }
 
-    protected override void OnArrive()
+    protected sealed override void OnArrive()
     {
         if (m_node != null) {
             if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
@@ -63,7 +66,7 @@ public class NetworkNodeMover : NetworkMover
         }
     }
 
-    protected override void OnLeave()
+    protected sealed override void OnLeave()
     {
         if (m_node != null) {
             if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.

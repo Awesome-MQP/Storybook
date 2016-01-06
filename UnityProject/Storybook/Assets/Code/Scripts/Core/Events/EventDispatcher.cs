@@ -64,7 +64,7 @@ public abstract class EventDispatcher
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    protected IEnumerator<T> IterateListeners<T>() where T : IEventListener
+    protected IEnumerable<T> IterateListeners<T>() where T : IEventListener
     {
         foreach (IEventListener eventListener in m_listeners)
         {

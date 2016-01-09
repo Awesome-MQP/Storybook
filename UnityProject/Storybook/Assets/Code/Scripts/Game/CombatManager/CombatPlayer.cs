@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class CombatPlayer : CombatPawn {
+public abstract class CombatPlayer : CombatPawn
+{
 
     [SerializeField]
     private static int m_handSize = 4;
@@ -45,7 +46,7 @@ public abstract class CombatPlayer : CombatPawn {
         }
         */
     }
-    
+
     public Page[] PlayerHand
     {
         get { return m_playerHand.ToArray(); }
@@ -57,14 +58,19 @@ public abstract class CombatPlayer : CombatPawn {
         {
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
-            
-            if(PhotonNetwork.player.ID == PawnId)
+
+            if (PhotonNetwork.isMasterClient)
+            {
+                AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
+            }
+
+            if (PhotonNetwork.player.ID == PawnId)
             {
                 DrawPageOnScreen(currentPage, i);
             }
         }
     }
-    
+
     public void DrawPageOnScreen(Page thePage, int pageCounter)
     {
         string pageName = thePage.PageGenre.ToString();
@@ -101,13 +107,17 @@ public abstract class CombatPlayer : CombatPawn {
     {
         m_playerHand.Remove(pageToRemove);
 
-        
+        if (PhotonNetwork.isMasterClient)
+        {
+            AddOrRemoveMod(pageToRemove.PageGenre, pageToRemove.PageLevel, false);
+        }
+
         if (PhotonNetwork.player.ID == PawnId)
         {
             Destroy(m_displayedPages[SelectedPageIndex]);
             ShiftPages(SelectedPageIndex);
         }
-        
+
 
         m_playerDeck.AddPageToGraveyard(pageToRemove);
     }
@@ -159,6 +169,10 @@ public abstract class CombatPlayer : CombatPawn {
     {
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
+        if (PhotonNetwork.isMasterClient)
+        {
+            AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
+        }
         if (PhotonNetwork.player.ID == PawnId)
         {
             DrawPageOnScreen(currentPage, 4);
@@ -179,7 +193,7 @@ public abstract class CombatPlayer : CombatPawn {
     public void RPCSendDeckIds(int[] viewIds)
     {
         List<Page> deckList = new List<Page>();
-        foreach(int i in viewIds)
+        foreach (int i in viewIds)
         {
             PhotonView pagePhotonView = PhotonView.Find(i);
             Page page = pagePhotonView.GetComponent<Page>();
@@ -204,7 +218,7 @@ public abstract class CombatPlayer : CombatPawn {
         List<Page> deckPages = new List<Page>();
         for (int i = 0; i < 20; i++)
         {
-            Page page = (Page) playerInventory[i].SlotItem;
+            Page page = (Page)playerInventory[i].SlotItem;
             deckPages.Add(page);
         }
         CombatDeck playerDeck = new CombatDeck(deckPages);
@@ -265,7 +279,7 @@ public abstract class CombatPlayer : CombatPawn {
             }
         }
 
-        foreach(CombatPawn pawn in GetPawnsOnTeam())
+        foreach (CombatPawn pawn in GetPawnsOnTeam())
         {
             if (pawn.PawnId == playerId && pawn is CombatPlayer)
             {
@@ -282,9 +296,9 @@ public abstract class CombatPlayer : CombatPawn {
     // Set the stat mods from pages in a player's hand to their stats
     public void CalculateStatMods()
     {
-        foreach(Page p in m_playerHand)
+        foreach (Page p in m_playerHand)
         {
-            switch(p.PageGenre)
+            switch (p.PageGenre)
             {
                 case Genre.Horror:
                     AttackMod = (AttackMod + p.PageLevel);
@@ -324,7 +338,7 @@ public abstract class CombatPlayer : CombatPawn {
 
     public void DestroyAllDisplayedPages()
     {
-        foreach(GameObject go in m_displayedPages)
+        foreach (GameObject go in m_displayedPages)
         {
             Destroy(go);
         }

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Code.Scripts.Game.Player;
 using ExitGames.Client.Photon;
-using Mono.Collections.Generic;
 using Photon;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;

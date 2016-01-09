@@ -2,28 +2,37 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class CombatPawn : Photon.PunBehaviour {
+public abstract class CombatPawn : Photon.PunBehaviour
+{
 
     private const int MAX_STATUS_TURNS = 7;
 
     // Character stats
     [SerializeField]
     private float m_health;
+
+    [SerializeField]
     private float m_healthMod = 0;
 
     [SerializeField]
     private float m_speed;
     private float m_speedBoost = 0;
-    private float m_speedMod = 0; 
+
+    [SerializeField]
+    private float m_speedMod = 0;
 
     [SerializeField]
     private float m_defense;
     private float m_defenseBoost = 0;
+
+    [SerializeField]
     private float m_defenseMod = 0;
 
     [SerializeField]
     private float m_attack;
     private float m_attackBoost = 0;
+
+    [SerializeField]
     private float m_attackMod = 0;
 
     [SerializeField]
@@ -62,7 +71,8 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// Setter for the pawn's CombatManager
     /// </summary>
     /// <param name="newCombatManager"></param>
-    public void RegisterCombatManager(CombatManager newCombatManager) {
+    public void RegisterCombatManager(CombatManager newCombatManager)
+    {
         m_combatManager = newCombatManager;
     }
 
@@ -73,7 +83,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public void DealDamageToPawn(int damageAmount)
     {
         m_health -= damageAmount;
-        
+
         if (m_health <= 0)
         {
             m_isAlive = false;
@@ -90,7 +100,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     {
         m_underStatusEffect = true;
         m_turnsUnderStatus += Mathf.CeilToInt(potency / 2);
-        if(m_turnsUnderStatus > MAX_STATUS_TURNS)
+        if (m_turnsUnderStatus > MAX_STATUS_TURNS)
         {
             m_turnsUnderStatus = MAX_STATUS_TURNS;
         }
@@ -105,7 +115,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         // TODO: Status things.
 
         m_turnsUnderStatus--;
-        if(m_turnsUnderStatus <= 0)
+        if (m_turnsUnderStatus <= 0)
         {
             m_underStatusEffect = false;
             Debug.Log("Status has dissipated!");
@@ -127,7 +137,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     /// </summary>
     public CombatManager CManager
     {
-        get{ return m_combatManager; }
+        get { return m_combatManager; }
     }
 
     /// <summary>
@@ -162,7 +172,10 @@ public abstract class CombatPawn : Photon.PunBehaviour {
     public float Health
     {
         get { return m_health; }
-        set { m_health = value; }
+        set
+        {
+            m_health = value;
+        }
     }
 
     public void SetHealth(float newHealth)
@@ -173,32 +186,52 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     // ==PROPERTIES FOR STAT MODS===================================================
 
+    [SyncProperty]
     public float AttackMod
     {
         get { return m_attackMod; }
-        set { m_attackMod = value; }
+        set
+        {
+            m_attackMod = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public float DefenseMod
     {
         get { return m_defenseMod; }
-        set { m_defenseMod = value; }
+        set
+        {
+            m_defenseMod = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public float SpeedMod
     {
         get { return m_speedMod; }
-        set { m_speedMod = value; }
+        set
+        {
+            m_speedMod = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public float HitpointsMod
     {
         get { return m_healthMod; }
-        set { m_health = value; }
+        set
+        {
+            m_healthMod = value;
+            PropertyChanged();
+        }
     }
 
     // ==============================================================================
-    
+
     /// <summary>
     /// True if the player's health is above 0, false otherwise
     /// </summary>
@@ -289,7 +322,7 @@ public abstract class CombatPawn : Photon.PunBehaviour {
 
     public PhotonView ScenePhotonView
     {
-        get { return m_scenePhotonView;  }
+        get { return m_scenePhotonView; }
     }
 
     public void SetTeamId(byte teamId)
@@ -361,5 +394,59 @@ public abstract class CombatPawn : Photon.PunBehaviour {
         CombatTeam pawnTeam = combatManager.GetTeamById(m_teamId);
         pawnTeam.AddPawnToTeam(this);
         RegisterTeam(pawnTeam);
+    }
+
+    public void AddOrRemoveMod(Genre modToAdd, int pageLevel, bool isAdd)
+    {
+        switch (modToAdd)
+        {
+            case Genre.Fantasy:
+                if (isAdd)
+                {
+                    Debug.Log("Adding speed mod");
+                    SpeedMod += pageLevel;
+                }
+                else
+                {
+                    SpeedMod -= pageLevel;
+                }
+                break;
+
+            case Genre.GraphicNovel:
+                if (isAdd)
+                {
+                    Debug.Log("Adding attack mod");
+                    AttackMod += pageLevel;
+                }
+                else
+                {
+                    AttackMod -= pageLevel;
+                }
+                break;
+
+            case Genre.Horror:
+                if (isAdd)
+                {
+                    Debug.Log("Adding HP mod");
+                    HitpointsMod += pageLevel;
+                }
+                else
+                {
+                    HitpointsMod -= pageLevel;
+                }
+                break;
+
+            case Genre.SciFi:
+                if (isAdd)
+                {
+                    Debug.Log("Adding defense mod");
+                    DefenseMod += pageLevel;
+                }
+                else
+                {
+                    DefenseMod -= pageLevel;
+                }
+                break;
+        }
     }
 }

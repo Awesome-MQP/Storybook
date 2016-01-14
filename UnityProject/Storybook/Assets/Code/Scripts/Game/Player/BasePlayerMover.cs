@@ -5,15 +5,20 @@ using UnityEngine.Assertions;
 
 public class BasePlayerMover : RoomMover
 {
-    private HashSet<PlayerEntity> m_registeredPlayers = new HashSet<PlayerEntity>();
+    private HashSet<PlayerObject> m_registeredPlayers = new HashSet<PlayerObject>();
+
+    public PlayerObject Leader
+    {
+        get { return GameManager.GetInstance<GameManager>().GetPlayerObject<PlayerEntity>(photonView.Controller); }
+    }
 
     /// <summary>
     /// Gets the next photon player to be the leader.
     /// </summary>
     /// <returns>The next player to be the leader.</returns>
-    public virtual PlayerEntity GetNextLeader()
+    public virtual PlayerObject GetNextLeader()
     {
-        throw new NotImplementedException();
+        return Leader.GetNext() as PlayerEntity;
     }
 
     /// <summary>
@@ -23,7 +28,7 @@ public class BasePlayerMover : RoomMover
     {
         Assert.IsTrue(IsMine);
 
-        photonView.TransferController(GetNextLeader().RepresentedPlayer);
+        photonView.TransferController(GetNextLeader().Player);
     }
 
     /// <summary>
@@ -37,16 +42,16 @@ public class BasePlayerMover : RoomMover
         photonView.TransferController(newLeader);
     }
 
-    public void ChangeLeader(PlayerEntity newLeader)
+    public void ChangeLeader(PlayerObject newLeader)
     {
-        ChangeLeader(newLeader.RepresentedPlayer);
+        ChangeLeader(newLeader.Player);
     }
 
     /// <summary>
     /// Registers a player entity with this player mover.
     /// </summary>
     /// <param name="player">The player to register with this mover.</param>
-    public void RegisterPlayer(PlayerEntity player)
+    public void RegisterPlayer(PlayerObject player)
     {
         if(OnRegisterPlayer(player))
             m_registeredPlayers.Add(player);
@@ -57,8 +62,15 @@ public class BasePlayerMover : RoomMover
     /// </summary>
     /// <param name="player">The player to register.</param>
     /// <returns>True if the player should be registered.</returns>
-    protected virtual bool OnRegisterPlayer(PlayerEntity player)
+    protected virtual bool OnRegisterPlayer(PlayerObject player)
     {
         return true;
+    }
+
+    protected override IEnumerable<StateDelegate> OnEnterRoom()
+    {
+        ChangeLeader();
+
+        return base.OnEnterRoom();
     }
 }

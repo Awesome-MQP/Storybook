@@ -299,6 +299,11 @@ public class PhotonPlayer
         return GetNextFor(this.ID);
     }
 
+    public PhotonPlayer GetPrev()
+    {
+        return GetPrevFor(this.ID);
+    }
+
     public PhotonPlayer GetNextFor(PhotonPlayer currentPlayer)
     {
         if (currentPlayer == null)
@@ -306,6 +311,13 @@ public class PhotonPlayer
             return null;
         }
         return GetNextFor(currentPlayer.ID);
+    }
+
+    public PhotonPlayer GetPrevFor(PhotonPlayer currentPlayer)
+    {
+        if (currentPlayer == null)
+            return null;
+        return GetPrevFor(currentPlayer.ID);
     }
 
     public PhotonPlayer GetNextFor(int currentPlayerId)
@@ -336,6 +348,36 @@ public class PhotonPlayer
         //UnityEngine.Debug.LogWarning(this.RoomReference.GetPlayer(lowestId));
         //if (nextHigherId != int.MaxValue) UnityEngine.Debug.LogWarning(this.RoomReference.GetPlayer(nextHigherId));
         return (nextHigherId != int.MaxValue) ? players[nextHigherId] : players[lowestId];
+    }
+
+    public PhotonPlayer GetPrevFor(int currentPlayerId)
+    {
+        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
+        {
+            return null;
+        }
+
+        Dictionary<int, PhotonPlayer> players = PhotonNetwork.networkingPeer.mActors;
+        int nextLowestId = int.MinValue;    // we look for the next higher ID
+        int highestId = currentPlayerId;     // if we are the player with the highest ID, there is no higher and we return to the lowest player's id
+
+        foreach (int playerid in players.Keys)
+        {
+            if (playerid > highestId)
+            {
+                highestId = playerid;        // less than any other ID (which must be at least less than this player's id).
+            }
+            else if (playerid < currentPlayerId && playerid > nextLowestId)
+            {
+                nextLowestId = playerid;    // more than our ID and less than those found so far.
+            }
+        }
+
+        //UnityEngine.Debug.LogWarning("Debug. " + currentPlayerId + " lower: " + lowestId + " higher: " + nextHigherId + " ");
+        //UnityEngine.Debug.LogWarning(this.RoomReference.GetPlayer(currentPlayerId));
+        //UnityEngine.Debug.LogWarning(this.RoomReference.GetPlayer(lowestId));
+        //if (nextHigherId != int.MaxValue) UnityEngine.Debug.LogWarning(this.RoomReference.GetPlayer(nextHigherId));
+        return (nextLowestId != int.MinValue) ? players[nextLowestId] : players[highestId];
     }
 
     /// <summary>

@@ -1,36 +1,20 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Code.Scripts.Game.Player;
-using ExitGames.Client.Photon;
-using Photon;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Networking;
 
 /// <summary>
 /// The representation of the real world player and there stats.
 /// </summary>
-public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
+public class PlayerEntity : PlayerObject
 {
-    [SyncProperty]
-    public string Name
-    {
-        get { return m_name; }
-        protected set
-        {
-            m_name = value;
-            PropertyChanged();
-        }
-    }
-
     [SyncProperty]
     public int HitPoints
     {
         get { return m_hitPoints; }
         protected set
         {
-            m_hitPoints = value;
+            Assert.IsTrue(ShouldBeChanging);
+
+            m_hitPoints = Mathf.Clamp(value, 0, m_maxHitPoints);
             PropertyChanged();
         }
     }
@@ -41,6 +25,8 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         get { return m_maxHitPoints; }
         protected set
         {
+            Assert.IsTrue(ShouldBeChanging);
+
             m_maxHitPoints = value;
             PropertyChanged();
         }
@@ -52,6 +38,8 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         get { return m_attack; }
         protected set
         {
+            Assert.IsTrue(ShouldBeChanging);
+
             m_attack = value;
             PropertyChanged();
         }
@@ -63,6 +51,8 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         get { return m_defense; }
         protected set
         {
+            Assert.IsTrue(ShouldBeChanging);
+
             m_defense = value;
             PropertyChanged();
         }
@@ -74,52 +64,20 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
         get { return m_speed; }
         protected set
         {
+            Assert.IsTrue(ShouldBeChanging);
+
             m_speed = value;
             PropertyChanged();
         }
     }
 
-    [SyncProperty]
-    public PhotonPlayer RepresentedPlayer
+    public override void OnStartOwner(bool wasSpawn)
     {
-        get { return m_photonPlayer; }
-        protected set
-        {
-            s_playerLookup.Remove(m_photonPlayer);
-            m_photonPlayer = value;
-            s_playerLookup.Add(m_photonPlayer, this);
-            s_playerQueue.AddLast(this);
-            PropertyChanged();
-        }
+        m_inventory = GetComponentInChildren<Inventory>();
+        Assert.IsNotNull(m_inventory);
+
+        m_inventory.photonView.TransferController(Player);
     }
-
-    public static PlayerEntity GetPlayerEntity(PhotonPlayer player)
-    {
-        PlayerEntity entity;
-        if(s_playerLookup.TryGetValue(player, out entity))
-            return entity;
-
-        return null;
-    }
-
-    public void Construct(PhotonPlayer player)
-    {
-        Assert.IsTrue(IsMine);
-        Assert.IsFalse(m_hasConstructed);
-
-        RepresentedPlayer = player;
-
-        m_hasConstructed = true;
-    }
-
-    protected virtual void OnDestroy()
-    {
-        s_playerLookup.Remove(m_photonPlayer);
-        s_playerQueue.Remove(this);
-    }
-
-    [SerializeField]
-    private string m_name = string.Empty;
 
     [SerializeField]
     private int m_hitPoints = 10;
@@ -139,10 +97,5 @@ public class PlayerEntity : PunBehaviour, IConstructable<PhotonPlayer>
     [SerializeField]
     private int m_luck = 1;
 
-    private PhotonPlayer m_photonPlayer;
-
-    private bool m_hasConstructed;
-
-    private static Dictionary<PhotonPlayer, PlayerEntity> s_playerLookup = new Dictionary<PhotonPlayer, PlayerEntity>();
-    private static LinkedList<PlayerEntity> s_playerQueue = new LinkedList<PlayerEntity>();
+    private Inventory m_inventory;
 }

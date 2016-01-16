@@ -28,24 +28,9 @@ public class MusicManager : MonoBehaviour {
 
     public AudioClip testAudio = null;
 
-    private AudioClip m_roomMusic;
-    private AudioClip m_fightMusic;
-
     private AudioClip[] m_currentMusicTracks;
 
     // ====PROPERTIES====
-    public AudioClip RoomMusic
-    {
-        get { return m_roomMusic; }
-        set { m_roomMusic = value; }
-    }
-
-    public AudioClip FightMusic
-    {
-        get { return m_fightMusic; }
-        set { m_fightMusic = value; }
-    }
-
     public AudioClip[] MusicTracks
     {
         get { return m_currentMusicTracks; }
@@ -168,19 +153,6 @@ public class MusicManager : MonoBehaviour {
                 m_currentFadeState = FadeState.none;
             }
         }
-    }
-
-    // A call to switch to the fight music.
-    public void switchToFightMusic()
-    {
-        Fade(FightMusic, 5, true);
-    }
-
-    // A call to switch back to the room music.
-    // This is primarily used when exiting combat.
-    public void switchToRoomMusic()
-    {
-        Fade(RoomMusic, 5, true);
     }
 
     // GUI to test the music

@@ -31,7 +31,6 @@ public class ShopRoom : RoomObject {
         Debug.Log("Welcome to the shop!");
         m_musicManager.MusicTracks = m_musicTracks;
         StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
-        //m_musicManager.RoomMusic = m_roomMusic;
         return;
     }
 

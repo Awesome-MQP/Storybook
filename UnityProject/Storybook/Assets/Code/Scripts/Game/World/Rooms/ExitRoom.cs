@@ -29,7 +29,6 @@ public class ExitRoom : RoomObject {
     {
         StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
         m_musicManager.MusicTracks = m_musicTracks;
-        //m_musicManager.RoomMusic = m_roomMusic;
         return;
     }
 

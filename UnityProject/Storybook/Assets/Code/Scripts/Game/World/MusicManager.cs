@@ -31,6 +31,8 @@ public class MusicManager : MonoBehaviour {
     private AudioClip m_roomMusic;
     private AudioClip m_fightMusic;
 
+    private AudioClip[] m_currentMusicTracks;
+
     // ====PROPERTIES====
     public AudioClip RoomMusic
     {
@@ -44,6 +46,12 @@ public class MusicManager : MonoBehaviour {
         set { m_fightMusic = value; }
     }
 
+    public AudioClip[] MusicTracks
+    {
+        get { return m_currentMusicTracks; }
+        set { m_currentMusicTracks = value; }
+    }
+
     // ====METHODS====
     void Awake()
     {
@@ -54,12 +62,12 @@ public class MusicManager : MonoBehaviour {
     
     // Fade in to a music track
     // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
-    public void Fade(AudioClip clip, float volume, bool loop)
+    public IEnumerator Fade(AudioClip clip, float volume, bool loop)
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {
             Debug.Log("no clip/clip is the same as the one we already have");
-            return;
+            yield return null;
         }
 
         m_nextMusicToPlay = clip;
@@ -75,11 +83,13 @@ public class MusicManager : MonoBehaviour {
             else
             {
                 FadeToNextClip();
+                yield return null;
             }
         }
         else
         {
             FadeToNextClip();
+            yield return null;
         }
     }
 

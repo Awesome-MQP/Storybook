@@ -100,7 +100,6 @@ public class GameManager : Photon.PunBehaviour
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
 
-            m_musicMgr.switchToFightMusic();
         }
     }
 
@@ -145,7 +144,7 @@ public class GameManager : Photon.PunBehaviour
         PhotonNetwork.Destroy(currentCombatInstance);
         Destroy(currentCombatInstance);
 
-        m_musicMgr.switchToRoomMusic();
+        StartCoroutine(m_musicMgr.Fade(m_musicMgr.MusicTracks[0], 5, true));
 
         _TransitionToOverworld();
 

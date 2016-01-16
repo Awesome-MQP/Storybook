@@ -11,6 +11,14 @@ public class CombatRoom : RoomObject {
     private AudioClip m_fightMusic;
 
     [SerializeField]
+    private AudioClip[] m_musicTracks; // This array holds all music tracks for a room, in an effort to make it more general. 
+                                       // To make accessing tracks from this more easy to follow, use this standard for putting tracks into the array
+                                       // INDEX | TRACK
+                                       // 0.......RoomMusic
+                                       // 1.......FightMusic
+                                       // 2+......Miscellaneous
+
+    [SerializeField]
     private List<GameObject> m_roomEnemiesOverworld = new List<GameObject>();
     [SerializeField]
     private EnemyTeam m_roomEnemies;
@@ -39,9 +47,12 @@ public class CombatRoom : RoomObject {
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
+        /*
         m_musicManager.FightMusic = m_fightMusic;
         m_musicManager.RoomMusic = m_roomMusic;
-        m_musicManager.Fade(m_roomMusic, 5, true);
+        */
+        m_musicManager.MusicTracks = m_musicTracks;
+        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -70,7 +81,7 @@ public class CombatRoom : RoomObject {
     {
         if (!m_wonCombat)
         {
-            //m_musicManager.Fade(m_fightMusic, 5, true);
+            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
             m_gameManager.TransitionToCombat();
             return;
         }

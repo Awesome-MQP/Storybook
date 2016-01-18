@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MatchMaker : Photon.PunBehaviour {
 
+    private int[] m_idMap = new int[4];
+
     private bool isFirst = false;
     private static PhotonView ScenePhotonView;
 

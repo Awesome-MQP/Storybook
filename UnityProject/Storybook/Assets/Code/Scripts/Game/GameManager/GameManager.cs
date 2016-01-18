@@ -43,7 +43,6 @@ public class GameManager : Photon.PunBehaviour
     protected override void Awake()
     {
         base.Awake();
-
         s_instance = this;
     }
 

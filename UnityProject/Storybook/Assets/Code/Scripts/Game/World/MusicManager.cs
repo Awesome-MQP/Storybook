@@ -28,20 +28,13 @@ public class MusicManager : MonoBehaviour {
 
     public AudioClip testAudio = null;
 
-    private AudioClip m_roomMusic;
-    private AudioClip m_fightMusic;
+    private AudioClip[] m_currentMusicTracks;
 
     // ====PROPERTIES====
-    public AudioClip RoomMusic
+    public AudioClip[] MusicTracks
     {
-        get { return m_roomMusic; }
-        set { m_roomMusic = value; }
-    }
-
-    public AudioClip FightMusic
-    {
-        get { return m_fightMusic; }
-        set { m_fightMusic = value; }
+        get { return m_currentMusicTracks; }
+        set { m_currentMusicTracks = value; }
     }
 
     // ====METHODS====
@@ -54,12 +47,12 @@ public class MusicManager : MonoBehaviour {
     
     // Fade in to a music track
     // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
-    public void Fade(AudioClip clip, float volume, bool loop)
+    public IEnumerator Fade(AudioClip clip, float volume, bool loop)
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {
             Debug.Log("no clip/clip is the same as the one we already have");
-            return;
+            yield return null;
         }
 
         m_nextMusicToPlay = clip;
@@ -75,11 +68,13 @@ public class MusicManager : MonoBehaviour {
             else
             {
                 FadeToNextClip();
+                yield return null;
             }
         }
         else
         {
             FadeToNextClip();
+            yield return null;
         }
     }
 
@@ -158,19 +153,6 @@ public class MusicManager : MonoBehaviour {
                 m_currentFadeState = FadeState.none;
             }
         }
-    }
-
-    // A call to switch to the fight music.
-    public void switchToFightMusic()
-    {
-        Fade(FightMusic, 5, true);
-    }
-
-    // A call to switch back to the room music.
-    // This is primarily used when exiting combat.
-    public void switchToRoomMusic()
-    {
-        Fade(RoomMusic, 5, true);
     }
 
     // GUI to test the music

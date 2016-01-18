@@ -7,6 +7,14 @@ public class ExitRoom : RoomObject {
     [SerializeField]
     private AudioClip m_roomMusic;
 
+    [SerializeField]
+    private AudioClip[] m_musicTracks; // This array holds all music tracks for a room, in an effort to make it more general. 
+                                       // To make accessing tracks from this more easy to follow, use this standard for putting tracks into the array
+                                       // INDEX | TRACK
+                                       // 0.......RoomMusic
+                                       // 1.......FightMusic
+                                       // 2+......Miscellaneous
+
     private MusicManager m_musicManager;
 
     // Use this for initialization
@@ -19,8 +27,8 @@ public class ExitRoom : RoomObject {
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
-        m_musicManager.Fade(m_roomMusic, 5, true);
-        m_musicManager.RoomMusic = m_roomMusic;
+        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.MusicTracks = m_musicTracks;
         return;
     }
 

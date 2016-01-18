@@ -5,8 +5,8 @@ public class TestGaussianRandom : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("TEST");
-        double randomNumber = GaussianRandom.GetRandomNumber();
+        GaussianRandom gr = new GaussianRandom();
+        double randomNumber = gr.NextDouble();
         Debug.Log("Gaussian Random Number = " + randomNumber);
 	}
 }

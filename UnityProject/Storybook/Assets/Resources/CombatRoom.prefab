@@ -1295,8 +1295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11405634}
-  m_isDoorEnabled: 1
 --- !u!114 &11405634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1350,17 +1348,17 @@ MonoBehaviour:
   m_cameraNode: {fileID: 431516}
   m_roomSize: 0
   m_roomGenre: 1
-  m_roomFeature: Combat
-  m_player1Pos: {fileID: 11449778}
-  m_player2Pos: {fileID: 11455842}
-  m_player3Pos: {fileID: 11446770}
-  m_player4Pos: {fileID: 11442988}
+  m_roomFeatures: []
   m_northDoor: {fileID: 11402610}
   m_eastDoor: {fileID: 11452742}
   m_southDoor: {fileID: 11426776}
   m_westDoor: {fileID: 11482644}
+  m_centerNode: {fileID: 0}
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
   m_fightMusic: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
+  m_musicTracks:
+  - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+  - {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
   m_roomEnemiesOverworld: []
   m_roomEnemies: {fileID: 0}
   m_enemyPosList:
@@ -1406,8 +1404,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11434584}
-  m_isDoorEnabled: 1
 --- !u!114 &11428470
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1650,8 +1646,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11438190}
-  m_isDoorEnabled: 1
 --- !u!114 &11455842
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1809,8 +1803,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11430208}
-  m_isDoorEnabled: 1
 --- !u!114 &11497304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1946,6 +1938,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_LocalRotation.x
       value: .440837294
       objectReference: {fileID: 0}
@@ -1981,6 +1977,14 @@ Prefab:
       propertyPath: m_roomMusic
       value: 
       objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 143978}

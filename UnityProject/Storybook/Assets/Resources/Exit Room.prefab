@@ -1376,8 +1376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11485966}
-  m_isDoorEnabled: 1
 --- !u!114 &11426564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1419,16 +1417,15 @@ MonoBehaviour:
   m_cameraNode: {fileID: 491088}
   m_roomSize: 0
   m_roomGenre: 1
-  m_roomFeature: Exit
-  m_player1Pos: {fileID: 11457250}
-  m_player2Pos: {fileID: 11433066}
-  m_player3Pos: {fileID: 11439344}
-  m_player4Pos: {fileID: 11430098}
+  m_roomFeatures: []
   m_northDoor: {fileID: 11487144}
   m_eastDoor: {fileID: 11425552}
   m_southDoor: {fileID: 11440414}
   m_westDoor: {fileID: 11488488}
+  m_centerNode: {fileID: 0}
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+  m_musicTracks:
+  - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
 --- !u!114 &11429394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1512,8 +1509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11495784}
-  m_isDoorEnabled: 1
 --- !u!114 &11457250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1749,8 +1744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11431992}
-  m_isDoorEnabled: 1
 --- !u!114 &11488488
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1762,8 +1755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_doorNode: {fileID: 11473496}
-  m_isDoorEnabled: 1
 --- !u!114 &11494532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1938,7 +1929,15 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_roomMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
     m_RemovedComponents: []

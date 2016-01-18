@@ -24,9 +24,10 @@ public class GameManager : Photon.PunBehaviour
     [SerializeField]
     private DungeonMaster m_dungeonMaster;
 
-    [SerializeField]
     [Tooltip("The player object to spawn for all players in the game.")]
     private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
+    private int m_deckSize;
 
     private GameObject m_combatInstance;
     private MusicManager m_musicMgr;
@@ -181,6 +182,19 @@ public class GameManager : Photon.PunBehaviour
         */
     }
 
+    public PlayerInventory GetLocalPlayerInventory()
+    {
+        PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
+        foreach(PlayerInventory pi in allInventories)
+        {
+            if (pi.PlayerId == PhotonNetwork.player.ID)
+            {
+                return pi;
+            }
+        }
+        return null;
+    }
+    
     /// <summary>
     /// Gets all of the PlayerObject in the game
     /// </summary>
@@ -285,5 +299,10 @@ public class GameManager : Photon.PunBehaviour
     {
         get { return m_playerTeamForCombat; }
         set { m_playerTeamForCombat = value; }
+    }
+
+    public int DeckSize
+    {
+        get { return m_deckSize; }
     }
 }

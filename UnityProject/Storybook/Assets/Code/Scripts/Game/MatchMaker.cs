@@ -39,6 +39,10 @@ public class MatchMaker : Photon.PunBehaviour {
         if (isFirst && GUILayout.Button("Start Scene Fade"))
         {
             PhotonNetwork.LoadLevel("FaderScene1");
+        }
+        if (isFirst && GUILayout.Button("Load Level Bug"))
+        {
+            PhotonNetwork.LoadLevel("LoadLevelBugScene");
             Destroy(this);
         }
     }

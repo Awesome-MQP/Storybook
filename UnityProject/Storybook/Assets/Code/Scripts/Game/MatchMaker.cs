@@ -34,6 +34,11 @@ public class MatchMaker : Photon.PunBehaviour {
             PhotonNetwork.LoadLevel("TestInventory");
             Destroy(this);
         }
+        if (isFirst && GUILayout.Button("Load Level Bug"))
+        {
+            PhotonNetwork.LoadLevel("LoadLevelBugScene");
+            Destroy(this);
+        }
     }
 
     /// <summary>

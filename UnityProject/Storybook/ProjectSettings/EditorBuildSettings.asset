@@ -13,3 +13,5 @@ EditorBuildSettings:
     path: Assets/Levels/Demo/WorldMovementTest.unity
   - enabled: 1
     path: Assets/Levels/Demo/TestInventory.unity
+  - enabled: 1
+    path: Assets/Levels/Demo/LoadLevelBugScene.unity

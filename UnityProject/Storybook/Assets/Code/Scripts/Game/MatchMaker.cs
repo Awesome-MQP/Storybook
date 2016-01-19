@@ -36,6 +36,11 @@ public class MatchMaker : Photon.PunBehaviour {
             PhotonNetwork.LoadLevel("TestInventory");
             Destroy(this);
         }
+        if (isFirst && GUILayout.Button("Start Scene Fade"))
+        {
+            PhotonNetwork.LoadLevel("FaderScene1");
+            Destroy(this);
+        }
     }
 
     /// <summary>

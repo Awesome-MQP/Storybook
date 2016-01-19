@@ -22,3 +22,10 @@ sysinfo.txt
 /.vs/
 /Builds/
 /compilation log.txt
+
+# Ignore C-Sharp meta files
+*.cs.meta
+
+# Ignore ProjectSettings, ProjectVersion
+*/ProjectSettings.asset
+*/ProjectVersion.txt

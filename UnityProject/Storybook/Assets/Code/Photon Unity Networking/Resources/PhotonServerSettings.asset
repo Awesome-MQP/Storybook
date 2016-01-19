@@ -70,4 +70,5 @@ MonoBehaviour:
   - RPCSwitchCharacterToWalking
   - DisableDoor
   - _rpcMoveInDirection
+  - BeginFadeOverNetwork
   DisableAutoOpenWizard: 1

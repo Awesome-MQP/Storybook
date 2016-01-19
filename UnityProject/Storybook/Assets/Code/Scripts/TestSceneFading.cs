@@ -3,6 +3,9 @@ using System.Collections;
 
 public class TestSceneFading : MonoBehaviour {
 
+    [SerializeField]
+    SceneFading sceneFader;
+
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(this);
@@ -11,9 +14,16 @@ public class TestSceneFading : MonoBehaviour {
 
     private IEnumerator loadNextScene()
     {
-        yield return new WaitForSeconds(5.0f);
-        float fadeTime = GameObject.Find("Fader").GetComponent<SceneFading>().BeginFade(1);
+        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/" + sceneFader.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(faderObject.GetPhotonView());
+        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        yield return new WaitForSeconds(2.0f);
+        float fadeTime = fader.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
-        Application.LoadLevel("FaderScene2");
+        PhotonNetwork.LoadLevel("FaderScene2");
+        fader.LevelWasLoaded();
+        yield return new WaitForSeconds(fadeTime);
+        Destroy(fader.gameObject);
+        Debug.Log("Fader destroyed");
     }
 }

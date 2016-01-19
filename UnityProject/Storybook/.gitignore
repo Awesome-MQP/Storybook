@@ -26,6 +26,7 @@ sysinfo.txt
 # Ignore C-Sharp meta files
 *.cs.meta
 
-# Ignore ProjectSettings, ProjectVersion
+# Ignore ProjectSettings, ProjectVersion, AnalyticsManager
 */ProjectSettings.asset
 */ProjectVersion.txt
+*/UnityAnalyticsManager.asset

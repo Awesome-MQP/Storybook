@@ -17,6 +17,11 @@ public abstract class PlayerControlEventListener : IEventListener
         get { return EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>(); }
     }
 
+    protected PlayerControlEventListener()
+    {
+        Dispatcher.RegisterEventListener(this);
+    }
+
     public delegate void DirectionInputSelectedCallback(Door.Direction direction);
 
     public abstract void OnWaitingForDirectionInput(DirectionInputSelectedCallback callback);

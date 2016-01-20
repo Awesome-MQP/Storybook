@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System;
 
-public class TestEnemyAttackMove : AIMove {
+public class HPDrain : AIMove
+{
 
     private bool IS_MOVE_ATTACK = true;
 
@@ -21,7 +22,9 @@ public class TestEnemyAttackMove : AIMove {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, combatPawn.Defense);
+            moveDamage = moveDamage / 2;
             combatPawn.DealDamageToPawn(moveDamage);
+            MoveOwner.IncreasePawnHP(moveDamage);
         }
     }
 

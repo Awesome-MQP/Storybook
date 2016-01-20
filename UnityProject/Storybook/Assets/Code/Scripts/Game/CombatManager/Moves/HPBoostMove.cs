@@ -1,57 +1,35 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 using System;
+using System.Collections.Generic;
 
-public class TestEnemyAttackMove : AIMove {
+public class HPBoostMove : AIMove
+{
 
-    private bool IS_MOVE_ATTACK = true;
+    private bool IS_MOVE_ATTACK = false;
 
-    private bool m_isMoveStarted = false;
+    [SerializeField]
+    private int m_HPIncreaseValue = 3;
 
-    void Start()
-    {
-        SetIsMoveAttack(IS_MOVE_ATTACK);
-    }
-
-    /// <summary>
-    /// Deals combat damage to all the player pawns in the target list
-    /// </summary>
     protected override void DoMoveEffect()
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, combatPawn.Defense);
-            combatPawn.DealDamageToPawn(moveDamage);
+            combatPawn.IncreasePawnHP(m_HPIncreaseValue);
         }
     }
 
     public override void ExecuteMove()
     {
-        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
-        Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
-        if (!m_isMoveStarted)
-        {
-            playerAnimator.SetBool("IdleToIdle", false);
-            playerAnimator.SetBool("WalkToIdle", false);
-            playerAnimator.SetBool("AttackToIdle", false);
-            playerAnimator.SetBool("IdleToAttack", true);
-            m_isMoveStarted = true;
-        }
         SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
-        if (TimeSinceMoveStarted >= 0.5f && !IsMoveEffectCompleted)
+        if (TimeSinceMoveStarted >= 0.5 && !IsMoveEffectCompleted)
         {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= 1.8f)
+        else if (TimeSinceMoveStarted >= 1)
         {
-            Debug.Log("Page move is complete");
-            playerAnimator.SetBool("IdleToAttack", false);
-            playerAnimator.SetBool("AttackToIdle", true);
-            playerAnimator.SetBool("IdleToIdle", true);
             SetIsMoveComplete(true);
-            m_isMoveStarted = false;
-            SetTimeSinceMoveStarted(0);
         }
     }
 
@@ -61,9 +39,6 @@ public class TestEnemyAttackMove : AIMove {
     /// <param name="possibleTargets">The list of CombatPawn that are the possible targets for the move</param>
     public override void ChooseTargets(HashSet<CombatPawn> possibleTargets)
     {
-        // Reset the targets list before starting
-        SetMoveTargets(new List<CombatPawn>());
-
         base.ChooseTargets(possibleTargets);
         if (MoveTargets.Length > 0)
         {

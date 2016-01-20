@@ -13,29 +13,21 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     [SerializeField]
     private float m_health;
-
-    [SerializeField]
     private float m_healthMod = 0;
 
     [SerializeField]
     private float m_speed;
     private float m_speedBoost = 0;
-
-    [SerializeField]
     private float m_speedMod = 0;
 
     [SerializeField]
     private float m_defense;
     private float m_defenseBoost = 0;
-
-    [SerializeField]
     private float m_defenseMod = 0;
 
     [SerializeField]
     private float m_attack;
     private float m_attackBoost = 0;
-
-    [SerializeField]
     private float m_attackMod = 0;
 
     [SerializeField]

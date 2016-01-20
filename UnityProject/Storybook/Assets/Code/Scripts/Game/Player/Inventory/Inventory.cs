@@ -83,7 +83,7 @@ public abstract class Inventory : PunBehaviour
         get { return m_slots[index]; }
     }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
         m_items = new Item[m_staticSize];
         m_itemsSet = new HashSet<Item>();

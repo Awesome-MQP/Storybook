@@ -36,7 +36,7 @@ public abstract class CombatAI : CombatPawn {
         get { return m_enemyMoveList; }
     }
 
-    protected void Awake()
+    override protected void Awake()
     {
         InitializeVariables();
         foreach (CombatMove move in EnemyMoves)

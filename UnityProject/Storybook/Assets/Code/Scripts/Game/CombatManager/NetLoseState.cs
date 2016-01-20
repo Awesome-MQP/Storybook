@@ -8,7 +8,7 @@ public class NetLoseState : NetworkState {
     private int m_playersReady = 0;
     private int m_trigger = 0;
 
-    void Awake()
+    override protected void Awake()
     {
         Debug.Log("Entering lose state");
         SetCombatManager(FindObjectOfType<CombatManager>());

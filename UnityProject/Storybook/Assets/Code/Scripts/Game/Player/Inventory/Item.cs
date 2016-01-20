@@ -17,7 +17,7 @@ public abstract class Item : PunBehaviour
         get { return m_index; }
     }
 
-    public Inventory Owner
+    public Inventory OwnerInventory
     {
         get { return m_inventory; }
     }

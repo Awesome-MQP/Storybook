@@ -12,7 +12,7 @@ public class NetExecuteState : NetworkState {
     private int m_playersReady = 0;
     private bool m_isClientReady = false;
 
-    void Awake()
+    override protected void Awake()
     {
         SetCombatManager(FindObjectOfType<CombatManager>());
         Debug.Log("Starting NetExecuteState");

@@ -36,7 +36,7 @@ public abstract class CombatPlayer : CombatPawn
         set { m_selectedPageIndex = value; }
     }
 
-    public void Start()
+    new public void Start()
     {
         base.Start();
         /*

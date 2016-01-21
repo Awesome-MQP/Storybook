@@ -39,31 +39,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 10
-  m_health: 10
-  m_healthMod: 0
-  m_speed: 8
-  m_speedMod: 0
-  m_defense: 3
-  m_defenseMod: 0
+  m_maxHealth: 12
+  m_health: 12
+  m_speed: 6
+  m_defense: 4
   m_attack: 3
-  m_attackMod: 0
-  m_genre: 1
-  m_aggressionValue: 50
-  m_currentMana: 3
+  m_genre: 2
+  m_aggressionValue: 60
+  m_currentMana: 2
   m_manaPerTurn: 3
   m_enemyMoveList:
-  - {fileID: 11491974, guid: 114cc39c67863d847a7ea57a88f7a8de, type: 2}
-  - {fileID: 11446990, guid: 37606de87b761fd45b253b109fba84d9, type: 2}
-  - {fileID: 11433056, guid: 7e9b9856bfea81241abe0a39b978b7b6, type: 2}
-  - {fileID: 11471550, guid: 397c411c7a0bee3408f50640ae0dba15, type: 2}
+  - {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7, type: 2}
+  - {fileID: 11460410, guid: a5560d21a2fa59846a574c30dd04b38e, type: 2}
+  - {fileID: 11471700, guid: 9729ea988ec12a6469d227ffaa7bfe14, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_genre
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_maxHealth
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_health
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_speed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_defense
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_aggressionValue
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_currentMana
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11460410, guid: a5560d21a2fa59846a574c30dd04b38e,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11471700, guid: 9729ea988ec12a6469d227ffaa7bfe14,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[3]
+      value: 
+      objectReference: {fileID: 11471550, guid: 397c411c7a0bee3408f50640ae0dba15,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 182652}

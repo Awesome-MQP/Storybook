@@ -84,6 +84,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
     {
         m_health -= damageAmount;
 
+        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+        // Adds support to UI
+        combatMenu.UpdateHitpointsOfPlayer(PhotonNetwork.player.ID, m_health);
+
         if (m_health <= 0)
         {
             m_isAlive = false;

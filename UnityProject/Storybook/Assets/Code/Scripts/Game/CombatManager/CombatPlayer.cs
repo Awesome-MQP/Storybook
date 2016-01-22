@@ -54,6 +54,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawStartingHand()
     {
+        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+
         for (int i = 0; i < m_handSize; i++)
         {
             Page currentPage = m_playerDeck.GetNextPage();
@@ -66,7 +68,8 @@ public abstract class CombatPlayer : CombatPawn
 
             if (PhotonNetwork.player.ID == PawnId)
             {
-                DrawPageOnScreen(currentPage, i);
+                //DrawPageOnScreen(currentPage, i);
+                combatMenu.DrawPage(currentPage, i);
             }
         }
     }
@@ -105,6 +108,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void RemovePageFromHand(Page pageToRemove)
     {
+        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+
         m_playerHand.Remove(pageToRemove);
 
         if (PhotonNetwork.isMasterClient)
@@ -114,8 +119,10 @@ public abstract class CombatPlayer : CombatPawn
 
         if (PhotonNetwork.player.ID == PawnId)
         {
-            Destroy(m_displayedPages[SelectedPageIndex]);
-            ShiftPages(SelectedPageIndex);
+            combatMenu.DestroyPage(SelectedPageIndex);
+            //Destroy(m_displayedPages[SelectedPageIndex]);
+            combatMenu.ShiftPages(SelectedPageIndex);
+            //ShiftPages(SelectedPageIndex);
         }
 
 
@@ -167,6 +174,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawPageForTurn()
     {
+        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
         if (PhotonNetwork.isMasterClient)
@@ -175,7 +184,8 @@ public abstract class CombatPlayer : CombatPawn
         }
         if (PhotonNetwork.player.ID == PawnId)
         {
-            DrawPageOnScreen(currentPage, 4);
+            //DrawPageOnScreen(currentPage, 4);
+            combatMenu.DrawPage(currentPage, 4);
         }
     }
 

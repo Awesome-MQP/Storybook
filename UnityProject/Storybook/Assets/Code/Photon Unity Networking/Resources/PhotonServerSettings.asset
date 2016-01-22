@@ -71,4 +71,5 @@ MonoBehaviour:
   - DisableDoor
   - _rpcMoveInDirection
   - BeginFadeOverNetwork
+  - _rpcOnStartGame
   DisableAutoOpenWizard: 1

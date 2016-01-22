@@ -207,7 +207,8 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return PhotonPlayer.Find(this.ownerId);
+            PhotonPlayer val = PhotonPlayer.Find(this.ownerId);
+            return val ?? PhotonNetwork.masterClient;
         }
     }
 
@@ -366,7 +367,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     internal bool DoesExistOnPlayer(PhotonPlayer player)
     {
-        return isMine && !isSceneView && existsOn.Contains(player);
+        return isMine && (isSceneView || existsOn.Contains(player));
     }
 
     internal bool ShouldExistOnPlayer(PhotonPlayer player)
@@ -376,14 +377,24 @@ public class PhotonView : Photon.MonoBehaviour
 
     internal bool ShouldCreateOnPlayer(PhotonPlayer player)
     {
-        return isMine && !isSceneView && ShouldExistOnPlayer(player) && !DoesExistOnPlayer(player);
+        return !player.isLocal && isMine && !isSceneView && ShouldExistOnPlayer(player) && !DoesExistOnPlayer(player);
+    }
+
+    internal bool IsSpawnedOnPlayer(PhotonPlayer player)
+    {
+        return isMine && (player.isLocal && HasSpawned) || spawnedOn.Contains(player);
+    }
+
+    internal bool ShouldSpawnOnPlayer(PhotonPlayer player)
+    {
+        return !player.isLocal && isMine && HasSpawned && !IsSpawnedOnPlayer(player) && CheckRelevance(player);
     }
 
     /// <summary>
     /// Registers this object to exist on a player
     /// </summary>
     /// <param name="player">The player to exist on</param>
-    internal void RegisterToPlayer(PhotonPlayer player)
+    internal void OnCreatedOnPlayer(PhotonPlayer player)
     {
         if (isMine && CheckRelevance(player))
         {
@@ -391,9 +402,23 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    internal void UnregisterToPlayer(PhotonPlayer player)
+    internal void OnDestroyedOnPlayer(PhotonPlayer player)
     {
         existsOn.Remove(player);
+        OnDespawnOnPlayer(player);
+    }
+
+    internal void OnSpawnedOnPlayer(PhotonPlayer player)
+    {
+        if (isMine && CheckRelevance(player))
+        {
+            spawnedOn.Add(player);
+        }
+    }
+
+    internal void OnDespawnOnPlayer(PhotonPlayer player)
+    {
+        spawnedOn.Remove(player);
     }
 
     /// <summary>
@@ -429,10 +454,13 @@ public class PhotonView : Photon.MonoBehaviour
     /// </remarks>
     public void TransferOwnership(int newOwnerId)
     {
-        if (HasSpawned && isMine)
+        //An object must be instantiated and spawned by the same owner, ownership cannot be transfered if a spawn has not happened yet.
+        if (isMine && HasSpawned)
         {
-            PhotonNetwork.networkingPeer.TransferOwnership(this.viewID, newOwnerId);
             this.ownerId = newOwnerId;// immediately switch ownership locally, to avoid more updates sent from this client.
+            RebuildNetworkRelavance();
+            PhotonNetwork.networkingPeer.TransferOwnership(this.viewID, newOwnerId);
+            SendMessage("OnStartPeer", false, SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -443,11 +471,16 @@ public class PhotonView : Photon.MonoBehaviour
 
     public void TransferController(int newControllerId)
     {
-        if (isMine && CheckRelevance(PhotonPlayer.Find(newControllerId)))
+        if (isMine)
         {
-            if(HasSpawned)
-                PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
             controllerId = newControllerId;
+            if (HasSpawned)
+            {
+                RebuildNetworkRelavance();
+                PhotonNetwork.networkingPeer.TransferController(viewID, newControllerId);
+                SendMessage("OnStartPeer", false, SendMessageOptions.DontRequireReceiver);
+            }
+            
         }
     }
 
@@ -965,6 +998,10 @@ public class PhotonView : Photon.MonoBehaviour
 
     private bool _IsRelevantTo(PhotonPlayer targetPlayer)
     {
+        // Always relevant to the controller or owner player.
+        if (targetPlayer == owner || targetPlayer == Controller)
+            return true;
+
         foreach (Component component in ObservedComponents)
         {
             if (!component)
@@ -1021,7 +1058,17 @@ public class PhotonView : Photon.MonoBehaviour
 
     private void BuildParent()
     {
-        parentView = transform.parent ? transform.parent.GetComponentInParent<PhotonView>() : null;
+        parentView = null;
+
+        Transform parent = transform.parent;
+        while (parent)
+        {
+            parentView = parent.GetComponent<PhotonView>();
+            if (parentView)
+                break;
+
+            parent = parent.parent;
+        }
     }
 
     public static PhotonView Get(Component component)
@@ -1063,6 +1110,7 @@ public class PhotonView : Photon.MonoBehaviour
     private PhotonView parentView;
 
     private HashSet<PhotonPlayer> existsOn = new HashSet<PhotonPlayer>();
+    private HashSet<PhotonPlayer> spawnedOn = new HashSet<PhotonPlayer>(); 
 
     internal int controllerId;
 

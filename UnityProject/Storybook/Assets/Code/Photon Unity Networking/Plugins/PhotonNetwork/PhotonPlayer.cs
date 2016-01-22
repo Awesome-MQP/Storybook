@@ -61,6 +61,26 @@ public class PhotonPlayer
         }
     }
 
+    public string currentLevel
+    {
+        get { return customProperties["lvl"] as string; }
+    }
+
+    public bool isReady
+    {
+        get
+        {
+            if (isLocal && PhotonNetwork.isInLevelLoad)
+                return false;
+            else if (isLocal)
+                return true;
+            else
+            {
+                return currentLevel == PhotonNetwork.masterClient.currentLevel;
+            }
+        }
+    }
+
     ///// <summary>UserId of the player. Sent when room gets created with RoomOptions.publishUserId = true. Useful for FindFriends and blocking slots in a room for expected players.</summary>
     //public string userId { get; internal set; }
 

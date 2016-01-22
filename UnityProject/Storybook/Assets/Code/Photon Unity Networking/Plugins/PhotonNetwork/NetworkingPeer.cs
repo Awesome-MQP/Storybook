@@ -2064,9 +2064,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             case PunEvent.DespawnObject:
                 PhotonNetwork.HandleDespawn((int[]) photonEvent[ParameterCode.Data]);
                 break;
-            case PunEvent.AddScene:
-
-                break;
             default:
                 if (photonEvent.Code < 200)
                 {

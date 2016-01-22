@@ -171,8 +171,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11491578}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 1
@@ -220,8 +220,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11415434}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 3
-  instantiationId: 3
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -247,8 +247,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11463602}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 4
-  instantiationId: 4
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -296,8 +296,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11470836}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 2
-  instantiationId: 2
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -323,8 +323,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11416478}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 5
-  instantiationId: 5
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -341,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
-  m_maxSpeed: 1
+  m_maxSpeed: 10
   m_atTargetThreashHold: 0.1
   m_node: {fileID: 0}
   m_playerPositions:
@@ -363,6 +363,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Name
       value: PlayerMover
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_maxSpeed
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

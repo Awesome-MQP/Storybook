@@ -20,6 +20,8 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     private bool m_atNode;
 
+    private RoomObject m_currentRoom;
+
     /// <summary>
     /// Gets the current room that this mover is considered in.
     /// </summary>
@@ -27,11 +29,14 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     {
         get
         {
+            /*
             MovementNode targetNode = TargetNode;
             if (targetNode)
                 return targetNode.GetComponentInParent<RoomObject>();
 
             return null;
+            */
+            return m_currentRoom;
         }
     }
 
@@ -72,10 +77,13 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// <param name="room">The room to spawn the players in</param>
     public void SpawnInRoom(RoomObject room)
     {
+        Debug.Log("Spawning in room at loc " + room.RoomLocation.X + ", " + room.RoomLocation.Y);
         Assert.IsTrue(IsMine);
         
         TargetNode = room.CenterNode;
         Position = room.CenterNode.transform.position;
+
+        m_currentRoom = room;
 
         StartCoroutine(_stateMachine());
     }
@@ -102,10 +110,40 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
+    public void CreateRoom(Location roomLoc)
+    {
+        Debug.Log("Creating room at " + roomLoc.X + ", " + roomLoc.Y);
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.PlaceRoom(roomLoc);
+    }
+
+    public void MoveToNextRoom(Location newRoomLoc)
+    {
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        RoomObject newRoom = mapManager.GetRoom(newRoomLoc);
+
+        Camera.main.transform.position = newRoom.CameraNode.position;
+        Camera.main.transform.rotation = newRoom.CameraNode.rotation;
+
+        m_currentRoom = newRoom;
+        m_currentRoom.OnRoomEnter();
+
+        SpawnInRoom(newRoom);
+    }
+
+    public void TransitionFromCombat()
+    {
+        Camera.main.transform.position = m_currentRoom.CameraNode.position;
+        Camera.main.transform.rotation = m_currentRoom.CameraNode.rotation;
+    }
+
     protected sealed override void OnArriveAtNode(MovementNode node)
     {
         if (node == CurrentRoom.CenterNode)
+        {
             m_isAtRoomCenter = true;
+            m_currentRoom.OnRoomEvent();
+        }
 
         m_atNode = true;
     }

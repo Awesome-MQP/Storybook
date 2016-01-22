@@ -114,6 +114,7 @@ public class GameManager : Photon.PunBehaviour
         foreach(PlayerWorldPawn player in players)
         {
             player.transform.position = playerMover.PlayerPositions[i].transform.position;
+            playerMover.RegisterPlayerWorldPawn(player);
             i++;
         }
         Camera.main.transform.position = startRoom.CameraNode.position;
@@ -131,6 +132,25 @@ public class GameManager : Photon.PunBehaviour
     {
         Debug.Log("Transitioning to overworld");
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, true);
+    }
+
+    [PunRPC]
+    protected void EnableMovementComponents(bool isEnable)
+    {
+        Debug.Log("Disabling movement components");
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.LoadMap(isEnable);
+        mapManager.enabled = isEnable;
+
+        StorybookPlayerMover playerMover = FindObjectOfType<StorybookPlayerMover>();
+        if (!isEnable)
+        {
+            playerMover.EnterCombat();
+        }
+        else
+        {
+            playerMover.ExitCombat();
+        }
     }
 
     /// <summary>

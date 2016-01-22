@@ -21,6 +21,8 @@ public class Door : MovementNode
 
     private RoomObject m_parentRoomObject;
 
+    private Location m_doorLocation;
+
     private Direction m_direction = Direction.Unknown;
 
     private Location m_nextRoomLocation;
@@ -84,7 +86,8 @@ public class Door : MovementNode
             Assert.AreEqual(Direction.Unknown, m_direction);
 
             m_direction = value;
-            m_nextRoomLocation += m_direction;
+
+            m_nextRoomLocation = m_doorLocation + m_direction;
 
             PropertyChanged();
         }
@@ -104,6 +107,15 @@ public class Door : MovementNode
     public Location NextRoomLocation
     {
         get { return m_nextRoomLocation; }
+    }
+
+    /// <summary>
+    /// The location of the room that the door is in
+    /// </summary>
+    public Location DoorLocation
+    {
+        get { return m_doorLocation; }
+        set { m_doorLocation = value; }
     }
 
     /// <summary>

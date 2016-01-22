@@ -58,9 +58,20 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         RoomLocation = new Location(room.X, room.Y);
 
         m_northDoor.IsDoorEnabled = room.IsNorthDoorActive;
+        m_northDoor.DoorLocation = RoomLocation;
+        m_northDoor.DoorDirection = Door.Direction.North;
+
         m_eastDoor.IsDoorEnabled = room.IsEastDoorActive;
+        m_eastDoor.DoorLocation = RoomLocation;
+        m_eastDoor.DoorDirection = Door.Direction.East;
+
         m_southDoor.IsDoorEnabled = room.IsSouthDoorActive;
+        m_southDoor.DoorLocation = RoomLocation;
+        m_southDoor.DoorDirection = Door.Direction.South;
+
         m_westDoor.IsDoorEnabled = room.IsWestDoorActive;
+        m_westDoor.DoorLocation = RoomLocation;
+        m_westDoor.DoorDirection = Door.Direction.West;
     }
 
     // What do we do immediately upon entering the room?

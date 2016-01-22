@@ -27,7 +27,7 @@ public class GameManager : Photon.PunBehaviour
     [Tooltip("The player object to spawn for all players in the game.")]
     private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
 
-    private int m_deckSize;
+    private int m_deckSize = 20;
 
     private GameObject m_combatInstance;
     private MusicManager m_musicMgr;
@@ -126,6 +126,7 @@ public class GameManager : Photon.PunBehaviour
     {
         Debug.Log("Transitioning to combat");
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, false);
+        EnableMovementComponents(false);
         StartCombat();
     }
 

@@ -10,7 +10,7 @@ public class TestMovementSpawner : MonoBehaviour {
     private MusicManager m_musicManager;
 
     [SerializeField]
-    private NetworkNodeMover m_worldPlayer;
+    private NetworkMover m_worldPlayer;
 
     [SerializeField]
     private RoomMover m_playerGroup;
@@ -44,9 +44,10 @@ public class TestMovementSpawner : MonoBehaviour {
             PhotonNetwork.Spawn(playerInventoryObject.GetComponent<PhotonView>());
             PlayerInventory playerInventory = playerInventoryObject.GetComponent<PlayerInventory>();
             playerInventory.PlayerId = i;
-            dungeonMaster.GetComponent<DungeonMaster>().InitializeInventory(playerInventory);
+            //dungeonMaster.GetComponent<DungeonMaster>().InitializeInventory(playerInventory);
         }
 
+        Debug.Log(m_playerGroup.name);
         GameObject playerGroup = PhotonNetwork.Instantiate(m_playerGroup.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(playerGroup.GetComponent<PhotonView>());
 

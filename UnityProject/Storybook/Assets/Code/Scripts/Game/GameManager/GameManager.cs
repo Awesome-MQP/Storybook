@@ -107,9 +107,17 @@ public class GameManager : Photon.PunBehaviour
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.GenerateMap();
         RoomObject startRoom = mapManager.PlaceStartRoom();
-        RoomMover playerMover = FindObjectOfType<RoomMover>();
-        List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
+        StorybookPlayerMover playerMover = FindObjectOfType<StorybookPlayerMover>();
         playerMover.SpawnInRoom(startRoom);
+        List<PlayerWorldPawn> players = new List<PlayerWorldPawn>(FindObjectsOfType<PlayerWorldPawn>());
+        int i = 0;
+        foreach(PlayerWorldPawn player in players)
+        {
+            player.transform.position = playerMover.PlayerPositions[i].transform.position;
+            i++;
+        }
+        Camera.main.transform.position = startRoom.CameraNode.position;
+        Camera.main.transform.rotation = startRoom.CameraNode.rotation;
     }
 
     public void TransitionToCombat()

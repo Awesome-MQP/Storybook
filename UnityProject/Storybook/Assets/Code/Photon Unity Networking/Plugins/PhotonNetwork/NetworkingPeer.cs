@@ -9,6 +9,7 @@ using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -3437,10 +3438,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 Debug.Log("New level loaded. Removed " + removeKeys.Count + " scene view IDs from last level.");
         }
 
-        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
+        PhotonView[] views = photonViewList.Values.ToArray();
+
+        foreach (PhotonView view in views)
         {
-            PhotonView view = pair.Value;
-            if (!view.HasSpawned && !view.isRuntimeInstantiated && view.isMine)
+            if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated && view.isMine)
                 PhotonNetwork.Spawn(view);
         }
     }

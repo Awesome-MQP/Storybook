@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 186848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 224.16637, y: 239.74754, z: -109.462105}
+  m_LocalPosition: {x: 425.48306, y: 210.50502, z: -109.462105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 493514}
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 101634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
+  m_Script: {fileID: 11500000, guid: be95fa8361abe104caa09c8705706b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11416478
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 143508}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
+  m_Script: {fileID: 11500000, guid: be95fa8361abe104caa09c8705706b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11424732
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 148026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
+  m_Script: {fileID: 11500000, guid: be95fa8361abe104caa09c8705706b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11470836
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 119718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
+  m_Script: {fileID: 11500000, guid: be95fa8361abe104caa09c8705706b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11488356
@@ -336,12 +336,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 186848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e69fadc132e0a0f4c98de973a22074f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b7c9c74adbe0b84ea6594d87c44cc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
-  m_maxSpeed: 10
+  m_maxSpeed: 1
   m_atTargetThreashHold: 0.1
   m_node: {fileID: 0}
   m_playerPositions:
@@ -356,6 +356,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_playerPositions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: allowFullCommunication
       value: 1

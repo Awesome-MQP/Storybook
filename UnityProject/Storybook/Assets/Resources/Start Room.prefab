@@ -1506,7 +1506,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 115104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c43731e61b8aba42bed52c8a03eccd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 138fef20de0186e4e9bfc54192e94f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11423814
@@ -1567,7 +1567,7 @@ MonoBehaviour:
   m_eastDoor: {fileID: 11465980}
   m_southDoor: {fileID: 11412200}
   m_westDoor: {fileID: 11461070}
-  m_centerNode: {fileID: 11423712}
+  m_centerNode: {fileID: 0}
   m_roomMusic: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}

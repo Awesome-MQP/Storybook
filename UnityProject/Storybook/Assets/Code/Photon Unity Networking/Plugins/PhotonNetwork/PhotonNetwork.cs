@@ -40,7 +40,7 @@ public static class PhotonNetwork
     /// <summary>
     /// This Monobehaviour allows Photon to run an Update loop.
     /// </summary>
-    internal static readonly PhotonHandler photonMono;
+    internal static PhotonHandler photonMono;
 
     /// <summary>
     /// Photon peer class that implements LoadBalancing in PUN.
@@ -1041,7 +1041,8 @@ public static class PhotonNetwork
     /// <summary>
     /// Static constructor used for basic setup.
     /// </summary>
-    static PhotonNetwork()
+    [PreLoadMethod(Order = int.MinValue)]
+    static void _startup()
     {
 #if UNITY_EDITOR
 

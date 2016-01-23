@@ -13,52 +13,38 @@ public class StorybookPlayerMover : BasePlayerMover {
     private PageForRoomUIHandler m_UIHandler;
 
     private bool m_isInCombat = false;
+    private bool m_isMenuOpen = false;
+
+    private GameObject m_canvas;
 
     public PlayerNode[] PlayerPositions
     {
         get { return m_playerPositions.ToArray(); }
     }
 
-    public void Start()
-    {
-        OpenPageForRoomMenu();
-    }
-
     public void OnGUI()
     {
-        if (!m_isInCombat)
+        if (!m_isInCombat && !m_isMenuOpen)
         {
             if (CurrentRoom.NorthDoor.IsDoorEnabled && GUILayout.Button("Go North"))
             {
-                Debug.Log("Going north");
                 MoveInDirection(Door.Direction.North);
-                CreateRoom(CurrentRoom.NorthDoor.NextRoomLocation);
-                TargetNode = CurrentRoom.NorthDoor;
-                StartCoroutine(MoveToDoor(CurrentRoom.NorthDoor.NextRoomLocation));
+                OpenPageForRoomMenu();
             }
             if (CurrentRoom.EastDoor.IsDoorEnabled && GUILayout.Button("Go East"))
             {
-                Debug.Log("Going east");
                 MoveInDirection(Door.Direction.East);
-                CreateRoom(CurrentRoom.EastDoor.NextRoomLocation);
-                TargetNode = CurrentRoom.EastDoor;
-                StartCoroutine(MoveToDoor(CurrentRoom.EastDoor.NextRoomLocation));
+                OpenPageForRoomMenu();
             }
             if (CurrentRoom.SouthDoor.IsDoorEnabled && GUILayout.Button("Go South"))
             {
-                Debug.Log("Going south");
                 MoveInDirection(Door.Direction.South);
-                CreateRoom(CurrentRoom.SouthDoor.NextRoomLocation);
-                TargetNode = CurrentRoom.SouthDoor;
-                StartCoroutine(MoveToDoor(CurrentRoom.SouthDoor.NextRoomLocation));
+                OpenPageForRoomMenu();
             }
             if (CurrentRoom.WestDoor.IsDoorEnabled && GUILayout.Button("Go West"))
             {
-                Debug.Log("Going west");
                 MoveInDirection(Door.Direction.West);
-                CreateRoom(CurrentRoom.WestDoor.NextRoomLocation);
-                TargetNode = CurrentRoom.WestDoor;
-                StartCoroutine(MoveToDoor(CurrentRoom.WestDoor.NextRoomLocation));
+                OpenPageForRoomMenu();
             }
         }
     }
@@ -110,8 +96,21 @@ public class StorybookPlayerMover : BasePlayerMover {
 
     public void OpenPageForRoomMenu()
     {
-        PageForRoomUIHandler uiMenu = Instantiate(m_UIHandler);
-        uiMenu.PopulateMenu();
+        Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
+        m_canvas = (GameObject)Instantiate(loadedObject);
+        m_UIHandler = m_canvas.GetComponent<PageForRoomUIHandler>();
+        m_UIHandler.RegisterPlayerMover(this);
+        m_UIHandler.PopulateMenu();
+        m_isMenuOpen = true;
     }
 
+    public void SubmitPageForRoom(int pageLevel, Genre pageGenre)
+    {
+        Destroy(m_canvas.gameObject);
+        m_isMenuOpen = false;
+        Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
+        CreateRoom(selectedDoor.NextRoomLocation);
+        TargetNode = selectedDoor;
+        StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
+    }
 }

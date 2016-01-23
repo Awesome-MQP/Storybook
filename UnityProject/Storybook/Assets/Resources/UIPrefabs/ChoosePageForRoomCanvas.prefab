@@ -11,6 +11,7 @@ GameObject:
   - 223: {fileID: 22371028}
   - 114: {fileID: 11423660}
   - 114: {fileID: 11456758}
+  - 114: {fileID: 11430800}
   m_Layer: 5
   m_Name: ChoosePageForRoomCanvas
   m_TagString: Untagged
@@ -336,7 +337,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11495284}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11430800}
+        m_MethodName: SubmitPage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11411154
@@ -516,6 +528,23 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &11430800
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 101504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdf0767940590740a31f602dfa75cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
+  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
+  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
+  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
+  m_gridXPadding: 20
+  m_gridYPadding: 20
 --- !u!114 &11432644
 MonoBehaviour:
   m_ObjectHideFlags: 1

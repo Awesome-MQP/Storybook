@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class PageForRoomUIHandler : UIHandler {
 
-    private GameObject m_canvas;
-
     [SerializeField]
     private Button m_greenPageButton;
 
@@ -30,19 +28,23 @@ public class PageForRoomUIHandler : UIHandler {
     private float m_contentWidth;
     private float m_contentHeight;
 
-    private Button m_selectedPageButton;
+    private PageButton m_selectedPageButton;
+    private Button m_selectedButton;
+    private Button m_submitPageButton;
+
+    private StorybookPlayerMover m_playerMover;
 
     public void Awake()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
-        m_canvas = (GameObject) Instantiate(loadedObject);
+        m_submitPageButton = GetComponentInChildren<Button>();
+        m_submitPageButton.enabled = false;
 
         // Get the dimensions of the button
         m_buttonHeight = m_greenPageButton.GetComponent<RectTransform>().rect.height;
         m_buttonWidth = m_greenPageButton.GetComponent<RectTransform>().rect.width;
 
         // Get the dimensions of the scrollview content
-        ScrollRect scrollView = m_canvas.GetComponentInChildren<ScrollRect>();
+        ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollRect = scrollView.GetComponent<RectTransform>();
         RectTransform scrollContent = scrollView.content;
         m_contentWidth = scrollRect.rect.xMax - scrollRect.rect.xMin;
@@ -59,7 +61,7 @@ public class PageForRoomUIHandler : UIHandler {
         GameManager gameManager = FindObjectOfType<GameManager>();
         PlayerInventory pi = gameManager.GetLocalPlayerInventory();
 
-        ScrollRect scrollView = m_canvas.GetComponentInChildren<ScrollRect>();
+        ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollContent = scrollView.content;
 
         for(int i = 0; i < pi.DynamicSize; i++)
@@ -81,7 +83,7 @@ public class PageForRoomUIHandler : UIHandler {
 
         Button selectedButton = _initializePageButton(pageLevel, pageGenre);
         selectedButton.enabled = false;
-        RectTransform[] AllRects = m_canvas.GetComponentsInChildren<RectTransform>();
+        RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
         RectTransform selectedPageRect = null;
 
         foreach(RectTransform rectT in AllRects)
@@ -93,7 +95,7 @@ public class PageForRoomUIHandler : UIHandler {
             }
         }
 
-        if (m_selectedPageButton != null)
+        if (m_selectedButton != null)
         {
             Debug.Log("Destroying previous page");
             Destroy(selectedPageRect.GetChild(0).gameObject);
@@ -103,7 +105,9 @@ public class PageForRoomUIHandler : UIHandler {
         grid.cellSize = new Vector2(m_buttonWidth, m_buttonHeight);
 
         selectedButton.transform.SetParent(selectedPageRect.transform, false);
-        m_selectedPageButton = selectedButton;
+        m_selectedButton = selectedButton;
+        m_selectedPageButton = selectedButton.GetComponent<PageButton>();
+        m_submitPageButton.enabled = true;
     }
 
     private Button _initializePageButton(int pageLevel, Genre pageGenre)
@@ -129,5 +133,16 @@ public class PageForRoomUIHandler : UIHandler {
         pageButton.PageLevel = pageLevel;
         pageButton.PageGenre = pageGenre;
         return button;
+    }
+
+    public void SubmitPage()
+    {
+        Debug.Log("Page submitted");
+        m_playerMover.SubmitPageForRoom(m_selectedPageButton.PageLevel, m_selectedPageButton.PageGenre);
+    }
+
+    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
+    {
+        m_playerMover = playerMover;
     }
 }

@@ -252,4 +252,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
                 yield break;
         }
     }
+
+    protected Door.Direction MoveDirection
+    {
+        get { return m_nextMoveDirection; }
+        set { m_nextMoveDirection = value; }
+    }
 }

@@ -22,6 +22,7 @@ public class CombatRoom : RoomObject {
     private List<GameObject> m_roomEnemiesOverworld = new List<GameObject>();
     [SerializeField]
     private EnemyTeam m_roomEnemies;
+    private string m_roomEnemiesPrefabLoc;
 
     [SerializeField]
     private List<Transform> m_enemyPosList = new List<Transform>();
@@ -53,6 +54,7 @@ public class CombatRoom : RoomObject {
         {
             _chooseEnemyTeam();
             m_gameManager.EnemyTeamForCombat = m_roomEnemies;
+            m_gameManager.EnemyTeamPrefabLoc = m_roomEnemiesPrefabLoc;
 
             int i = 0;
 
@@ -107,18 +109,22 @@ public class CombatRoom : RoomObject {
     private void _chooseEnemyTeam()
     {
         Object[] teams = null;
-        switch (RoomGenre)
+        switch (RoomPageData.PageGenre)
         {
             case Genre.Fantasy:
+                m_roomEnemiesPrefabLoc = "EnemyTeams/Fantasy/";
                 teams = Resources.LoadAll("EnemyTeams/Fantasy");
                 break;
             case Genre.GraphicNovel:
+                m_roomEnemiesPrefabLoc = "EnemyTeams/Comic/";
                 teams = Resources.LoadAll("EnemyTeams/Comic");
                 break;
             case Genre.Horror:
+                m_roomEnemiesPrefabLoc = "EnemyTeams/Horror/";
                 teams = Resources.LoadAll("EnemyTeams/Horror");
                 break;
             case Genre.SciFi:
+                m_roomEnemiesPrefabLoc = "EnemyTeams/SciFi/";
                 teams = Resources.LoadAll("EnemyTeams/SciFi");
                 break;
         }

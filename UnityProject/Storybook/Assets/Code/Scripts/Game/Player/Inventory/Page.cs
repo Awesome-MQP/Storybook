@@ -175,6 +175,12 @@ public class Page : Item  {
         }
     }
 
+    public PageData GetPageData()
+    {
+        PageData pageData = new PageData(m_pageLevel, m_pageGenre);
+        return pageData;
+    }
+
     //=INHERITED CLASSES FROM ITEM================================================================
     protected override void OnPickup()
     {

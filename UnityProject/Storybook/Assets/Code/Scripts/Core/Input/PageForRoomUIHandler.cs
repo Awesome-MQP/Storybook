@@ -71,17 +71,19 @@ public class PageForRoomUIHandler : UIHandler {
             {
                 Item currentItem = currentSlot.SlotItem;
                 Page currentPage = (Page)currentItem;
-                Button pageButton = _initializePageButton(currentPage.PageLevel, currentPage.PageGenre);
+                PageData currentPageData = currentPage.GetPageData();
+                currentPageData.InventoryId = i;
+                Button pageButton = _initializePageButton(currentPageData);
                 pageButton.transform.SetParent(scrollContent, false);
             }
         }
     }
 	
-    public override void PageButtonPressed(int pageLevel, Genre pageGenre)
+    public override void PageButtonPressed(PageData pageData)
     {
         Debug.Log("Page button pressed");
 
-        Button selectedButton = _initializePageButton(pageLevel, pageGenre);
+        Button selectedButton = _initializePageButton(pageData);
         selectedButton.enabled = false;
         RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
         RectTransform selectedPageRect = null;
@@ -110,10 +112,10 @@ public class PageForRoomUIHandler : UIHandler {
         m_submitPageButton.enabled = true;
     }
 
-    private Button _initializePageButton(int pageLevel, Genre pageGenre)
+    private Button _initializePageButton(PageData pageData)
     {
         Button prefabToUse = null;
-        switch (pageGenre)
+        switch (pageData.PageGenre)
         {
             case Genre.Fantasy:
                 prefabToUse = m_greenPageButton;
@@ -130,19 +132,28 @@ public class PageForRoomUIHandler : UIHandler {
         }
         Button button = Instantiate(prefabToUse);
         PageButton pageButton = button.GetComponent<PageButton>();
-        pageButton.PageLevel = pageLevel;
-        pageButton.PageGenre = pageGenre;
+        pageButton.PageData = pageData;
         return button;
     }
 
     public void SubmitPage()
     {
         Debug.Log("Page submitted");
-        m_playerMover.SubmitPageForRoom(m_selectedPageButton.PageLevel, m_selectedPageButton.PageGenre);
+        //_dropAndReplaceSelectedPage();
+        m_playerMover.SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
     public void RegisterPlayerMover(StorybookPlayerMover playerMover)
     {
         m_playerMover = playerMover;
+    }
+
+    private void _dropAndReplaceSelectedPage()
+    {
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+        PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
+        currentPlayerInventory.Drop(m_selectedPageButton.PageData.InventoryId);
+        currentPlayerInventory.Add(dm.GetBasicPage(), m_selectedPageButton.PageData.InventoryId);
     }
 }

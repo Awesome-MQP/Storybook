@@ -20,9 +20,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     private int m_roomSize; // Can be x1, x2, x4.
 
     [SerializeField]
-    private Genre m_roomGenre;
-
-    [SerializeField]
     private string[] m_roomFeatures = new string[0];
 
     [SerializeField]
@@ -39,6 +36,8 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
 
     [SerializeField]
     private MovementNode m_centerNode;
+
+    private PageData m_roomPageData;
 
     protected override void Awake()
     {
@@ -147,11 +146,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_roomSize; }
     }
 
-    public Genre RoomGenre
-    {
-        get { return m_roomGenre; }
-    }
-
     public MovementNode CenterNode
     {
         get { return m_centerNode; }
@@ -160,6 +154,12 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     public Transform CameraNode
     {
         get { return m_cameraNode; }
+    }
+
+    public PageData RoomPageData
+    {
+        get { return m_roomPageData; }
+        set { m_roomPageData = value; }
     }
 
     /// <summary>

@@ -14,6 +14,7 @@ public class GameManager : Photon.PunBehaviour
 
     [SerializeField]
     private EnemyTeam m_enemyTeamForCombat;
+    private string m_enemyTeamPrefabLoc;
 
     [SerializeField]
     private PlayerTeam m_playerTeamForCombat;
@@ -73,7 +74,7 @@ public class GameManager : Photon.PunBehaviour
             GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
 
-            GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
+            GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamPrefabLoc + m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(enemyTeam.GetComponent<PhotonView>());
 
             for(int i = 0; i < PhotonNetwork.playerList.Length; i++)
@@ -307,5 +308,11 @@ public class GameManager : Photon.PunBehaviour
     public int DeckSize
     {
         get { return m_deckSize; }
+    }
+
+    public string EnemyTeamPrefabLoc
+    {
+        get { return m_enemyTeamPrefabLoc; }
+        set { m_enemyTeamPrefabLoc = value; }
     }
 }

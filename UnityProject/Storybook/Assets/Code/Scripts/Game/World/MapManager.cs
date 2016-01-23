@@ -136,7 +136,7 @@ public class MapManager : Photon.PunBehaviour {
     // Place a new room in the world.
     // The MapMgr is not concerned with the contents of the room, just that it can be placed.
     // 
-    public RoomObject PlaceRoom(Location gridPosition)
+    public RoomObject PlaceRoom(Location gridPosition, PageData pageToUseData)
     {
         int placeX = gridPosition.X;
         int placeY = gridPosition.Y;
@@ -159,6 +159,7 @@ public class MapManager : Photon.PunBehaviour {
 
         GameObject roomGameObject = PhotonNetwork.Instantiate(roomPrefab.name, roomGridLocation, new Quaternion(), 0);
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
+        room.RoomPageData = pageToUseData;
         room.Construct(currentRoomData);
         PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
@@ -223,12 +224,12 @@ public class MapManager : Photon.PunBehaviour {
         Location OOB_Both = new Location(25, 25);
         Location Good_1 = new Location(5, 5);
         Location Good_2 = new Location(5, 6);
-        PlaceRoom(OOB_X); // try placing a room out of bounds in X (expect fail)
-        PlaceRoom(OOB_Y); // try placing a room OOB in Y (expect fail)
-        PlaceRoom(OOB_Both); // try placing a room OOB in both directions (expect fail)
-        PlaceRoom(Good_1); // try placing a room in a good location (expect pass)
-        PlaceRoom(Good_2); // try placing a room in another good location (expect pass)
-        PlaceRoom(Good_1); // try placing a room where another room has already been placed (expect fail)
+        PlaceRoom(OOB_X, new PageData()); // try placing a room out of bounds in X (expect fail)
+        PlaceRoom(OOB_Y, new PageData()); // try placing a room OOB in Y (expect fail)
+        PlaceRoom(OOB_Both, new PageData()); // try placing a room OOB in both directions (expect fail)
+        PlaceRoom(Good_1, new PageData()); // try placing a room in a good location (expect pass)
+        PlaceRoom(Good_2, new PageData()); // try placing a room in another good location (expect pass)
+        PlaceRoom(Good_1, new PageData()); // try placing a room where another room has already been placed (expect fail)
     }
 
     void TestMapMgrPlacement()
@@ -914,7 +915,7 @@ public class MapManager : Photon.PunBehaviour {
     public RoomObject PlaceStartRoom()
     {
         Location start = new Location(m_startPoint.x, m_startPoint.y);
-        return PlaceRoom(start);
+        return PlaceRoom(start, new PageData(-1, Genre.None));
     }
 
     public bool isAllDataReceived()

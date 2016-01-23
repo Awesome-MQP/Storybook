@@ -104,12 +104,12 @@ public class StorybookPlayerMover : BasePlayerMover {
         m_isMenuOpen = true;
     }
 
-    public void SubmitPageForRoom(int pageLevel, Genre pageGenre)
+    public void SubmitPageForRoom(PageData pageToUseData)
     {
         Destroy(m_canvas.gameObject);
         m_isMenuOpen = false;
         Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
-        CreateRoom(selectedDoor.NextRoomLocation);
+        CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
         TargetNode = selectedDoor;
         StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
     }

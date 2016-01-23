@@ -3,6 +3,6 @@ using System.Collections;
 
 public abstract class UIHandler : MonoBehaviour {
 
-    public abstract void PageButtonPressed(int pageLevel, Genre pageGenre);
+    public abstract void PageButtonPressed(PageData pageData);
 
 }

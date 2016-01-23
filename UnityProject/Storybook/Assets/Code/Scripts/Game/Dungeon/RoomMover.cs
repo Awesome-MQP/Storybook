@@ -110,11 +110,11 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
-    public void CreateRoom(Location roomLoc)
+    public void CreateRoom(Location roomLoc, PageData pageToUseData)
     {
         Debug.Log("Creating room at " + roomLoc.X + ", " + roomLoc.Y);
         MapManager mapManager = FindObjectOfType<MapManager>();
-        mapManager.PlaceRoom(roomLoc);
+        mapManager.PlaceRoom(roomLoc, pageToUseData);
     }
 
     public void MoveToNextRoom(Location newRoomLoc)

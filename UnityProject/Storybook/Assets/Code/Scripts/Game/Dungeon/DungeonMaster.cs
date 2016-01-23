@@ -69,7 +69,7 @@ public class DungeonMaster : MonoBehaviour {
             {
                 continue;
             }
-            else if (r.RoomGenre != genre)
+            else if (r.RoomPageData.PageGenre != genre)
             {
                 continue;
             }

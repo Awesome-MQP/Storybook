@@ -9,11 +9,19 @@ public class StorybookPlayerMover : BasePlayerMover {
     [SerializeField]
     List<PlayerNode> m_playerPositions = new List<PlayerNode>();
 
+    [SerializeField]
+    private PageForRoomUIHandler m_UIHandler;
+
     private bool m_isInCombat = false;
 
     public PlayerNode[] PlayerPositions
     {
         get { return m_playerPositions.ToArray(); }
+    }
+
+    public void Start()
+    {
+        OpenPageForRoomMenu();
     }
 
     public void OnGUI()
@@ -98,6 +106,12 @@ public class StorybookPlayerMover : BasePlayerMover {
             pawn.gameObject.SetActive(true);
         }
         TransitionFromCombat();
+    }
+
+    public void OpenPageForRoomMenu()
+    {
+        PageForRoomUIHandler uiMenu = Instantiate(m_UIHandler);
+        uiMenu.PopulateMenu();
     }
 
 }

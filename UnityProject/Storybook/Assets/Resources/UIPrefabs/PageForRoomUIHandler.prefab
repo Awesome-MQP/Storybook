@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &109688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 468364}
+  - 114: {fileID: 11429612}
+  m_Layer: 0
+  m_Name: PageForRoomUIHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &468364
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -246.07391, y: 662.6623, z: -60.40786}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11429612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdf0767940590740a31f602dfa75cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
+  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
+  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
+  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
+  m_gridXPadding: 20
+  m_gridYPadding: 20
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_greenPageButton
+      value: 
+      objectReference: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_gridXPadding
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_gridYPadding
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_redPageButton
+      value: 
+      objectReference: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_yellowPageButton
+      value: 
+      objectReference: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_bluePageButton
+      value: 
+      objectReference: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709,
+        type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 109688}
+  m_IsPrefabParent: 1

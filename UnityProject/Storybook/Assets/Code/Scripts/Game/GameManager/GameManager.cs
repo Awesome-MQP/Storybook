@@ -188,6 +188,8 @@ public class GameManager : Photon.PunBehaviour
         PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
         foreach(PlayerInventory pi in allInventories)
         {
+            Debug.Log("Checking player inventory");
+            Debug.Log("Inventory id = " + pi.PlayerId);
             if (pi.PlayerId == PhotonNetwork.player.ID)
             {
                 return pi;

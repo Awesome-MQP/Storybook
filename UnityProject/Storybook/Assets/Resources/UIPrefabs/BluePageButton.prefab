@@ -11,6 +11,7 @@ GameObject:
   - 222: {fileID: 22207564}
   - 114: {fileID: 11460114}
   - 114: {fileID: 11465700}
+  - 114: {fileID: 11458308}
   m_Layer: 5
   m_Name: BluePageButton
   m_TagString: Untagged
@@ -85,6 +86,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Page Type
+--- !u!114 &11458308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00280bf5e50cc66499e83dabf8ab5a04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_pageLevel: 0
+  m_pageGenre: 2
 --- !u!114 &11460114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,7 +164,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11460114}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11458308}
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11482520
@@ -254,7 +279,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150.47389, y: -96.4}
+  m_AnchoredPosition: {x: -83.492584, y: 115.75747}
   m_SizeDelta: {x: 72.5, y: 104.2}
   m_Pivot: {x: 1.3127738, y: 0.5}
 --- !u!1001 &100100000
@@ -263,7 +288,28 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_pageGenre
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11500000, guid: 3e642cd2659831148a8a6cdef549ec9e,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100392}

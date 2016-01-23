@@ -43,7 +43,7 @@ public class TestMovementSpawner : MonoBehaviour {
             GameObject playerInventoryObject = PhotonNetwork.Instantiate(m_playerInventoryPrefab.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerInventoryObject.GetComponent<PhotonView>());
             PlayerInventory playerInventory = playerInventoryObject.GetComponent<PlayerInventory>();
-            playerInventory.PlayerId = i;
+            playerInventory.PlayerId = PhotonNetwork.playerList[i].ID;
             dungeonMaster.GetComponent<DungeonMaster>().InitializeInventory(playerInventory);
         }
 

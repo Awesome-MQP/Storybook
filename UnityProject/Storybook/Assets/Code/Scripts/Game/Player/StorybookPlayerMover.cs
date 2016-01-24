@@ -22,6 +22,11 @@ public class StorybookPlayerMover : BasePlayerMover {
         get { return m_playerPositions.ToArray(); }
     }
 
+    public void Start()
+    {
+        OpenDeckManagementMenu();
+    }
+
     public void OnGUI()
     {
         if (!m_isInCombat && !m_isMenuOpen)
@@ -102,6 +107,14 @@ public class StorybookPlayerMover : BasePlayerMover {
         m_UIHandler.RegisterPlayerMover(this);
         m_UIHandler.PopulateMenu();
         m_isMenuOpen = true;
+    }
+
+    public void OpenDeckManagementMenu()
+    {
+        Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
+        GameObject canvas = (GameObject) Instantiate(loadedObject);
+        DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
+        uiHandler.PopulateMenu();
     }
 
     public void SubmitPageForRoom(PageData pageToUseData)

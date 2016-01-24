@@ -9,7 +9,7 @@ public class PageButton : MonoBehaviour {
     public void OnClick()
     {
         UIHandler currentUIHandler = FindObjectOfType<UIHandler>();
-        currentUIHandler.PageButtonPressed(m_pageData);
+        currentUIHandler.PageButtonPressed(this);
     }
 
     public int PageLevel
@@ -19,6 +19,15 @@ public class PageButton : MonoBehaviour {
         {
             m_pageData.PageLevel = value;
             _updateButtonText();
+        }
+    }
+
+    public int InventoryId
+    {
+        get { return m_pageData.InventoryId; }
+        set
+        {
+            m_pageData.InventoryId = value;
         }
     }
 

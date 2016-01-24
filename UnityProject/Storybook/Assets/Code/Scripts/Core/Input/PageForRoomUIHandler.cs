@@ -5,18 +5,6 @@ using UnityEngine.UI;
 public class PageForRoomUIHandler : UIHandler {
 
     [SerializeField]
-    private Button m_greenPageButton;
-
-    [SerializeField]
-    private Button m_redPageButton;
-
-    [SerializeField]
-    private Button m_yellowPageButton;
-
-    [SerializeField]
-    private Button m_bluePageButton;
-
-    [SerializeField]
     private float m_gridXPadding;
 
     [SerializeField]
@@ -79,11 +67,11 @@ public class PageForRoomUIHandler : UIHandler {
         }
     }
 	
-    public override void PageButtonPressed(PageData pageData)
+    public override void PageButtonPressed(PageButton buttonPressed)
     {
         Debug.Log("Page button pressed");
 
-        Button selectedButton = _initializePageButton(pageData);
+        Button selectedButton = _initializePageButton(buttonPressed.PageData);
         selectedButton.enabled = false;
         RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
         RectTransform selectedPageRect = null;
@@ -110,30 +98,6 @@ public class PageForRoomUIHandler : UIHandler {
         m_selectedButton = selectedButton;
         m_selectedPageButton = selectedButton.GetComponent<PageButton>();
         m_submitPageButton.enabled = true;
-    }
-
-    private Button _initializePageButton(PageData pageData)
-    {
-        Button prefabToUse = null;
-        switch (pageData.PageGenre)
-        {
-            case Genre.Fantasy:
-                prefabToUse = m_greenPageButton;
-                break;
-            case Genre.GraphicNovel:
-                prefabToUse = m_yellowPageButton;
-                break;
-            case Genre.Horror:
-                prefabToUse = m_redPageButton;
-                break;
-            case Genre.SciFi:
-                prefabToUse = m_bluePageButton;
-                break;
-        }
-        Button button = Instantiate(prefabToUse);
-        PageButton pageButton = button.GetComponent<PageButton>();
-        pageButton.PageData = pageData;
-        return button;
     }
 
     public void SubmitPage()

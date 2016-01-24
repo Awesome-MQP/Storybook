@@ -58,12 +58,12 @@ public class NetWinState : NetworkState {
         Page pageDrop = dm.GetPageDropFromCombat(Genre.GraphicNovel, 1);
 
         GameManager gm = FindObjectOfType<GameManager>();
-        /*
         PlayerInventory localPlayerInventory = gm.GetLocalPlayerInventory();
 
         // TODO: Use the number of items in the inventory to figure out the position to add to
-        localPlayerInventory.Add(pageDrop, 21);
-        */
+        if (!localPlayerInventory.IsInventoryFull()) {
+            localPlayerInventory.Add(pageDrop, localPlayerInventory.FirstOpenSlot());
+        }
 
         if (pageDrop != null)
         {

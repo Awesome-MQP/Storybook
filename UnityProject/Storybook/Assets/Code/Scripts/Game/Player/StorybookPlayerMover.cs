@@ -97,6 +97,7 @@ public class StorybookPlayerMover : BasePlayerMover {
             pawn.gameObject.SetActive(true);
         }
         TransitionFromCombat();
+        OpenDeckManagementMenu();
     }
 
     public void OpenPageForRoomMenu()

@@ -587,6 +587,32 @@ public abstract class Inventory : PunBehaviour
         return m_itemsSet.Contains(item);
     }
 
+    public bool IsInventoryFull()
+    {
+        foreach (Slot slot in m_slots)
+        {
+            if (slot.IsEmpty)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int FirstOpenSlot()
+    {
+        int i = 0;
+        foreach(Slot slot in m_slots)
+        {
+            if (slot.IsEmpty)
+            {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
     /// <summary>
     /// Checks to see if the local player can add the item to this inventory.
     /// </summary>

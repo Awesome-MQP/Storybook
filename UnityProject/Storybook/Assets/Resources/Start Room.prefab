@@ -1567,7 +1567,7 @@ MonoBehaviour:
   m_eastDoor: {fileID: 11465980}
   m_southDoor: {fileID: 11412200}
   m_westDoor: {fileID: 11461070}
-  m_centerNode: {fileID: 0}
+  m_centerNode: {fileID: 11423712}
   m_roomMusic: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
@@ -2034,6 +2034,10 @@ Prefab:
       propertyPath: m_musicTracks.Array.data[0]
       value: 
       objectReference: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_centerNode
+      value: 
+      objectReference: {fileID: 11423712}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 179132}

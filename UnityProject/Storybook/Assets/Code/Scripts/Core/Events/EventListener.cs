@@ -6,9 +6,25 @@ public interface IEventListener
     EventDispatcher Dispatcher { get; }
 }
 
-public abstract class MonoEventListener : MonoBehaviour, IEventListener
+public abstract class EventListener<T> : IEventListener where T : EventDispatcher, new()
 {
-    public abstract EventDispatcher Dispatcher { get; }
+    public EventDispatcher Dispatcher
+    {
+        get { return EventDispatcher.GetDispatcher<T>(); }
+    }
+
+    protected EventListener()
+    {
+        Dispatcher.RegisterEventListener(this);
+    } 
+}
+
+public abstract class MonoEventListener<T> : MonoBehaviour, IEventListener where T : EventDispatcher, new()
+{
+    public EventDispatcher Dispatcher
+    {
+        get { return EventDispatcher.GetDispatcher<T>(); }
+    }
 
     protected virtual void Awake()
     {

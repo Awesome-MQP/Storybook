@@ -27,6 +27,8 @@ sysinfo.txt
 *.cs.meta
 
 # Ignore ProjectSettings, ProjectVersion, AnalyticsManager
-*/ProjectSettings.asset
-*/ProjectVersion.txt
+./ProjectSettings/ProjectSettings.asset
+./ProjectSettings/ProjectVersion.txt
 */UnityAnalyticsManager.asset
+./GraphicsSettings.asset
+./UnityConnectSettings.asset

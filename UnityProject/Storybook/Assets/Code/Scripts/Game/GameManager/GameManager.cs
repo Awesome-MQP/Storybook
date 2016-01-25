@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Assertions;
@@ -24,6 +25,9 @@ public class GameManager : Photon.PunBehaviour
 
     [SerializeField]
     private DungeonMaster m_dungeonMaster;
+
+    [SerializeField]
+    private SceneFading m_sceneFader;
 
     [Tooltip("The player object to spawn for all players in the game.")]
     private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
@@ -126,15 +130,49 @@ public class GameManager : Photon.PunBehaviour
     public void TransitionToCombat()
     {
         Debug.Log("Transitioning to combat");
+        StartCoroutine(_fadeScreenToCombat());
+    }
+
+    private IEnumerator _fadeScreenToCombat()
+    {
+        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/" + m_sceneFader.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(faderObject.GetPhotonView());
+        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        float fadeTime = fader.BeginFade(1);
+        yield return new WaitForSeconds(fadeTime);
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, false);
-        EnableMovementComponents(false);
         StartCombat();
+        fader.LevelWasLoaded();
+        yield return new WaitForSeconds(fadeTime);
+        Destroy(fader.gameObject);
     }
 
     private void _TransitionToOverworld()
     {
         Debug.Log("Transitioning to overworld");
+        StartCoroutine(_fadeScreenFromCombat());
+    }
+
+    private IEnumerator _fadeScreenFromCombat()
+    {
+        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/" + m_sceneFader.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(faderObject.GetPhotonView());
+        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        float fadeTime = fader.BeginFade(1);
+        yield return new WaitForSeconds(fadeTime);
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, true);
+        fader.LevelWasLoaded();
+        yield return new WaitForSeconds(fadeTime);
+        Destroy(fader.gameObject);
+    }
+
+    private float _spawnFader()
+    {
+        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/" + m_sceneFader.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(faderObject.GetPhotonView());
+        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        float fadeTime = fader.BeginFade(1);
+        return fadeTime;
     }
 
     [PunRPC]

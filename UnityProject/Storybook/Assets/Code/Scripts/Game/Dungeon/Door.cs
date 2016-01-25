@@ -19,6 +19,8 @@ public class Door : MovementNode
 
     private bool m_isDoorOpen;
 
+    private bool m_isConnectedRoomMade = false;
+
     private RoomObject m_parentRoomObject;
 
     private Location m_doorLocation;
@@ -168,5 +170,11 @@ public class Door : MovementNode
 
     protected override void OnLeave(NetworkNodeMover mover)
     {
+    }
+
+    public bool IsConnectedRoomMade
+    {
+        get { return m_isConnectedRoomMade; }
+        set { m_isConnectedRoomMade = value; }
     }
 }

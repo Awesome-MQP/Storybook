@@ -1138,7 +1138,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195720}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 82f13d99470f82745953d01aeeb174a3, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 5739f35159f4fb44ba61d0251e183934, type: 3}
   m_Controller: {fileID: 9100000, guid: d24b6ccdc501b36459d60f14eb8fd70b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1186,14 +1186,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_maxHealth: 10
   m_health: 10
-  m_healthMod: 0
   m_speed: 5
-  m_speedMod: 0
   m_defense: 1
-  m_defenseMod: 0
   m_attack: 1
-  m_attackMod: 0
   m_genre: 3
   m_aggressionValue: 100
   m_currentMana: 4
@@ -1267,7 +1264,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 5739f35159f4fb44ba61d0251e183934, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_maxHealth
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 195720}

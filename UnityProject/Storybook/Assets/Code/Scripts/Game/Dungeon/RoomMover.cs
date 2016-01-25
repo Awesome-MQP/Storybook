@@ -119,6 +119,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     public void MoveToNextRoom(Location newRoomLoc)
     {
+        m_currentRoom.OnRoomExit();
         MapManager mapManager = FindObjectOfType<MapManager>();
         RoomObject newRoom = mapManager.GetRoom(newRoomLoc);
 

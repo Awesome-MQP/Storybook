@@ -43,7 +43,7 @@ public class TestEnemyAttackMove : AIMove {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= 1.8f)
+        else if (TimeSinceMoveStarted >= 3.0f)
         {
             Debug.Log("Page move is complete");
             playerAnimator.SetBool("IdleToAttack", false);

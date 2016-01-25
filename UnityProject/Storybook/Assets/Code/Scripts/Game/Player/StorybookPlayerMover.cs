@@ -34,22 +34,54 @@ public class StorybookPlayerMover : BasePlayerMover {
             if (CurrentRoom.NorthDoor.IsDoorEnabled && GUILayout.Button("Go North"))
             {
                 MoveInDirection(Door.Direction.North);
-                OpenPageForRoomMenu();
+                if (!CurrentRoom.NorthDoor.IsConnectedRoomMade)
+                {
+                    OpenPageForRoomMenu();
+                }
+                else
+                {
+                    TargetNode = CurrentRoom.NorthDoor;
+                    StartCoroutine(MoveToDoor(CurrentRoom.NorthDoor.NextRoomLocation));
+                }
             }
             if (CurrentRoom.EastDoor.IsDoorEnabled && GUILayout.Button("Go East"))
             {
                 MoveInDirection(Door.Direction.East);
-                OpenPageForRoomMenu();
+                if (!CurrentRoom.EastDoor.IsConnectedRoomMade)
+                {
+                    OpenPageForRoomMenu();
+                }
+                else
+                {
+                    TargetNode = CurrentRoom.EastDoor;
+                    StartCoroutine(MoveToDoor(CurrentRoom.EastDoor.NextRoomLocation));
+                }
             }
             if (CurrentRoom.SouthDoor.IsDoorEnabled && GUILayout.Button("Go South"))
             {
                 MoveInDirection(Door.Direction.South);
-                OpenPageForRoomMenu();
+                if (!CurrentRoom.SouthDoor.IsConnectedRoomMade)
+                {
+                    OpenPageForRoomMenu();
+                }
+                else
+                {
+                    TargetNode = CurrentRoom.SouthDoor;
+                    StartCoroutine(MoveToDoor(CurrentRoom.SouthDoor.NextRoomLocation));
+                }
             }
             if (CurrentRoom.WestDoor.IsDoorEnabled && GUILayout.Button("Go West"))
             {
                 MoveInDirection(Door.Direction.West);
-                OpenPageForRoomMenu();
+                if (!CurrentRoom.WestDoor.IsConnectedRoomMade)
+                {
+                    OpenPageForRoomMenu();
+                }
+                else
+                {
+                    TargetNode = CurrentRoom.WestDoor;
+                    StartCoroutine(MoveToDoor(CurrentRoom.WestDoor.NextRoomLocation));
+                }
             }
         }
     }
@@ -70,6 +102,7 @@ public class StorybookPlayerMover : BasePlayerMover {
 
     public IEnumerator MoveToDoor(Location newRoomLoc)
     {
+        _playWalkAnimations();
         while (!IsAtTarget)
         {
             yield return new WaitForFixedUpdate();
@@ -80,6 +113,7 @@ public class StorybookPlayerMover : BasePlayerMover {
 
     public void EnterCombat()
     {
+        _playIdleAnimations();
         m_isInCombat = true;
         foreach (PlayerWorldPawn pawn in m_playerWorldPawns)
         {
@@ -91,6 +125,8 @@ public class StorybookPlayerMover : BasePlayerMover {
     public void ExitCombat()
     {
         m_isInCombat = false;
+        CombatRoom currentCombatRoom = (CombatRoom)CurrentRoom;
+        currentCombatRoom.DestroyEnemyWorldPawns();
         foreach (PlayerWorldPawn pawn in m_playerWorldPawns)
         {
             pawn.enabled = true;
@@ -124,7 +160,25 @@ public class StorybookPlayerMover : BasePlayerMover {
         m_isMenuOpen = false;
         Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
         CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
+        selectedDoor.IsConnectedRoomMade = true;
+        selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
         TargetNode = selectedDoor;
         StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
+    }
+
+    private void _playWalkAnimations()
+    {
+        foreach(PlayerWorldPawn pawn in m_playerWorldPawns)
+        {
+            pawn.SwitchCharacterToWalking();
+        }
+    }
+
+    private void _playIdleAnimations()
+    {
+        foreach(PlayerWorldPawn pawn in m_playerWorldPawns)
+        {
+            pawn.SwitchCharacterToIdle();
+        }
     }
 }

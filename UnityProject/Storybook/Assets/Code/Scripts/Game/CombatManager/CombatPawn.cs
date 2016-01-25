@@ -77,12 +77,25 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// <param name="damageAmount">The amount to subtract from the health of this pawn</param>
     public void DealDamageToPawn(int damageAmount)
     {
+        StartCoroutine(_playHurtAnimation());
         m_health -= damageAmount;
 
         if (m_health <= 0)
         {
             m_isAlive = false;
         }
+    }
+
+    private IEnumerator _playHurtAnimation()
+    {
+        Animator pawnAnimator = GetComponent<Animator>();
+        pawnAnimator.SetBool("IdleToIdle", false);
+        pawnAnimator.SetBool("HurtToIdle", false);
+        pawnAnimator.SetBool("IdleToHurt", true);
+        yield return new WaitForSeconds(2);
+        pawnAnimator.SetBool("IdleToIdle", true);
+        pawnAnimator.SetBool("IdleToHurt", false);
+        pawnAnimator.SetBool("HurtToIdle", true);
     }
 
     /// <summary>

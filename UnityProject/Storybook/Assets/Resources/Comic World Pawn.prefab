@@ -1272,7 +1272,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 177068}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 69c4cc46a2154284dacfa6336005bddc, type: 3}
+  m_Avatar: {fileID: 9000000, guid: db291f142ad05f24ebc85910593c29bd, type: 3}
   m_Controller: {fileID: 9100000, guid: e78b1c164caa31d40bb2d95dce117113, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_targetPosition: {x: 0, y: 0, z: 0}
-  m_isAtTarget: 0
+  m_isAtTarget: 1
   m_maxSpeed: 1
   m_atTargetThreashHold: 0.1
 --- !u!114 &11490002
@@ -1318,6 +1318,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 471644}
   - {fileID: 0}
+  - {fileID: 11485156}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -1410,6 +1411,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: allowFullCommunication
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: db291f142ad05f24ebc85910593c29bd, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_isAtTarget
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

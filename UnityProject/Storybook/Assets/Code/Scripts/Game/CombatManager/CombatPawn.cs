@@ -86,7 +86,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
         CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
         // Adds support to UI
-        combatMenu.UpdateHitpointsOfPlayer(PhotonNetwork.player.ID, m_health);
+        combatMenu.UpdateHitpointsOfPlayer(PhotonNetwork.player, m_health);
 
         if (m_health <= 0)
         {

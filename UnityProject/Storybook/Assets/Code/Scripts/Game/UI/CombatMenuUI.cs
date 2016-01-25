@@ -236,11 +236,11 @@ public class CombatMenuUI : MonoBehaviour {
     }
 
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
-    public void UpdateHitpointsOfPlayer(int playerPhotonID, float newHP)
+    public void UpdateHitpointsOfPlayer(PhotonPlayer photonPlayer, float newHP)
     {
-        if(m_mapIDtoUI.ContainsKey(playerPhotonID))
+        if(m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
-            m_mapIDtoUI[playerPhotonID].text = newHP.ToString();
+            m_mapIDtoUI[pho.ID].text = newHP.ToString();
         }
     }
 }

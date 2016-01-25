@@ -36,7 +36,7 @@ public abstract class CombatPlayer : CombatPawn
         set { m_selectedPageIndex = value; }
     }
 
-    public void Start()
+    new public void Start()
     {
         base.Start();
         /*
@@ -225,8 +225,9 @@ public abstract class CombatPlayer : CombatPawn
     //TODO: Get the player inventory from the given PlayerEntity
     private CombatDeck _initializePlayerDeck(PlayerInventory playerInventory)
     {
+        GameManager gm = FindObjectOfType<GameManager>();
         List<Page> deckPages = new List<Page>();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < gm.DeckSize; i++)
         {
             Page page = (Page)playerInventory[i].SlotItem;
             deckPages.Add(page);

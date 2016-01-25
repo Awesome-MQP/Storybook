@@ -4,9 +4,6 @@ using System;
 
 public class TestEnemyAttackMove : AIMove {
 
-    [SerializeField]
-    private int m_moveDamage = 3;
-
     private bool IS_MOVE_ATTACK = true;
 
     private bool m_isMoveStarted = false;
@@ -23,7 +20,7 @@ public class TestEnemyAttackMove : AIMove {
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, m_moveDamage, MoveOwner.Attack, combatPawn.Defense);
+            int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, combatPawn.Defense);
             combatPawn.DealDamageToPawn(moveDamage);
         }
     }

@@ -20,9 +20,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     private int m_roomSize; // Can be x1, x2, x4.
 
     [SerializeField]
-    private Genre m_roomGenre;
-
-    [SerializeField]
     private string[] m_roomFeatures = new string[0];
 
     [SerializeField]
@@ -39,6 +36,8 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
 
     [SerializeField]
     private MovementNode m_centerNode;
+
+    private PageData m_roomPageData;
 
     protected override void Awake()
     {
@@ -58,9 +57,20 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         RoomLocation = new Location(room.X, room.Y);
 
         m_northDoor.IsDoorEnabled = room.IsNorthDoorActive;
+        m_northDoor.DoorLocation = RoomLocation;
+        m_northDoor.DoorDirection = Door.Direction.North;
+
         m_eastDoor.IsDoorEnabled = room.IsEastDoorActive;
+        m_eastDoor.DoorLocation = RoomLocation;
+        m_eastDoor.DoorDirection = Door.Direction.East;
+
         m_southDoor.IsDoorEnabled = room.IsSouthDoorActive;
+        m_southDoor.DoorLocation = RoomLocation;
+        m_southDoor.DoorDirection = Door.Direction.South;
+
         m_westDoor.IsDoorEnabled = room.IsWestDoorActive;
+        m_westDoor.DoorLocation = RoomLocation;
+        m_westDoor.DoorDirection = Door.Direction.West;
     }
 
     // What do we do immediately upon entering the room?
@@ -136,11 +146,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_roomSize; }
     }
 
-    public Genre RoomGenre
-    {
-        get { return m_roomGenre; }
-    }
-
     public MovementNode CenterNode
     {
         get { return m_centerNode; }
@@ -149,6 +154,12 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     public Transform CameraNode
     {
         get { return m_cameraNode; }
+    }
+
+    public PageData RoomPageData
+    {
+        get { return m_roomPageData; }
+        set { m_roomPageData = value; }
     }
 
     /// <summary>

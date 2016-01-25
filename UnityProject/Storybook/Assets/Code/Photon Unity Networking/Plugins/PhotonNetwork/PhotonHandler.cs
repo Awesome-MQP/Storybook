@@ -9,6 +9,8 @@ using System.Collections;
 using System.Diagnostics;
 using ExitGames.Client.Photon;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -154,7 +156,7 @@ internal class PhotonHandler : Photon.MonoBehaviour
     protected void OnLevelWasLoaded(int level)
     {
         PhotonNetwork.networkingPeer.NewSceneLoaded();
-        PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(Application.loadedLevelName);
+        //PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(SceneManager.GetActiveScene().name);
     }
 
     protected void OnJoinedRoom()
@@ -164,7 +166,7 @@ internal class PhotonHandler : Photon.MonoBehaviour
 
     protected void OnCreatedRoom()
     {
-        PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(Application.loadedLevelName);
+        PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(SceneManager.GetActiveScene().name);
     }
 
     public static void StartFallbackSendAckThread()

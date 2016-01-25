@@ -31,7 +31,8 @@ public class PlayerTeam : CombatTeam {
             if (playerPawn is CombatPlayer)
             {
                 CombatPlayer player = (CombatPlayer)playerPawn;
-                PlayerInventory currentPlayerInventory = _findPlayerInventory(playerPawn.TeamId);
+                GameManager gameManager = FindObjectOfType<GameManager>();
+                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
                 player.CreateDeck(currentPlayerInventory);
             }
 

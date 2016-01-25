@@ -83,7 +83,7 @@ public abstract class Inventory : PunBehaviour
         get { return m_slots[index]; }
     }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
         m_items = new Item[m_staticSize];
         m_itemsSet = new HashSet<Item>();
@@ -585,6 +585,32 @@ public abstract class Inventory : PunBehaviour
     public bool ContainsItem(Item item)
     {
         return m_itemsSet.Contains(item);
+    }
+
+    public bool IsInventoryFull()
+    {
+        foreach (Slot slot in m_slots)
+        {
+            if (slot.IsEmpty)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int FirstOpenSlot()
+    {
+        int i = 0;
+        foreach(Slot slot in m_slots)
+        {
+            if (slot.IsEmpty)
+            {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
     /// <summary>

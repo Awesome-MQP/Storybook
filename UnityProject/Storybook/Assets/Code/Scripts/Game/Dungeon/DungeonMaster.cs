@@ -69,7 +69,7 @@ public class DungeonMaster : MonoBehaviour {
             {
                 continue;
             }
-            else if (r.RoomGenre != genre)
+            else if (r.RoomPageData.PageGenre != genre)
             {
                 continue;
             }
@@ -248,7 +248,7 @@ public class DungeonMaster : MonoBehaviour {
 
     public void InitializeInventory(Inventory inventoryToInitialize)
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 21; i++)
         {
             Page basicPage = GetBasicPage();
             inventoryToInitialize.Add(basicPage, i);

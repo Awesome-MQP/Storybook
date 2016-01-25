@@ -493,6 +493,7 @@ namespace Photon
     /// </remarks>
     /// \ingroup publicApi
     // the documentation for the interface methods becomes inherited when Doxygen builds it.
+    [RequireComponent(typeof(PhotonView))]
     public class PunBehaviour : Photon.MonoBehaviour, IPunCallbacks
     {
         public bool IsMine
@@ -533,6 +534,12 @@ namespace Photon
         protected virtual void Awake()
         {
             BuildPropertyInfo();
+        }
+
+        protected virtual void OnValidate()
+        {
+            if (!photonView.ObservedComponents.Contains(this))
+                photonView.ObservedComponents.Add(this);
         }
 
         private void BuildPropertyInfo()

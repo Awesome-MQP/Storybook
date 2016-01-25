@@ -9,30 +9,25 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     // Character stats
     [SerializeField]
-    private float m_health;
+    private float m_maxHealth;
 
     [SerializeField]
+    private float m_health;
     private float m_healthMod = 0;
 
     [SerializeField]
     private float m_speed;
     private float m_speedBoost = 0;
-
-    [SerializeField]
     private float m_speedMod = 0;
 
     [SerializeField]
     private float m_defense;
     private float m_defenseBoost = 0;
-
-    [SerializeField]
     private float m_defenseMod = 0;
 
     [SerializeField]
     private float m_attack;
     private float m_attackBoost = 0;
-
-    [SerializeField]
     private float m_attackMod = 0;
 
     [SerializeField]
@@ -128,12 +123,46 @@ public abstract class CombatPawn : Photon.PunBehaviour
     }
 
     /// <summary>
-    /// Increases the pawn speed by the given amount
+    /// Increases the pawn speed boost by the given amount
+    /// Adds to the speed boost value so that it will be decremented each turn
     /// </summary>
     /// <param name="speedIncrease">The amount to increase the speed by</param>
     public void IncreasePawnSpeed(int speedIncrease)
     {
-        m_speed += speedIncrease;
+        m_speedBoost += speedIncrease;
+    }
+
+    /// <summary>
+    /// Increases the pawn HP by the given amount
+    /// </summary>
+    /// <param name="hpIncrease">The amount to increase the hp by</param>
+    public void IncreasePawnHP(int hpIncrease)
+    {
+        m_health += hpIncrease;
+        if (m_health > m_maxHealth)
+        {
+            m_health = m_maxHealth;
+        }
+    }
+
+    /// <summary>
+    /// Increases the pawn attack boost by the given amount
+    /// Adds the the attack boost value so that it will be decremented each turn
+    /// </summary>
+    /// <param name="attackIncrease">The amount to increase the attack by</param>
+    public void IncreasePawnAttack(int attackIncrease)
+    {
+        m_attackBoost += attackIncrease;
+    }
+
+    /// <summary>
+    /// Increases the pawn defense boost by the given amount
+    /// Adds to the defense boost value so that it will be decremented each turn
+    /// </summary>
+    /// <param name="defenseIncrease">The amount to increase the defense by</param>
+    public void IncreasePawnDefense(int defenseIncrease)
+    {
+        m_defenseBoost += defenseIncrease;
     }
 
     /// <summary>
@@ -162,7 +191,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// </summary>
     public float Speed
     {
-        get { return m_speed + m_speedBoost; }
+        get { return m_speed + m_speedBoost + m_speedMod; }
     }
 
     public void SetSpeed(float newSpeed)

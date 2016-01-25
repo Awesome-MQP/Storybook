@@ -22,7 +22,7 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<Transform>{
     // Use this for initialization
     void Start ()
     {
-        m_playerNum = PhotonNetwork.player.GetNext().ID;
+        m_playerNum = PhotonNetwork.player.ID;
 	}
 	
 	// Update is called once per frame

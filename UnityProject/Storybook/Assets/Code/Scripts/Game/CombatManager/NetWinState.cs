@@ -8,7 +8,7 @@ public class NetWinState : NetworkState {
     private int m_playersReady = 0;
     private int m_trigger = 0;
 
-    void Awake()
+    override protected void Awake()
     {
         SetCombatManager(FindObjectOfType<CombatManager>());
     }
@@ -56,6 +56,15 @@ public class NetWinState : NetworkState {
     {
         DungeonMaster dm = FindObjectOfType<DungeonMaster>();
         Page pageDrop = dm.GetPageDropFromCombat(Genre.GraphicNovel, 1);
+
+        GameManager gm = FindObjectOfType<GameManager>();
+        PlayerInventory localPlayerInventory = gm.GetLocalPlayerInventory();
+
+        // TODO: Use the number of items in the inventory to figure out the position to add to
+        if (!localPlayerInventory.IsInventoryFull()) {
+            localPlayerInventory.Add(pageDrop, localPlayerInventory.FirstOpenSlot());
+        }
+
         if (pageDrop != null)
         {
             Debug.Log("Got a page drop!");

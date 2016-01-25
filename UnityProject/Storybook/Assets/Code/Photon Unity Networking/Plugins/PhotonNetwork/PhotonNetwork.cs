@@ -8,9 +8,12 @@
 using System.Diagnostics;
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
+using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = UnityEngine.Object;
@@ -37,7 +40,7 @@ public static class PhotonNetwork
     /// <summary>
     /// This Monobehaviour allows Photon to run an Update loop.
     /// </summary>
-    internal static readonly PhotonHandler photonMono;
+    internal static PhotonHandler photonMono;
 
     /// <summary>
     /// Photon peer class that implements LoadBalancing in PUN.
@@ -63,6 +66,8 @@ public static class PhotonNetwork
 
     /// <summary>Currently used server address (no matter if master or game server).</summary>
     public static string ServerAddress { get { return (networkingPeer != null) ? networkingPeer.ServerAddress : "<not connected>"; } }
+
+    internal static LinkedList<Scene> s_sceneStack = new LinkedList<Scene>(); 
 
     /// <summary>
     /// False until you connected to Photon initially. True in offline mode, while connected to any server and even while switching servers.
@@ -536,7 +541,7 @@ public static class PhotonNetwork
         }
     }
 
-    private static bool _mAutomaticallySyncScene = false;
+    private static bool _mAutomaticallySyncScene = true;
 
     /// <summary>
     /// This setting defines per room, if network-instantiated GameObjects (with PhotonView) get cleaned up when the creator of it leaves.
@@ -813,6 +818,11 @@ public static class PhotonNetwork
         }
     }
 
+    public static bool isInLevelLoad
+    {
+        get { return networkingPeer.loadingLevelAndPausedNetwork; }
+    }
+
     /// <summary>
     /// Defines after how many seconds PUN will close a connection, after Unity's OnApplicationPause(true) call.
     /// </summary>
@@ -1031,7 +1041,8 @@ public static class PhotonNetwork
     /// <summary>
     /// Static constructor used for basic setup.
     /// </summary>
-    static PhotonNetwork()
+    [PreLoadMethod(Order = int.MinValue)]
+    static void _startup()
     {
 #if UNITY_EDITOR
 
@@ -2280,6 +2291,8 @@ public static class PhotonNetwork
             view.viewID = id;
         }
 
+        InternalTryCreateOnPlayers(views, otherPlayers);
+
         return newObject;
     }
 
@@ -2297,143 +2310,149 @@ public static class PhotonNetwork
         Spawn(view, new []{target});
     }
 
-    internal static void HandleSpawn(Hashtable evData, PhotonPlayer player)
-    {
-        int time = (int)evData[(byte)0];
-        int[] ids = (int[])evData[(byte)1];
-        Hashtable[] serializedReliableData = (Hashtable[])evData[(byte)2];
-        Hashtable[] serializedUnreliableData = (Hashtable[])evData[(byte)3];
-        short prefix = (short)evData[(byte)4];
-        int controllerId = (int) evData[(byte) 6];
-
-        PhotonView[] views = new PhotonView[ids.Length];
-        for (int i = 0; i < ids.Length; i++)
-        {
-            int id = ids[i];
-            PhotonView view = PhotonView.Find(id);
-
-            if (view.prefix > 0 && view.prefix != prefix)
-            {
-                Debug.LogErrorFormat("View spawned with wrong level prefix.");
-                return;
-            }
-
-            networkingPeer.OnSerializeReliableRead(serializedReliableData[i], player, time, prefix);
-            networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData[i], player, time, prefix);
-
-            view.controllerId = controllerId;
-
-            view.OnSpawn();
-
-            views[i] = view;
-        }
-
-        if (evData.ContainsKey((byte)5))
-        {
-            PhotonView parent = PhotonView.Find((int)evData[(byte)5]);
-            views[0].transform.parent = parent.transform;
-        }
-    }
-
-    /// <summary>
-    /// Spawns the photon view on the network, if it does not exist on a client then we will also send a create command
-    /// </summary>
-    /// <param name="view">The view to attempt to spawn.</param>
-    /// <param name="players">The players to attempt to spawn on. This will not force relevance.</param>
-    private static void Spawn(PhotonView view, PhotonPlayer[] players)
+    public static void Spawn(PhotonView view, PhotonPlayer[] players)
     {
         if (!view.isMine)
             return;
 
-        //if we are not the root view then we should handle it from the root view
+        PhotonView parent = view.ParentView;
+        if (parent)
+        {
+            Spawn(parent, players);
+            return;
+        }
+
         if (view.instantiationId != view.viewID)
         {
-            PhotonView root = PhotonView.Find(view.instantiationId);
-            Spawn(root, players);
+            parent = PhotonView.Find(view.instantiationId);
+            Spawn(parent, players);
             return;
         }
 
-        if (view.ParentView && !view.ParentView.HasSpawned)
-        {
-            Spawn(view.ParentView, players);
-            return;
-        }
+        _spawnStructureRoot(view, players);
+    }
 
-        //find all children that belong to us
-        PhotonView[] children = view.GetComponentsInChildren<PhotonView>(true);
-        List<PhotonView> childrenList = new List<PhotonView>(children);
-        for (int i = 0; i < childrenList.Count; i++)
-        {
-            if (childrenList[i].instantiationId != view.instantiationId)
-            {
-                childrenList.RemoveAt(i);
-                i--;
-            }
-        }
-        PhotonView[] ownedChildren = childrenList.ToArray();
-        int[] ownedChildrenId = new int[ownedChildren.Length];
-        for (int i = 0; i < ownedChildren.Length; i++)
-        {
-            PhotonView child = ownedChildren[i];
-            ownedChildrenId[i] = child.viewID;
-        }
-
-        foreach (PhotonView child in ownedChildren)
-        {
-            child.OnSpawn();
-        }
+    //Spawn a view that is a root of new structure
+    private static void _spawnStructureRoot(PhotonView view, PhotonPlayer[] players)
+    {
+        // Get all views that are children of the main view
+        PhotonView[] allViews = view.GetComponentsInChildren<PhotonView>(true);
+        // Get views that are a part of this prefab
+        PhotonView[] prefabViews =
+            allViews.Where(photonView => photonView.instantiationId == view.instantiationId).ToArray();
 
         view.RebuildRelevance();
 
-        PhotonPlayer[] relevantPlayers = view.RelevantPlayers;
+        // Create the object on relevant players
+        InternalTryCreateOnPlayers(prefabViews, players);
 
-        InternalTryCreateOnPlayers(ownedChildren, relevantPlayers);
+        // Spawn the actual view structure
+        _spawnStructurePiece(view, players, prefabViews);
+    }
 
-        //Create the serialized data to send
-        Hashtable[] serializedReliableData = new Hashtable[ownedChildren.Length];
-        Hashtable[] serializedUnreliableData = new Hashtable[ownedChildren.Length];
-        for (int i = 0; i < ownedChildren.Length; i++)
+    //Spawn all members of a view
+    private static void _spawnStructurePiece(PhotonView view, PhotonPlayer[] players, PhotonView[] structure)
+    {
+        if (!view.HasSpawned)
+            view.OnSpawn();
+
+        // Find all players to spawn on and register them as spawning
+        PhotonPlayer[] targetPlayers = players.Where(view.ShouldSpawnOnPlayer).ToArray();
+
+        // If no players need a spawn then do not send the message
+        if (targetPlayers.Length != 0)
         {
-            PhotonView child = ownedChildren[i];
-
-            networkingPeer.OnSerializeReliableWrite(child, true);
-            networkingPeer.OnSerializeUnreliableWrite(child);
-
-            serializedReliableData[i] = child.reliableSerializedData;
-            serializedUnreliableData[i] = child.unreliableSerializedData;
-        }
-
-        Hashtable evData = new Hashtable();
-        evData[(byte)0] = networkingPeer.ServerTimeInMilliSeconds;
-        evData[(byte)1] = ownedChildrenId;
-        evData[(byte)2] = serializedReliableData;
-        evData[(byte)3] = serializedUnreliableData;
-        evData[(byte)4] = networkingPeer.currentLevelPrefix;
-
-        if (view.ParentView)
-            evData[(byte)5] = view.ParentView.viewID;
-
-        evData[(byte) 6] = view.ControllerActorNr;
-
-        int[] relevantPlayerIds = new int[relevantPlayers.Length];
-        for (int i = 0; i < relevantPlayers.Length; i++)
-        {
-            PhotonPlayer photonPlayer = relevantPlayers[i];
-            relevantPlayerIds[i] = photonPlayer.ID;
-        }
-
-        RaiseEventOptions options = new RaiseEventOptions();
-        options.TargetActors = relevantPlayerIds;
-
-        RaiseEvent(PunEvent.SpawnObject, evData, true, options);
-
-        //Children that are not part of the prefab will not be spawned, so we go through
-        foreach (PhotonView child in children)
-        {
-            if (child != view && child.ParentView == view && child.instantiationId != view.viewID)
+            // Register spawning on every player we are spawning on
+            foreach (PhotonPlayer photonPlayer in targetPlayers)
             {
-                Spawn(child, relevantPlayers);
+                view.OnSpawnedOnPlayer(photonPlayer);
             }
+
+            networkingPeer.OnSerializeReliableWrite(view, true);
+            networkingPeer.OnSerializeUnreliableWrite(view);
+
+            // Gather all player ids
+            int[] targetPlayerIds = targetPlayers.Select(photonPlayer => photonPlayer.ID).ToArray();
+
+            // Construct the message data
+            Hashtable evData = new Hashtable
+            {
+                [(byte)0] = networkingPeer.ServerTimeInMilliSeconds,
+                [(byte)1] = view.viewID,
+                [(byte)2] = view.instantiationId,
+                [(byte)3] = view.reliableSerializedData,
+                [(byte)4] = view.unreliableSerializedData,
+                [(byte)5] = (short)view.gameObject.scene.buildIndex
+            };
+
+            // Store the parent view if we are the root
+            if (view.instantiationId == view.viewID && view.ParentView)
+                evData[(byte)6] = view.ParentView.viewID;
+
+            evData[(byte)7] = view.ControllerActorNr;
+
+            RaiseEventOptions eventOptions = new RaiseEventOptions { TargetActors = targetPlayerIds };
+
+            RaiseEvent(PunEvent.SpawnObject, evData, true, eventOptions);
+        }
+
+        // Spawn all child parts
+        foreach (PhotonView structureView in structure)
+        {
+            if (structureView.ParentView == view)
+            {
+                // Spawn pieces of the prefab without checking to spawn again
+                if (structureView.instantiationId == view.viewID)
+                    _spawnStructurePiece(structureView, targetPlayers,
+                        structure.Where(photonView => photonView.ParentView == structureView).ToArray());
+                else
+                    _spawnStructureRoot(structureView, targetPlayers);
+            }
+        }
+    }
+
+    internal static void HandleSpawn(Hashtable evData, PhotonPlayer player)
+    {
+        int time = (int)evData[(byte)0];
+        int id = (int)evData[(byte)1];
+        int instantiationId = (int) evData[(byte) 2];
+        Hashtable serializedReliableData = (Hashtable) evData[(byte)3];
+        Hashtable serializedUnreliableData = (Hashtable) evData[(byte)4];
+        short prefix = (short)evData[(byte)5];
+        int controllerId = (int) evData[(byte) 7];
+
+        PhotonView view = PhotonView.Find(id);
+        if (view == null)
+        {
+            Debug.LogWarning("Cannot find view to spawn. Possible leaked data from previous level.");
+            return;
+        }
+
+        if (view.prefix > 0 && view.prefix != prefix)
+        {
+            Debug.LogWarning("View spawned with wrong level prefix.");
+            return;
+        }
+
+        // Only the owner can send a spawn
+        if (view.owner != player)
+        {
+            Debug.LogError("Spawn from non-owner player.");
+            return;
+        }
+
+        view.controllerId = controllerId;
+        view.instantiationId = instantiationId;
+
+        networkingPeer.OnSerializeReliableRead(serializedReliableData, player, time);
+        networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData, player, time);
+
+        view.OnSpawn();
+
+        if (evData.ContainsKey((byte)6))
+        {
+            PhotonView parent = PhotonView.Find((int)evData[(byte)5]);
+            view.transform.parent = parent.transform;
         }
     }
 
@@ -2466,6 +2485,20 @@ public static class PhotonNetwork
         }
 
         GameObject newObject = Object.Instantiate(prefabGo, position, rotation) as GameObject;
+
+        //Find the scene to add to, -1 is an unregistered scene
+        if (prefix != -1)
+        {
+            foreach (Scene scene in SceneManager.GetAllScenes())
+            {
+                if (scene.buildIndex == prefix && scene.buildIndex != -1)
+                {
+                    SceneManager.MoveGameObjectToScene(newObject, scene);
+                    break;
+                }
+            }
+        }
+
         PhotonView[] views = newObject.GetComponentsInChildren<PhotonView>(true);
 
         for (int i = 0; i < viewIds.Length; i++)
@@ -2534,57 +2567,44 @@ public static class PhotonNetwork
         PhotonView root = viewStructure[0];
 
         //Get all players that need this view structure created on them
-        List<PhotonPlayer> playerList = new List<PhotonPlayer>(players);
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            if (!root.ShouldCreateOnPlayer(players[i]))
-            {
-                playerList.RemoveAt(i);
-                i--;
-            }
-        }
+        List<PhotonPlayer> targetPlayerList = new List<PhotonPlayer>(players);
+        targetPlayerList.RemoveAll(photonPlayer => !root.ShouldCreateOnPlayer(photonPlayer));
 
-        if (playerList.Count == 0)
+        // No players need creation
+        if (targetPlayerList.Count == 0)
             return;
 
         //Get the player ids
-        int[] playerIds = new int[playerList.Count];
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            PhotonPlayer photonPlayer = playerList[i];
-            playerIds[i] = photonPlayer.ID;
-        }
+        int[] playerIds = targetPlayerList.Select(photonPlayer => photonPlayer.ID).ToArray();
 
         //Get the view ids in the structure
-        int[] viewIds = new int[viewStructure.Length];
-        for (int i = 0; i < viewStructure.Length; i++)
+        int[] viewIds = viewStructure.Select(delegate(PhotonView view)
         {
-            PhotonView photonView = viewStructure[i];
-            viewIds[i] = photonView.viewID;
-
-            foreach (PhotonPlayer photonPlayer in players)
+            foreach (PhotonPlayer photonPlayer in targetPlayerList)
             {
-                photonView.RegisterToPlayer(photonPlayer);
+                view.OnCreatedOnPlayer(photonPlayer);
             }
-        }
+
+            return view.viewID;
+        }).ToArray();
 
         //Create and send the data
-        Hashtable evData = new Hashtable();
-        evData[(byte)0] = networkingPeer.ServerTimeInMilliSeconds;
-        evData[(byte)1] = root.prefabName;
-        evData[(byte)2] = networkingPeer.currentLevelPrefix;
-        evData[(byte)3] = viewIds;
-        evData[(byte)4] = root.group;
-        evData[(byte)5] = root.transform.position;
-        evData[(byte)6] = root.transform.rotation;
-        evData[(byte)7] = root.ownerId;
-        evData[(byte)8] = root.ControllerActorNr;
+        Hashtable evData = new Hashtable
+        {
+            [(byte) 0] = networkingPeer.ServerTimeInMilliSeconds,
+            [(byte) 1] = root.prefabName,
+            [(byte) 2] = (short) root.gameObject.scene.buildIndex,
+            [(byte) 3] = viewIds,
+            [(byte) 4] = root.@group,
+            [(byte) 5] = root.transform.position,
+            [(byte) 6] = root.transform.rotation,
+            [(byte) 7] = root.ownerId,
+            [(byte) 8] = root.ControllerActorNr
+        };
 
-        //TODO: Add instantiated data here
+        RaiseEventOptions options = new RaiseEventOptions {TargetActors = playerIds};
 
-        RaiseEventOptions options = new RaiseEventOptions();
-        options.TargetActors = playerIds;
-
+        //Raise the event on the network
         RaiseEvent(PunEvent.Create, evData, true, options);
     }
 
@@ -2804,7 +2824,7 @@ public static class PhotonNetwork
 
             foreach (PhotonPlayer photonPlayer in players)
             {
-                photonView.UnregisterToPlayer(photonPlayer);
+                photonView.OnDestroyedOnPlayer(photonPlayer);
             }
 
             viewIds[i] = photonView.viewID;
@@ -3096,7 +3116,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelNumber);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(levelNumber, LoadSceneMode.Single);
 
         networkingPeer.LevelLoadOperation = operation;
     }
@@ -3124,7 +3144,7 @@ public static class PhotonNetwork
 
         PhotonNetwork.isMessageQueueRunning = false;
         networkingPeer.loadingLevelAndPausedNetwork = true;
-        AsyncOperation operation = Application.LoadLevelAsync(levelName);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
 
         networkingPeer.LevelLoadOperation = operation;
     }

@@ -9,9 +9,11 @@ using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = UnityEngine.Object;
 
@@ -654,7 +656,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             this.CurrentGame.CacheProperties(gameProperties);
             SendMonoMessage(PhotonNetworkingMessage.OnPhotonCustomRoomPropertiesChanged, gameProperties);
-            if (PhotonNetwork.automaticallySyncScene)
+            if (PhotonNetwork.automaticallySyncScene && !PhotonNetwork.isMasterClient)
             {
                 this.LoadLevelIfSynced();   // will load new scene if sceneName was changed
             }
@@ -1842,6 +1844,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     if (originatingPlayer == pv.owner || !pv.isOwnerActive && originatingPlayer.isMasterClient)
                     {
                         pv.ownerId = newOwnerId;
+                        pv.RebuildNetworkRelavance();
                         if(newOwnerId == PhotonNetwork.player.ID)
                             pv.SendMessage("OnStartOwner", false, SendMessageOptions.DontRequireReceiver);
                     }
@@ -1979,20 +1982,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 int remoteUpdateServerTimestamp = (int)serializeData[(byte)0];
                 short remoteLevelPrefix = -1;
                 short initialDataIndex = 1;
-                if (serializeData.ContainsKey((byte)1))
-                {
-                    remoteLevelPrefix = (short)serializeData[(byte)1];
-                    initialDataIndex = 2;
-                }
 
                 for (short s = initialDataIndex; s < serializeData.Count; s++)
                 {
                     if (photonEvent.Code == PunEvent.SendSerialize)
                         this.OnSerializeUnreliableRead(serializeData[s] as Hashtable, originatingPlayer,
-                            remoteUpdateServerTimestamp, remoteLevelPrefix);
+                            remoteUpdateServerTimestamp);
                     else
                         this.OnSerializeReliableRead(serializeData[s] as Hashtable, originatingPlayer,
-                            remoteUpdateServerTimestamp, remoteLevelPrefix);
+                            remoteUpdateServerTimestamp);
                 }
                 break;
 
@@ -2127,6 +2125,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         if (originatingPlayer == view.owner || !view.isOwnerActive && originatingPlayer.isMasterClient)
         {
             view.controllerId = playerId;
+            view.RebuildNetworkRelavance();
             if (playerId == PhotonNetwork.player.ID)
                 view.SendMessage("OnStartController", false, SendMessageOptions.DontRequireReceiver);
         }
@@ -2530,7 +2529,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         return true;
     }
 
-    internal Hashtable SendCreate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
+    internal Hashtable SendCreate(string prefabName, Vector3 position, Quaternion rotation, int group, short scene, int[] viewIDs, object[] data, bool isGlobalObject)
     {
         // first viewID is now also the gameobject's instantiateId
         int instantiateId = viewIDs[0];   // LIMITS PHOTONVIEWS&PLAYERS
@@ -2970,7 +2969,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         Debug.Log("TransferOwnership() view " + viewID + " to: " + playerID + " Time: " + Environment.TickCount % 1000);
         //PhotonNetwork.networkingPeer.OpRaiseEvent(PunEvent.OwnershipTransfer, true, new int[] {viewID, playerID}, 0, EventCaching.DoNotCache, null, ReceiverGroup.All, 0);
-        this.OpRaiseEvent(PunEvent.ControllerTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
+        this.OpRaiseEvent(PunEvent.OwnershipTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
     }
 
     internal protected void TransferController(int viewId, int playerId)
@@ -3439,10 +3438,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 Debug.Log("New level loaded. Removed " + removeKeys.Count + " scene view IDs from last level.");
         }
 
-        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
+        PhotonView[] views = photonViewList.Values.ToArray();
+
+        foreach (PhotonView view in views)
         {
-            PhotonView view = pair.Value;
-            if (!view.HasSpawned && !view.isRuntimeInstantiated)
+            if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated && view.isMine)
                 PhotonNetwork.Spawn(view);
         }
     }
@@ -3540,10 +3540,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     dataPerGroupReliable[view.group] = new Hashtable();
                     dataPerGroupReliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
-                    if (currentLevelPrefix >= 0)
-                    {
-                        dataPerGroupReliable[view.group][(byte)1] = this.currentLevelPrefix;
-                    }
                 }
 
                 Hashtable reliableGroupHashtable = dataPerGroupReliable[view.group];
@@ -3553,10 +3549,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     dataPerGroupUnreliable[view.group] = new Hashtable();
                     dataPerGroupUnreliable[view.group][(byte)0] = this.ServerTimeInMilliSeconds;
-                    if (currentLevelPrefix >= 0)
-                    {
-                        dataPerGroupUnreliable[view.group][(byte)1] = this.currentLevelPrefix;
-                    }
                 }
 
                 Hashtable unreliableGroupHashtable = dataPerGroupUnreliable[view.group];
@@ -3603,7 +3595,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     /// <summary>
     /// Reads updates created by OnSerializeWrite
     /// </summary>
-    internal void OnSerializeReliableRead(Hashtable data, PhotonPlayer sender, int networkTime, short correctPrefix)
+    internal void OnSerializeReliableRead(Hashtable data, PhotonPlayer sender, int networkTime)
     {
         // read view ID from key (byte)0: a int-array (PUN 1.17++)
         int viewID = (int)data[(byte)0];
@@ -3612,13 +3604,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         PhotonView view = this.GetPhotonView(viewID);
         if (view == null)
         {
-            Debug.LogWarning("Received OnSerialization for view ID " + viewID + ". We have no such PhotonView! Ignored this if you're leaving a room. State: " + this.State);
-            return;
-        }
-
-        if (view.prefix > 0 && correctPrefix != view.prefix)
-        {
-            Debug.LogError("Received OnSerialization for view ID " + viewID + " with prefix " + correctPrefix + ". Our prefix is " + view.prefix);
+            //Debug.LogWarning("Received OnSerialization for view ID " + viewID + ". We have no such PhotonView! Ignored this if you're leaving a room. State: " + this.State);
             return;
         }
 
@@ -3651,7 +3637,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     /// <summary>
     /// Reads updates created by OnSerializeWrite
     /// </summary>
-    internal void OnSerializeUnreliableRead(Hashtable data, PhotonPlayer sender, int networkTime, short correctPrefix)
+    internal void OnSerializeUnreliableRead(Hashtable data, PhotonPlayer sender, int networkTime)
     {
         // read view ID from key (byte)0: a int-array (PUN 1.17++)
         int viewID = (int)data[(byte)0];
@@ -3660,13 +3646,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         PhotonView view = this.GetPhotonView(viewID);
         if (view == null)
         {
-            Debug.LogWarning("Received OnSerialization for view ID " + viewID + ". We have no such PhotonView! Ignored this if you're leaving a room. State: " + this.State);
-            return;
-        }
-
-        if (view.prefix > 0 && correctPrefix != view.prefix)
-        {
-            Debug.LogError("Received OnSerialization for view ID " + viewID + " with prefix " + correctPrefix + ". Our prefix is " + view.prefix);
+            //Debug.LogWarning("Received OnSerialization for view ID " + viewID + ". We have no such PhotonView! Ignored this if you're leaving a room. State: " + this.State);
             return;
         }
 
@@ -3938,13 +3918,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         object sceneId = PhotonNetwork.room.customProperties[NetworkingPeer.CurrentSceneProperty];
         if (sceneId is int)
         {
-            if (Application.loadedLevel != (int)sceneId)
-                PhotonNetwork.LoadLevel((int)sceneId);
+            PhotonNetwork.LoadLevel((int)sceneId);
         }
         else if (sceneId is string)
         {
-            if (Application.loadedLevelName != (string)sceneId)
-                PhotonNetwork.LoadLevel((string)sceneId);
+            PhotonNetwork.LoadLevel((string)sceneId);
         }
     }
 
@@ -3958,20 +3936,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             Debug.LogError("Parameter levelId can't be null!");
             return;
-        }
-
-        // check if "current level" is already set in props
-        if (PhotonNetwork.room.customProperties.ContainsKey(NetworkingPeer.CurrentSceneProperty))
-        {
-            object levelIdInProps = PhotonNetwork.room.customProperties[NetworkingPeer.CurrentSceneProperty];
-            if (levelIdInProps is int && Application.loadedLevel == (int)levelIdInProps)
-            {
-                return;
-            }
-            if (levelIdInProps is string && Application.loadedLevelName.Equals((string)levelIdInProps))
-            {
-                return;
-            }
         }
 
         // current level is not yet in props, so this client has to set it

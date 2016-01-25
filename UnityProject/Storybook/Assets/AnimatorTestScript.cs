@@ -9,7 +9,7 @@ public class AnimatorTestScript : Photon.PunBehaviour
     private bool m_isCombatStarted = false;
 
     // Use this for initialization
-    void Awake()
+    override protected void Awake()
     {
         DontDestroyOnLoad(this);
         m_combatAnimator = GetComponent<Animator>();

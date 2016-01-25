@@ -240,7 +240,7 @@ public class CombatMenuUI : MonoBehaviour {
     {
         if(m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
-            m_mapIDtoUI[pho.ID].text = newHP.ToString();
+            m_mapIDtoUI[photonPlayer.ID].text = newHP.ToString();
         }
     }
 }

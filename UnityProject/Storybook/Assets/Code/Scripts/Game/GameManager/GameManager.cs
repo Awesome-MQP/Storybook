@@ -14,6 +14,7 @@ public class GameManager : Photon.PunBehaviour
 
     [SerializeField]
     private EnemyTeam m_enemyTeamForCombat;
+    private string m_enemyTeamPrefabLoc;
 
     [SerializeField]
     private PlayerTeam m_playerTeamForCombat;
@@ -24,9 +25,10 @@ public class GameManager : Photon.PunBehaviour
     [SerializeField]
     private DungeonMaster m_dungeonMaster;
 
-    [SerializeField]
     [Tooltip("The player object to spawn for all players in the game.")]
     private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
+    private int m_deckSize = 20;
 
     private GameObject m_combatInstance;
     private MusicManager m_musicMgr;
@@ -72,7 +74,7 @@ public class GameManager : Photon.PunBehaviour
             GameObject playerTeam = PhotonNetwork.Instantiate(m_playerTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerTeam.GetComponent<PhotonView>());
 
-            GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
+            GameObject enemyTeam = PhotonNetwork.Instantiate(m_enemyTeamPrefabLoc + m_enemyTeamForCombat.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(enemyTeam.GetComponent<PhotonView>());
 
             for(int i = 0; i < PhotonNetwork.playerList.Length; i++)
@@ -107,15 +109,25 @@ public class GameManager : Photon.PunBehaviour
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.GenerateMap();
         RoomObject startRoom = mapManager.PlaceStartRoom();
-        RoomMover playerMover = FindObjectOfType<RoomMover>();
-        List<NetworkNodeMover> players = new List<NetworkNodeMover>(FindObjectsOfType<NetworkNodeMover>());
+        StorybookPlayerMover playerMover = FindObjectOfType<StorybookPlayerMover>();
         playerMover.SpawnInRoom(startRoom);
+        List<PlayerWorldPawn> players = new List<PlayerWorldPawn>(FindObjectsOfType<PlayerWorldPawn>());
+        int i = 0;
+        foreach(PlayerWorldPawn player in players)
+        {
+            player.transform.position = playerMover.PlayerPositions[i].transform.position;
+            playerMover.RegisterPlayerWorldPawn(player);
+            i++;
+        }
+        Camera.main.transform.position = startRoom.CameraNode.position;
+        Camera.main.transform.rotation = startRoom.CameraNode.rotation;
     }
 
     public void TransitionToCombat()
     {
         Debug.Log("Transitioning to combat");
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, false);
+        EnableMovementComponents(false);
         StartCombat();
     }
 
@@ -123,6 +135,25 @@ public class GameManager : Photon.PunBehaviour
     {
         Debug.Log("Transitioning to overworld");
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, true);
+    }
+
+    [PunRPC]
+    protected void EnableMovementComponents(bool isEnable)
+    {
+        Debug.Log("Disabling movement components");
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        mapManager.LoadMap(isEnable);
+        mapManager.enabled = isEnable;
+
+        StorybookPlayerMover playerMover = FindObjectOfType<StorybookPlayerMover>();
+        if (!isEnable)
+        {
+            playerMover.EnterCombat();
+        }
+        else
+        {
+            playerMover.ExitCombat();
+        }
     }
 
     /// <summary>
@@ -153,6 +184,21 @@ public class GameManager : Photon.PunBehaviour
         */
     }
 
+    public PlayerInventory GetLocalPlayerInventory()
+    {
+        PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
+        foreach(PlayerInventory pi in allInventories)
+        {
+            Debug.Log("Checking player inventory");
+            Debug.Log("Inventory id = " + pi.PlayerId);
+            if (pi.PlayerId == PhotonNetwork.player.ID)
+            {
+                return pi;
+            }
+        }
+        return null;
+    }
+    
     /// <summary>
     /// Gets all of the PlayerObject in the game
     /// </summary>
@@ -257,5 +303,16 @@ public class GameManager : Photon.PunBehaviour
     {
         get { return m_playerTeamForCombat; }
         set { m_playerTeamForCombat = value; }
+    }
+
+    public int DeckSize
+    {
+        get { return m_deckSize; }
+    }
+
+    public string EnemyTeamPrefabLoc
+    {
+        get { return m_enemyTeamPrefabLoc; }
+        set { m_enemyTeamPrefabLoc = value; }
     }
 }

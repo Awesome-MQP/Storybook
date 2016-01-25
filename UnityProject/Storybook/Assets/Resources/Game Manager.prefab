@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 138782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -248.82465, y: 61.1, z: 1230.7909}
+  m_LocalPosition: {x: 268.5157, y: 244.49475, z: 1230.7909}
   m_LocalScale: {x: 1.6052281, y: 1.6052282, z: 1.6052282}
   m_Children: []
   m_Father: {fileID: 0}
@@ -49,10 +49,7 @@ MonoBehaviour:
     type: 2}
   m_playerPawn: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94, type: 2}
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
-  m_defaultPlayerObject:
-    m_asset: Resources/PlayerObject
-    m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerObject.prefab
+  m_sceneFader: {fileID: 11488256, guid: 526dcdcaeb1249946982c061c9e843ea, type: 2}
 --- !u!114 &11473206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -74,6 +71,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
+  - {fileID: 11465666}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

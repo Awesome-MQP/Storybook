@@ -79,7 +79,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     {
         m_health -= damageAmount;
 
-        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
         // Adds support to UI
         combatMenu.UpdateHitpointsOfPlayer(PhotonNetwork.player, m_health);
 

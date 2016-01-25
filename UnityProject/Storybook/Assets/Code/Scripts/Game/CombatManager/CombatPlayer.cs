@@ -54,7 +54,7 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawStartingHand()
     {
-        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
 
         for (int i = 0; i < m_handSize; i++)
         {
@@ -108,7 +108,7 @@ public abstract class CombatPlayer : CombatPawn
 
     public void RemovePageFromHand(Page pageToRemove)
     {
-        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
 
         m_playerHand.Remove(pageToRemove);
 
@@ -174,7 +174,7 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawPageForTurn()
     {
-        CombatMenuUI combatMenu = FindObjectOfType<CombatMenuUI>();
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
 
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);

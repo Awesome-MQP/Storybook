@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
-public class CombatMenuUI : MonoBehaviour {
+public class CombatMenuUIHandler : UIHandler {
 
     private Vector3 m_player1InfoPosition = new Vector3(-349, 197, 0);
     private Vector3 m_player2InfoPosition = new Vector3(-131, 197, 0);
@@ -242,5 +243,10 @@ public class CombatMenuUI : MonoBehaviour {
         {
             m_mapIDtoUI[photonPlayer.ID].text = newHP.ToString();
         }
+    }
+
+    public override void PageButtonPressed(PageButton pageButton)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
-public class CombatMenuUIHandler : UIHandler {
+public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
 
     private Vector3 m_player1InfoPosition = new Vector3(-349, 197, 0);
     private Vector3 m_player2InfoPosition = new Vector3(-131, 197, 0);
@@ -23,9 +23,18 @@ public class CombatMenuUIHandler : UIHandler {
     private Page[] m_pagesInHand = new Page[5];
     private Button[] m_pageButtons = new Button[5];
 
+    public EventDispatcher Dispatcher
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     // Use this for initialization
-    void Start () {
-        _pollPhotonForPlayerInfo();   
+    void Awake () {
+        _pollPhotonForPlayerInfo();
+        Dispatcher.RegisterEventListener(this); 
 	}
 	
 	// Update is called once per frame

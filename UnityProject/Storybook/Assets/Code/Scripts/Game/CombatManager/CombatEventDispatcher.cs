@@ -19,6 +19,22 @@ public class CombatEventDispatcher : EventDispatcher
             listener.OnCheckingPawnHit(callback);
         }
     }
+
+    public void OnSendingPlayerHand(CombatEventListener.PawnSendingHandCallback callback)
+    {
+        foreach (CombatEventListener listener in IterateListeners<CombatEventListener>())
+        {
+            listener.OnCheckingPlayerHand(callback);
+        }
+    }
+}
+
+// This interface handles any Combat related events between players and the UI.
+// Primarily, it is meant to be used for players to pass their hands to the UI, and
+// for the UI to know when to update a player's hitpoints.
+public interface ICombatEventListener : IEventListener
+{
+
 }
 
 public abstract class CombatEventListener : IEventListener
@@ -40,4 +56,9 @@ public abstract class CombatEventListener : IEventListener
     public delegate void PawnIsHitCallback(CombatPawn pawnHit, CombatMove moveUsed);
 
     public abstract void OnCheckingPawnHit(PawnIsHitCallback callback);
+
+    public delegate void PawnSendingHandCallback(Page[] hand);
+
+    public abstract void OnCheckingPlayerHand(PawnSendingHandCallback callback);
+
 }

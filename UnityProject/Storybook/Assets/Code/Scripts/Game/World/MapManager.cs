@@ -451,7 +451,6 @@ public class MapManager : Photon.PunBehaviour {
 
         RoomData exitRoom = new RoomData(exitX, exitY, false, false, false, false, RoomType.Exit);
         m_worldMapData[exitX, exitY] = exitRoom;
-        Debug.Log("Is actually exit = " + m_worldMapData[exitX, exitY].RoomType);
         m_exitPoint = new Point(exitX, exitY);
     }
 

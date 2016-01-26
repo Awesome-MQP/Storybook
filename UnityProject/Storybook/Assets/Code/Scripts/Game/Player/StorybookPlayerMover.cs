@@ -86,6 +86,10 @@ public class StorybookPlayerMover : BasePlayerMover {
         }
     }
 
+    /// <summary>
+    /// Sets the target position for all the players in the world pawns list
+    /// </summary>
+    /// <param name="nodeForPlayers">The position to be used as the target</param>
     public void MovePlayersToNode(Vector3 nodeForPlayers)
     {
         foreach(PlayerWorldPawn playerPawn in m_playerWorldPawns)
@@ -94,12 +98,22 @@ public class StorybookPlayerMover : BasePlayerMover {
         }
     }
 
+    /// <summary>
+    /// Adds the given PlayerWorldPawn to the list of world pawns
+    /// </summary>
+    /// <param name="pawnToRegister">The pawn to add to the list</param>
     public void RegisterPlayerWorldPawn(PlayerWorldPawn pawnToRegister)
     {
         m_playerWorldPawns.Add(pawnToRegister);
         pawnToRegister.transform.parent = transform;
     }
 
+    /// <summary>
+    /// Waits until the players have moved to the door
+    /// When the players reach the door, calls the MoveToNextRoom function to move the players to the room that the door connects
+    /// </summary>
+    /// <param name="newRoomLoc">The location of the room to move to</param>
+    /// <returns></returns>
     public IEnumerator MoveToDoor(Location newRoomLoc)
     {
         _playWalkAnimations();
@@ -111,6 +125,10 @@ public class StorybookPlayerMover : BasePlayerMover {
         MoveToNextRoom(newRoomLoc);
     }
 
+    /// <summary>
+    /// Called when the game is transitioning to combat from the dungeon
+    /// Disables all of the world pawns
+    /// </summary>
     public void EnterCombat()
     {
         _playIdleAnimations();
@@ -122,6 +140,10 @@ public class StorybookPlayerMover : BasePlayerMover {
         }
     }
 
+    /// <summary>
+    /// Called when the game is transitioning to the dungeon from combat
+    /// Destroys the enemy pawns that are in the center of the room, and enables the PlayerWorldPawns
+    /// </summary>
     public void ExitCombat()
     {
         m_isInCombat = false;
@@ -136,6 +158,9 @@ public class StorybookPlayerMover : BasePlayerMover {
         OpenDeckManagementMenu();
     }
 
+    /// <summary>
+    /// Opens the menu for selecting a page to create a room
+    /// </summary>
     public void OpenPageForRoomMenu()
     {
         Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
@@ -146,6 +171,9 @@ public class StorybookPlayerMover : BasePlayerMover {
         m_isMenuOpen = true;
     }
 
+    /// <summary>
+    /// Opens the menu for managing the player's deck
+    /// </summary>
     public void OpenDeckManagementMenu()
     {
         Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
@@ -154,6 +182,11 @@ public class StorybookPlayerMover : BasePlayerMover {
         uiHandler.PopulateMenu();
     }
 
+    /// <summary>
+    /// Called when a player has selected a page to use to create a room
+    /// Uses the selected page data to create the next room
+    /// </summary>
+    /// <param name="pageToUseData">The page data from the page that the player selected for the room</param>
     public void SubmitPageForRoom(PageData pageToUseData)
     {
         Destroy(m_canvas.gameObject);

@@ -44,6 +44,10 @@ public class PageForRoomUIHandler : UIHandler {
         gridGroup.spacing = new Vector2(m_gridXPadding, m_gridYPadding);
     }
 
+    /// <summary>
+    /// Fills the menu with all of the pages currently in the player's inventory
+    /// Creates the pages in the UI as page buttons so that they can be clicked
+    /// </summary>
     public void PopulateMenu()
     {
         GameManager gameManager = FindObjectOfType<GameManager>();
@@ -67,15 +71,19 @@ public class PageForRoomUIHandler : UIHandler {
         }
     }
 	
+    /// <summary>
+    /// When a page button is pressed in this menu, that page becomes the current selected page and is displayed
+    /// underneath the 'selected page' label
+    /// </summary>
+    /// <param name="buttonPressed">The page button that was pressed</param>
     public override void PageButtonPressed(PageButton buttonPressed)
     {
-        Debug.Log("Page button pressed");
-
         Button selectedButton = _initializePageButton(buttonPressed.PageData);
         selectedButton.enabled = false;
         RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
         RectTransform selectedPageRect = null;
 
+        // Find the selected page rect
         foreach(RectTransform rectT in AllRects)
         {
             if (rectT.name == "SelectedPage")
@@ -85,9 +93,9 @@ public class PageForRoomUIHandler : UIHandler {
             }
         }
 
+        // If there was a previously selected page, destroy it in the UI
         if (m_selectedButton != null)
         {
-            Debug.Log("Destroying previous page");
             Destroy(selectedPageRect.GetChild(0).gameObject);
         }
 
@@ -100,18 +108,28 @@ public class PageForRoomUIHandler : UIHandler {
         m_submitPageButton.enabled = true;
     }
 
+    /// <summary>
+    /// Called when the submit button is pressed in the UI
+    /// Submits the selected page as the one to use for the next room
+    /// </summary>
     public void SubmitPage()
     {
-        Debug.Log("Page submitted");
         //_dropAndReplaceSelectedPage();
         m_playerMover.SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
+    /// <summary>
+    /// Registers the player mover that created the UI
+    /// </summary>
+    /// <param name="playerMover">The player mover that created the UI</param>
     public void RegisterPlayerMover(StorybookPlayerMover playerMover)
     {
         m_playerMover = playerMover;
     }
 
+    /// <summary>
+    /// Removes the selected page from the player's inventory and replaces it with a default page
+    /// </summary>
     private void _dropAndReplaceSelectedPage()
     {
         GameManager gameManager = FindObjectOfType<GameManager>();

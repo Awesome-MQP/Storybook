@@ -587,6 +587,10 @@ public abstract class Inventory : PunBehaviour
         return m_itemsSet.Contains(item);
     }
 
+    /// <summary>
+    /// Checks to see if all of the slots in the inventory are filled with an item
+    /// </summary>
+    /// <returns>True if the inventory is full, false otherwise</returns>
     public bool IsInventoryFull()
     {
         foreach (Slot slot in m_slots)
@@ -599,6 +603,10 @@ public abstract class Inventory : PunBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Finds the first empty slot in the inventory
+    /// </summary>
+    /// <returns>The index of the first empty slot</returns>
     public int FirstOpenSlot()
     {
         int i = 0;

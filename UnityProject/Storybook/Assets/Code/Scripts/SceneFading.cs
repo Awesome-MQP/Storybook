@@ -39,15 +39,22 @@ public class SceneFading : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Starts the fade over the network using an RPC call
+    /// </summary>
+    /// <param name="direction">The direction to fade the screen in</param>
+    /// <returns>The speed of the fade</returns>
     public float BeginFade(int direction)
     {
         photonView.RPC("BeginFadeOverNetwork", PhotonTargets.All, direction);
         return m_fadeSpeed;
     }
 
+    /// <summary>
+    /// Begins the fade in the opposite direction (black to clear) when the level has completed loading
+    /// </summary>
     public void LevelWasLoaded()
     {
-        Debug.Log("Level was loaded");
         if (PhotonNetwork.isMasterClient)
         {
             BeginFade(-1);

@@ -129,7 +129,6 @@ public class GameManager : Photon.PunBehaviour
 
     public void TransitionToCombat()
     {
-        Debug.Log("Transitioning to combat");
         StartCoroutine(_fadeScreenToCombat());
     }
 
@@ -149,7 +148,6 @@ public class GameManager : Photon.PunBehaviour
 
     private void _TransitionToOverworld()
     {
-        Debug.Log("Transitioning to overworld");
         StartCoroutine(_fadeScreenFromCombat());
     }
 
@@ -178,7 +176,6 @@ public class GameManager : Photon.PunBehaviour
     [PunRPC]
     protected void EnableMovementComponents(bool isEnable)
     {
-        Debug.Log("Disabling movement components");
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.LoadMap(isEnable);
         mapManager.enabled = isEnable;
@@ -201,11 +198,7 @@ public class GameManager : Photon.PunBehaviour
     {
         CombatManager cm = m_combatInstance.GetComponent<CombatManager>();
 
-        Debug.Log("Destroying all teams");
-
         cm.DestroyAllTeams();
-
-        Debug.Log("Destroying combat instance");
 
         GameObject currentCombatInstance = m_combatInstance;
 
@@ -227,8 +220,6 @@ public class GameManager : Photon.PunBehaviour
         PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
         foreach(PlayerInventory pi in allInventories)
         {
-            Debug.Log("Checking player inventory");
-            Debug.Log("Inventory id = " + pi.PlayerId);
             if (pi.PlayerId == PhotonNetwork.player.ID)
             {
                 return pi;

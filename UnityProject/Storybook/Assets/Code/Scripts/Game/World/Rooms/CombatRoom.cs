@@ -64,7 +64,6 @@ public class CombatRoom : RoomObject {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 Quaternion currentEnemyRot = m_enemyPosList[i].rotation;
                 GameObject pawnGameObject = PhotonNetwork.Instantiate(pawn.name, currentEnemyPos, currentEnemyRot, 0);
-                Debug.Log("Spawning pawn with name = " + pawn.name);
                 pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
                 m_enemyWorldPawns.Add(pawnGameObject);

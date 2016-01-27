@@ -177,7 +177,7 @@ public class Page : Item  {
 
     public PageData GetPageData()
     {
-        PageData pageData = new PageData(m_pageLevel, m_pageGenre);
+        PageData pageData = new PageData(m_pageLevel, m_pageGenre, m_pageMoveType);
         return pageData;
     }
 

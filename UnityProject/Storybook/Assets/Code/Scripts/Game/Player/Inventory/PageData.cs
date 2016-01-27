@@ -6,12 +6,14 @@ public struct PageData {
     private int m_pageLevel;
     private int m_inventoryId;
     private Genre m_pageGenre;
+    private MoveType m_pageType;
 
     public PageData(int pageLevel, Genre pageGenre)
     {
         m_pageLevel = pageLevel;
         m_pageGenre = pageGenre;
         m_inventoryId = -1;
+        m_pageType = MoveType.None;
     }
 
     public PageData(int pageLevel, Genre pageGenre, int inventoryId)
@@ -19,6 +21,15 @@ public struct PageData {
         m_pageLevel = pageLevel;
         m_pageGenre = pageGenre;
         m_inventoryId = inventoryId;
+        m_pageType = MoveType.None;
+    }
+
+    public PageData(int pageLevel, Genre pageGenre, MoveType pageType)
+    {
+        m_pageLevel = pageLevel;
+        m_pageGenre = pageGenre;
+        m_inventoryId = -1;
+        m_pageType = pageType;
     }
 
     /// <summary>
@@ -46,6 +57,15 @@ public struct PageData {
     {
         get { return m_pageGenre; }
         set { m_pageGenre = value; }
+    }
+
+    /// <summary>
+    /// The move type of the page
+    /// </summary>
+    public MoveType PageMoveType
+    {
+        get { return m_pageType; }
+        set { m_pageType = value; }
     }
 
 }

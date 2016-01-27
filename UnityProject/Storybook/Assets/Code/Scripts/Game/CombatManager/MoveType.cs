@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum MoveType {
-    Attack, Boost, Status
+    Attack, Boost, Status, None
 }

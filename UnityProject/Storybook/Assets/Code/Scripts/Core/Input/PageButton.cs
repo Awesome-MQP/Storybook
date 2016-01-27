@@ -55,6 +55,19 @@ public class PageButton : MonoBehaviour {
     }
 
     /// <summary>
+    /// The move type of the page that is tied to this button
+    /// </summary>
+    public MoveType PageMoveType
+    {
+        get { return m_pageData.PageMoveType; }
+        set
+        {
+            m_pageData.PageMoveType = value;
+            _updateButtonText();
+        }
+    }
+
+    /// <summary>
     /// The page data that is tied to this button
     /// </summary>
     public PageData PageData
@@ -79,6 +92,10 @@ public class PageButton : MonoBehaviour {
             if (t.name == "Level")
             {
                 t.text = "Level " + PageLevel.ToString();
+            }
+            if (t.name == "Page Type")
+            {
+                t.text = PageMoveType.ToString();
             }
         }
     }

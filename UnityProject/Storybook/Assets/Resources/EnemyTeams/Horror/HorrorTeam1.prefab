@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1575.46521, y: 1243.81885, z: 681.738953}
+  m_LocalPosition: {x: 1575.4652, y: 1243.8188, z: 681.73895}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -41,8 +41,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pawnsToSpawn:
-  - {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4, type: 2}
-  - {fileID: 11450368, guid: cfaec54079b08904dae891f3221af3b4, type: 2}
+  - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
+  - {fileID: 11471350, guid: 26e148fb9fa5d3946bb95c91823957cd, type: 2}
 --- !u!114 &11469974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,6 +64,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
+  - {fileID: 11453382}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -76,7 +77,17 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[0]
+      value: 
+      objectReference: {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[1]
+      value: 
+      objectReference: {fileID: 11471350, guid: 26e148fb9fa5d3946bb95c91823957cd,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 195538}

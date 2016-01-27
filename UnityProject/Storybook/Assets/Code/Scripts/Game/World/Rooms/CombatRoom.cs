@@ -49,7 +49,6 @@ public class CombatRoom : RoomObject {
     public override void OnRoomEnter()
     {
         m_musicManager.MusicTracks = m_musicTracks;
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -70,8 +69,11 @@ public class CombatRoom : RoomObject {
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-
+            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
+            return;
         }
+        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+
         return;
     }
 
@@ -81,6 +83,11 @@ public class CombatRoom : RoomObject {
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
             m_gameManager.TransitionToCombat();
+            return;
+        }
+        else
+        {
+            StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
             return;
         }
     }

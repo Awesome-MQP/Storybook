@@ -31,14 +31,14 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<Transform>{
 	    // if the player is moving, set the animation to moving
         if(!IsAtTarget)
         {
-            SwitchCharacterToWalking();
+            //SwitchCharacterToWalking();
         }
 
         // if the player has stopped moving, move to their position in the diamond.
         if(IsAtTarget)
         {
             //GetIntoPosition(m_playerNum);
-            SwitchCharacterToIdle();
+            //SwitchCharacterToIdle();
         }
 	}
 
@@ -75,6 +75,7 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<Transform>{
         Animator animator = GetComponent<Animator>();
         animator.SetBool("IdleToIdle", false);
         animator.SetBool("WalkToIdle", false);
+        animator.SetBool("WalkToWalk", true);
         animator.SetBool("IdleToWalk", true);
     }
 
@@ -85,5 +86,6 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<Transform>{
         animator.SetBool("WalkToWalk", false);
         animator.SetBool("IdleToWalk", false);
         animator.SetBool("WalkToIdle", true);
+        animator.SetBool("IdleToIdle", true);
     }
 }

@@ -44,7 +44,7 @@ public class TestPageAttackMove : PageMove {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= 1.2f)
+        else if (TimeSinceMoveStarted >= 3.0f)
         {
             Debug.Log("Page move is complete");
             playerAnimator.SetBool("IdleToAttack", false);

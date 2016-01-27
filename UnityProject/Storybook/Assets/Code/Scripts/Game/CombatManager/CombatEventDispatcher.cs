@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class CombatEventDispatcher : EventDispatcher
 {
@@ -25,6 +26,14 @@ public class CombatEventDispatcher : EventDispatcher
         foreach (CombatEventListener listener in IterateListeners<CombatEventListener>())
         {
             listener.OnCheckingPlayerHand(callback);
+        }
+    }
+
+    public void OnPawnTakesDamage(CombatEventListener.PawnTakesDamageCallback callback)
+    {
+        foreach (CombatEventListener listener in IterateListeners<CombatEventListener>())
+        {
+            listener.OnPawnTakesDamage(callback);
         }
     }
 }
@@ -61,4 +70,38 @@ public abstract class CombatEventListener : IEventListener
 
     public abstract void OnCheckingPlayerHand(PawnSendingHandCallback callback);
 
+    public delegate void PawnTakesDamageCallback(int damageTaken);
+
+    public abstract void OnPawnTakesDamage(PawnTakesDamageCallback callback);
+
+}
+
+/// <summary>
+///  Class for handling UI-specific CombatEvents
+///  The only methods in here we need to worry about are the OnCheckingPlayerHand and OnPawnTakesDamage
+/// </summary>
+public class CombatUIEventListener : CombatEventListener
+{
+    // We don't need this one to do anything.
+    public override void OnCheckingPawnHit(PawnIsHitCallback callback)
+    {
+        return;
+    }
+
+    // We don't need this one to do anything.
+    public override void OnCheckingPawnStatus(PawnHasDiedCallback callback)
+    {
+        return;
+    }
+
+    // This event is sent to the UI whenever a player draws a new hand
+    public override void OnCheckingPlayerHand(PawnSendingHandCallback callback)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void OnPawnTakesDamage(PawnTakesDamageCallback callback)
+    {
+        throw new NotImplementedException();
+    }
 }

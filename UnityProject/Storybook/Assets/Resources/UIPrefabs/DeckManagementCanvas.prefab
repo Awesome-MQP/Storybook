@@ -1836,6 +1836,26 @@ Prefab:
       propertyPath: m_gridYPadding
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_greenPageButton
+      value: 
+      objectReference: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_redPageButton
+      value: 
+      objectReference: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_yellowPageButton
+      value: 
+      objectReference: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_bluePageButton
+      value: 
+      objectReference: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 176862}

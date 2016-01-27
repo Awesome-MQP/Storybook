@@ -41,6 +41,8 @@ public class GameManager : Photon.PunBehaviour
 
     private static GameManager s_instance;
 
+    private GameObject m_combatCanvas;
+
     public static T GetInstance<T>() where T : GameManager
     {
         return s_instance as T;
@@ -101,6 +103,12 @@ public class GameManager : Photon.PunBehaviour
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetCombatTeamList(combatTeams);
+
+            // Spawn the Combat UI prefab
+            Object combatUIObject = Resources.Load("UIPrefabs/CombatMenu");
+            m_combatCanvas = (GameObject)Instantiate(combatUIObject);
+            CombatMenuUIHandler combatUIHandler = m_combatCanvas.GetComponent<CombatMenuUIHandler>();
+            combatUIHandler.PopulateUI();
 
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
@@ -215,6 +223,9 @@ public class GameManager : Photon.PunBehaviour
         StartCoroutine(m_musicMgr.Fade(m_musicMgr.MusicTracks[0], 5, true));
 
         _TransitionToOverworld();
+
+        // Destroy the Combat UI
+        Destroy(m_combatCanvas.gameObject);
 
         /*
         CameraManager m_camManager = FindObjectOfType<CameraManager>();

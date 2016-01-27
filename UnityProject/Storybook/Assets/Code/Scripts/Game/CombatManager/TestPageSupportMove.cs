@@ -8,8 +8,6 @@ public class TestPageSupportMove : PageMove {
 
     private const bool IS_MOVE_ATTACK = false;
 
-    private bool m_isMoveStarted = false;
-
     // Use this for initialization
     void Start () {
         SetIsMoveAttack(IS_MOVE_ATTACK);

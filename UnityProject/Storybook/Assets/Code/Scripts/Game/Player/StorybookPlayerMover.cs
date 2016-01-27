@@ -27,65 +27,6 @@ public class StorybookPlayerMover : BasePlayerMover {
         OpenDeckManagementMenu();
     }
 
-    public void OnGUI()
-    {
-        if (!m_isInCombat && !m_isMenuOpen)
-        {
-            if (CurrentRoom.NorthDoor.IsDoorEnabled && GUILayout.Button("Go North"))
-            {
-                MoveInDirection(Door.Direction.North);
-                if (!CurrentRoom.NorthDoor.IsConnectedRoomMade)
-                {
-                    OpenPageForRoomMenu();
-                }
-                else
-                {
-                    TargetNode = CurrentRoom.NorthDoor;
-                    StartCoroutine(MoveToDoor(CurrentRoom.NorthDoor.NextRoomLocation));
-                }
-            }
-            if (CurrentRoom.EastDoor.IsDoorEnabled && GUILayout.Button("Go East"))
-            {
-                MoveInDirection(Door.Direction.East);
-                if (!CurrentRoom.EastDoor.IsConnectedRoomMade)
-                {
-                    OpenPageForRoomMenu();
-                }
-                else
-                {
-                    TargetNode = CurrentRoom.EastDoor;
-                    StartCoroutine(MoveToDoor(CurrentRoom.EastDoor.NextRoomLocation));
-                }
-            }
-            if (CurrentRoom.SouthDoor.IsDoorEnabled && GUILayout.Button("Go South"))
-            {
-                MoveInDirection(Door.Direction.South);
-                if (!CurrentRoom.SouthDoor.IsConnectedRoomMade)
-                {
-                    OpenPageForRoomMenu();
-                }
-                else
-                {
-                    TargetNode = CurrentRoom.SouthDoor;
-                    StartCoroutine(MoveToDoor(CurrentRoom.SouthDoor.NextRoomLocation));
-                }
-            }
-            if (CurrentRoom.WestDoor.IsDoorEnabled && GUILayout.Button("Go West"))
-            {
-                MoveInDirection(Door.Direction.West);
-                if (!CurrentRoom.WestDoor.IsConnectedRoomMade)
-                {
-                    OpenPageForRoomMenu();
-                }
-                else
-                {
-                    TargetNode = CurrentRoom.WestDoor;
-                    StartCoroutine(MoveToDoor(CurrentRoom.WestDoor.NextRoomLocation));
-                }
-            }
-        }
-    }
-
     /// <summary>
     /// Sets the target position for all the players in the world pawns list
     /// </summary>
@@ -179,7 +120,20 @@ public class StorybookPlayerMover : BasePlayerMover {
         Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
+        uiHandler.RegisterPlayerMover(this);
         uiHandler.PopulateMenu();
+    }
+
+    /// <summary>
+    /// Opens the menu for selecting a direction
+    /// </summary>
+    public void OpenOverworldMenu()
+    {
+        Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
+        GameObject canvas = (GameObject)Instantiate(loadedObject);
+        OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
+        uiHandler.RegisterPlayerMover(this);
+        uiHandler.PopulateMenu(CurrentRoom);
     }
 
     /// <summary>
@@ -199,6 +153,28 @@ public class StorybookPlayerMover : BasePlayerMover {
         StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
     }
 
+    /// <summary>
+    /// Called by the overworld menu when a direction has been selected
+    /// </summary>
+    /// <param name="moveDirection"></param>
+    public void SubmitDirection(Door.Direction moveDirection)
+    {
+        MoveInDirection(moveDirection);
+
+        // If the selected room has not been created yet, open the PageForRoom menu
+        if (!CurrentRoom.GetDoorByDirection(moveDirection).IsConnectedRoomMade)
+        {
+            OpenPageForRoomMenu();
+        }
+
+        // If the selected room has already been created, move to the door
+        else
+        {
+            TargetNode = CurrentRoom.WestDoor;
+            StartCoroutine(MoveToDoor(CurrentRoom.WestDoor.NextRoomLocation));
+        }
+    }
+
     private void _playWalkAnimations()
     {
         foreach(PlayerWorldPawn pawn in m_playerWorldPawns)
@@ -213,5 +189,14 @@ public class StorybookPlayerMover : BasePlayerMover {
         {
             pawn.SwitchCharacterToIdle();
         }
+    }
+
+    /// <summary>
+    /// Called by the DeckManagement menu when the finish button is pressed
+    /// Opens the OverworldMenu
+    /// </summary>
+    public void CloseDeckManagement()
+    {
+        OpenOverworldMenu();
     }
 }

@@ -6,8 +6,6 @@ public class TestPageAttackMove : PageMove {
 
     private const bool IS_MOVE_ATTACK = true;
 
-    private bool m_isMoveStarted = false;
-
     void Awake()
     {
         Debug.Log("Setting is move attack");

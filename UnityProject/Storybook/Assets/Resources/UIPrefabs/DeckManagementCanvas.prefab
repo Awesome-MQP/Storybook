@@ -460,7 +460,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22457662}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22403582}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -624,10 +624,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 1
     m_AlignByGeometry: 0
@@ -726,7 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -757,10 +757,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 1
     m_AlignByGeometry: 0
@@ -808,7 +808,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22490668}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -888,10 +888,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1059,7 +1059,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22492142}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1517,8 +1517,8 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 143, y: 9.75}
-  m_SizeDelta: {x: 272, y: 234.5}
+  m_AnchoredPosition: {x: 194, y: 7}
+  m_SizeDelta: {x: 343, y: 331}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22421668
 RectTransform:
@@ -1537,8 +1537,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144, y: 10}
-  m_SizeDelta: {x: 272, y: 234}
+  m_AnchoredPosition: {x: -190, y: 7}
+  m_SizeDelta: {x: 347, y: 331}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22424318
 RectTransform:
@@ -1626,8 +1626,8 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -136}
-  m_SizeDelta: {x: 111, y: 30}
+  m_AnchoredPosition: {x: -0.0000076294, y: -193.61}
+  m_SizeDelta: {x: 184, y: 63}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22456536
 RectTransform:
@@ -1678,8 +1678,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.000009536743, y: -0.0000019073}
+  m_SizeDelta: {x: -43, y: -25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22462862
 RectTransform:
@@ -1695,8 +1695,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 143, y: 142}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 194.00003, y: 186.99997}
+  m_SizeDelta: {x: 234, y: 46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22469180
 RectTransform:
@@ -1730,8 +1730,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144, y: 142}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -189, y: 181}
+  m_SizeDelta: {x: 245, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22480568
 RectTransform:

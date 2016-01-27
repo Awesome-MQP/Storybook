@@ -2133,10 +2133,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     internal void OnCreateRoom()
     {
-        foreach (KeyValuePair<int, PhotonView> pair in photonViewList)
+        PhotonView[] views = photonViewList.Values.ToArray();
+        foreach (PhotonView view in views)
         {
-            PhotonView view = pair.Value;
-            if (!view.isRuntimeInstantiated)
+            if (!view.isRuntimeInstantiated && view.isMine)
                 view.OnSpawn();
         }
         SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);

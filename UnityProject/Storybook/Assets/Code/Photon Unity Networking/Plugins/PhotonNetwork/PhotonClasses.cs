@@ -538,7 +538,7 @@ namespace Photon
 
         protected virtual void OnValidate()
         {
-            if (!photonView.ObservedComponents.Contains(this))
+            if (photonView && !photonView.ObservedComponents.Contains(this))
                 photonView.ObservedComponents.Add(this);
         }
 
@@ -616,6 +616,9 @@ namespace Photon
 
             if (!m_hasBuildProperties)
                 BuildPropertyInfo();
+
+            if(!photonView.HasSpawned)
+                return;
 
             StackTrace stackTrace = new StackTrace();
             MethodBase setter = stackTrace.GetFrame(1).GetMethod();
@@ -1221,7 +1224,7 @@ namespace Photon
         private Dictionary<int, PropertyInfo> m_propertiesByNumber = new Dictionary<int, PropertyInfo>();
         private Dictionary<string, int> m_propertyNumbersByName = new Dictionary<string, int>(); 
         private Dictionary<MethodBase, PropertyInfo> m_propertiesBySetter = new Dictionary<MethodBase, PropertyInfo>(); 
-        private uint m_dirtyBits = uint.MaxValue;
+        private uint m_dirtyBits = 0;
 
         private bool m_hasBuildProperties;
 

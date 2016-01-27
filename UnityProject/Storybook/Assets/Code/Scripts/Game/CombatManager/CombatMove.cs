@@ -19,7 +19,7 @@ public abstract class CombatMove : MonoBehaviour{
     {
         NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
         Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
-        float bufferTime = 2.0f;
+        float bufferTime = 0.5f;
         if (!m_isMoveStarted)
         {
             playerAnimator.SetBool("IdleToIdle", false);
@@ -30,13 +30,22 @@ public abstract class CombatMove : MonoBehaviour{
         }
         AnimatorClipInfo[] allClips = playerAnimator.GetCurrentAnimatorClipInfo(0);
         float clipLength = allClips[0].clip.length;
+        float waitTime = clipLength;
+        if (IsMoveEffectCompleted)
+        {
+            float longestHurtAnim = _longestHurtAnim();
+            if (longestHurtAnim > clipLength)
+            {
+                waitTime = longestHurtAnim;
+            }
+        }
         SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
         if (TimeSinceMoveStarted >= 0.5f && !IsMoveEffectCompleted)
         {
             DoMoveEffect();
             SetIsMoveEffectCompleted(true);
         }
-        else if (TimeSinceMoveStarted >= clipLength + bufferTime)
+        else if (TimeSinceMoveStarted >= waitTime + bufferTime)
         {
             Debug.Log("Page move is complete");
             playerAnimator.SetBool("IdleToAttack", false);
@@ -45,6 +54,31 @@ public abstract class CombatMove : MonoBehaviour{
             SetIsMoveComplete(true);
             m_isMoveStarted = false;
             SetTimeSinceMoveStarted(0);
+            _switchTargetsToIdle();
+        }
+    }
+
+    private float _longestHurtAnim()
+    {
+        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
+        float longestClipTime = 0;
+        foreach (CombatPawn pawn in m_targets)
+        { 
+            Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
+            float clipTime = playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+            if (clipTime > longestClipTime)
+            {
+                longestClipTime = clipTime;
+            }
+        }
+        return longestClipTime;
+    }
+
+    private void _switchTargetsToIdle()
+    {
+        foreach(CombatPawn pawn in MoveTargets)
+        {
+            pawn.SwitchToIdleAnim();
         }
     }
 

@@ -27,3 +27,7 @@ sysinfo.txt
 */ProjectSettings.asset
 */ProjectVersion.txt
 */UnityAnalyticsManager.asset
+
+# Ignore CSharp and ShaderForge support files
+*/CSharp60Support.*
+*/ShaderForge.*

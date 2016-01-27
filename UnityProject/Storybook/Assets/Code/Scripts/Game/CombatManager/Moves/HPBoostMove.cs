@@ -19,20 +19,6 @@ public class HPBoostMove : AIMove
         }
     }
 
-    public override void ExecuteMove()
-    {
-        SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
-        if (TimeSinceMoveStarted >= 0.5 && !IsMoveEffectCompleted)
-        {
-            DoMoveEffect();
-            SetIsMoveEffectCompleted(true);
-        }
-        else if (TimeSinceMoveStarted >= 1)
-        {
-            SetIsMoveComplete(true);
-        }
-    }
-
     /// <summary>
     /// Chooses the targets for the move, currently chooses the pawns that have the lowest health
     /// </summary>

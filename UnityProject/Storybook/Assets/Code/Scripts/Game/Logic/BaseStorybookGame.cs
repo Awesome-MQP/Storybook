@@ -1,15 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using Random = UnityEngine.Random;
+using UnityEngine.Assertions;
 
-// Dungeon Master class is the handler for all statistics, as well as handling
-// the location of all room prefabs.
-[Serializable]
-public class DungeonMaster : ScriptableObject
+public class BaseStorybookGame : GameManager
 {
+    [SerializeField]
+    private DungeonMaster m_dungeonMaster = new DungeonMaster();
+
+    [SerializeField]
+    private MapManager m_mapManager;
+
+    [SerializeField]
+    private ResourceAsset m_playerMoverPrefab = new ResourceAsset(typeof(BasePlayerMover));
+
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
     [SerializeField]
@@ -48,17 +51,32 @@ public class DungeonMaster : ScriptableObject
     [SerializeField]
     private float m_isPageStatusProbability = 0.3f;
 
-    private static DungeonMaster s_instance;
-
-    public static DungeonMaster Instance
+    protected override void Awake()
     {
-        get { return s_instance; }
+        base.Awake();
+
+        m_rooms = Resources.LoadAll<RoomObject>("Rooms");
+
+        Assert.IsNotNull(m_mapManager);
+        Assert.IsNotNull(m_playerMoverPrefab.AssetName);
     }
 
-    void OnEnable()
+    public override void OnStartOwner(bool wasSpawn)
     {
-            m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
-            s_instance = this;
+        base.OnStartOwner(wasSpawn);
+
+        m_mapManager.GenerateMap();
+    }
+
+    protected override void OnStartGame()
+    {
+        base.OnStartGame();
+
+        //Spawn the player mover on the map
+        BasePlayerMover mover = PhotonNetwork.Instantiate<BasePlayerMover>(m_playerMoverPrefab,
+            Vector3.zero, Quaternion.identity, 0);
+        mover.Construct(m_mapManager.StartRoom);
+        PhotonNetwork.Spawn(mover.photonView);
     }
 
     /// <summary>
@@ -243,7 +261,7 @@ public class DungeonMaster : ScriptableObject
 
     public void InitializeInventory(Inventory inventoryToInitialize)
     {
-        for (int i = 0; i < 21; i++)
+        for (int i = 0; i < 20; i++)
         {
             Page basicPage = GetBasicPage();
             inventoryToInitialize.Add(basicPage, i);

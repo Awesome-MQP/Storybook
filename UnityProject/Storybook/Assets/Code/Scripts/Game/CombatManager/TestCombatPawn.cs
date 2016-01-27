@@ -42,7 +42,7 @@ public class TestCombatPawn : CombatPlayer
             SetHasSubmittedMove(true);
             
             PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
-            pm.construct(chosenPage);
+            pm.Construct(chosenPage);
 
             int[] targetIds = new int[4];
             for (int i = 0; i < pm.NumberOfTargets; i++)

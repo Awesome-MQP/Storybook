@@ -29,9 +29,6 @@ public class TestMovementSpawner : MonoBehaviour {
         GameObject mapObject = PhotonNetwork.Instantiate(m_mapManager.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(mapObject.GetComponent<PhotonView>());
 
-        GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMasterPrefab.name, Vector3.zero, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
-
         GameObject musicManager = PhotonNetwork.Instantiate(m_musicManager.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(musicManager.GetComponent<PhotonView>());
 
@@ -43,8 +40,8 @@ public class TestMovementSpawner : MonoBehaviour {
             GameObject playerInventoryObject = PhotonNetwork.Instantiate(m_playerInventoryPrefab.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerInventoryObject.GetComponent<PhotonView>());
             PlayerInventory playerInventory = playerInventoryObject.GetComponent<PlayerInventory>();
-            playerInventory.PlayerId = PhotonNetwork.playerList[i].ID;
-            dungeonMaster.GetComponent<DungeonMaster>().InitializeInventory(playerInventory);
+            playerInventory.PlayerId = i;
+            GameManager.GetInstance<BaseStorybookGame>().InitializeInventory(playerInventory);
         }
 
         Debug.Log(m_playerGroup.name);

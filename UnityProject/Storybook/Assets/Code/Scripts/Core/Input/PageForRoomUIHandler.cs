@@ -51,7 +51,7 @@ public class PageForRoomUIHandler : UIHandler {
     public void PopulateMenu()
     {
         GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+        PlayerInventory pi = null;//gameManager.GetLocalPlayerInventory();
 
         ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollContent = scrollView.content;
@@ -134,7 +134,7 @@ public class PageForRoomUIHandler : UIHandler {
     {
         GameManager gameManager = FindObjectOfType<GameManager>();
         DungeonMaster dm = FindObjectOfType<DungeonMaster>();
-        PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
+        PlayerInventory currentPlayerInventory = null;//gameManager.GetLocalPlayerInventory();
         currentPlayerInventory.Drop(m_selectedPageButton.PageData.InventoryId);
         currentPlayerInventory.Add(dm.GetBasicPage(), m_selectedPageButton.PageData.InventoryId);
     }

@@ -52,8 +52,9 @@ public class CombatRoom : RoomObject {
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
-            m_gameManager.EnemyTeamForCombat = m_roomEnemies;
-            m_gameManager.EnemyTeamPrefabLoc = m_roomEnemiesPrefabLoc;
+            //m_gameManager.EnemyTeamForCombat = m_roomEnemies;
+            //m_gameManager.EnemyTeamPrefabLoc = m_roomEnemiesPrefabLoc;
+
 
             int i = 0;
 
@@ -81,7 +82,7 @@ public class CombatRoom : RoomObject {
         if (!m_wonCombat)
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
-            m_gameManager.TransitionToCombat();
+            //TODO: m_gameManager.TransitionToCombat();
             return;
         }
         else

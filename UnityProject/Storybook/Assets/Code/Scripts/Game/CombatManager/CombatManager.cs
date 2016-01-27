@@ -111,7 +111,7 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     public void EndCurrentCombat()
     {
-        FindObjectOfType<GameManager>().EndCombat();
+        //FindObjectOfType<GameManager>().EndCombat();
     }
 
     /// <summary>

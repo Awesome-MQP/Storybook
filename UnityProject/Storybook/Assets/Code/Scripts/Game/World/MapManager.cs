@@ -5,58 +5,13 @@ using UnityEngine.Assertions;
 
 public class MapManager : Photon.PunBehaviour {
 
-    struct Point
-    {
-        public bool Equals(Point other)
-        {
-            return x == other.x && y == other.y;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-                return false;
-            return obj is Point && Equals((Point) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (x * 397) ^ y;
-            }
-        }
-
-        public int x, y;
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public override string ToString()
-        {
-            return ("(" + x.ToString() + ", " + y.ToString() + ")");
-        }
-
-        public static bool operator ==(Point p1, Point p2)
-        {
-            return p1.x == p2.x && p1.y == p2.y;
-        }
-
-        public static bool operator !=(Point p1, Point p2)
-        {
-            return !(p1 == p2);
-        }
-    }
-
     struct Pair
     {
-        public Point pointA, pointB;
-        public Pair(Point pointA, Point pointB)
+        public Location LocationA, LocationB;
+        public Pair(Location LocationA, Location LocationB)
         {
-            this.pointA = pointA;
-            this.pointB = pointB;
+            this.LocationA = LocationA;
+            this.LocationB = LocationB;
         }
     }
 
@@ -106,14 +61,19 @@ public class MapManager : Photon.PunBehaviour {
 
     public enum RoomType { None = 0, Start, Combat, Exit, Shop };
 
-    private List<Point> m_pathFromStartToExit = new List<Point>();
+    private List<Location> m_pathFromStartToExit = new List<Location>();
 
-    private Point m_startPoint;
-    private Point m_exitPoint;
-    private Point m_shopPoint;
+    private Location m_startPoint;
+    private Location m_exitPoint;
+    private Location m_shopPoint;
     private int m_roomDataReceived = 0;
 
-    private HashSet<RoomObject> m_registeredRooms = new HashSet<RoomObject>(); 
+    private HashSet<RoomObject> m_registeredRooms = new HashSet<RoomObject>();
+
+    public RoomObject StartRoom
+    {
+        get { return GetRoom(m_startPoint); }
+    }
 
     // Initialize
     protected override void Awake()
@@ -357,7 +317,7 @@ public class MapManager : Photon.PunBehaviour {
         _createPathFromStartToExit();
         _addAdditionalDoors();
         _placeSpecialRooms();
-        _printMap();
+        PlaceStartRoom();
     }
 
     /// <summary>
@@ -395,8 +355,8 @@ public class MapManager : Photon.PunBehaviour {
         int shopY = 0;
         while (isSpotCombat)
         {
-            shopX = UnityEngine.Random.Range(0, m_worldMaxXSize);
-            shopY = UnityEngine.Random.Range(0, m_worldMaxYSize);
+            shopX = Random.Range(0, m_worldMaxXSize);
+            shopY = Random.Range(0, m_worldMaxYSize);
             if (m_worldMapData[shopX, shopY].RoomType == RoomType.Combat)
             {
                 isSpotCombat = false;
@@ -405,7 +365,7 @@ public class MapManager : Photon.PunBehaviour {
         RoomData currentData = m_worldMapData[shopX, shopY];
         RoomData shopRoom = new RoomData(shopX, shopY, currentData.IsNorthDoorActive, currentData.IsEastDoorActive, currentData.IsSouthDoorActive, currentData.IsWestDoorActive, RoomType.Shop);
         m_worldMapData[shopX, shopY] = shopRoom;
-        m_shopPoint = new Point(shopX, shopY);
+        m_shopPoint = new Location(shopX, shopY);
     }
 
     /// <summary>
@@ -418,8 +378,8 @@ public class MapManager : Photon.PunBehaviour {
         int startY = 0;
         while (isSpotOccupied)
         {
-            startX = UnityEngine.Random.Range(0, m_worldMaxXSize);
-            startY = UnityEngine.Random.Range(0, m_worldMaxYSize);
+            startX = Random.Range(0, m_worldMaxXSize);
+            startY = Random.Range(0, m_worldMaxYSize);
             if (m_worldMapData[startX, startY].RoomType == RoomType.None)
             {
                 isSpotOccupied = false;
@@ -428,7 +388,7 @@ public class MapManager : Photon.PunBehaviour {
 
         RoomData startingRoom = new RoomData(startX, startY, false, false, false, false, RoomType.Start);
         m_worldMapData[startX, startY] = startingRoom;
-        m_startPoint = new Point(startX, startY);
+        m_startPoint = new Location(startX, startY);
     }
 
     /// <summary>
@@ -441,8 +401,8 @@ public class MapManager : Photon.PunBehaviour {
         int exitY = 0;
         while (isSpotOccupied)
         {
-            exitX = UnityEngine.Random.Range(0, m_worldMaxXSize);
-            exitY = UnityEngine.Random.Range(0, m_worldMaxYSize);
+            exitX = Random.Range(0, m_worldMaxXSize);
+            exitY = Random.Range(0, m_worldMaxYSize);
             if (m_worldMapData[exitX, exitY].RoomType == RoomType.None)
             {
                 isSpotOccupied = false;
@@ -451,7 +411,8 @@ public class MapManager : Photon.PunBehaviour {
 
         RoomData exitRoom = new RoomData(exitX, exitY, false, false, false, false, RoomType.Exit);
         m_worldMapData[exitX, exitY] = exitRoom;
-        m_exitPoint = new Point(exitX, exitY);
+        Debug.Log("Is actually exit = " + m_worldMapData[exitX, exitY].RoomType);
+        m_exitPoint = new Location(exitX, exitY);
     }
 
     /// <summary>
@@ -467,16 +428,16 @@ public class MapManager : Photon.PunBehaviour {
     /// </summary>
     /// <param name="depth">The current depth that the function is at</param>
     /// <param name="position">The current position in the map that it is looking at</param>
-    private void _depthBranch(int depth, Point position)
+    private void _depthBranch(int depth, Location position)
     {
-        List<Point> validPositions = _getSurroundingPositions(position);
+        List<Location> validPositions = _getSurroundingPositions(position);
         while (validPositions.Count > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, validPositions.Count - 1);
-            Point newPos = validPositions[randomIndex];
+            int randomIndex = Random.Range(0, validPositions.Count - 1);
+            Location newPos = validPositions[randomIndex];
             if (_positionCheck(depth, newPos))
             {
-                RoomData currentNewPosRoomData = m_worldMapData[newPos.x, newPos.y];
+                RoomData currentNewPosRoomData = m_worldMapData[newPos.X, newPos.Y];
                 bool isEmptyRoom = false;
                 if (currentNewPosRoomData.RoomType == RoomType.None)
                 {
@@ -485,8 +446,8 @@ public class MapManager : Photon.PunBehaviour {
                 
                 if (isEmptyRoom)
                 {
-                    RoomData newPosRoomData = new RoomData(newPos.x, newPos.y, false, false, false, false, RoomType.Combat);
-                    m_worldMapData[newPos.x, newPos.y] = newPosRoomData;
+                    RoomData newPosRoomData = new RoomData(newPos.X, newPos.Y, false, false, false, false, RoomType.Combat);
+                    m_worldMapData[newPos.X, newPos.Y] = newPosRoomData;
                 }
 
                 _connectRooms(position, newPos);
@@ -504,65 +465,65 @@ public class MapManager : Photon.PunBehaviour {
     /// </summary>
     /// <param name="currentRoomPos">The position of the current room in the map</param>
     /// <param name="newRoomPos">The position of the new room in the map</param>
-    private void _connectRooms(Point currentRoomPos, Point newRoomPos)
+    private void _connectRooms(Location currentRoomPos, Location newRoomPos)
     {
-        RoomData currentRoom = m_worldMapData[currentRoomPos.x, currentRoomPos.y];
-        RoomData newRoom = m_worldMapData[newRoomPos.x, newRoomPos.y];
-        if (newRoomPos.y < currentRoomPos.y)
+        RoomData currentRoom = m_worldMapData[currentRoomPos.X, currentRoomPos.Y];
+        RoomData newRoom = m_worldMapData[newRoomPos.X, newRoomPos.Y];
+        if (newRoomPos.Y < currentRoomPos.Y)
         {
             currentRoom.IsWestDoorActive = true;
             newRoom.IsEastDoorActive = true;
         }
-        else if (newRoomPos.y > currentRoomPos.y)
+        else if (newRoomPos.Y > currentRoomPos.Y)
         {
             currentRoom.IsEastDoorActive = true;
             newRoom.IsWestDoorActive = true;
         }
-        else if (newRoomPos.x < currentRoomPos.x)
+        else if (newRoomPos.X < currentRoomPos.X)
         {
             currentRoom.IsNorthDoorActive = true;
             newRoom.IsSouthDoorActive = true;
         }
-        else if (newRoomPos.x > currentRoomPos.x)
+        else if (newRoomPos.X > currentRoomPos.X)
         {
             currentRoom.IsSouthDoorActive = true;
             newRoom.IsNorthDoorActive = true;
         }
-        m_worldMapData[currentRoomPos.x, currentRoomPos.y] = currentRoom;
-        m_worldMapData[newRoomPos.x, newRoomPos.y] = newRoom;
+        m_worldMapData[currentRoomPos.X, currentRoomPos.Y] = currentRoom;
+        m_worldMapData[newRoomPos.X, newRoomPos.Y] = newRoom;
     }
 
     /// <summary>
-    /// Disconnects the rooms at the two given points by setting the corresponding doors to false in their RoomData
+    /// Disconnects the rooms at the two given Locations by setting the corresponding doors to false in their RoomData
     /// </summary>
     /// <param name="currentRoomPos">The position of the current room in the map</param>
     /// <param name="newRoomPos">The position of the new room in the map</param>
-    private void _disconnectRooms(Point currentRoomPos, Point newRoomPos)
+    private void _disconnectRooms(Location currentRoomPos, Location newRoomPos)
     {
-        RoomData currentRoom = m_worldMapData[currentRoomPos.x, currentRoomPos.y];
-        RoomData newRoom = m_worldMapData[newRoomPos.x, newRoomPos.y];
-        if (newRoomPos.y < currentRoomPos.y)
+        RoomData currentRoom = m_worldMapData[currentRoomPos.X, currentRoomPos.Y];
+        RoomData newRoom = m_worldMapData[newRoomPos.X, newRoomPos.Y];
+        if (newRoomPos.Y < currentRoomPos.Y)
         {
             currentRoom.IsWestDoorActive = false;
             newRoom.IsEastDoorActive = false;
         }
-        else if (newRoomPos.y > currentRoomPos.y)
+        else if (newRoomPos.Y > currentRoomPos.Y)
         {
             currentRoom.IsEastDoorActive = false;
             newRoom.IsWestDoorActive = false;
         }
-        else if (newRoomPos.x < currentRoomPos.x)
+        else if (newRoomPos.X < currentRoomPos.X)
         {
             currentRoom.IsNorthDoorActive = false;
             newRoom.IsSouthDoorActive = false;
         }
-        else if (newRoomPos.x > currentRoomPos.x)
+        else if (newRoomPos.X > currentRoomPos.X)
         {
             currentRoom.IsSouthDoorActive = false;
             newRoom.IsNorthDoorActive = false;
         }
-        m_worldMapData[currentRoomPos.x, currentRoomPos.y] = currentRoom;
-        m_worldMapData[newRoomPos.x, newRoomPos.y] = newRoom;
+        m_worldMapData[currentRoomPos.X, currentRoomPos.Y] = currentRoom;
+        m_worldMapData[newRoomPos.X, newRoomPos.Y] = newRoom;
     }
 
     /// <summary>
@@ -571,18 +532,18 @@ public class MapManager : Photon.PunBehaviour {
     /// <param name="depth">The current depth of the algorithm</param>
     /// <param name="position">The position that the algorithm is trying to add</param>
     /// <returns>True if the position is valid, false otherwise</returns>
-    private bool _positionCheck(int depth, Point position)
+    private bool _positionCheck(int depth, Location position)
     {
         bool doesPositionPass = true;
 
         // If the position is off the map, return false
-        if (position.x >= m_worldMaxXSize || position.x < 0 || position.y >= m_worldMaxYSize || position.y < 0)
+        if (position.X >= m_worldMaxXSize || position.X < 0 || position.Y >= m_worldMaxYSize || position.Y < 0)
         {
             doesPositionPass = false;
         }
 
         // If the position is the exit and the minimum distance from start to exit has not been met, return false
-        RoomData roomAtPos = m_worldMapData[position.x, position.y];
+        RoomData roomAtPos = m_worldMapData[position.X, position.Y];
         if (roomAtPos.RoomType == RoomType.Exit && depth < m_minRoomsStartToExit)
         {
             doesPositionPass = false;
@@ -597,31 +558,31 @@ public class MapManager : Photon.PunBehaviour {
     }
 
     /// <summary>
-    /// Returns a list of all the valid positions surrounding the given point
+    /// Returns a list of all the valid positions surrounding the given Location
     /// </summary>
-    /// <param name="position">The position to get the surrounding points</param>
-    /// <returns>A list of all the valid positions around the given point</returns>
-    private List<Point> _getSurroundingPositions(Point position)
+    /// <param name="position">The position to get the surrounding Locations</param>
+    /// <returns>A list of all the valid positions around the given Location</returns>
+    private List<Location> _getSurroundingPositions(Location position)
     {
-        List<Point> surroundingPositions = new List<Point>();
-        if (position.y + 1 < m_worldMaxYSize)
+        List<Location> surroundingPositions = new List<Location>();
+        if (position.Y + 1 < m_worldMaxYSize)
         {
-            Point validPos = new Point(position.x, position.y + 1);
+            Location validPos = new Location(position.X, position.Y + 1);
             surroundingPositions.Add(validPos);
         }
-        if (position.y - 1 >= 0)
+        if (position.Y - 1 >= 0)
         {
-            Point validPos = new Point(position.x, position.y - 1);
+            Location validPos = new Location(position.X, position.Y - 1);
             surroundingPositions.Add(validPos);
         }
-        if (position.x + 1 < m_worldMaxXSize)
+        if (position.X + 1 < m_worldMaxXSize)
         {
-            Point validPos = new Point(position.x + 1, position.y);
+            Location validPos = new Location(position.X + 1, position.Y);
             surroundingPositions.Add(validPos);
         }
-        if (position.x - 1 >= 0)
+        if (position.X - 1 >= 0)
         {
-            Point validPos = new Point(position.x - 1, position.y);
+            Location validPos = new Location(position.X - 1, position.Y);
             surroundingPositions.Add(validPos);
         }
         return surroundingPositions;
@@ -633,20 +594,20 @@ public class MapManager : Photon.PunBehaviour {
     private void _addAdditionalDoors()
     {
         int addedHalls = 0;
-        int additionalHalls = UnityEngine.Random.Range(m_additionalHallsMin, m_additionalHallsMax + 1);
+        int additionalHalls = Random.Range(m_additionalHallsMin, m_additionalHallsMax + 1);
         while (addedHalls < additionalHalls)
         {
             Pair roomPair = _getPairOfAdjacentRooms();
             if (!_isPairConnected(roomPair))
             {
-                _connectRooms(roomPair.pointA, roomPair.pointB);
-                List<Point> shortestPath = _aStarSearch(m_startPoint, m_exitPoint);
+                _connectRooms(roomPair.LocationA, roomPair.LocationB);
+                List<Location> shortestPath = _aStarSearch(m_startPoint, m_exitPoint);
 
                 // If adding this connection causes the minimum distance from start to exit to go below the set distance, disconnect
                 // these two rooms and try again
                 if (shortestPath.Count < m_minRoomsStartToExit)
                 {
-                    _disconnectRooms(roomPair.pointA, roomPair.pointB);
+                    _disconnectRooms(roomPair.LocationA, roomPair.LocationB);
                 }
 
                 // Otherwise, keep these rooms connected and increment the number of added halls
@@ -665,11 +626,11 @@ public class MapManager : Photon.PunBehaviour {
     /// <returns>A Pair containing two adjacent rooms</returns>
     private Pair _getPairOfAdjacentRooms()
     {
-        int pointX = UnityEngine.Random.Range(0, m_worldMaxXSize);
-        int pointY = UnityEngine.Random.Range(0, m_worldMaxYSize);
-        Point pointA = new Point(pointX, pointY);
+        int pointX = Random.Range(0, m_worldMaxXSize);
+        int pointY = Random.Range(0, m_worldMaxYSize);
+        Location LocationA = new Location(pointX, pointY);
 
-        List<Point> adjacentRooms = new List<Point>();
+        List<Location> adjacentRooms = new List<Location>();
         int northPointX = pointX - 1;
         int eastPointY = pointY + 1;
         int southPointX = pointX + 1;
@@ -677,31 +638,31 @@ public class MapManager : Photon.PunBehaviour {
 
         if (northPointX >= 0)
         {
-            Point northPoint = new Point(northPointX, pointY);
-            adjacentRooms.Add(northPoint);
+            Location northLocation = new Location(northPointX, pointY);
+            adjacentRooms.Add(northLocation);
         }
 
         if (eastPointY < m_worldMaxYSize)
         {
-            Point eastPoint = new Point(pointX, eastPointY);
-            adjacentRooms.Add(eastPoint);
+            Location eastLocation = new Location(pointX, eastPointY);
+            adjacentRooms.Add(eastLocation);
         }
 
         if (southPointX < m_worldMaxXSize)
         {
-            Point southPoint = new Point(southPointX, pointY);
-            adjacentRooms.Add(southPoint);
+            Location southLocation = new Location(southPointX, pointY);
+            adjacentRooms.Add(southLocation);
         }
 
         if (westPointY >= 0)
         {
-            Point westPoint = new Point(pointX, westPointY);
-            adjacentRooms.Add(westPoint);
+            Location westLocation = new Location(pointX, westPointY);
+            adjacentRooms.Add(westLocation);
         }
 
-        int otherRoomIndex = UnityEngine.Random.Range(0, adjacentRooms.Count);
-        Point otherRoomPoint = adjacentRooms[otherRoomIndex];
-        Pair roomPair = new Pair(pointA, otherRoomPoint);
+        int otherRoomIndex = Random.Range(0, adjacentRooms.Count);
+        Location otherRoomLocation = adjacentRooms[otherRoomIndex];
+        Pair roomPair = new Pair(LocationA, otherRoomLocation);
         return roomPair;
     }
 
@@ -712,24 +673,24 @@ public class MapManager : Photon.PunBehaviour {
     /// <returns>True if the given pair is connected, false otherwise</returns>
     private bool _isPairConnected(Pair roomPair)
     {
-        Point roomAPoint = roomPair.pointA;
-        Point roomBPoint = roomPair.pointB;
-        RoomData roomA = m_worldMapData[roomAPoint.x, roomAPoint.y];
-        RoomData roomB = m_worldMapData[roomBPoint.x, roomBPoint.y];
+        Location roomALocation = roomPair.LocationA;
+        Location roomBLocation = roomPair.LocationB;
+        RoomData roomA = m_worldMapData[roomALocation.X, roomALocation.Y];
+        RoomData roomB = m_worldMapData[roomBLocation.X, roomBLocation.Y];
 
-        if (roomAPoint.y < roomBPoint.y && roomA.IsEastDoorActive && roomB.IsWestDoorActive)
+        if (roomALocation.Y < roomBLocation.Y && roomA.IsEastDoorActive && roomB.IsWestDoorActive)
         {
             return true;
         }
-        else if (roomAPoint.y > roomBPoint.y && roomA.IsWestDoorActive && roomB.IsEastDoorActive)
+        else if (roomALocation.Y > roomBLocation.Y && roomA.IsWestDoorActive && roomB.IsEastDoorActive)
         {
             return true;
         }
-        else if (roomAPoint.x < roomBPoint.x && roomA.IsSouthDoorActive && roomB.IsNorthDoorActive)
+        else if (roomALocation.X < roomBLocation.X && roomA.IsSouthDoorActive && roomB.IsNorthDoorActive)
         {
             return true;
         }
-        else if (roomAPoint.x > roomBPoint.x && roomA.IsNorthDoorActive && roomB.IsSouthDoorActive)
+        else if (roomALocation.X > roomBLocation.X && roomA.IsNorthDoorActive && roomB.IsSouthDoorActive)
         {
             return true;
         }
@@ -742,26 +703,26 @@ public class MapManager : Photon.PunBehaviour {
     }
 
     // Finds a path between the start node and the destination node using A* pathfinding algorithm
-    private List<Point> _aStarSearch(Point start, Point destination)
+    private List<Location> _aStarSearch(Location start, Location destination)
     {
         // Initialize the necessary lists and variables for A* pathfinding
-        List<Point> all = new List<Point>();
+        List<Location> all = new List<Location>();
         all.Add(start);
-        List<Point> closed = new List<Point>();
-        List<Point> open = new List<Point>(all);
-        List<Point> path = new List<Point>();
+        List<Location> closed = new List<Location>();
+        List<Location> open = new List<Location>(all);
+        List<Location> path = new List<Location>();
 
-        while (!(open[0].x == destination.x && open[0].y == destination.y))
+        while (!(open[0].X == destination.X && open[0].Y == destination.Y))
         {   
-            Point lowest = open[0];
-            RoomData lowestData = m_worldMapData[lowest.x, lowest.y];
+            Location lowest = open[0];
+            RoomData lowestData = m_worldMapData[lowest.X, lowest.Y];
 
             // Find the node with the lowest value in open
             int openCount = open.Count;
             for (int i = 0; i < openCount; i++)
             {
-                Point currentNode = open[i];
-                RoomData currentData = m_worldMapData[currentNode.x, currentNode.y];
+                Location currentNode = open[i];
+                RoomData currentData = m_worldMapData[currentNode.X, currentNode.Y];
 
                 if (currentData.CostToHere < lowestData.CostToHere)
                 {
@@ -777,8 +738,8 @@ public class MapManager : Photon.PunBehaviour {
             int lowestNeighborCount = _getConnectedRooms(lowest).Count;
             for (int i = 0; i < lowestNeighborCount; i++)
             {
-                Point currentNeighbor = _getConnectedRooms(lowest)[i];
-                RoomData currentNeighborData = m_worldMapData[currentNeighbor.x, currentNeighbor.y];
+                Location currentNeighbor = _getConnectedRooms(lowest)[i];
+                RoomData currentNeighborData = m_worldMapData[currentNeighbor.X, currentNeighbor.Y];
 
                 // Calculate the cost as the distance between the current point and the current neighbor
                 float cost = 1 + lowestData.CostToHere;
@@ -804,7 +765,7 @@ public class MapManager : Photon.PunBehaviour {
                         int count = open.Count;
                         for (int j = 0; j < count; j++)
                         {
-                            if (cost < m_worldMapData[open[j].x, open[j].y].CostToHere)
+                            if (cost < m_worldMapData[open[j].X, open[j].Y].CostToHere)
                             {
                                 open.Insert(j, currentNeighbor);
                                 addedToOpen = true;
@@ -819,20 +780,20 @@ public class MapManager : Photon.PunBehaviour {
 
                     // Set the cost and parent of the current neighbor
                     currentNeighborData.CostToHere = cost;
-                    currentNeighborData.ParentX = lowest.x;
-                    currentNeighborData.ParentY = lowest.y;
-                    m_worldMapData[currentNeighbor.x, currentNeighbor.y] = currentNeighborData;
+                    currentNeighborData.ParentX = lowest.X;
+                    currentNeighborData.ParentY = lowest.Y;
+                    m_worldMapData[currentNeighbor.X, currentNeighbor.Y] = currentNeighborData;
                 }
             }
         }
 
         // Once finished, determine what the path is by looking at the parent nodes and insert them into the path in the proper order
-        Point node = destination;
-        while (!(node.x == start.x && node.y == start.y))
+        Location node = destination;
+        while (!(node.X == start.X && node.Y == start.Y))
         {
-            RoomData nodeData = m_worldMapData[node.x, node.y];
+            RoomData nodeData = m_worldMapData[node.X, node.Y];
             path.Insert(0, node);
-            node = new Point(nodeData.ParentX, nodeData.ParentY);
+            node = new Location(nodeData.ParentX, nodeData.ParentY);
         }
         path.Insert(0, node);
         return path;
@@ -843,33 +804,33 @@ public class MapManager : Photon.PunBehaviour {
     /// </summary>
     /// <param name="roomLoc">The location of the room to check for</param>
     /// <returns>The list of all the points that the given room is connected to</returns>
-    private List<Point> _getConnectedRooms(Point roomLoc)
+    private List<Location> _getConnectedRooms(Location roomLoc)
     {
-        RoomData room = m_worldMapData[roomLoc.x, roomLoc.y];
-        List<Point> connectedRooms = new List<Point>();
+        RoomData room = m_worldMapData[roomLoc.X, roomLoc.Y];
+        List<Location> connectedRooms = new List<Location>();
 
         if (room.IsNorthDoorActive)
         {
-            Point northRoomPoint = new Point(roomLoc.x - 1, roomLoc.y);
-            connectedRooms.Add(northRoomPoint);
+            Location northRoomLocation = new Location(roomLoc.X - 1, roomLoc.Y);
+            connectedRooms.Add(northRoomLocation);
         }
 
         if (room.IsEastDoorActive)
         {
-            Point eastRoomPoint = new Point(roomLoc.x, roomLoc.y + 1);
-            connectedRooms.Add(eastRoomPoint);
+            Location eastRoomLocation = new Location(roomLoc.X, roomLoc.Y + 1);
+            connectedRooms.Add(eastRoomLocation);
         }
 
         if (room.IsSouthDoorActive)
         {
-            Point southRoomPoint = new Point(roomLoc.x + 1, roomLoc.y);
-            connectedRooms.Add(southRoomPoint);
+            Location southRoomLocation = new Location(roomLoc.X + 1, roomLoc.Y);
+            connectedRooms.Add(southRoomLocation);
         }
 
         if (room.IsWestDoorActive)
         {
-            Point westRoomPoint = new Point(roomLoc.x, roomLoc.y - 1);
-            connectedRooms.Add(westRoomPoint);
+            Location westRoomLocation = new Location(roomLoc.X, roomLoc.Y - 1);
+            connectedRooms.Add(westRoomLocation);
         }
 
         return connectedRooms;
@@ -879,14 +840,14 @@ public class MapManager : Photon.PunBehaviour {
     /// Checks to see if the given list contains the given point
     /// </summary>
     /// <param name="listToSearch">The list to search through</param>
-    /// <param name="pointToSearch">The point to check for</param>
+    /// <param name="locationToSearch">The point to check for</param>
     /// <returns>True if the given point is in the list, false otherwise</returns>
-    private int _doesListContainPoint(List<Point> listToSearch, Point pointToSearch)
+    private int _doesListContainPoint(List<Location> listToSearch, Location locationToSearch)
     {
         int i = 0;
-        foreach (Point p in listToSearch)
+        foreach (Location p in listToSearch)
         {
-            if (p.x == pointToSearch.x && p.y == pointToSearch.y)
+            if (p.X == locationToSearch.X && p.Y == locationToSearch.Y)
             {
                 return i;
             }
@@ -913,7 +874,7 @@ public class MapManager : Photon.PunBehaviour {
 
     public RoomObject PlaceStartRoom()
     {
-        Location start = new Location(m_startPoint.x, m_startPoint.y);
+        Location start = new Location(m_startPoint.X, m_startPoint.Y);
         return PlaceRoom(start, new PageData(-1, Genre.None));
     }
 

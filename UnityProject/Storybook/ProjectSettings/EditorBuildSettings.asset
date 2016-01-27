@@ -11,5 +11,7 @@ EditorBuildSettings:
     path: Assets/Levels/Demo/DemoCombatScene.unity
   - enabled: 1
     path: Assets/Levels/Demo/WorldMovementTest.unity
-  - enabled: 1
-    path: Assets/Levels/Demo/TestInventory.unity
+  - enabled: 0
+    path: Assets/Levels/Demo/TestInventory.unit
+  - enabled: 0
+    path: 

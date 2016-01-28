@@ -205,11 +205,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Speed
     {
         get { return m_speed + m_speedBoost + m_speedMod; }
-    }
-
-    public void SetSpeed(float newSpeed)
-    {
-        m_speed = newSpeed;
+        set { m_speed = value; }
     }
 
     /// <summary>
@@ -218,15 +214,12 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Health
     {
         get { return m_health; }
-        set
-        {
-            m_health = value;
-        }
+        set { m_health = value; }
     }
 
-    public void SetHealth(float newHealth)
+    public void SetMaxHealth(float newMaxHealth)
     {
-        m_health = newHealth;
+        m_maxHealth = newMaxHealth;
     }
 
 
@@ -337,11 +330,13 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Attack
     {
         get { return m_attack + m_attackBoost + m_attackMod; }
+        set { m_attack = value; }
     }
 
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
+        set { m_defense = value; }
     }
 
     [SyncProperty]

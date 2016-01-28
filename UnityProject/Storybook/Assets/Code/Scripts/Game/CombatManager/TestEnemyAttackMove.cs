@@ -19,6 +19,7 @@ public class TestEnemyAttackMove : AIMove {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, combatPawn.Defense);
+            Debug.Log("Enemy dealing " + moveDamage + " to the player");
             combatPawn.DealDamageToPawn(moveDamage);
         }
     }

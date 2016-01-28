@@ -344,4 +344,13 @@ public abstract class CombatPlayer : CombatPawn
             Destroy(go);
         }
     }
+
+    public void InitializePlayerPawn(PlayerEntity playerData)
+    {
+        SetMaxHealth(playerData.MaxHitPoints);
+        Health = playerData.HitPoints;
+        Defense = playerData.Defense;
+        Speed = playerData.Speed;
+        Attack = playerData.Attack;
+    }
 }

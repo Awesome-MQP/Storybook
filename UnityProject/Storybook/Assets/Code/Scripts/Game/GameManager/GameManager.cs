@@ -30,7 +30,8 @@ public class GameManager : Photon.PunBehaviour
     private SceneFading m_sceneFader;
 
     [Tooltip("The player object to spawn for all players in the game.")]
-    private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
+    [SerializeField]
+    private PlayerEntity m_defaultPlayerObject;
 
     private int m_deckSize = 20;
 
@@ -266,7 +267,7 @@ public class GameManager : Photon.PunBehaviour
     /// <returns>The player object for a player.</returns>
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
-        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
 

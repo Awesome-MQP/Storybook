@@ -32,6 +32,8 @@ public class PlayerTeam : CombatTeam {
             {
                 CombatPlayer player = (CombatPlayer)playerPawn;
                 GameManager gameManager = FindObjectOfType<GameManager>();
+                PlayerEntity currentPlayerEntity = _findPlayerEntity(playerPawn.PawnId);
+                player.InitializePlayerPawn(currentPlayerEntity);
                 PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
                 player.CreateDeck(currentPlayerInventory);
             }
@@ -44,6 +46,19 @@ public class PlayerTeam : CombatTeam {
         }
     }
 
+    private PlayerEntity _findPlayerEntity(int photonPlayerId)
+    {
+        PlayerEntity[] allPlayerEntity = FindObjectsOfType<PlayerEntity>();
+        foreach(PlayerEntity pe in allPlayerEntity)
+        {
+            if (pe.Player.ID == photonPlayerId)
+            {
+                return pe;
+            }
+        }
+        return null;
+    }
+
     public override void RemovePawnFromTeam(CombatPawn pawnToRemove)
     {
         base.RemovePawnFromTeam(pawnToRemove);
@@ -52,6 +67,26 @@ public class PlayerTeam : CombatTeam {
     public override void StartCombat()
     {
         Debug.Log("Player team starting combat");
+    }
+
+    /// <summary>
+    /// When combat ends, update the HP for all of the player entities based on the ending HP of their corresponding combat pawns
+    /// </summary>
+    public override void EndCombat()
+    {
+        foreach (CombatPawn pawn in AllPawnsSpawned)
+        {
+            PlayerEntity currentPlayerEntity = _findPlayerEntity(pawn.PawnId);
+            if (pawn.Health > 0)
+            {
+                currentPlayerEntity.UpdateHitPoints((int)pawn.Health);
+            }
+            else
+            {
+                currentPlayerEntity.UpdateHitPoints(1);
+            }
+        }
+        base.EndCombat();
     }
 
     public override void StartNewTurn()

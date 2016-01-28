@@ -94,8 +94,10 @@ public class PlayerEntity : PlayerObject
     [SerializeField]
     private int m_speed = 1;
 
-    [SerializeField]
-    private int m_luck = 1;
-
     private Inventory m_inventory;
+
+    public void UpdateHitPoints(int newHitPoints)
+    {
+        m_hitPoints = newHitPoints;
+    }
 }

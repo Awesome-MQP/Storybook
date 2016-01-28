@@ -10,7 +10,8 @@ public class MatchMaker : Photon.PunBehaviour {
 
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("0.75");
+        // TODO
+        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 

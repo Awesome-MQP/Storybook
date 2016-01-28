@@ -21,19 +21,29 @@ public class CombatEventDispatcher : EventDispatcher
         }
     }
 
-    public void OnSendingPlayerHand(CombatEventListener.PawnSendingHandCallback callback)
+    //public void OnSendingPlayerHand(CombatEventListener.PawnSendingHandCallback callback, Page[] playerHand)
+    public void OnSendingPageInfo(Page playerPage, int counter)
     {
-        foreach (CombatEventListener listener in IterateListeners<CombatEventListener>())
+        foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
         {
-            listener.OnCheckingPlayerHand(callback);
+            listener.OnReceivePage(playerPage, counter);
         }
     }
 
-    public void OnPawnTakesDamage(CombatEventListener.PawnTakesDamageCallback callback)
+    //public void OnPawnTakesDamage(CombatEventListener.PawnTakesDamageCallback callback, PhotonPlayer thePlayer, int damageTaken)
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth)
     {
-        foreach (CombatEventListener listener in IterateListeners<CombatEventListener>())
+        foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
         {
-            listener.OnPawnTakesDamage(callback);
+            listener.OnPawnTakesDamage(thePlayer, currentHealth);
+        }
+    }
+
+    public void OnCombatMoveChosen(PageData pageData)
+    {
+        foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
+        {
+            listener.OnCombatMoveChosen(pageData);
         }
     }
 }
@@ -43,7 +53,14 @@ public class CombatEventDispatcher : EventDispatcher
 // for the UI to know when to update a player's hitpoints.
 public interface ICombatEventListener : IEventListener
 {
+    // Notifies the UI about receiving the player's hand
+    void OnReceivePage(Page playerPage, int counter);
 
+    // Notifies the UI about a player receiving damage
+    void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth);
+
+    // Notifies a player about a page selection
+    void OnCombatMoveChosen(PageData pageData);
 }
 
 public abstract class CombatEventListener : IEventListener
@@ -70,7 +87,7 @@ public abstract class CombatEventListener : IEventListener
 
     public abstract void OnCheckingPlayerHand(PawnSendingHandCallback callback);
 
-    public delegate void PawnTakesDamageCallback(int damageTaken);
+    public delegate void PawnTakesDamageCallback(PhotonPlayer thePlayer, int damageTaken);
 
     public abstract void OnPawnTakesDamage(PawnTakesDamageCallback callback);
 

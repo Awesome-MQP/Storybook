@@ -72,6 +72,18 @@ public class GameManager : Photon.PunBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
+            // Spawn the Combat UI prefab
+            Object combatUIObject = Resources.Load("UIPrefabs/CombatMenu");
+            if (combatUIObject == null)
+            {
+                Debug.Log("WARNING! CombatUI Not Found");
+            }
+            else
+            {
+                Debug.Log("Spawning combat UI...");
+            }
+            m_combatCanvas = (GameObject)Instantiate(combatUIObject);
+
             /*
             GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMaster.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
@@ -104,11 +116,7 @@ public class GameManager : Photon.PunBehaviour
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetCombatTeamList(combatTeams);
 
-            // Spawn the Combat UI prefab
-            Object combatUIObject = Resources.Load("UIPrefabs/CombatMenu");
-            m_combatCanvas = (GameObject)Instantiate(combatUIObject);
-            CombatMenuUIHandler combatUIHandler = m_combatCanvas.GetComponent<CombatMenuUIHandler>();
-            combatUIHandler.PopulateUI();
+
 
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.

@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
-public class CombatMenuUIHandler : UIHandler {
+public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
 
     private Vector3 m_player1InfoPosition = new Vector3(-349, 197, 0);
     private Vector3 m_player2InfoPosition = new Vector3(-131, 197, 0);
     private Vector3 m_player3InfoPosition = new Vector3(59, 197, 0);
     private Vector3 m_player4InfoPosition = new Vector3(255, 197, 0);
 
-    private Vector3 m_page1Pos = new Vector3(-300, -142, 0);
-    private Vector3 m_page2Pos = new Vector3(-150, -142, 0);
-    private Vector3 m_page3Pos = new Vector3(0, -142, 0);
-    private Vector3 m_page4Pos = new Vector3(150, -142, 0);
-    private Vector3 m_page5Pos = new Vector3(300, -142, 0);
-
     // Map of Player IDs to their Info screens, used for when HP is updated.
     private Dictionary<int, Text> m_mapIDtoUI = new Dictionary<int, Text>();
 
     // List of the pages the player has in their hand
-    private Page[] m_pagesInHand = new Page[5];
+    private PageData[] m_pagesInHand = new PageData[5];
     private Button[] m_pageButtons = new Button[5];
 
-    private CombatUIEventListener combatUIListener; 
+    [SerializeField]
+    private float m_gridXPadding;
+
+    [SerializeField]
+    private float m_gridYPadding;
+
+    [SerializeField]
+    private float m_buttonHeight;
+    [SerializeField]
+    private float m_buttonWidth;
 
     public EventDispatcher Dispatcher
     {
@@ -36,8 +39,14 @@ public class CombatMenuUIHandler : UIHandler {
     // Use this for initialization
     void Awake () {
         _pollPhotonForPlayerInfo();
-        Dispatcher.RegisterEventListener(combatUIListener); 
-	}
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().RegisterEventListener(this); 
+
+        // Set the values in the GridLayoutGroup for each of the scroll rects based on the page sizes
+        ScrollRect scrollRect = GetComponentInChildren<ScrollRect>();
+        GridLayoutGroup gridGroup = scrollRect.GetComponentInChildren<GridLayoutGroup>();
+        gridGroup.cellSize = new Vector2(m_buttonWidth, m_buttonHeight);
+        gridGroup.spacing = new Vector2(m_gridXPadding, m_gridYPadding);
+    }
 	
     // Popualtes the menu for the first time upon instantiation
     public void PopulateUI()
@@ -60,13 +69,13 @@ public class CombatMenuUIHandler : UIHandler {
             {
                 case 0:
                     {
-                        // Activate the UI elemnts 
-                        GameObject.Find("Player1Icon").SetActive(true);
-                        GameObject.Find("Player1ID").SetActive(true);
-                        GameObject.Find("Player1HP").SetActive(true);
+                        // Activate the UI elemnts
+                        this.transform.GetChild(0).gameObject.SetActive(true);
+                        this.transform.GetChild(1).gameObject.SetActive(true);
+                        this.transform.GetChild(2).gameObject.SetActive(true);
                         // Set the Icon type based on the player's genre
                         Image p1img = GameObject.Find("Player1Icon").GetComponent<Image>();
-                        //p1img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
+                        //p1img.sprite = _getImageBasedOnGenre(pe); //UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
                         Text p1ID = GameObject.Find("Player1ID").GetComponent<Text>();
                         p1ID.text = "ID: " + playerID.ToString();
                         Text p1HP = GameObject.Find("Player1HP").GetComponent<Text>();
@@ -77,9 +86,9 @@ public class CombatMenuUIHandler : UIHandler {
                 case 1:
                     {
                         // Activate the UI elemnts 
-                        GameObject.Find("Player2Icon").SetActive(true);
-                        GameObject.Find("Player2ID").SetActive(true);
-                        GameObject.Find("Player2HP").SetActive(true);
+                        this.transform.GetChild(3).gameObject.SetActive(true);
+                        this.transform.GetChild(4).gameObject.SetActive(true);
+                        this.transform.GetChild(5).gameObject.SetActive(true);
                         // Set the Icon type based on the player's genre
                         Image p2img = GameObject.Find("Player2Icon").GetComponent<Image>();
                         //p2img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
@@ -93,9 +102,9 @@ public class CombatMenuUIHandler : UIHandler {
                 case 2:
                     {
                         // Activate the UI elemnts 
-                        GameObject.Find("Player3Icon").SetActive(true);
-                        GameObject.Find("Player3ID").SetActive(true);
-                        GameObject.Find("Player3HP").SetActive(true);
+                        this.transform.GetChild(6).gameObject.SetActive(true);
+                        this.transform.GetChild(7).gameObject.SetActive(true);
+                        this.transform.GetChild(8).gameObject.SetActive(true);
                         // Set the Icon type based on the player's genre
                         Image p3img = GameObject.Find("Player3Icon").GetComponent<Image>();
                         //p3img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
@@ -109,9 +118,9 @@ public class CombatMenuUIHandler : UIHandler {
                 case 3:
                     {
                         // Activate the UI elemnts 
-                        GameObject.Find("Player4Icon").SetActive(true);
-                        GameObject.Find("Player4ID").SetActive(true);
-                        GameObject.Find("Player4HP").SetActive(true);
+                        this.transform.GetChild(9).gameObject.SetActive(true);
+                        this.transform.GetChild(10).gameObject.SetActive(true);
+                        this.transform.GetChild(11).gameObject.SetActive(true);
                         // Set the Icon type based on the player's genre
                         Image p4img = GameObject.Find("Player4Icon").GetComponent<Image>();
                         //p4img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
@@ -165,38 +174,47 @@ public class CombatMenuUIHandler : UIHandler {
 
     // Draws a player's hand on the screen
     // Functionally identical to the similar method from CombatPlayer.
-    public void DrawPage(Page page, int counter)
+    public void _drawPage(Page page, int counter)
     {
         string pageName = page.PageGenre.ToString();
-        string pathToPage = "Pages/" + "PageButton_" + pageName;
-        Debug.Log("Card #: " + counter + " is " + pageName);
-        Vector3 posToUse = Vector3.zero;
-        switch (counter)
+        string pageNameAsColor = "";
+        switch (pageName)
         {
-            case 0:
-                posToUse = m_page1Pos;
+            case "Fantasy":
+                pageNameAsColor = "Green";
                 break;
-            case 1:
-                posToUse = m_page2Pos;
+            case "GraphicNovel":
+                pageNameAsColor = "Yellow";
                 break;
-            case 2:
-                posToUse = m_page3Pos;
+            case "Horror":
+                pageNameAsColor = "Red";
                 break;
-            case 3:
-                posToUse = m_page4Pos;
-                break;
-            case 4:
-                posToUse = m_page5Pos;
+            case "SciFi":
+                pageNameAsColor = "Blue";
                 break;
             default:
+                pageNameAsColor = "NULL";
                 break;
         }
+        string pathToPage = pageNameAsColor + "PageButton";
+        Debug.Log("Card #: " + counter + " is " + pageName);
+        Debug.Log(pathToPage);
+        pathToPage = "UIPrefabs/" + pathToPage;
+
+        /*
         Button go = Instantiate(Resources.Load(pathToPage), posToUse, Quaternion.identity) as Button;
         // TODO: Add the listener for buttons
-        GameObject goLevel = go.transform.GetChild(1).gameObject;
+        GameObject goLevel = go.transform.GetChild(0).gameObject;
         goLevel.GetComponent<TextMesh>().text = "Level " + page.PageLevel + "\n" + page.PageType.ToString();
-        Page pageData = goLevel.GetComponent<Page>(); // Each button has a page script attached to it, which holds page data. The data is assigned at this step.
-        m_pagesInHand[counter] = pageData;
+        */
+        ScrollRect pageButtonArea = GetComponentInChildren<ScrollRect>();
+        RectTransform content = pageButtonArea.content;
+
+        PageData currentPageData = page.GetPageData();
+        Button pageButton = _initializePageButton(currentPageData);
+        pageButton.transform.SetParent(content, false);
+        m_pageButtons[counter] = pageButton;
+        m_pagesInHand[counter] = currentPageData;
     }
 
     // Removes a page from the screen
@@ -206,6 +224,7 @@ public class CombatMenuUIHandler : UIHandler {
     }
 
     // Visually shift pages over to make room for when one is drawn
+    /*
     public void ShiftPages(int index)
     {
         switch (index)
@@ -248,9 +267,10 @@ public class CombatMenuUIHandler : UIHandler {
                 break;
         }
     }
+    */
 
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
-    public void UpdateHitpointsOfPlayer(PhotonPlayer photonPlayer, float newHP)
+    private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP)
     {
         if(m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
@@ -258,8 +278,35 @@ public class CombatMenuUIHandler : UIHandler {
         }
     }
 
+    // Send the page data to the combat system which will process the move.
     public override void PageButtonPressed(PageButton pageButton)
     {
-        throw new NotImplementedException();
+
+        // Send PageData to the combat system
+        //EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(pageButton.GetComponent<PageData>());
+        // Delete the page and shift pages
+        Destroy(pageButton.gameObject);
+        return;
+    }
+
+    // Know to draw a page on the screen when the player draws one
+    public void OnReceivePage(Page playerPage, int counter)
+    {
+        if(this != null)
+        {
+            _drawPage(playerPage, counter);
+        }
+    }
+
+    // Know to update the UI when a player takes damage
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth)
+    {
+        _updateHitpointsOfPlayer(thePlayer, currentHealth);
+    }
+
+    // Don't do anything - this method is for players only.
+    public void OnCombatMoveChosen(PageData data)
+    {
+        return;
     }
 }

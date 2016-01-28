@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public abstract class CombatPlayer : CombatPawn
+public abstract class CombatPlayer : CombatPawn, ICombatEventListener
 {
 
     [SerializeField]
@@ -69,7 +70,8 @@ public abstract class CombatPlayer : CombatPawn
             if (PhotonNetwork.player.ID == PawnId)
             {
                 //DrawPageOnScreen(currentPage, i);
-                combatMenu.DrawPage(currentPage, i);
+                EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, i);
+                //combatMenu.DrawPage(currentPage, i);
             }
         }
     }
@@ -121,7 +123,7 @@ public abstract class CombatPlayer : CombatPawn
         {
             combatMenu.DestroyPage(SelectedPageIndex);
             //Destroy(m_displayedPages[SelectedPageIndex]);
-            combatMenu.ShiftPages(SelectedPageIndex);
+            //combatMenu.ShiftPages(SelectedPageIndex);
             //ShiftPages(SelectedPageIndex);
         }
 
@@ -185,13 +187,21 @@ public abstract class CombatPlayer : CombatPawn
         if (PhotonNetwork.player.ID == PawnId)
         {
             //DrawPageOnScreen(currentPage, 4);
-            combatMenu.DrawPage(currentPage, 4);
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, 4);
         }
     }
 
     public CombatDeck PlayerDeck
     {
         get { return m_playerDeck; }
+    }
+
+    public EventDispatcher Dispatcher
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public void SendDeckPageViewIds(int[] viewIds)
@@ -353,5 +363,34 @@ public abstract class CombatPlayer : CombatPawn
         {
             Destroy(go);
         }
+    }
+
+    public override void DealDamageToPawn(int damageAmount)
+    {
+
+        base.DealDamageToPawn(damageAmount);
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health);
+        // Adds support to UI
+        
+        /*
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
+        combatMenu.OnPawnTakesDamage(PhotonNetwork.player, (int)Health);
+        */
+    }
+
+    public void OnReceivePage(Page playerPage, int counter)
+    {
+        return;
+    }
+
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken)
+    {
+        return;
+    }
+
+    public void OnCombatMoveChosen(PageData pageData)
+    {
+        Debug.Log("Chose move: " + pageData);
     }
 }

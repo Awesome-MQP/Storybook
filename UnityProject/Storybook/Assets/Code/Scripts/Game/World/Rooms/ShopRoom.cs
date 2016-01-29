@@ -17,6 +17,9 @@ public class ShopRoom : RoomObject {
 
     private MusicManager m_musicManager;
 
+    [SerializeField]
+    private UIHandler m_shopUI;
+
     // Use this for initialization
     protected override void Awake ()
     {
@@ -40,6 +43,9 @@ public class ShopRoom : RoomObject {
     {
         // TODO: open the shop UI.
         Debug.Log("Whaddya buyin'?");
+        ShopUIHandler shopUI = Instantiate(m_shopUI).GetComponent<ShopUIHandler>();
+        shopUI.RegisterShopRoom(this);
+        shopUI.PopulateMenu();
         return;
     }
 
@@ -48,5 +54,10 @@ public class ShopRoom : RoomObject {
     public override void OnRoomExit()
     {
         return;
+    }
+
+    public void OnShopClosed()
+    {
+        FindObjectOfType<StorybookPlayerMover>().OpenDeckManagementMenu();
     }
 }

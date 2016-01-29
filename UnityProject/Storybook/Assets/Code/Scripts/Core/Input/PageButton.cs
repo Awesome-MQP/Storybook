@@ -6,6 +6,8 @@ public class PageButton : MonoBehaviour {
 
     private PageData m_pageData;
 
+    private int m_menuId;
+    
     /// <summary>
     /// Called when the page button is pressed
     /// Calls the PageButtonPressed function on the current UIHandler in the scene
@@ -78,6 +80,12 @@ public class PageButton : MonoBehaviour {
             m_pageData = value;
             _updateButtonText();
         }
+    }
+
+    public int MenuId
+    {
+        get { return m_menuId; }
+        set { m_menuId = value; }
     }
 
     /// <summary>

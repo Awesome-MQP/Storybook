@@ -214,6 +214,18 @@ public class DungeonMaster : MonoBehaviour {
         return page;
     }
 
+    public Page SpawnPageWithDataOnNetwork(PageData pageData)
+    {
+        GameObject pageObject = PhotonNetwork.Instantiate(m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
+        Page page = pageObject.GetComponent<Page>();
+        page.PageLevel = pageData.PageLevel;
+        page.PageGenre = pageData.PageGenre;
+        page.PageType = pageData.PageMoveType;
+        page.Rarity = pageData.IsRare;
+        return page;
+    }
+
     private bool _getIsPageRare(int pageLevel)
     {
         float isPageRareValue = Random.Range(0.00f, 1.00f);
@@ -253,5 +265,23 @@ public class DungeonMaster : MonoBehaviour {
             Page basicPage = GetBasicPage();
             inventoryToInitialize.Add(basicPage, i);
         }
+    }
+
+    public PageData GetShopPage(PageData shopRoomPageData)
+    {
+        Genre pageGenre = _getPageGenre(shopRoomPageData.PageGenre);
+        float levelRandomValue = Random.Range(0.00f, 1.00f);
+        int pageLevel;
+        if (levelRandomValue < 0.75)
+        {
+            pageLevel = shopRoomPageData.PageLevel + 2;
+        }
+        else
+        {
+            pageLevel = shopRoomPageData.PageLevel + 3;
+        }
+        bool isRare = _getIsPageRare(shopRoomPageData.PageLevel);
+        MoveType pageType = _getPageMoveType();
+        return new PageData(pageLevel, pageGenre, pageType, isRare);
     }
 }

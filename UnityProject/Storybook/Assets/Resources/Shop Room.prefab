@@ -1481,6 +1481,7 @@ MonoBehaviour:
   m_roomMusic: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
+  m_shopUI: {fileID: 11455858, guid: 88905d6c01556b74c88bf860b7346d33, type: 2}
 --- !u!114 &11482432
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1661,7 +1662,12 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_shopUI
+      value: 
+      objectReference: {fileID: 11455858, guid: 88905d6c01556b74c88bf860b7346d33,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 165170}

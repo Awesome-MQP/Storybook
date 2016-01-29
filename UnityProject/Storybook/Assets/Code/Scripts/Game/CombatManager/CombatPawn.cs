@@ -75,7 +75,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// Subtract the given damage amount from the health of the pawn
     /// </summary>
     /// <param name="damageAmount">The amount to subtract from the health of this pawn</param>
-    public void DealDamageToPawn(int damageAmount)
+    public virtual void DealDamageToPawn(int damageAmount)
     {
         _playHurtAnimation();
         m_health -= damageAmount;

@@ -3,24 +3,54 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class TestCombatPawn : CombatPlayer
+public class TestCombatPawn : CombatPlayer, ICombatEventListener
 {
+    private int m_selectedPageIndex = -1;
+    private bool m_isThinking = false;
+
+    // Receive a move to use from the UI.
+    public void OnCombatMoveChosen(int handNumber)
+    {
+        // Only do this if thinking!
+        if(m_isThinking)
+        {
+            Debug.Log("Got a CombatMoveChosen event, index: " + handNumber);
+            m_selectedPageIndex = handNumber;
+        }
+    }
+
+    public void OnReceivePage(Page playerPage, int counter)
+    {
+        return;
+    }
+
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken)
+    {
+        return;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().RegisterEventListener(this);
+
+    }
 
     // Waits for input of a move
     public override void OnThink()
     {
-        int numPressed = _getButtonPress();
-
+        //int numPressed = _getButtonPress();
+        m_isThinking = true;
         // If the player hits the space bar and this pawn is the client's, submit a move
-        if (numPressed > -1 && PhotonNetwork.player.ID == PawnId)
+        if (m_selectedPageIndex > -1 && PhotonNetwork.player.ID == PawnId)
         {
-            SelectedPageIndex = numPressed;
+            SelectedPageIndex = m_selectedPageIndex;
 
-            Debug.Log("Submitted page " + numPressed);
+            Debug.Log("Submitted page " + m_selectedPageIndex);
 
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();
             
-            Page chosenPage = PlayerHand[numPressed];
+            Page chosenPage = PlayerHand[m_selectedPageIndex];
             PlayerMove chosenMove = chosenPage.PlayerCombatMove;
 
             List<CombatPawn> targetList = new List<CombatPawn>();
@@ -51,7 +81,9 @@ public class TestCombatPawn : CombatPlayer
                 targetIds[i] = target.PawnId;
             }
 
-            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, numPressed);
+            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, m_selectedPageIndex);
+            m_selectedPageIndex = -1; // Reset it.
+            m_isThinking = false;
         }
     }
 

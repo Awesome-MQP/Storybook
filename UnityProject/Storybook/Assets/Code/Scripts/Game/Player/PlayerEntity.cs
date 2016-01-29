@@ -20,6 +20,18 @@ public class PlayerEntity : PlayerObject
     }
 
     [SyncProperty]
+    public Genre Genre
+    {
+        get { return m_genre; }
+        protected set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_genre = value;
+            PropertyChanged();
+        }
+    }
+
+    [SyncProperty]
     public int MaxHitPoints
     {
         get { return m_maxHitPoints; }
@@ -93,6 +105,12 @@ public class PlayerEntity : PlayerObject
 
     [SerializeField]
     private int m_speed = 1;
+
+    [SerializeField]
+    private int m_luck = 1;
+
+    [SerializeField]
+    private Genre m_genre = Genre.None;
 
     private Inventory m_inventory;
 

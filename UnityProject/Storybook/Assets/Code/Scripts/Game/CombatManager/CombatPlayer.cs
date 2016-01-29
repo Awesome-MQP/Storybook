@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public abstract class CombatPlayer : CombatPawn, ICombatEventListener
+public abstract class CombatPlayer : CombatPawn
 {
 
     [SerializeField]
@@ -372,25 +372,6 @@ public abstract class CombatPlayer : CombatPawn, ICombatEventListener
 
         EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health);
         // Adds support to UI
-        
-        /*
-        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
-        combatMenu.OnPawnTakesDamage(PhotonNetwork.player, (int)Health);
-        */
     }
 
-    public void OnReceivePage(Page playerPage, int counter)
-    {
-        return;
-    }
-
-    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken)
-    {
-        return;
-    }
-
-    public void OnCombatMoveChosen(PageData pageData)
-    {
-        Debug.Log("Chose move: " + pageData);
-    }
 }

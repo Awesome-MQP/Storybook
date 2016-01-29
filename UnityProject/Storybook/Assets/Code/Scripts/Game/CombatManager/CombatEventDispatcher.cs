@@ -39,11 +39,11 @@ public class CombatEventDispatcher : EventDispatcher
         }
     }
 
-    public void OnCombatMoveChosen(PageData pageData)
+    public void OnCombatMoveChosen(int handIndex)
     {
         foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
         {
-            listener.OnCombatMoveChosen(pageData);
+            listener.OnCombatMoveChosen(handIndex);
         }
     }
 }
@@ -60,7 +60,7 @@ public interface ICombatEventListener : IEventListener
     void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth);
 
     // Notifies a player about a page selection
-    void OnCombatMoveChosen(PageData pageData);
+    void OnCombatMoveChosen(int handIndex);
 }
 
 public abstract class CombatEventListener : IEventListener

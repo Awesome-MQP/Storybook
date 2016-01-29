@@ -15,7 +15,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
 
     // List of the pages the player has in their hand
     private PageData[] m_pagesInHand = new PageData[5];
-    private Button[] m_pageButtons = new Button[5];
+    private PageButton[] m_pageButtons = new PageButton[5];
 
     [SerializeField]
     private float m_gridXPadding;
@@ -28,13 +28,9 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     [SerializeField]
     private float m_buttonWidth;
 
-    public EventDispatcher Dispatcher
-    {
-        get
-        {
-            throw new NotImplementedException();
-        }
-    }
+    private bool m_isThinking = false;
+
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatEventDispatcher>(); } }
 
     // Use this for initialization
     void Awake () {
@@ -51,8 +47,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     // Popualtes the menu for the first time upon instantiation
     public void PopulateUI()
     {
-        //_pollPhotonForPlayerInfo();
-        Debug.Log("Combat UI is active");
+
     }
 
     // Gets the player IDs from Photon, then gets player info from the GameManager 
@@ -211,9 +206,10 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         RectTransform content = pageButtonArea.content;
 
         PageData currentPageData = page.GetPageData();
+        currentPageData.InventoryId = counter;
         Button pageButton = _initializePageButton(currentPageData);
         pageButton.transform.SetParent(content, false);
-        m_pageButtons[counter] = pageButton;
+        m_pageButtons[counter] = pageButton.GetComponent<PageButton>();
         m_pagesInHand[counter] = currentPageData;
     }
 
@@ -223,42 +219,61 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         Destroy(m_pageButtons[index]);
     }
 
-    // Visually shift pages over to make room for when one is drawn
-    /*
-    public void ShiftPages(int index)
+    // Shift the internal logic of the pages.
+    private void _shiftPages(int index)
     {
+        /*
+        switch(index)
+        {
+            case 0:
+                {
+                    break;
+                }
+            case 1:
+                {
+                    break;
+                }
+            case 2:
+                {
+                    break;
+                }
+            case 3:
+                {
+                    break;
+                }
+            case 4:
+                {
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+        /**/
+        /*
         switch (index)
         {
             case 0:
                 m_pageButtons[0] = m_pageButtons[1];
-                m_pageButtons[0].transform.position = m_page1Pos;
                 m_pageButtons[1] = m_pageButtons[2];
-                m_pageButtons[1].transform.position = m_page2Pos;
                 m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[2].transform.position = m_page3Pos;
                 m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[3].transform.position = m_page4Pos;
                 m_pageButtons[4] = null;
                 break;
             case 1:
                 m_pageButtons[1] = m_pageButtons[2];
-                m_pageButtons[1].transform.position = m_page2Pos;
                 m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[2].transform.position = m_page3Pos;
                 m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[3].transform.position = m_page4Pos;
                 m_pageButtons[4] = null;
                 break;
             case 2:
                 m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[2].transform.position = m_page3Pos;
                 m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[3].transform.position = m_page4Pos;
                 m_pageButtons[4] = null;
                 break;
             case 3:
                 m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[3].transform.position = m_page4Pos;
                 m_pageButtons[4] = null;
                 break;
             case 4:
@@ -266,8 +281,9 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
             default:
                 break;
         }
+        /**/
     }
-    */
+    
 
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
     private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP)
@@ -278,14 +294,19 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         }
     }
 
-    // Send the page data to the combat system which will process the move.
+    // Send the page data to the combat system which will process the move, but only if the player is thinking
     public override void PageButtonPressed(PageButton pageButton)
     {
-
         // Send PageData to the combat system
-        //EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(pageButton.GetComponent<PageData>());
-        // Delete the page and shift pages
-        Destroy(pageButton.gameObject);
+        if(m_isThinking)
+        {
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(pageButton.InventoryId);
+            Debug.Log("Sending a combatMoveChosen event, index: " + pageButton.InventoryId);
+            // Delete the page and shift pages
+            _shiftPages(pageButton.InventoryId);
+            Destroy(pageButton.gameObject);
+            m_isThinking = false;
+        }
         return;
     }
 
@@ -295,6 +316,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         if(this != null)
         {
             _drawPage(playerPage, counter);
+            m_isThinking = true; // Since we are getting our hand back, we are back in thinking.
         }
     }
 
@@ -305,7 +327,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     }
 
     // Don't do anything - this method is for players only.
-    public void OnCombatMoveChosen(PageData data)
+    public void OnCombatMoveChosen(int handNumber)
     {
         return;
     }

@@ -55,9 +55,4 @@ public class ShopRoom : RoomObject {
     {
         return;
     }
-
-    public void OnShopClosed()
-    {
-        FindObjectOfType<StorybookPlayerMover>().OpenDeckManagementMenu();
-    }
 }

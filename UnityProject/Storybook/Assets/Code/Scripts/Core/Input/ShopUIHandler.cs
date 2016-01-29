@@ -152,7 +152,7 @@ public class ShopUIHandler : UIHandler {
 
     public void ExitMenu()
     {
-        m_shopRoom.OnShopClosed();
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnShopClosed();
         Destroy(gameObject);
     }
 

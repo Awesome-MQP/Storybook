@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class StorybookPlayerMover : BasePlayerMover {
+public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForRoomEventListener, UIEventDispatcher.IDeckManagementEventListener,
+    UIEventDispatcher.IOverworldEventListener, UIEventDispatcher.IRoomEventListener, UIEventDispatcher.IShopEventListener
+{
 
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
 
@@ -22,9 +24,11 @@ public class StorybookPlayerMover : BasePlayerMover {
         get { return m_playerPositions.ToArray(); }
     }
 
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
+
     public void Start()
     {
-        OpenDeckManagementMenu();
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
     }
 
     /// <summary>
@@ -107,7 +111,6 @@ public class StorybookPlayerMover : BasePlayerMover {
         Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
         m_canvas = (GameObject)Instantiate(loadedObject);
         m_UIHandler = m_canvas.GetComponent<PageForRoomUIHandler>();
-        m_UIHandler.RegisterPlayerMover(this);
         m_UIHandler.PopulateMenu();
         m_isMenuOpen = true;
     }
@@ -120,7 +123,6 @@ public class StorybookPlayerMover : BasePlayerMover {
         Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
-        uiHandler.RegisterPlayerMover(this);
         uiHandler.PopulateMenu();
     }
 
@@ -132,7 +134,6 @@ public class StorybookPlayerMover : BasePlayerMover {
         Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
         GameObject canvas = (GameObject)Instantiate(loadedObject);
         OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
-        uiHandler.RegisterPlayerMover(this);
         uiHandler.PopulateMenu(CurrentRoom);
     }
 
@@ -143,7 +144,6 @@ public class StorybookPlayerMover : BasePlayerMover {
     /// <param name="pageToUseData">The page data from the page that the player selected for the room</param>
     public void SubmitPageForRoom(PageData pageToUseData)
     {
-        Destroy(m_canvas.gameObject);
         m_isMenuOpen = false;
         Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
         CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
@@ -159,6 +159,7 @@ public class StorybookPlayerMover : BasePlayerMover {
     /// <param name="moveDirection"></param>
     public void SubmitDirection(Door.Direction moveDirection)
     {
+        Debug.Log("MoveDirection = " + moveDirection);
         MoveInDirection(moveDirection);
 
         // If the selected room has not been created yet, open the PageForRoom menu
@@ -170,8 +171,8 @@ public class StorybookPlayerMover : BasePlayerMover {
         // If the selected room has already been created, move to the door
         else
         {
-            TargetNode = CurrentRoom.WestDoor;
-            StartCoroutine(MoveToDoor(CurrentRoom.WestDoor.NextRoomLocation));
+            TargetNode = CurrentRoom.GetDoorByDirection(moveDirection);
+            StartCoroutine(MoveToDoor(CurrentRoom.GetDoorByDirection(moveDirection).NextRoomLocation));
         }
     }
 
@@ -195,8 +196,18 @@ public class StorybookPlayerMover : BasePlayerMover {
     /// Called by the DeckManagement menu when the finish button is pressed
     /// Opens the OverworldMenu
     /// </summary>
-    public void CloseDeckManagement()
+    public void OnDeckManagementClosed()
     {
         OpenOverworldMenu();
+    }
+
+    public void OnRoomCleared()
+    {
+        OpenDeckManagementMenu();
+    }
+
+    public void OnShopClosed()
+    {
+        OpenDeckManagementMenu();
     }
 }

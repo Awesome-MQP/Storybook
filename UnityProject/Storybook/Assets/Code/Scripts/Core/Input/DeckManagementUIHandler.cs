@@ -20,8 +20,6 @@ public class DeckManagementUIHandler : UIHandler
     private ScrollRect m_deckScrollRect;
     private ScrollRect m_inventoryScrollRect;
 
-    private StorybookPlayerMover m_playerMover;
-
     public void Awake()
     {
         // Get the dimensions of the button
@@ -148,17 +146,13 @@ public class DeckManagementUIHandler : UIHandler
         }
     }
 
-    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
-    {
-        m_playerMover = playerMover;
-    }
-
     /// <summary>
     /// Called when the finish button is clicked, this function destroys the deck management UI
     /// </summary>
     public void FinishedClicked()
     {
-        m_playerMover.CloseDeckManagement();
-        Destroy(this.gameObject);
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnDeckManagementClosed();
+        Debug.Log("Destroying deck management menu");
+        Destroy(gameObject);
     }
 }

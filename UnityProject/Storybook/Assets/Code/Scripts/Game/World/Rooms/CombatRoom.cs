@@ -87,6 +87,7 @@ public class CombatRoom : RoomObject {
         else
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+            EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
             return;
         }
     }

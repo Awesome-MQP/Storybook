@@ -20,8 +20,6 @@ public class PageForRoomUIHandler : UIHandler {
     private Button m_selectedButton;
     private Button m_submitPageButton;
 
-    private StorybookPlayerMover m_playerMover;
-
     public void Awake()
     {
         m_submitPageButton = GetComponentInChildren<Button>();
@@ -115,16 +113,8 @@ public class PageForRoomUIHandler : UIHandler {
     public void SubmitPage()
     {
         //_dropAndReplaceSelectedPage();
-        m_playerMover.SubmitPageForRoom(m_selectedPageButton.PageData);
-    }
-
-    /// <summary>
-    /// Registers the player mover that created the UI
-    /// </summary>
-    /// <param name="playerMover">The player mover that created the UI</param>
-    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
-    {
-        m_playerMover = playerMover;
+        Destroy(gameObject);
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
     /// <summary>

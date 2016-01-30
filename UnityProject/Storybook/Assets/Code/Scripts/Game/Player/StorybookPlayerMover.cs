@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForRoomEventListener, UIEventDispatcher.IDeckManagementEventListener,
-    UIEventDispatcher.IOverworldEventListener, UIEventDispatcher.IRoomEventListener, UIEventDispatcher.IShopEventListener
+    UIEventDispatcher.IOverworldEventListener, UIEventDispatcher.IRoomEventListener
 {
 
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
@@ -202,11 +202,6 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
     }
 
     public void OnRoomCleared()
-    {
-        OpenDeckManagementMenu();
-    }
-
-    public void OnShopClosed()
     {
         OpenDeckManagementMenu();
     }

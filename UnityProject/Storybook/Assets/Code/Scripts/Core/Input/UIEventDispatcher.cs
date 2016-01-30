@@ -11,6 +11,22 @@ public class UIEventDispatcher : EventDispatcher {
         }
     }
 
+    public void PagesGenerated(PageData[] pagesGenerated)
+    {
+        foreach (IShopEventListener listener in IterateListeners<IShopEventListener>())
+        {
+            listener.PagesGenerated(pagesGenerated);
+        }
+    }
+
+    public void PageTraded(PageData pageTraded)
+    {
+        foreach (IShopEventListener listener in IterateListeners<IShopEventListener>())
+        {
+            listener.PageTraded(pageTraded);
+        }
+    }
+
     public void SubmitPageForRoom(PageData dataToSubmit)
     {
         foreach (IPageForRoomEventListener listener in IterateListeners<IPageForRoomEventListener>())
@@ -46,6 +62,10 @@ public class UIEventDispatcher : EventDispatcher {
     public interface IShopEventListener : IEventListener
     {
         void OnShopClosed();
+
+        void PagesGenerated(PageData[] pagesGenerated);
+
+        void PageTraded(PageData pageTraded);
     }
 
     public interface IPageForRoomEventListener : IEventListener

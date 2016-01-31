@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2643.91675, y: 1964.56958, z: -4360.70508}
+  m_LocalPosition: {x: 2643.9167, y: 1964.5696, z: -4360.705}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -68,24 +68,66 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rooms: []
-  m_pageSameLevelProbability: .699999988
-  m_pageLevelPlus1Probability: .200000003
-  m_pageLevelPlus2Probability: .0500000007
-  m_levelCurveValue: .0250000004
-  m_pageSameGenreProbability: .75
-  m_rarePageProbability: .0500000007
-  m_rarePageLevelIncrease: .0250000004
+  m_pageSameLevelProbability: 0.7
+  m_pageLevelPlus1Probability: 0.2
+  m_pageLevelPlus2Probability: 0.05
+  m_levelCurveValue: 0.025
+  m_pageSameGenreProbability: 0.75
+  m_rarePageProbability: 0.05
+  m_rarePageLevelIncrease: 0.025
   m_pagePrefab: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
-  m_isPageAttackProbability: .400000006
-  m_isPageSupportProbability: .300000012
-  m_isPageStatusProbability: .300000012
+  m_isPageAttackProbability: 0.5
+  m_isPageSupportProbability: 0.5
+  m_isPageStatusProbability: 0
+  m_pageAttack: {fileID: 11426778, guid: a70588006b9d1ce44b1a211bb466b490, type: 2}
+  m_pageHPBoost: {fileID: 11428374, guid: 4e8f802c87a5a1242942ec9251a542cf, type: 2}
+  m_pageAttackBoost: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354, type: 2}
+  m_pageDefenseBoost: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7, type: 2}
+  m_pageSpeedBoost: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_pageAttackBoost
+      value: 
+      objectReference: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageSpeedBoost
+      value: 
+      objectReference: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageHPBoost
+      value: 
+      objectReference: {fileID: 11428374, guid: 4e8f802c87a5a1242942ec9251a542cf,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageDefenseBoost
+      value: 
+      objectReference: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageAttack
+      value: 
+      objectReference: {fileID: 11426778, guid: a70588006b9d1ce44b1a211bb466b490,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_isPageAttackProbability
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_isPageSupportProbability
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_isPageStatusProbability
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 195022}

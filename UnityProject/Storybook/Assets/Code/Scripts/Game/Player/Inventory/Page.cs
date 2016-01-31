@@ -305,5 +305,6 @@ public class Page : Item  {
     public PlayerMove PlayerCombatMove
     {
         get { return m_playerCombatMove; }
+        set { m_playerCombatMove = value; }
     }
 }

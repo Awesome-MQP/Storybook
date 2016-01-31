@@ -45,6 +45,21 @@ public class DungeonMaster : MonoBehaviour {
     [SerializeField]
     private float m_isPageStatusProbability = 0.3f;
 
+    [SerializeField]
+    private PageMove m_pageAttack;
+
+    [SerializeField]
+    private PageMove m_pageHPBoost;
+
+    [SerializeField]
+    private PageMove m_pageAttackBoost;
+
+    [SerializeField]
+    private PageMove m_pageDefenseBoost;
+
+    [SerializeField]
+    private PageMove m_pageSpeedBoost;
+
     // When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
     void Awake() {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
@@ -114,11 +129,37 @@ public class DungeonMaster : MonoBehaviour {
     public Page GetBasicPage()
     {
         Genre pageGenre = _getRandomGenre();
+        MoveType pageType = _getPageMoveType();
+        PageMove movePrefab = _getMovePrefab(pageType, pageGenre);
         int pageLevel = 1;
         Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+        page.PlayerCombatMove = movePrefab;
         page.Rarity = false;
-        page.PageType = MoveType.Attack;
+        page.PageType = pageType;
         return page;
+    }
+
+    private PageMove _getMovePrefab(MoveType pageType, Genre pageGenre)
+    {
+        if (pageType == MoveType.Attack)
+        {
+            return m_pageAttack;
+        }
+        else if (pageType == MoveType.Boost)
+        {
+            switch (pageGenre)
+            {
+                case Genre.SciFi:
+                    return m_pageDefenseBoost;
+                case Genre.Fantasy:
+                    return m_pageSpeedBoost;
+                case Genre.Horror:
+                    return m_pageHPBoost;
+                case Genre.GraphicNovel:
+                    return m_pageAttackBoost;
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -136,6 +177,8 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel);
             page.Rarity = _getIsPageRare(roomLevel);
             page.PageType = _getPageMoveType();
+            PageMove move = _getMovePrefab(page.PageType, pageGenre);
+            page.PlayerCombatMove = move;
             Debug.Log("Dungeon Master returning a page");
             return page;
         }
@@ -146,6 +189,8 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 1);
             page.Rarity = _getIsPageRare(roomLevel + 1);
             page.PageType = _getPageMoveType();
+            PageMove move = _getMovePrefab(page.PageType, pageGenre);
+            page.PlayerCombatMove = move;
             Debug.Log("Dungeon Master returning a page");
             return page;
         }
@@ -156,6 +201,8 @@ public class DungeonMaster : MonoBehaviour {
             Page page = _spawnPageOnNetwork(pageGenre, roomLevel + 2);
             page.Rarity = _getIsPageRare(roomLevel + 2);
             page.PageType = _getPageMoveType();
+            PageMove move = _getMovePrefab(page.PageType, pageGenre);
+            page.PlayerCombatMove = move;
             Debug.Log("Dungeon Master returning a page");
             return page;
         }

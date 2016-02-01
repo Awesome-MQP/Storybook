@@ -257,6 +257,7 @@ public abstract class CombatMove : MonoBehaviour{
     public Genre MoveGenre
     {
         get { return m_moveGenre; }
+        set { m_moveGenre = value; }
     }
 
     public MoveType MoveType

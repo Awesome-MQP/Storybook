@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_worldMaxXSize: 4
   m_worldMaxYSize: 4
-  m_combatRoomPrefab: {fileID: 11415158, guid: 161d5de8108f55f4caecd3945c4ab885, type: 2}
+  m_combatRoomPrefab: {fileID: 11481726, guid: 41b604e7c8d099e4290e620b176b1f09, type: 2}
   m_startRoomPrefab: {fileID: 11428004, guid: d4ceebab9eabfb2438e01fdf4c39c69f, type: 2}
   m_exitRoomPrefab: {fileID: 11409198, guid: 6bafd727926567d4194c1fea36f5c2cb, type: 2}
   m_shopRoomPrefab: {fileID: 11481726, guid: 41b604e7c8d099e4290e620b176b1f09, type: 2}
@@ -129,7 +129,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_combatRoomPrefab
       value: 
-      objectReference: {fileID: 11415158, guid: 161d5de8108f55f4caecd3945c4ab885,
+      objectReference: {fileID: 11481726, guid: 41b604e7c8d099e4290e620b176b1f09,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

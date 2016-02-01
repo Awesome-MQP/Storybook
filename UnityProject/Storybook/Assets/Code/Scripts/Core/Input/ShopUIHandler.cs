@@ -196,7 +196,8 @@ public class ShopUIHandler : UIHandler {
             }
             */
 
-            Page newPlayerPage = dm.SpawnPageWithDataOnNetwork(m_selectedShopPageButton.PageData);
+            PageData selectedPageData = m_selectedShopPageButton.PageData;
+            Page newPlayerPage = dm.ConstructPageFromData(selectedPageData);
             pi.Add(newPlayerPage, pi.FirstOpenSlot());
             m_shopPages.Remove(m_selectedShopPageButton.PageData);
 

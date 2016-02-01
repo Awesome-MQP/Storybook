@@ -118,4 +118,9 @@ public class PlayerEntity : PlayerObject
     {
         m_hitPoints = newHitPoints;
     }
+
+    public void SetGenre(Genre playerGenre)
+    {
+        m_genre = playerGenre;
+    }
 }

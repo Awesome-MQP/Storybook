@@ -287,6 +287,9 @@ public class GameManager : Photon.PunBehaviour
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
         PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+
+        // TODO - Better way to set genre
+        playerObj.GetComponent<PlayerEntity>().SetGenre(Genre.GraphicNovel);
         return playerObj;
     }
 
@@ -363,5 +366,18 @@ public class GameManager : Photon.PunBehaviour
     {
         get { return m_enemyTeamPrefabLoc; }
         set { m_enemyTeamPrefabLoc = value; }
+    }
+
+    public PlayerEntity FindPlayerEntity(int photonPlayerId)
+    {
+        PlayerEntity[] allPlayerEntity = FindObjectsOfType<PlayerEntity>();
+        foreach(PlayerEntity pe in allPlayerEntity)
+        {
+            if (pe.Player.ID == photonPlayerId)
+            {
+                return pe;
+            }
+        }
+        return null;
     }
 }

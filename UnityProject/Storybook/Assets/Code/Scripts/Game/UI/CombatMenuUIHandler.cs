@@ -28,6 +28,18 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     [SerializeField]
     private float m_buttonWidth;
 
+    [SerializeField]
+    private Sprite m_comicSprite;
+
+    [SerializeField]
+    private Sprite m_scifiSprite;
+
+    [SerializeField]
+    private Sprite m_fantasySprite;
+
+    [SerializeField]
+    private Sprite m_horrorSprite;
+
     private bool m_isThinking = false;
 
     public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatEventDispatcher>(); } }
@@ -54,108 +66,83 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     private void _pollPhotonForPlayerInfo()
     {
         // Get a player ID from Photon and use that to find he corresponding player.
-        for(int i = 0; i < PhotonNetwork.playerList.Length; i++)
+        for(int i = 1; i <= PhotonNetwork.playerList.Length; i++)
         {
-            PhotonPlayer player = PhotonNetwork.playerList[i]; // the current player
-            int playerID = PhotonNetwork.playerList[i].ID; // player ID
+            PhotonPlayer player = PhotonNetwork.playerList[i - 1]; // the current player
+            int playerID = PhotonNetwork.playerList[i - 1].ID; // player ID
             GameManager gm = FindObjectOfType<GameManager>();
-            // PlayerEntity pe = gm.GetPlayerEntity(playerID);
-            switch(i)
+            PlayerEntity pe = gm.FindPlayerEntity(playerID);
+
+            Debug.Log("Children count = " + gameObject.GetComponentsInChildren<Image>().Length);
+
+            // Set and enable the corresponding player icon
+            Image playerImage = null;
+            string iconName = "Player" + i + "Icon";
+            foreach(Image image in GetComponentsInChildren<Image>())
             {
-                case 0:
-                    {
-                        // Activate the UI elemnts
-                        this.transform.GetChild(0).gameObject.SetActive(true);
-                        this.transform.GetChild(1).gameObject.SetActive(true);
-                        this.transform.GetChild(2).gameObject.SetActive(true);
-                        // Set the Icon type based on the player's genre
-                        Image p1img = GameObject.Find("Player1Icon").GetComponent<Image>();
-                        //p1img.sprite = _getImageBasedOnGenre(pe); //UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
-                        Text p1ID = GameObject.Find("Player1ID").GetComponent<Text>();
-                        p1ID.text = "ID: " + playerID.ToString();
-                        Text p1HP = GameObject.Find("Player1HP").GetComponent<Text>();
-                        p1HP.text = "HP: " + p1HP.ToString();
-                        m_mapIDtoUI.Add(playerID, p1HP);
-                        break;
-                    }
-                case 1:
-                    {
-                        // Activate the UI elemnts 
-                        this.transform.GetChild(3).gameObject.SetActive(true);
-                        this.transform.GetChild(4).gameObject.SetActive(true);
-                        this.transform.GetChild(5).gameObject.SetActive(true);
-                        // Set the Icon type based on the player's genre
-                        Image p2img = GameObject.Find("Player2Icon").GetComponent<Image>();
-                        //p2img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
-                        Text p2ID = GameObject.Find("Player2ID").GetComponent<Text>();
-                        p2ID.text = "ID: " + playerID.ToString();
-                        Text p2HP = GameObject.Find("Player2HP").GetComponent<Text>();
-                        p2HP.text = "HP: " + p2HP.ToString();
-                        m_mapIDtoUI.Add(playerID, p2HP);
-                        break;
-                    }
-                case 2:
-                    {
-                        // Activate the UI elemnts 
-                        this.transform.GetChild(6).gameObject.SetActive(true);
-                        this.transform.GetChild(7).gameObject.SetActive(true);
-                        this.transform.GetChild(8).gameObject.SetActive(true);
-                        // Set the Icon type based on the player's genre
-                        Image p3img = GameObject.Find("Player3Icon").GetComponent<Image>();
-                        //p3img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
-                        Text p3ID = GameObject.Find("Player3ID").GetComponent<Text>();
-                        p3ID.text = "ID: " + playerID.ToString();
-                        Text p3HP = GameObject.Find("Player3HP").GetComponent<Text>();
-                        p3HP.text = "HP: " + p3HP.ToString();
-                        m_mapIDtoUI.Add(playerID, p3HP);
-                        break;
-                    }
-                case 3:
-                    {
-                        // Activate the UI elemnts 
-                        this.transform.GetChild(9).gameObject.SetActive(true);
-                        this.transform.GetChild(10).gameObject.SetActive(true);
-                        this.transform.GetChild(11).gameObject.SetActive(true);
-                        // Set the Icon type based on the player's genre
-                        Image p4img = GameObject.Find("Player4Icon").GetComponent<Image>();
-                        //p4img.sprite = _getImageBasedOnGenre(pe); UNCOMMENT WHEN PLAYER ENTITYS ARE INTEGRATED
-                        Text p4ID = GameObject.Find("Player4ID").GetComponent<Text>();
-                        p4ID.text = "ID: " + playerID.ToString();
-                        Text p4HP = GameObject.Find("Player4HP").GetComponent<Text>();
-                        p4HP.text = "HP: " + p4HP.ToString();
-                        m_mapIDtoUI.Add(playerID, p4HP);
-                        break;
-                    }
+                Debug.Log("Image name = " + image.name);
+                if (image.name == iconName)
+                {
+                    playerImage = image;
+                }
             }
-            
-        }
-    }
+            playerImage.enabled = true;
+            playerImage.sprite = _getImageBasedOnGenre(pe);
+
+            // Set and enable the corresponding player ID text
+            Text playerIdText = null;
+            string idName = "Player" + i + "ID";
+            foreach (Text text in GetComponentsInChildren<Text>())
+            {
+                if (text.name == idName)
+                {
+                    playerIdText = text;
+                }
+            }
+            playerIdText.enabled = true;
+            playerIdText.text = "ID: " + playerID.ToString();
+
+            // Set and enable the corresponding player HP text
+            Text playerHP = null;
+            string hpName = "Player" + i + "HP";
+            foreach (Text text in GetComponentsInChildren<Text>())
+            {
+                if (text.name == hpName)
+                {
+                    playerHP = text;
+                }
+            }
+            playerHP.enabled = true;
+            playerHP.text = "HP: " + pe.HitPoints;
+            m_mapIDtoUI.Add(playerID, playerHP);
+         }          
+     }
 
     // Determines what image icon the player will have
-    private Image _getImageBasedOnGenre(PlayerEntity pe)
+    private Sprite _getImageBasedOnGenre(PlayerEntity pe)
     {
-        Image genreIcon = Resources.Load("Sprites/Icon_NoGenre") as Image;
+        Sprite genreIcon = Resources.Load("Sprites/Icon_NoGenre") as Sprite;
 
         switch(pe.Genre)
         {
             case Genre.Fantasy:
                 {
-                    genreIcon = Resources.Load("Sprites/Icon_Fantasy") as Image;
+                    genreIcon = m_fantasySprite;
                     break;
                 }
             case Genre.GraphicNovel:
                 {
-                    genreIcon = Resources.Load("Sprites/Icon_Comic") as Image;
+                    genreIcon = m_comicSprite;
                     break;
                 }
             case Genre.Horror:
                 {
-                    genreIcon = Resources.Load("Sprites/Icon_horror") as Image;
+                    genreIcon = m_horrorSprite;
                     break;
                 }
             case Genre.SciFi:
                 {
-                    genreIcon = Resources.Load("Sprites/Icon_SciFi") as Image;
+                    genreIcon = m_scifiSprite;
                     break;
                 }
             default:
@@ -164,6 +151,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
                 }
         }
 
+        Debug.Log("GenreIcon = " + genreIcon.pivot);
         return genreIcon;
     }
 

@@ -14,8 +14,8 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     private Dictionary<int, Text> m_mapIDtoUI = new Dictionary<int, Text>();
 
     // List of the pages the player has in their hand
-    private PageData[] m_pagesInHand = new PageData[5];
-    private PageButton[] m_pageButtons = new PageButton[5];
+    //private PageButton[] m_pageButtons = new PageButton[5];
+    private List<PageButton> m_pageButtonList = new List<PageButton>();
 
     [SerializeField]
     private float m_gridXPadding;
@@ -209,81 +209,16 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         currentPageData.InventoryId = counter;
         Button pageButton = _initializePageButton(currentPageData);
         pageButton.transform.SetParent(content, false);
-        m_pageButtons[counter] = pageButton.GetComponent<PageButton>();
-        m_pagesInHand[counter] = currentPageData;
+        m_pageButtonList.Add(pageButton.GetComponent<PageButton>());
     }
 
     // Removes a page from the screen
     public void DestroyPage(int index)
     {
-        Destroy(m_pageButtons[index]);
-    }
-
-    // Shift the internal logic of the pages.
-    private void _shiftPages(int index)
-    {
-        /*
-        switch(index)
-        {
-            case 0:
-                {
-                    break;
-                }
-            case 1:
-                {
-                    break;
-                }
-            case 2:
-                {
-                    break;
-                }
-            case 3:
-                {
-                    break;
-                }
-            case 4:
-                {
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
-        /**/
-        /*
-        switch (index)
-        {
-            case 0:
-                m_pageButtons[0] = m_pageButtons[1];
-                m_pageButtons[1] = m_pageButtons[2];
-                m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[4] = null;
-                break;
-            case 1:
-                m_pageButtons[1] = m_pageButtons[2];
-                m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[4] = null;
-                break;
-            case 2:
-                m_pageButtons[2] = m_pageButtons[3];
-                m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[4] = null;
-                break;
-            case 3:
-                m_pageButtons[3] = m_pageButtons[4];
-                m_pageButtons[4] = null;
-                break;
-            case 4:
-                break;
-            default:
-                break;
-        }
-        /**/
-    }
-    
+        PageButton pageButton = m_pageButtonList[index];
+        m_pageButtonList.RemoveAt(index);
+        Destroy(pageButton.gameObject);
+    }    
 
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
     private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP)
@@ -300,10 +235,10 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         // Send PageData to the combat system
         if(m_isThinking)
         {
-            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(pageButton.InventoryId);
-            Debug.Log("Sending a combatMoveChosen event, index: " + pageButton.InventoryId);
+            int handId = m_pageButtonList.IndexOf(pageButton);
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(handId);
+            Debug.Log("Sending a combatMoveChosen event, index: " + handId);
             // Delete the page and shift pages
-            _shiftPages(pageButton.InventoryId);
             Destroy(pageButton.gameObject);
             m_isThinking = false;
         }
@@ -315,6 +250,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     {
         if(this != null)
         {
+            Debug.Log("Counter = " + counter);
             _drawPage(playerPage, counter);
             m_isThinking = true; // Since we are getting our hand back, we are back in thinking.
         }

@@ -59,6 +59,10 @@ public abstract class CombatTeam : Photon.PunBehaviour {
                 isTeamDefeated = false;
                 break;
             }
+            else
+            {
+                _disablePawnMesh(pawn);
+            }
         }
         return isTeamDefeated;
     }

@@ -401,6 +401,31 @@ public abstract class CombatPawn : Photon.PunBehaviour
         return opposingPawns.ToArray();
     }
 
+    public CombatPawn GetPawnOpposingWithId(int pawnId)
+    {
+        CombatPawn[] opposingPawns = GetPawnsOpposing();
+        foreach(CombatPawn pawn in opposingPawns)
+        {
+            if (pawn.PawnId == pawnId)
+            {
+                return pawn;
+            }
+        }
+        return null;
+    }
+
+    public CombatPawn GetPawnOnTeamWithId(int pawnId)
+    {
+        CombatPawn[] pawnsOnTeam = GetPawnsOnTeam();
+        foreach (CombatPawn pawn in pawnsOnTeam)
+        {
+            if (pawn.PawnId == pawnId)
+            {
+                return pawn;
+            }
+        }
+        return null;
+    }
 
     /// <summary>
     /// The team that the pawn is currently a part of

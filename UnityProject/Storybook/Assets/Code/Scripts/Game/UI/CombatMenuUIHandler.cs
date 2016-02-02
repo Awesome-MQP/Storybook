@@ -40,7 +40,19 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     [SerializeField]
     private Sprite m_horrorSprite;
 
+    [SerializeField]
+    private RectTransform m_playerTargetButtons;
+
+    [SerializeField]
+    private RectTransform m_enemyTargetButtons;
+
     private bool m_isThinking = false;
+
+    private int m_handId;
+    private List<int> m_targets = new List<int>();
+    private List<int> m_activePlayers = new List<int>();
+    private List<int> m_activeEnemies = new List<int>();
+    private int m_selectedMoveTargets;
 
     public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatEventDispatcher>(); } }
 
@@ -223,12 +235,24 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         // Send PageData to the combat system
         if(m_isThinking)
         {
+            m_handId = m_pageButtonList.IndexOf(pageButton);
+            _displayTargetButtons(pageButton);
+            if (pageButton.PageData.IsRare)
+            {
+                m_selectedMoveTargets = 4;
+            }
+            else
+            {
+                m_selectedMoveTargets = 1;
+            }
+            /*
             int handId = m_pageButtonList.IndexOf(pageButton);
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(handId);
             Debug.Log("Sending a combatMoveChosen event, index: " + handId);
             // Delete the page and shift pages
             Destroy(pageButton.gameObject);
             m_isThinking = false;
+            */
         }
         return;
     }
@@ -251,8 +275,107 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     }
 
     // Don't do anything - this method is for players only.
-    public void OnCombatMoveChosen(int handNumber)
+    public void OnCombatMoveChosen(int pawnId, int handIndex, int[] targets)
     {
         return;
     }
+
+    private void _displayTargetButtons(PageButton buttonPressed)
+    {
+        switch (buttonPressed.PageMoveType)
+        {
+            case MoveType.Attack:
+                _displayEnemyTargetButtons();
+                break;
+            case MoveType.Boost:
+                _displayPlayerTargetButtons();
+                break;
+            case MoveType.Status:
+                _displayEnemyTargetButtons();
+                break;
+        }
+    }
+
+    private void _displayPlayerTargetButtons()
+    {
+        PlayerTeam playerTeam = FindObjectOfType<PlayerTeam>();
+        foreach(CombatPawn pawn in playerTeam.ActivePawnsOnTeam)
+        {
+            m_activePlayers.Add(pawn.PawnId);
+        }
+
+        TargetButton[] playerTargetButtons = m_playerTargetButtons.GetComponentsInChildren<TargetButton>();
+
+        foreach(TargetButton b in playerTargetButtons)
+        {
+            if (m_activePlayers.Contains(b.TargetId))
+            {
+                b.enabled = true;
+                b.GetComponent<Button>().enabled = true;
+                b.GetComponent<Image>().enabled = true;
+                b.GetComponentInChildren<Text>().enabled = true;
+            }
+        }
+    }
+
+    private void _displayEnemyTargetButtons()
+    {
+        EnemyTeam enemyTeam = FindObjectOfType<EnemyTeam>();
+        foreach (CombatPawn pawn in enemyTeam.ActivePawnsOnTeam)
+        {
+            m_activeEnemies.Add(pawn.PawnId);
+        }
+
+        TargetButton[] enemyTargetButtons = m_enemyTargetButtons.GetComponentsInChildren<TargetButton>();
+        foreach (TargetButton b in enemyTargetButtons)
+        {
+            if (m_activeEnemies.Contains(b.TargetId))
+            {
+                b.enabled = true;
+                b.GetComponent<Button>().enabled = true;
+                b.GetComponent<Image>().enabled = true;
+                b.GetComponentInChildren<Text>().enabled = true;
+            }
+        }
+    }
+
+    private void _hidePlayerTargetButtons()
+    {
+        TargetButton[] playerTargetButtons = m_playerTargetButtons.GetComponentsInChildren<TargetButton>();
+
+        foreach (TargetButton b in playerTargetButtons)
+        {
+            b.enabled = false;
+            b.GetComponent<Button>().enabled = false;
+            b.GetComponent<Image>().enabled = false;
+            b.GetComponentInChildren<Text>().enabled = false;
+        }
+    }
+
+    private void _hideEnemyTargetButtons()
+    {
+        TargetButton[] enemyTargetButtons = m_enemyTargetButtons.GetComponentsInChildren<TargetButton>();
+        foreach (TargetButton b in enemyTargetButtons)
+        {
+            b.enabled = false;
+            b.GetComponent<Button>().enabled = false;
+            b.GetComponent<Image>().enabled = false;
+            b.GetComponentInChildren<Text>().enabled = false;
+        }
+    }
+
+    public void TargetSelected(int targetId)
+    {
+        Debug.Log("Button pressed");
+        _hideEnemyTargetButtons();
+        _hidePlayerTargetButtons();
+        m_targets.Add(targetId);
+        if (m_targets.Count >= m_selectedMoveTargets)
+        {
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(PhotonNetwork.player.ID, m_handId, m_targets.ToArray());
+        }
+        m_activePlayers = new List<int>();
+        m_activeEnemies = new List<int>();
+        m_targets = new List<int>();
+}
 }

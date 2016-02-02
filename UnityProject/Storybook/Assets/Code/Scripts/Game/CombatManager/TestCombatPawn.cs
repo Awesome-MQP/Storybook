@@ -6,16 +6,19 @@ using System;
 public class TestCombatPawn : CombatPlayer, ICombatEventListener
 {
     private int m_selectedHandIndex = -1;
+    private int[] m_selectedTargets;
     private bool m_isThinking = false;
 
     // Receive a move to use from the UI.
-    public void OnCombatMoveChosen(int handNumber)
+    public void OnCombatMoveChosen(int pawnId, int handIndex, int[] targets)
     {
         // Only do this if thinking!
-        if(m_isThinking)
+        if(m_isThinking && pawnId == PawnId)
         {
-            Debug.Log("Got a CombatMoveChosen event, index: " + handNumber);
-            m_selectedHandIndex = handNumber;
+            Debug.Log("Got a CombatMoveChosen event, index: " + handIndex);
+            Debug.Log("Target = " + targets[0]);
+            m_selectedHandIndex = handIndex;
+            m_selectedTargets = targets;
         }
     }
 
@@ -55,11 +58,17 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
             List<CombatPawn> targetList = new List<CombatPawn>();
             if (chosenPage.PageType == MoveType.Attack)
             {
-                targetList.Add(GetPawnsOpposing()[0]);
+                foreach(int i in m_selectedTargets)
+                {
+                    targetList.Add(GetPawnOpposingWithId(i));
+                }
             }
             else if (chosenPage.PageType == MoveType.Boost)
             {
-                targetList.Add(GetPawnsOnTeam()[0]);
+                foreach (int i in m_selectedTargets)
+                {
+                    targetList.Add(GetPawnOnTeamWithId(i));
+                }
             }
 
             RemovePageFromHand(chosenPage);

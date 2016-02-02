@@ -113,7 +113,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
                 }
             }
             playerHP.enabled = true;
-            playerHP.text = "HP: " + pe.HitPoints;
+            playerHP.text = "HP: " + pe.HitPoints + "/" + pe.MaxHitPoints;
             m_mapIDtoUI.Add(playerID, playerHP);
          }          
      }
@@ -209,11 +209,11 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     }    
 
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
-    private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP)
+    private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP, int maxHP)
     {
         if(m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
-            m_mapIDtoUI[photonPlayer.ID].text = newHP.ToString();
+            m_mapIDtoUI[photonPlayer.ID].text = "HP: " + newHP.ToString() + "/" + maxHP.ToString();
         }
     }
 
@@ -221,7 +221,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     public override void PageButtonPressed(PageButton pageButton)
     {
         // Send PageData to the combat system
-        if(m_isThinking)
+        if (m_isThinking)
         {
             int handId = m_pageButtonList.IndexOf(pageButton);
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(handId);
@@ -229,6 +229,10 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
             // Delete the page and shift pages
             Destroy(pageButton.gameObject);
             m_isThinking = false;
+            foreach (PageButton pb in m_pageButtonList)
+            {
+                pb.GetComponent<Button>().interactable = false;
+            }
         }
         return;
     }
@@ -241,13 +245,17 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
             Debug.Log("Counter = " + counter);
             _drawPage(playerPage, counter);
             m_isThinking = true; // Since we are getting our hand back, we are back in thinking.
+            foreach (PageButton pb in m_pageButtonList)
+            {
+                pb.GetComponent<Button>().interactable = true;
+            }
         }
     }
 
     // Know to update the UI when a player takes damage
-    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth)
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth, int maxHealth)
     {
-        _updateHitpointsOfPlayer(thePlayer, currentHealth);
+        _updateHitpointsOfPlayer(thePlayer, currentHealth, maxHealth);
     }
 
     // Don't do anything - this method is for players only.

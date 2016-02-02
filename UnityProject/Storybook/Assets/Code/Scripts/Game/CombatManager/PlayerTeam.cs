@@ -24,6 +24,7 @@ public class PlayerTeam : CombatTeam {
             }
             PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
             CombatPawn playerPawn = playerObject.GetComponent<CombatPawn>();
+            playerPawn.transform.SetParent(positionNodes[i].transform);
             playerPawn.PawnId = i + 1;
 
             playerPawn.TeamId = TeamId;

@@ -14,16 +14,18 @@ public class PlayerTeam : CombatTeam {
         List<PlayerPositionNode> positionNodes = new List<PlayerPositionNode>(FindObjectsOfType<PlayerPositionNode>());
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
+            PlayerPositionNode playerNode = _getPositionNodeById(positionNodes, i + 1);
             Quaternion rotation = Quaternion.identity;
             rotation.y = 120;
             rotation.w = 120;
-            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, rotation, 0);
+            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, playerNode.transform.position, rotation, 0);
             if ((i + 1) != PhotonNetwork.player.ID)
             {
                 playerObject.GetComponent<PhotonView>().TransferController(i + 1);
             }
             PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
             CombatPawn playerPawn = playerObject.GetComponent<CombatPawn>();
+            playerPawn.transform.SetParent(playerNode.transform);
             playerPawn.PawnId = i + 1;
 
             playerPawn.TeamId = TeamId;
@@ -44,6 +46,19 @@ public class PlayerTeam : CombatTeam {
             playerPawn.SendPawnTeam(TeamId);
             i++;
         }
+    }
+
+    private PlayerPositionNode _getPositionNodeById(List<PlayerPositionNode> enemyPositions, int positionId)
+    {
+        foreach (PlayerPositionNode playerNode in enemyPositions)
+        {
+            Debug.Log("Node Id = " + playerNode.PositionId);
+            if (playerNode.PositionId == positionId)
+            {
+                return playerNode;
+            }
+        }
+        return null;
     }
 
     private PlayerEntity _findPlayerEntity(int photonPlayerId)

@@ -379,7 +379,7 @@ public abstract class CombatPlayer : CombatPawn
 
         base.DealDamageToPawn(damageAmount);
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health);
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health, (int)Health);
         // Adds support to UI
     }
 

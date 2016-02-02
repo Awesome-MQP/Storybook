@@ -31,11 +31,11 @@ public class CombatEventDispatcher : EventDispatcher
     }
 
     //public void OnPawnTakesDamage(CombatEventListener.PawnTakesDamageCallback callback, PhotonPlayer thePlayer, int damageTaken)
-    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth)
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth, int maxHealth)
     {
         foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
         {
-            listener.OnPawnTakesDamage(thePlayer, currentHealth);
+            listener.OnPawnTakesDamage(thePlayer, currentHealth, maxHealth);
         }
     }
 
@@ -57,7 +57,7 @@ public interface ICombatEventListener : IEventListener
     void OnReceivePage(Page playerPage, int counter);
 
     // Notifies the UI about a player receiving damage
-    void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth);
+    void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth, int maxHealth);
 
     // Notifies a player about a page selection
     void OnCombatMoveChosen(int pawnId, int handIndex, int[] targets);

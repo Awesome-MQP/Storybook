@@ -27,7 +27,7 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
         return;
     }
 
-    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken)
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken, int maxHealth)
     {
         return;
     }

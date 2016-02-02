@@ -538,7 +538,7 @@ namespace Photon
 
         protected virtual void OnValidate()
         {
-            if (photonView && !photonView.ObservedComponents.Contains(this))
+            if (photonView && photonView.ObservedComponents != null && !photonView.ObservedComponents.Contains(this))
                 photonView.ObservedComponents.Add(this);
         }
 

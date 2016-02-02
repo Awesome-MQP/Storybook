@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Assertions;
 
+[RequireComponent(typeof(MusicManager))]
 public abstract class GameManager : Photon.PunBehaviour
 {
     [SerializeField]
@@ -13,13 +14,15 @@ public abstract class GameManager : Photon.PunBehaviour
     [Tooltip("When false all old player objects will be destroyed when this game manager starts up.")]
     private bool m_keepOldPlayerObjects = false;
 
-    [SerializeField]
-    private MusicManager m_musicMgr;
-
     private Dictionary<PhotonPlayer, PlayerObject> m_playerObjects = new Dictionary<PhotonPlayer, PlayerObject>();
 
     private static GameManager s_instance;
 
+    /// <summary>
+    /// Get the active GameManager instance.
+    /// </summary>
+    /// <typeparam name="T">The type of GameManager.</typeparam>
+    /// <returns>The active GameManager instance.</returns>
     public static T GetInstance<T>() where T : GameManager
     {
         return s_instance as T;
@@ -37,11 +40,6 @@ public abstract class GameManager : Photon.PunBehaviour
         _startup();
         OnStartGame();
         photonView.RPC(nameof(_rpcOnStartGame), PhotonTargets.Others);
-    }
-
-    void Start ()
-    {
-        m_musicMgr = FindObjectOfType<MusicManager>();
     }
 
     protected virtual void OnStartGame()
@@ -68,6 +66,30 @@ public abstract class GameManager : Photon.PunBehaviour
         return m_playerObjects.Values.OfType<T>().ToArray();
     }
 
+    /// <summary>
+    /// Helper method to iterate over all player objects.
+    /// </summary>
+    /// <returns>An IEnumerable to iterate over the players.</returns>
+    public IEnumerable<PlayerObject> IteratePlayers()
+    {
+        return m_playerObjects.Values.AsEnumerable();
+    }
+
+    /// <summary>
+    /// Helper method ot iterate over all player objects of a type.
+    /// </summary>
+    /// <typeparam name="T">The type of player object.</typeparam>
+    /// <returns>An IEnumerable that will iterate over objects of type T.</returns>
+    public IEnumerable<T> IteratePlayers<T>() where T : PlayerObject
+    {
+        return IteratePlayers().OfType<T>();
+    }
+
+    /// <summary>
+    /// Get the PlayerObject assigned to a player.
+    /// </summary>
+    /// <param name="player">The player to get the player object of.</param>
+    /// <returns>The player object for this player.</returns>
     public PlayerObject GetPlayerObject(PhotonPlayer player)
     {
         return GetPlayerObject<PlayerObject>(player);

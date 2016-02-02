@@ -2,13 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
-public class CombatManager : Photon.PunBehaviour {
+public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
+{
 
     [SerializeField]
     private Transform m_cameraPos;
 
-    [SerializeField]
     private List<CombatTeam> m_teamList = new List<CombatTeam>();
 
     private Animator m_combatStateMachine;
@@ -19,6 +20,14 @@ public class CombatManager : Photon.PunBehaviour {
     override protected void Awake()
     {
         DontDestroyOnLoad(this);
+    }
+
+    public void Construct(CombatInstance combatInfo)
+    {
+        Assert.IsTrue(IsMine);
+
+        CombatTeam[] teams = combatInfo.CreateTeams();
+        m_teamList = new List<CombatTeam>(teams);
     }
 
     // Use this for initialization

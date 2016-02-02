@@ -54,7 +54,7 @@ public class NetWinState : NetworkState {
 
     private void _getPageDrop()
     {
-        BaseStorybookGame dm = GameManager.GetInstance<BaseStorybookGame>();
+        DungeonMaster dm = GameManager.GetInstance<BaseStorybookGame>().DM;
         Page pageDrop = dm.GetPageDropFromCombat(Genre.GraphicNovel, 1);
 
         GameManager gm = FindObjectOfType<GameManager>();

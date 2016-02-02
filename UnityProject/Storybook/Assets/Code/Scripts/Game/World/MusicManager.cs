@@ -7,11 +7,13 @@ public class MusicManager : MonoBehaviour {
     [SerializeField]
     private AudioClip m_currentMusicTrack = null;
 
-    public float FadeOutThreshold = 0.05f;
-    public float FadeSpeed = 0.05f;
+    [SerializeField]
+    private float m_fadeOutThreshold = 0.05f;
 
     [SerializeField]
-    private AudioSource m_musicSource = null;
+    private float m_fadeSpeed = 0.05f;
+
+    private AudioSource m_musicSource;
 
     [SerializeField]
     private float m_musicVolume = 5.0f;
@@ -127,11 +129,11 @@ public class MusicManager : MonoBehaviour {
 
         if (m_currentFadeState == FadeState.fadeOut)
         {
-            if (m_musicSource.volume > this.FadeOutThreshold)
+            if (m_musicSource.volume > this.m_fadeOutThreshold)
             {
                 Debug.Log("Fading out. vol= " + m_musicSource.volume);
                 // Fade out current clip.
-                m_musicSource.volume -= this.FadeSpeed * Time.deltaTime;
+                m_musicSource.volume -= this.m_fadeSpeed * Time.deltaTime;
             }
             else
             {
@@ -145,7 +147,7 @@ public class MusicManager : MonoBehaviour {
             if (m_musicSource.volume < m_nextMusicVolume)
             {
                 // Fade in next clip.
-                m_musicSource.volume += this.FadeSpeed * Time.deltaTime;
+                m_musicSource.volume += this.m_fadeSpeed * Time.deltaTime;
             }
             else
             {

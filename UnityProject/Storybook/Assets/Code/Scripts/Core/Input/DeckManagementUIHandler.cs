@@ -123,6 +123,11 @@ public class DeckManagementUIHandler : UIHandler
         }
     }
 
+    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
+    {
+        
+    }
+
     public void FinishedClicked()
     {
         Destroy(this.gameObject);

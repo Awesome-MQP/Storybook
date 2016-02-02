@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public class BasePlayerMover : RoomMover
+public abstract class BasePlayerMover : RoomMover
 {
     private HashSet<PlayerObject> m_registeredPlayers = new HashSet<PlayerObject>();
 

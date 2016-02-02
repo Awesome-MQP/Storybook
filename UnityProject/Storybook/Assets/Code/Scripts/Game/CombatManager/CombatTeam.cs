@@ -83,8 +83,20 @@ public abstract class CombatTeam : Photon.PunBehaviour {
             RemovePawnFromTeam(pawn);
             m_combatManager = FindObjectOfType<CombatManager>();
             CManager.RemovePawnMove(pawn);
+            _disablePawnMesh(pawn);
         }
         return defeatedPawns;
+    }
+
+    private void _disablePawnMesh(CombatPawn pawnToDisable)
+    {
+        pawnToDisable.GetComponent<Animator>().enabled = false;
+        pawnToDisable.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        MeshRenderer[] allMeshRenderers = pawnToDisable.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer m in allMeshRenderers)
+        {
+            m.enabled = false;
+        }
     }
 
     public virtual void EndCombat()

@@ -1040,8 +1040,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11467210}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 22
+  instantiationId: 22
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1067,8 +1067,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11459702}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 19
+  instantiationId: 19
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1094,8 +1094,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11429042}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 28
+  instantiationId: 28
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1121,8 +1121,8 @@ MonoBehaviour:
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
   m_fightMusic: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
   m_musicTracks:
-  - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
-  - {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
+  - {fileID: 8300000, guid: 83537e63d2551504b8ebeb385e2211de, type: 3}
+  - {fileID: 8300000, guid: ee42c1c5ee5a2184b9593378875c2ccb, type: 3}
   m_roomEnemiesOverworld: []
   m_roomEnemies: {fileID: 0}
   m_enemyPosList:
@@ -1153,8 +1153,8 @@ MonoBehaviour:
   - {fileID: 410718}
   - {fileID: 11415158}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 29
+  instantiationId: 29
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1203,8 +1203,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11418170}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 18
+  instantiationId: 18
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1241,8 +1241,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11496448}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 16
+  instantiationId: 16
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1279,8 +1279,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11432198}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 25
+  instantiationId: 25
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1306,8 +1306,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11470268}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 24
+  instantiationId: 24
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1333,8 +1333,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11402286}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 27
+  instantiationId: 27
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1360,8 +1360,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11417024}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 23
+  instantiationId: 23
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1409,8 +1409,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11455462}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 17
+  instantiationId: 17
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1482,8 +1482,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11499984}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 21
+  instantiationId: 21
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1509,8 +1509,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11467042}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 26
+  instantiationId: 26
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1536,8 +1536,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11468904}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 20
+  instantiationId: 20
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0

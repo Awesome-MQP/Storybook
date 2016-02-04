@@ -1674,6 +1674,10 @@ Prefab:
       propertyPath: ObservedComponents.Array.data[2]
       value: 
       objectReference: {fileID: 11409198}
+    - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 112148}

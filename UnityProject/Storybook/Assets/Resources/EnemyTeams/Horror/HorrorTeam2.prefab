@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 175316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1571.0991, y: 1244.042, z: 677.9839}
+  m_LocalPosition: {x: 10.121142, y: 138.90111, z: 63.69332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_pawnsToSpawn:
   - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
   - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
-  - {fileID: 11471350, guid: 26e148fb9fa5d3946bb95c91823957cd, type: 2}
+  - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
 --- !u!114 &11476198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,7 +64,6 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
   - {fileID: 11447240}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0

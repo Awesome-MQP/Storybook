@@ -9,10 +9,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     // Character stats
     [SerializeField]
-    private float m_maxHealth;
+    protected float m_maxHealth;
 
     [SerializeField]
-    private float m_health;
+    protected float m_health;
     private float m_healthMod = 0;
 
     [SerializeField]

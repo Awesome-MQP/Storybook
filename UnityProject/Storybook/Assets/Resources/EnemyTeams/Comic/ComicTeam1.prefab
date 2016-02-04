@@ -65,8 +65,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11427914}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0

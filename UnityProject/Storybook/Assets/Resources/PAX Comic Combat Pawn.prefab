@@ -872,11 +872,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52bf73ce1e2879245ba525084b35e65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 0
-  m_health: 10
+  m_maxHealth: 20
+  m_health: 20
   m_speed: 7
-  m_defense: 10
-  m_attack: 80
+  m_defense: 2
+  m_attack: 5
   m_genre: 4
   m_pageToUse: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
   m_otherPageToUse: {fileID: 11420582, guid: 423364e4069802941911587a6aa7236c, type: 2}
@@ -979,7 +979,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_defense
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_maxHealth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_attack
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_health
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 162898}

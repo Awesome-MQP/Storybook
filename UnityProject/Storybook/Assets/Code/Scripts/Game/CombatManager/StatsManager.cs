@@ -3,12 +3,12 @@ using System.Collections;
 
 public static class StatsManager {
 
-    private static float m_positiveSTABBonus = 1f;
-    private static float m_neutralSTABBonus = 0.5f;
-    private static float m_negativeSTABBonus = 0.3f;
-    private static float m_positiveTypeMatchBonus = 1f;
-    private static float m_neutralTypeMatchBonus = 0.5f;
-    private static float m_negativeTypeMatchBonus = 0.25f;
+    private static float m_positiveSTABBonus = 1.5f;
+    private static float m_neutralSTABBonus = 1f;
+    private static float m_negativeSTABBonus = 0.75f;
+    private static float m_positiveTypeMatchBonus = 1.5f;
+    private static float m_neutralTypeMatchBonus = 1.0f;
+    private static float m_negativeTypeMatchBonus = 0.75f;
 
     /// <summary>
     /// Does damage calculation. This version of the formula reflects the design change from late A-term.
@@ -26,8 +26,8 @@ public static class StatsManager {
 
         float totalDmg = (pageLevel + attackerStr) * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
 
-        if (totalDmg < 0)
-        { return 0; }
+        if (totalDmg <= 0)
+        { return 1; }
         else
         { return Mathf.FloorToInt(totalDmg); }
     }

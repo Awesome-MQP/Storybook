@@ -1040,8 +1040,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11420586}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 16
-  instantiationId: 16
+  viewIdField: 47
+  instantiationId: 47
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1067,8 +1067,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11493164}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 19
-  instantiationId: 19
+  viewIdField: 48
+  instantiationId: 48
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1094,8 +1094,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11418038}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 23
-  instantiationId: 23
+  viewIdField: 55
+  instantiationId: 55
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1165,8 +1165,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11420712}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 17
-  instantiationId: 17
+  viewIdField: 46
+  instantiationId: 46
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1192,8 +1192,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11449044}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 26
-  instantiationId: 26
+  viewIdField: 56
+  instantiationId: 56
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1219,8 +1219,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11468122}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 15
-  instantiationId: 15
+  viewIdField: 44
+  instantiationId: 44
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1246,8 +1246,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11474122}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 21
-  instantiationId: 21
+  viewIdField: 51
+  instantiationId: 51
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1284,8 +1284,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11421468}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 18
-  instantiationId: 18
+  viewIdField: 45
+  instantiationId: 45
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1312,8 +1312,8 @@ MonoBehaviour:
   - {fileID: 445076}
   - {fileID: 11481726}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 28
-  instantiationId: 28
+  viewIdField: 57
+  instantiationId: 57
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1339,8 +1339,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11482432}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 24
-  instantiationId: 24
+  viewIdField: 54
+  instantiationId: 54
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1366,8 +1366,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11494800}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 22
-  instantiationId: 22
+  viewIdField: 49
+  instantiationId: 49
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1393,8 +1393,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11481606}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 27
-  instantiationId: 27
+  viewIdField: 53
+  instantiationId: 53
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1431,8 +1431,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11404084}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 25
-  instantiationId: 25
+  viewIdField: 52
+  instantiationId: 52
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1480,7 +1480,7 @@ MonoBehaviour:
   m_centerNode: {fileID: 11482432}
   m_roomMusic: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
   m_musicTracks:
-  - {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
+  - {fileID: 8300000, guid: 1b0b1b9f569fb9c4c9412bdabfaa92e4, type: 3}
   m_shopUI: {fileID: 11455858, guid: 88905d6c01556b74c88bf860b7346d33, type: 2}
 --- !u!114 &11482432
 MonoBehaviour:
@@ -1527,8 +1527,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11483980}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 20
-  instantiationId: 20
+  viewIdField: 50
+  instantiationId: 50
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0

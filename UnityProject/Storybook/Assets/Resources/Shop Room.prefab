@@ -535,7 +535,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 165170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 104.947426, y: 247.33104, z: 409.591}
+  m_LocalPosition: {x: 133.94022, y: 318.51782, z: 537.3735}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 476400}
@@ -1478,6 +1478,7 @@ MonoBehaviour:
   m_southDoor: {fileID: 11481606}
   m_westDoor: {fileID: 11418038}
   m_centerNode: {fileID: 11482432}
+  m_floorObject: {fileID: 442364}
   m_roomMusic: {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 096ad90d2a15af24eb700021938b37c4, type: 3}

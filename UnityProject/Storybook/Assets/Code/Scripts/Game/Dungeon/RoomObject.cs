@@ -37,6 +37,9 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     [SerializeField]
     private MovementNode m_centerNode;
 
+    [SerializeField]
+    protected Transform m_floorObject;
+
     private PageData m_roomPageData;
 
     protected override void Awake()

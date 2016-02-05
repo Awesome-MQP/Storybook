@@ -36,6 +36,7 @@ public class ExitRoom : RoomObject {
     // Most likely nothing, but that may change.
     public override void OnRoomEvent()
     {
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
         return;
     }
 

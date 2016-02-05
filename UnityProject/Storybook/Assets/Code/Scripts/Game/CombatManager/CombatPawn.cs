@@ -9,10 +9,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     // Character stats
     [SerializeField]
-    private float m_maxHealth;
+    protected float m_maxHealth;
 
     [SerializeField]
-    private float m_health;
+    protected float m_health;
     private float m_healthMod = 0;
 
     [SerializeField]
@@ -40,6 +40,11 @@ public abstract class CombatPawn : Photon.PunBehaviour
     private bool m_underStatusEffect = false;
     private int m_turnsUnderStatus = 0;
 
+    [SerializeField]
+    private const int m_textTickStartingCount = 90;
+    private int m_textTick = 0; // When a pawn takes damage, display the text on-screen for about 1.5 seconds.
+    private bool m_textIsActive = false;
+
     private CombatManager m_combatManager;
 
     // Defaults to null because it needs to be able to return null moves
@@ -62,6 +67,21 @@ public abstract class CombatPawn : Photon.PunBehaviour
         m_scenePhotonView = GetComponent<PhotonView>();
     }
 
+    // every tick, if the damage text is up, decrement the counter until it reaches 0.
+    // then hide the text
+    public void Update()
+    {
+       if(m_textIsActive)
+        {
+            m_textTick--;
+            if(m_textTick <= 0)
+            {
+                m_textTick = 0;
+                transform.parent.Find("DamageText").gameObject.SetActive(false); // yay dot trains!
+            }
+        }
+    }
+
     /// <summary>
     /// Setter for the pawn's CombatManager
     /// </summary>
@@ -75,24 +95,53 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// Subtract the given damage amount from the health of the pawn
     /// </summary>
     /// <param name="damageAmount">The amount to subtract from the health of this pawn</param>
-    public void DealDamageToPawn(int damageAmount)
+    public virtual void DealDamageToPawn(int damageAmount)
     {
-        StartCoroutine(_playHurtAnimation());
+        // Display health lost above the target
+        TextMesh dmgText = transform.parent.Find("DamageText").GetComponent<TextMesh>();
+
+        if (damageAmount > 0)
+        {
+            dmgText.color = Color.red;
+            dmgText.text = "-" + damageAmount.ToString() + "HP";
+        }
+        else if (damageAmount < 0)
+        {
+            dmgText.color = Color.green;
+            dmgText.text = "+" + damageAmount.ToString() + "HP";
+        }
+        else
+        {
+            // no damage
+            dmgText.color = new Color(255, 165, 0);
+            dmgText.text = "No Dmg!";
+        }
+
+        // Deal damage to target
+        _playHurtAnimation();
         m_health -= damageAmount;
 
         if (m_health <= 0)
         {
             m_isAlive = false;
         }
+
+        transform.parent.Find("DamageText").gameObject.SetActive(true);
+        m_textTick += m_textTickStartingCount;
+        m_textIsActive = true;
     }
 
-    private IEnumerator _playHurtAnimation()
+    private void _playHurtAnimation()
     {
         Animator pawnAnimator = GetComponent<Animator>();
         pawnAnimator.SetBool("IdleToIdle", false);
         pawnAnimator.SetBool("HurtToIdle", false);
         pawnAnimator.SetBool("IdleToHurt", true);
-        yield return new WaitForSeconds(2);
+    }
+
+    public void SwitchToIdleAnim()
+    {
+        Animator pawnAnimator = GetComponent<Animator>();
         pawnAnimator.SetBool("IdleToIdle", true);
         pawnAnimator.SetBool("IdleToHurt", false);
         pawnAnimator.SetBool("HurtToIdle", true);
@@ -139,6 +188,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public void IncreasePawnSpeed(int speedIncrease)
     {
         m_speedBoost += speedIncrease;
+
+        TextMesh dmgText = transform.parent.Find("DamageText").GetComponent<TextMesh>();
+        dmgText.color = Color.green;
+        dmgText.text = "+" + speedIncrease.ToString() + " SPD";
+        transform.parent.Find("DamageText").gameObject.SetActive(true);
+        m_textTick += m_textTickStartingCount;
+        m_textIsActive = true;
+
     }
 
     /// <summary>
@@ -147,11 +204,20 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// <param name="hpIncrease">The amount to increase the hp by</param>
     public void IncreasePawnHP(int hpIncrease)
     {
+        TextMesh dmgText = transform.parent.Find("DamageText").GetComponent<TextMesh>();
+        dmgText.color = Color.green;
+        dmgText.text = "+" + hpIncrease.ToString() + " HP";
+        transform.parent.Find("DamageText").gameObject.SetActive(true);
+        m_textTick += m_textTickStartingCount;
+        m_textIsActive = true;
+
         m_health += hpIncrease;
         if (m_health > m_maxHealth)
         {
             m_health = m_maxHealth;
         }
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)m_health, (int)m_maxHealth);
     }
 
     /// <summary>
@@ -162,6 +228,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public void IncreasePawnAttack(int attackIncrease)
     {
         m_attackBoost += attackIncrease;
+
+        TextMesh dmgText = transform.parent.Find("DamageText").GetComponent<TextMesh>();
+        dmgText.color = Color.green;
+        dmgText.text = "+" + attackIncrease.ToString() + " ATK";
+        transform.parent.Find("DamageText").gameObject.SetActive(true);
+        m_textTick += m_textTickStartingCount;
+        m_textIsActive = true;
+
     }
 
     /// <summary>
@@ -172,6 +246,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public void IncreasePawnDefense(int defenseIncrease)
     {
         m_defenseBoost += defenseIncrease;
+
+        TextMesh dmgText = transform.parent.Find("DamageText").GetComponent<TextMesh>();
+        dmgText.color = Color.green;
+        dmgText.text = "+" + defenseIncrease.ToString() + " DEF";
+        transform.parent.Find("DamageText").gameObject.SetActive(true);
+        m_textTick += m_textTickStartingCount;
+        m_textIsActive = true;
+
     }
 
     /// <summary>
@@ -201,11 +283,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Speed
     {
         get { return m_speed + m_speedBoost + m_speedMod; }
-    }
-
-    public void SetSpeed(float newSpeed)
-    {
-        m_speed = newSpeed;
+        set { m_speed = value; }
     }
 
     /// <summary>
@@ -214,15 +292,12 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Health
     {
         get { return m_health; }
-        set
-        {
-            m_health = value;
-        }
+        set { m_health = value; }
     }
 
-    public void SetHealth(float newHealth)
+    public void SetMaxHealth(float newMaxHealth)
     {
-        m_health = newHealth;
+        m_maxHealth = newMaxHealth;
     }
 
 
@@ -333,11 +408,13 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public float Attack
     {
         get { return m_attack + m_attackBoost + m_attackMod; }
+        set { m_attack = value; }
     }
 
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
+        set { m_defense = value; }
     }
 
     [SyncProperty]
@@ -402,6 +479,31 @@ public abstract class CombatPawn : Photon.PunBehaviour
         return opposingPawns.ToArray();
     }
 
+    public CombatPawn GetPawnOpposingWithId(int pawnId)
+    {
+        CombatPawn[] opposingPawns = GetPawnsOpposing();
+        foreach(CombatPawn pawn in opposingPawns)
+        {
+            if (pawn.PawnId == pawnId)
+            {
+                return pawn;
+            }
+        }
+        return null;
+    }
+
+    public CombatPawn GetPawnOnTeamWithId(int pawnId)
+    {
+        CombatPawn[] pawnsOnTeam = GetPawnsOnTeam();
+        foreach (CombatPawn pawn in pawnsOnTeam)
+        {
+            if (pawn.PawnId == pawnId)
+            {
+                return pawn;
+            }
+        }
+        return null;
+    }
 
     /// <summary>
     /// The team that the pawn is currently a part of

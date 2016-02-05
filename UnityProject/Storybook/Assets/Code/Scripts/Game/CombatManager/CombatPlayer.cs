@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public abstract class CombatPlayer : CombatPawn
 {
@@ -54,6 +55,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawStartingHand()
     {
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
+
         for (int i = 0; i < m_handSize; i++)
         {
             Page currentPage = m_playerDeck.GetNextPage();
@@ -66,7 +69,9 @@ public abstract class CombatPlayer : CombatPawn
 
             if (PhotonNetwork.player.ID == PawnId)
             {
-                DrawPageOnScreen(currentPage, i);
+                //DrawPageOnScreen(currentPage, i);
+                EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, i);
+                //combatMenu.DrawPage(currentPage, i);
             }
         }
     }
@@ -105,6 +110,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void RemovePageFromHand(Page pageToRemove)
     {
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
+
         m_playerHand.Remove(pageToRemove);
 
         if (PhotonNetwork.isMasterClient)
@@ -114,8 +121,10 @@ public abstract class CombatPlayer : CombatPawn
 
         if (PhotonNetwork.player.ID == PawnId)
         {
-            Destroy(m_displayedPages[SelectedPageIndex]);
-            ShiftPages(SelectedPageIndex);
+            combatMenu.DestroyPage(SelectedPageIndex);
+            //Destroy(m_displayedPages[SelectedPageIndex]);
+            //combatMenu.ShiftPages(SelectedPageIndex);
+            //ShiftPages(SelectedPageIndex);
         }
 
 
@@ -167,6 +176,8 @@ public abstract class CombatPlayer : CombatPawn
 
     public void DrawPageForTurn()
     {
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
+
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
         if (PhotonNetwork.isMasterClient)
@@ -175,13 +186,22 @@ public abstract class CombatPlayer : CombatPawn
         }
         if (PhotonNetwork.player.ID == PawnId)
         {
-            DrawPageOnScreen(currentPage, 4);
+            //DrawPageOnScreen(currentPage, 4);
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, 4);
         }
     }
 
     public CombatDeck PlayerDeck
     {
         get { return m_playerDeck; }
+    }
+
+    public EventDispatcher Dispatcher
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public void SendDeckPageViewIds(int[] viewIds)
@@ -344,4 +364,23 @@ public abstract class CombatPlayer : CombatPawn
             Destroy(go);
         }
     }
+
+    public void InitializePlayerPawn(PlayerEntity playerData)
+    {
+        SetMaxHealth(playerData.MaxHitPoints);
+        Health = playerData.HitPoints;
+        Defense = playerData.Defense;
+        Speed = playerData.Speed;
+        Attack = playerData.Attack;
+    }
+
+    public override void DealDamageToPawn(int damageAmount)
+    {
+
+        base.DealDamageToPawn(damageAmount);
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health, (int)m_maxHealth);
+        // Adds support to UI
+    }
+
 }

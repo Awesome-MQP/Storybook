@@ -58,11 +58,25 @@ public class PhotonViewInspector : Editor
         }
 
         // ownership requests
-        EditorGUI.BeginDisabledGroup(Application.isPlaying);
+        /*EditorGUI.BeginDisabledGroup(Application.isPlaying);
         m_Target.ownershipTransfer = (OwnershipOption) EditorGUILayout.EnumPopup(m_Target.ownershipTransfer, GUILayout.Width(100));
-        EditorGUI.EndDisabledGroup();
+        EditorGUI.EndDisabledGroup();*/
 
         EditorGUILayout.EndHorizontal();
+
+        if (Application.isPlaying)
+        {
+            PhotonPlayer controller = m_Target.Controller;
+            string controllerInfo = (controller != null) ? controller.name : "<no PhotonPlayer found>";
+
+            if (string.IsNullOrEmpty(controllerInfo))
+            {
+                controllerInfo = "<no playername set>";
+            }
+
+            if(controller != null)
+                EditorGUILayout.LabelField("Controller", "[" + controller.ID + "] " + controllerInfo);
+        }
 
 
         // View ID
@@ -101,7 +115,7 @@ public class PhotonViewInspector : Editor
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("shouldSync"), new GUIContent("Should Sync? "));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("allowFullCommunication"),
-            new GUIContent("Allow Full COmmunication? "));
+            new GUIContent("Allow Full Communication? "));
 
         if (m_Target.shouldSync &&
             m_Target.ObservedComponents.FindAll(item => item != null).Count == 0)

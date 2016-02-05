@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class CombatMove : MonoBehaviour{ 
+public abstract class CombatMove : MonoBehaviour{
+
+    private bool m_isMoveStarted = false;
 
     /// <summary>
     /// Carries out the effect that the move does
@@ -13,7 +15,72 @@ public abstract class CombatMove : MonoBehaviour{
     /// Called each frame during the execute state until the move is complete
     /// Handles the animation for the move as well as calling DoMoveEffect 
     /// </summary>
-    public abstract void ExecuteMove();
+    public virtual void ExecuteMove()
+    {
+        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
+        Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
+        float bufferTime = 0.5f;
+        if (!m_isMoveStarted)
+        {
+            playerAnimator.SetBool("IdleToIdle", false);
+            playerAnimator.SetBool("WalkToIdle", false);
+            playerAnimator.SetBool("AttackToIdle", false);
+            playerAnimator.SetBool("IdleToAttack", true);
+            m_isMoveStarted = true;
+        }
+        AnimatorClipInfo[] allClips = playerAnimator.GetCurrentAnimatorClipInfo(0);
+        float clipLength = allClips[0].clip.length;
+        float waitTime = clipLength;
+        if (IsMoveEffectCompleted)
+        {
+            float longestHurtAnim = _longestHurtAnim();
+            if (longestHurtAnim > clipLength)
+            {
+                waitTime = longestHurtAnim;
+            }
+        }
+        SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
+        if (TimeSinceMoveStarted >= 0.5f && !IsMoveEffectCompleted)
+        {
+            DoMoveEffect();
+            SetIsMoveEffectCompleted(true);
+        }
+        else if (TimeSinceMoveStarted >= waitTime + bufferTime)
+        {
+            Debug.Log("Page move is complete");
+            playerAnimator.SetBool("IdleToAttack", false);
+            playerAnimator.SetBool("AttackToIdle", true);
+            playerAnimator.SetBool("IdleToIdle", true);
+            SetIsMoveComplete(true);
+            m_isMoveStarted = false;
+            SetTimeSinceMoveStarted(0);
+            _switchTargetsToIdle();
+        }
+    }
+
+    private float _longestHurtAnim()
+    {
+        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
+        float longestClipTime = 0;
+        foreach (CombatPawn pawn in m_targets)
+        { 
+            Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
+            float clipTime = playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+            if (clipTime > longestClipTime)
+            {
+                longestClipTime = clipTime;
+            }
+        }
+        return longestClipTime;
+    }
+
+    private void _switchTargetsToIdle()
+    {
+        foreach(CombatPawn pawn in MoveTargets)
+        {
+            pawn.SwitchToIdleAnim();
+        }
+    }
 
     /// <summary>
     /// The combat pawns that are being targeted by the move
@@ -190,6 +257,7 @@ public abstract class CombatMove : MonoBehaviour{
     public Genre MoveGenre
     {
         get { return m_moveGenre; }
+        set { m_moveGenre = value; }
     }
 
     public MoveType MoveType

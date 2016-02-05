@@ -62,7 +62,7 @@ public static class PhotonNetwork
 
 
     /// <summary>Serialized server settings, written by the Setup Wizard for use in ConnectUsingSettings.</summary>
-    public static ServerSettings PhotonServerSettings = (ServerSettings)Resources.Load(PhotonNetwork.serverSettingsAssetFile, typeof(ServerSettings));
+    public static ServerSettings PhotonServerSettings;
 
     /// <summary>Currently used server address (no matter if master or game server).</summary>
     public static string ServerAddress { get { return (networkingPeer != null) ? networkingPeer.ServerAddress : "<not connected>"; } }
@@ -1044,6 +1044,8 @@ public static class PhotonNetwork
     [PreLoadMethod(Order = int.MinValue)]
     static void _startup()
     {
+        PhotonServerSettings = (ServerSettings)Resources.Load(PhotonNetwork.serverSettingsAssetFile, typeof(ServerSettings));
+
 #if UNITY_EDITOR
 
         if (PhotonServerSettings == null)

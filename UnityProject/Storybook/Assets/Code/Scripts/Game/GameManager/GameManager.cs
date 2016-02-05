@@ -30,7 +30,8 @@ public class GameManager : Photon.PunBehaviour
     private SceneFading m_sceneFader;
 
     [Tooltip("The player object to spawn for all players in the game.")]
-    private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
+    [SerializeField]
+    private PlayerEntity m_defaultPlayerObject;
 
     private int m_deckSize = 20;
 
@@ -40,6 +41,8 @@ public class GameManager : Photon.PunBehaviour
     private Dictionary<PhotonPlayer, PlayerObject> m_playerObjects = new Dictionary<PhotonPlayer, PlayerObject>();
 
     private static GameManager s_instance;
+
+    private GameObject m_combatCanvas;
 
     public static T GetInstance<T>() where T : GameManager
     {
@@ -70,6 +73,18 @@ public class GameManager : Photon.PunBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
+            // Spawn the Combat UI prefab
+            GameObject combatUIObject = Resources.Load("UIPrefabs/CombatMenu") as GameObject;
+            if (combatUIObject == null)
+            {
+                Debug.Log("WARNING! CombatUI Not Found");
+            }
+            else
+            {
+                Debug.Log("Spawning combat UI...");
+            }
+            m_combatCanvas = (GameObject)Instantiate(combatUIObject);
+
             /*
             GameObject dungeonMaster = PhotonNetwork.Instantiate(m_dungeonMaster.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(dungeonMaster.GetComponent<PhotonView>());
@@ -102,6 +117,8 @@ public class GameManager : Photon.PunBehaviour
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.SetCombatTeamList(combatTeams);
 
+
+
             //CameraManager m_camManager = FindObjectOfType<CameraManager>();
             //m_camManager.SwitchToCombatCamera(); // Switch to combat camera.
 
@@ -129,7 +146,6 @@ public class GameManager : Photon.PunBehaviour
 
     public void TransitionToCombat()
     {
-        Debug.Log("Transitioning to combat");
         StartCoroutine(_fadeScreenToCombat());
     }
 
@@ -149,7 +165,6 @@ public class GameManager : Photon.PunBehaviour
 
     private void _TransitionToOverworld()
     {
-        Debug.Log("Transitioning to overworld");
         StartCoroutine(_fadeScreenFromCombat());
     }
 
@@ -178,7 +193,6 @@ public class GameManager : Photon.PunBehaviour
     [PunRPC]
     protected void EnableMovementComponents(bool isEnable)
     {
-        Debug.Log("Disabling movement components");
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.LoadMap(isEnable);
         mapManager.enabled = isEnable;
@@ -201,11 +215,7 @@ public class GameManager : Photon.PunBehaviour
     {
         CombatManager cm = m_combatInstance.GetComponent<CombatManager>();
 
-        Debug.Log("Destroying all teams");
-
         cm.DestroyAllTeams();
-
-        Debug.Log("Destroying combat instance");
 
         GameObject currentCombatInstance = m_combatInstance;
 
@@ -215,6 +225,9 @@ public class GameManager : Photon.PunBehaviour
         StartCoroutine(m_musicMgr.Fade(m_musicMgr.MusicTracks[0], 5, true));
 
         _TransitionToOverworld();
+
+        // Destroy the Combat UI
+        Destroy(m_combatCanvas);
 
         /*
         CameraManager m_camManager = FindObjectOfType<CameraManager>();
@@ -227,8 +240,6 @@ public class GameManager : Photon.PunBehaviour
         PlayerInventory[] allInventories = FindObjectsOfType<PlayerInventory>();
         foreach(PlayerInventory pi in allInventories)
         {
-            Debug.Log("Checking player inventory");
-            Debug.Log("Inventory id = " + pi.PlayerId);
             if (pi.PlayerId == PhotonNetwork.player.ID)
             {
                 return pi;
@@ -275,7 +286,10 @@ public class GameManager : Photon.PunBehaviour
     /// <returns>The player object for a player.</returns>
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
-        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+
+        // TODO - Better way to set genre
+        playerObj.GetComponent<PlayerEntity>().SetGenre(Genre.GraphicNovel);
         return playerObj;
     }
 
@@ -352,5 +366,18 @@ public class GameManager : Photon.PunBehaviour
     {
         get { return m_enemyTeamPrefabLoc; }
         set { m_enemyTeamPrefabLoc = value; }
+    }
+
+    public PlayerEntity FindPlayerEntity(int photonPlayerId)
+    {
+        PlayerEntity[] allPlayerEntity = FindObjectsOfType<PlayerEntity>();
+        foreach(PlayerEntity pe in allPlayerEntity)
+        {
+            if (pe.Player.ID == photonPlayerId)
+            {
+                return pe;
+            }
+        }
+        return null;
     }
 }

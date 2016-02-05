@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
-
+using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -214,7 +214,11 @@ public class PhotonView : Photon.MonoBehaviour
 
     public PhotonPlayer Controller
     {
-        get { return PhotonPlayer.Find(controllerId);}
+        get
+        {
+            PhotonPlayer val = PhotonPlayer.Find(controllerId);
+            return val ?? owner;
+        }
     }
 
     public int OwnerActorNr
@@ -300,10 +304,14 @@ public class PhotonView : Photon.MonoBehaviour
     void OnValidate()
     {
         isRuntimeInstantiated = false;
+        ObservedComponents.RemoveAll(component => component == null);
     }
 
     internal void OnSpawn()
     {
+        if (hasSpawned)
+            return;
+
         hasSpawned = true;
         gameObject.SetActive(true);
 

@@ -6,8 +6,6 @@ public class TestEnemyAttackMove : AIMove {
 
     private bool IS_MOVE_ATTACK = true;
 
-    private bool m_isMoveStarted = false;
-
     void Start()
     {
         SetIsMoveAttack(IS_MOVE_ATTACK);
@@ -21,37 +19,8 @@ public class TestEnemyAttackMove : AIMove {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
             int moveDamage = StatsManager.CalcDamage(MoveOwner.PawnGenre, combatPawn.PawnGenre, MoveGenre, MoveLevel, MoveOwner.Attack, combatPawn.Defense);
+            Debug.Log("Enemy dealing " + moveDamage + " to the player");
             combatPawn.DealDamageToPawn(moveDamage);
-        }
-    }
-
-    public override void ExecuteMove()
-    {
-        NetExecuteState executeState = FindObjectOfType<NetExecuteState>();
-        Animator playerAnimator = executeState.CurrentCombatPawn.GetComponent<Animator>();
-        if (!m_isMoveStarted)
-        {
-            playerAnimator.SetBool("IdleToIdle", false);
-            playerAnimator.SetBool("WalkToIdle", false);
-            playerAnimator.SetBool("AttackToIdle", false);
-            playerAnimator.SetBool("IdleToAttack", true);
-            m_isMoveStarted = true;
-        }
-        SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
-        if (TimeSinceMoveStarted >= 0.5f && !IsMoveEffectCompleted)
-        {
-            DoMoveEffect();
-            SetIsMoveEffectCompleted(true);
-        }
-        else if (TimeSinceMoveStarted >= 3.0f)
-        {
-            Debug.Log("Page move is complete");
-            playerAnimator.SetBool("IdleToAttack", false);
-            playerAnimator.SetBool("AttackToIdle", true);
-            playerAnimator.SetBool("IdleToIdle", true);
-            SetIsMoveComplete(true);
-            m_isMoveStarted = false;
-            SetTimeSinceMoveStarted(0);
         }
     }
 

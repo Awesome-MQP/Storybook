@@ -3,34 +3,72 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class TestCombatPawn : CombatPlayer
+public class TestCombatPawn : CombatPlayer, ICombatEventListener
 {
+    private int m_selectedHandIndex = -1;
+    private int[] m_selectedTargets;
+    private bool m_isThinking = false;
+
+    // Receive a move to use from the UI.
+    public void OnCombatMoveChosen(int pawnId, int handIndex, int[] targets)
+    {
+        // Only do this if thinking!
+        if(m_isThinking && pawnId == PawnId)
+        {
+            Debug.Log("Got a CombatMoveChosen event, index: " + handIndex);
+            Debug.Log("Target = " + targets[0]);
+            m_selectedHandIndex = handIndex;
+            m_selectedTargets = targets;
+        }
+    }
+
+    public void OnReceivePage(Page playerPage, int counter)
+    {
+        return;
+    }
+
+    public void OnPawnTakesDamage(PhotonPlayer thePlayer, int damageTaken, int maxHealth)
+    {
+        return;
+    }
+    
+    protected override void Awake()
+    {
+        base.Awake();
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().RegisterEventListener(this);
+    }
 
     // Waits for input of a move
     public override void OnThink()
     {
-        int numPressed = _getButtonPress();
-
+        //int numPressed = _getButtonPress();
+        m_isThinking = true;
         // If the player hits the space bar and this pawn is the client's, submit a move
-        if (numPressed > -1 && PhotonNetwork.player.ID == PawnId)
+        if (m_selectedHandIndex > -1 && PhotonNetwork.player.ID == PawnId)
         {
-            SelectedPageIndex = numPressed;
+            SelectedPageIndex = m_selectedHandIndex;
 
-            Debug.Log("Submitted page " + numPressed);
+            Debug.Log("Submitted page " + m_selectedHandIndex);
 
             PhotonView m_scenePhotonView = GetComponent<PhotonView>();
             
-            Page chosenPage = PlayerHand[numPressed];
+            Page chosenPage = PlayerHand[m_selectedHandIndex];
             PlayerMove chosenMove = chosenPage.PlayerCombatMove;
 
             List<CombatPawn> targetList = new List<CombatPawn>();
             if (chosenPage.PageType == MoveType.Attack)
             {
-                targetList.Add(GetPawnsOpposing()[0]);
+                foreach(int i in m_selectedTargets)
+                {
+                    targetList.Add(GetPawnOpposingWithId(i));
+                }
             }
             else if (chosenPage.PageType == MoveType.Boost)
             {
-                targetList.Add(GetPawnsOnTeam()[0]);
+                foreach (int i in m_selectedTargets)
+                {
+                    targetList.Add(GetPawnOnTeamWithId(i));
+                }
             }
 
             RemovePageFromHand(chosenPage);
@@ -51,7 +89,9 @@ public class TestCombatPawn : CombatPlayer
                 targetIds[i] = target.PawnId;
             }
 
-            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, numPressed);
+            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, m_selectedHandIndex);
+            m_selectedHandIndex = -1; // Reset it.
+            m_isThinking = false;
         }
     }
 

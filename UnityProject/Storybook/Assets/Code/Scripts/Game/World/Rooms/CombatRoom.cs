@@ -45,11 +45,16 @@ public class CombatRoom : RoomObject {
         m_musicManager = FindObjectOfType<MusicManager>();
 	}
 
+    protected void Start()
+    {
+        Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
+        floorRenderer.material = _getFloorMaterial();
+    }
+
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
         m_musicManager.MusicTracks = m_musicTracks;
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -64,14 +69,16 @@ public class CombatRoom : RoomObject {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 Quaternion currentEnemyRot = m_enemyPosList[i].rotation;
                 GameObject pawnGameObject = PhotonNetwork.Instantiate(pawn.name, currentEnemyPos, currentEnemyRot, 0);
-                Debug.Log("Spawning pawn with name = " + pawn.name);
                 pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-
+            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
+            return;
         }
+        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+
         return;
     }
 
@@ -81,6 +88,12 @@ public class CombatRoom : RoomObject {
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
             m_gameManager.TransitionToCombat();
+            return;
+        }
+        else
+        {
+            StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+            EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
             return;
         }
     }
@@ -134,5 +147,26 @@ public class CombatRoom : RoomObject {
             GameObject enemyTeam = (GameObject) teams[Random.Range(0, teams.Length)];
             m_roomEnemies = enemyTeam.GetComponent<EnemyTeam>();
         }
+    }
+
+    private Material _getFloorMaterial()
+    {
+        Material floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
+        switch (RoomPageData.PageGenre)
+        {
+            case Genre.SciFi:
+                floorMaterial = Resources.Load("FloorTiles/sci-fi-tile") as Material;
+                break;
+            case Genre.Fantasy:
+                floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
+                break;
+            case Genre.GraphicNovel:
+                floorMaterial = Resources.Load("FloorTiles/shop-tile") as Material;
+                break;
+            case Genre.Horror:
+                floorMaterial = Resources.Load("FloorTiles/horror-tile") as Material;
+                break;
+        }
+        return floorMaterial;
     }
 }

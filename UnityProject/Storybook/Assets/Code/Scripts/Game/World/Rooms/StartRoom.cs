@@ -33,6 +33,7 @@ public class StartRoom : RoomObject
 
     public override void OnRoomEvent()
     {
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
         return;
     }
 

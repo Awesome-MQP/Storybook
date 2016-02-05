@@ -177,7 +177,7 @@ public class Page : Item  {
 
     public PageData GetPageData()
     {
-        PageData pageData = new PageData(m_pageLevel, m_pageGenre);
+        PageData pageData = new PageData(m_pageLevel, m_pageGenre, m_pageMoveType);
         return pageData;
     }
 
@@ -305,5 +305,6 @@ public class Page : Item  {
     public PlayerMove PlayerCombatMove
     {
         get { return m_playerCombatMove; }
+        set { m_playerCombatMove = value; }
     }
 }

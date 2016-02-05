@@ -16,8 +16,17 @@ public abstract class UIHandler : MonoBehaviour {
     [SerializeField]
     protected Button m_bluePageButton;
 
+    /// <summary>
+    /// Function that is called by a page button that is in the current UI
+    /// </summary>
+    /// <param name="pageButton">The page button that was pressed</param>
     public abstract void PageButtonPressed(PageButton pageButton);
 
+    /// <summary>
+    /// Generates a page button based on the given page data
+    /// </summary>
+    /// <param name="pageData">The data to use for the button</param>
+    /// <returns>The page button that was generated</returns>
     protected Button _initializePageButton(PageData pageData)
     {
         Button prefabToUse = null;

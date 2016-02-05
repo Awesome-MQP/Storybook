@@ -77,7 +77,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// <param name="room">The room to spawn the players in</param>
     public void SpawnInRoom(RoomObject room)
     {
-        Debug.Log("Spawning in room at loc " + room.RoomLocation.X + ", " + room.RoomLocation.Y);
         Assert.IsTrue(IsMine);
         
         TargetNode = room.CenterNode;
@@ -110,13 +109,21 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
+    /// <summary>
+    /// Calls PlaceRoom in MapManager using the given location and page data to create the room
+    /// </summary>
+    /// <param name="roomLoc"></param>
+    /// <param name="pageToUseData"></param>
     public void CreateRoom(Location roomLoc, PageData pageToUseData)
     {
-        Debug.Log("Creating room at " + roomLoc.X + ", " + roomLoc.Y);
         MapManager mapManager = FindObjectOfType<MapManager>();
         mapManager.PlaceRoom(roomLoc, pageToUseData);
     }
 
+    /// <summary>
+    /// Moves all the players to the next room
+    /// </summary>
+    /// <param name="newRoomLoc">The location of the room to move to</param>
     public void MoveToNextRoom(Location newRoomLoc)
     {
         m_currentRoom.OnRoomExit();
@@ -132,6 +139,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         SpawnInRoom(newRoom);
     }
 
+    /// <summary>
+    /// Called when the game transitions from combat back to the dungeon
+    /// Moves the cameras to the room positions
+    /// </summary>
     public void TransitionFromCombat()
     {
         Camera.main.transform.position = m_currentRoom.CameraNode.position;

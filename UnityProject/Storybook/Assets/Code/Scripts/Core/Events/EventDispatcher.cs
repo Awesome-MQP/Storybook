@@ -59,6 +59,15 @@ public abstract class EventDispatcher
         m_listenerSet.Add(listener);
     }
 
+    public void RemoveListener(IEventListener listener)
+    {
+        if (m_listenerSet.Contains(listener))
+        {
+            m_listeners.Remove(listener);
+            m_listenerSet.Remove(listener);
+        }
+    }
+
     /// <summary>
     /// Iterates through the registered listeners for this dispatcher.
     /// </summary>

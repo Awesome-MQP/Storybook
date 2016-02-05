@@ -74,7 +74,7 @@ public class GameManager : Photon.PunBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             // Spawn the Combat UI prefab
-            Object combatUIObject = Resources.Load("UIPrefabs/CombatMenu");
+            GameObject combatUIObject = Resources.Load("UIPrefabs/CombatMenu") as GameObject;
             if (combatUIObject == null)
             {
                 Debug.Log("WARNING! CombatUI Not Found");
@@ -227,7 +227,7 @@ public class GameManager : Photon.PunBehaviour
         _TransitionToOverworld();
 
         // Destroy the Combat UI
-        Destroy(m_combatCanvas.gameObject);
+        Destroy(m_combatCanvas);
 
         /*
         CameraManager m_camManager = FindObjectOfType<CameraManager>();

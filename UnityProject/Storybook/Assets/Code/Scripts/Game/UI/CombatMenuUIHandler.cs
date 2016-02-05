@@ -11,7 +11,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     private Vector3 m_player4InfoPosition = new Vector3(255, 197, 0);
 
     // Map of Player IDs to their Info screens, used for when HP is updated.
-    private Dictionary<int, Text> m_mapIDtoUI = new Dictionary<int, Text>();
+    private Dictionary<int, Text> m_mapIDtoUI;
 
     // List of the pages the player has in their hand
     //private PageButton[] m_pageButtons = new PageButton[5];
@@ -58,6 +58,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
 
     // Use this for initialization
     void Awake () {
+        m_mapIDtoUI = new Dictionary<int, Text>();
         _pollPhotonForPlayerInfo();
         EventDispatcher.GetDispatcher<CombatEventDispatcher>().RegisterEventListener(this); 
 
@@ -67,7 +68,13 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         gridGroup.cellSize = new Vector2(m_buttonWidth, m_buttonHeight);
         gridGroup.spacing = new Vector2(m_gridXPadding, m_gridYPadding);
     }
-	
+
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().RemoveListener(this);
+        Debug.Log("Menu was destroyed");
+    }
+
     // Popualtes the menu for the first time upon instantiation
     public void PopulateUI()
     {
@@ -78,7 +85,7 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     private void _pollPhotonForPlayerInfo()
     {
         // Get a player ID from Photon and use that to find he corresponding player.
-        for(int i = 1; i <= PhotonNetwork.playerList.Length; i++)
+        for (int i = 1; i <= PhotonNetwork.playerList.Length; i++)
         {
             PhotonPlayer player = PhotonNetwork.playerList[i - 1]; // the current player
             int playerID = PhotonNetwork.playerList[i - 1].ID; // player ID
@@ -163,7 +170,6 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
                 }
         }
 
-        Debug.Log("GenreIcon = " + genreIcon.pivot);
         return genreIcon;
     }
 
@@ -223,7 +229,8 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
     private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP, int maxHP)
     {
-        if(m_mapIDtoUI.ContainsKey(photonPlayer.ID))
+        Debug.Log(m_mapIDtoUI[photonPlayer.ID].text);
+        if (m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
             m_mapIDtoUI[photonPlayer.ID].text = "HP: " + newHP.ToString() + "/" + maxHP.ToString();
         }

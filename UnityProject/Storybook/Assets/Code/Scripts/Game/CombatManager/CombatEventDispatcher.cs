@@ -33,9 +33,12 @@ public class CombatEventDispatcher : EventDispatcher
     //public void OnPawnTakesDamage(CombatEventListener.PawnTakesDamageCallback callback, PhotonPlayer thePlayer, int damageTaken)
     public void OnPawnTakesDamage(PhotonPlayer thePlayer, int currentHealth, int maxHealth)
     {
+        int i = 0;
         foreach (ICombatEventListener listener in IterateListeners<ICombatEventListener>())
         {
             listener.OnPawnTakesDamage(thePlayer, currentHealth, maxHealth);
+            Debug.Log("Pawn taking damage " + i);
+            i++;
         }
     }
 

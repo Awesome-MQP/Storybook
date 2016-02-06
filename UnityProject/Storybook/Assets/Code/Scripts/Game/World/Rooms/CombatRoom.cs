@@ -162,7 +162,7 @@ public class CombatRoom : RoomObject {
                 floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
                 break;
             case Genre.GraphicNovel:
-                floorMaterial = Resources.Load("FloorTiles/shop-tile") as Material;
+                floorMaterial = Resources.Load("FloorTiles/comic-book-tile") as Material;
                 break;
             case Genre.Horror:
                 floorMaterial = Resources.Load("FloorTiles/horror-tile") as Material;

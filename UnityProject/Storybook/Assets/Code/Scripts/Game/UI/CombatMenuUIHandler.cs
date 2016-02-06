@@ -229,7 +229,6 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
     // Modify the player's HP by taking in the PhotonID (so we know what player it is) and the new HP to update it
     private void _updateHitpointsOfPlayer(PhotonPlayer photonPlayer, int newHP, int maxHP)
     {
-        Debug.Log(m_mapIDtoUI[photonPlayer.ID].text);
         if (m_mapIDtoUI.ContainsKey(photonPlayer.ID))
         {
             m_mapIDtoUI[photonPlayer.ID].text = "HP: " + newHP.ToString() + "/" + maxHP.ToString();
@@ -388,9 +387,9 @@ public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
         if (m_targets.Count >= m_selectedMoveTargets)
         {
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(PhotonNetwork.player.ID, m_handId, m_targets.ToArray());
+            m_activePlayers = new List<int>();
+            m_activeEnemies = new List<int>();
+            m_targets = new List<int>();
         }
-        m_activePlayers = new List<int>();
-        m_activeEnemies = new List<int>();
-        m_targets = new List<int>();
-}
+    }
 }

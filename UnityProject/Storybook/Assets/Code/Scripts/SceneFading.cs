@@ -76,4 +76,18 @@ public class SceneFading : Photon.PunBehaviour {
         }
         return m_fadeSpeed;
     }
+
+    public void LoadScene(string sceneToLoad)
+    {
+        StartCoroutine(_LoadNextScene(sceneToLoad));
+    }
+
+    private IEnumerator _LoadNextScene(string sceneToLoad)
+    {
+        float fadeTime = BeginFade(1);
+        yield return new WaitForSeconds(fadeTime);
+        PhotonNetwork.LoadLevel(sceneToLoad);
+        LevelWasLoaded();
+        yield return new WaitForSeconds(fadeTime);
+    }
 }

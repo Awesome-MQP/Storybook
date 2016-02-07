@@ -26,7 +26,7 @@ public static class StatsManager {
 
         float totalDmg = (pageLevel + attackerStr) * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
 
-        if (totalDmg <= 0)
+        if (totalDmg <= 1)
         { return 1; }
         else
         { return Mathf.FloorToInt(totalDmg); }

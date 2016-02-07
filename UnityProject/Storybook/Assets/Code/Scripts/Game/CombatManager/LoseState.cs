@@ -49,17 +49,10 @@ public class LoseState : CombatState {
 
     public override void ExitState()
     {
-        m_netLoseState.DeleteCombat();
-
-        // Destroy the NetLoseState when exiting and end the combat
-        if (m_netLoseStateObject != null)
-        {
-            // TODO: Change back to just calling Destroy when that is fixed
-            PhotonNetwork.Destroy(m_netLoseStateObject);
-            Destroy(m_netLoseStateObject);
-        }
+        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/Fader", Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(faderObject.GetPhotonView());
+        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        fader.LoadScene("GameOverScene");
         m_isExiting = true;
-        ResetBools();
-        StateMachine.SetBool("ExitCombat", true);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PageForRoomUIHandler : UIHandler {
+public class PageForRoomUIHandler : PageUIHandler {
 
     [SerializeField]
     private float m_gridXPadding;

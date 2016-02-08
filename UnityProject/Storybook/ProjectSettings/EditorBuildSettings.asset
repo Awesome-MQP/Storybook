@@ -19,3 +19,7 @@ EditorBuildSettings:
     path: Assets/Levels/Demo/TestMapGeneration.unity
   - enabled: 1
     path: Assets/Levels/Game/GameOverScene.unity
+  - enabled: 1
+    path: Assets/Levels/Game/MainMenu.unity
+  - enabled: 1
+    path: Assets/Levels/Game/GameStartup.unity

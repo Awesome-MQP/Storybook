@@ -49,9 +49,7 @@ public class LoseState : CombatState {
 
     public override void ExitState()
     {
-        GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/Fader", Vector3.zero, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(faderObject.GetPhotonView());
-        SceneFading fader = faderObject.GetComponent<SceneFading>();
+        SceneFading fader = SceneFading.Instance();
         fader.LoadScene("GameOverScene");
         m_isExiting = true;
     }

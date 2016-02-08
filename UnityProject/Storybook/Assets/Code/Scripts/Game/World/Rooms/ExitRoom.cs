@@ -36,7 +36,9 @@ public class ExitRoom : RoomObject {
     // Most likely nothing, but that may change.
     public override void OnRoomEvent()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        //EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        SceneFading fader = SceneFading.Instance();
+        fader.LoadScene("DemoCompleteScene");
         return;
     }
 

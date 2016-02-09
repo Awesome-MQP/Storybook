@@ -11,9 +11,11 @@ public class EnemyTeam : CombatTeam {
         List<EnemyPositionNode> positionNodes = new List<EnemyPositionNode>(FindObjectsOfType<EnemyPositionNode>()); 
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
-            GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, positionNodes[i].transform.position, positionNodes[i].transform.rotation, 0);
+            EnemyPositionNode nodeToUse = _getPositionNodeById(positionNodes, i + 1);
+            GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
             PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
+            enemyPawn.transform.SetParent(nodeToUse.transform);
             enemyPawn.PawnId = i + 1;
             enemyPawn.TeamId = TeamId;
             enemyPawn.RegisterTeam(this);
@@ -22,6 +24,18 @@ public class EnemyTeam : CombatTeam {
             enemyPawn.SendPawnTeam(TeamId);
             i++;
         }
+    }
+
+    private EnemyPositionNode _getPositionNodeById(List<EnemyPositionNode> enemyPositions, int positionId)
+    {
+        foreach(EnemyPositionNode ep in enemyPositions)
+        {
+            if (ep.PositionId == positionId)
+            {
+                return ep;
+            }
+        }
+        return null;
     }
 
     public override void RemovePawnFromTeam(CombatPawn pawnToRemove)

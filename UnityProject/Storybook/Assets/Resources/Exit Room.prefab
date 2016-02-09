@@ -508,7 +508,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2497.6475, y: 2265.72, z: 2057.0159}
+  m_LocalPosition: {x: 129.8556, y: 304.18973, z: 516.48346}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 409502}
@@ -838,7 +838,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 53b04bfaaf8a43149b601984ab50333a, type: 2}
+  - {fileID: 2100000, guid: 3eee492f1b1098a45a36a9ce694fe614, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1064,6 +1064,7 @@ MonoBehaviour:
   m_southDoor: {fileID: 11417644}
   m_westDoor: {fileID: 11422814}
   m_centerNode: {fileID: 11442050}
+  m_floorObject: {fileID: 447730}
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
@@ -1674,6 +1675,10 @@ Prefab:
       propertyPath: ObservedComponents.Array.data[2]
       value: 
       objectReference: {fileID: 11409198}
+    - target: {fileID: 0}
+      propertyPath: m_musicTracks.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 112148}

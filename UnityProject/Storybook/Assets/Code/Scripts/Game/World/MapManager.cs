@@ -82,14 +82,15 @@ public class MapManager : Photon.PunBehaviour {
 
         DontDestroyOnLoad(this);
         s_instance = this;
-        m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
-        m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
     }
 
     /*
     void Start()
     {
-        GenerateMap();
+            for (int i = 0; i < 100; i++)
+            {
+                GenerateMap();
+            }
     }    
     */
 
@@ -312,12 +313,22 @@ public class MapManager : Photon.PunBehaviour {
     /// </summary>
     public void GenerateMap()
     {
-        _placeStart();
-        _placeExit();
-        _createPathFromStartToExit();
-        _addAdditionalDoors();
-        _placeSpecialRooms();
-        PlaceStartRoom();
+        m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
+        m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
+
+        // In case the map fails to generate properly, it will just try again
+        try {
+            _placeStart();
+            _placeExit();
+            _createPathFromStartToExit();
+            _addAdditionalDoors();
+            _placeSpecialRooms();
+            _printMap();
+        }
+        catch
+        {
+            GenerateMap();
+        }
     }
 
     /// <summary>

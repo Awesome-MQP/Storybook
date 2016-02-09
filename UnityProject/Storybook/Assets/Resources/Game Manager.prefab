@@ -40,16 +40,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ddd6f4f9748c245b9a546aade37edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_combatInstancePrefab: {fileID: 11483406, guid: f51232a1cd84a214fad16f94564b5993,
+  m_combatInstancePrefab: {fileID: 11447600, guid: 649e82e93a597f24bb4fc0ad9a7c6b91,
     type: 2}
   m_defaultLocation: {x: 1000, y: 1000, z: 1000}
   m_enemyTeamForCombat: {fileID: 11479944, guid: 2318e80628f177d42b16ef20eadc4eff,
     type: 2}
   m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
     type: 2}
-  m_playerPawn: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94, type: 2}
+  m_playerPawn: {fileID: 11423406, guid: 952539b98084dc94bbb99f58a9671dca, type: 2}
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
   m_sceneFader: {fileID: 11488256, guid: 526dcdcaeb1249946982c061c9e843ea, type: 2}
+  m_defaultPlayerObject: {fileID: 11454834, guid: 97374b48fbb82fa4f9f5fb0429583bdb,
+    type: 2}
 --- !u!114 &11473206
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,7 +72,6 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
   - {fileID: 11465666}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
@@ -88,7 +89,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_combatInstancePrefab
       value: 
-      objectReference: {fileID: 11483406, guid: f51232a1cd84a214fad16f94564b5993,
+      objectReference: {fileID: 11447600, guid: 649e82e93a597f24bb4fc0ad9a7c6b91,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_enemyTeamForCombat
@@ -103,7 +104,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_playerPawn
       value: 
-      objectReference: {fileID: 11481154, guid: aaed9c24353d6c74088eeac293e99c94,
+      objectReference: {fileID: 11423406, guid: 952539b98084dc94bbb99f58a9671dca,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_dungeonMaster
@@ -112,12 +113,17 @@ Prefab:
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_defaultPlayerObject.m_asset
-      value: Resources/PlayerObject
+      value: Resources/PlayerEntity
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_defaultPlayerObject.m_editorAsset
-      value: Assets/Resources/PlayerObject.prefab
+      value: Assets/Resources/PlayerEntity.prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_defaultPlayerObject
+      value: 
+      objectReference: {fileID: 11454834, guid: 97374b48fbb82fa4f9f5fb0429583bdb,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 138782}

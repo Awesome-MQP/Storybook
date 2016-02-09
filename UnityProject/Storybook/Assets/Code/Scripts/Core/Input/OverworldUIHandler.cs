@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class OverworldUIHandler : UIHandler {
 
-    private StorybookPlayerMover m_playerMover;
-
     [SerializeField]
     Button m_northButton;
 
@@ -31,13 +29,8 @@ public class OverworldUIHandler : UIHandler {
     /// <param name="selectedDirection">The direction that was pressed</param>
     public void DirectionButtonPressed(Door.Direction selectedDirection)
     {
-        m_playerMover.SubmitDirection(selectedDirection);
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitDirection(selectedDirection);
         Destroy(gameObject);
-    }
-
-    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
-    {
-        m_playerMover = playerMover;
     }
 
     /// <summary>

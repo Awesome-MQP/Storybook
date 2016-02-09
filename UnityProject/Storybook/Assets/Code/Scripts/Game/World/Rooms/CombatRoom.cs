@@ -45,6 +45,12 @@ public class CombatRoom : RoomObject {
         m_musicManager = FindObjectOfType<MusicManager>();
 	}
 
+    protected void Start()
+    {
+        Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
+        floorRenderer.material = _getFloorMaterial();
+    }
+
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {
@@ -88,6 +94,7 @@ public class CombatRoom : RoomObject {
         else
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+            EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
             return;
         }
     }
@@ -141,5 +148,26 @@ public class CombatRoom : RoomObject {
             GameObject enemyTeam = (GameObject) teams[Random.Range(0, teams.Length)];
             m_roomEnemies = enemyTeam.GetComponent<EnemyTeam>();
         }
+    }
+
+    private Material _getFloorMaterial()
+    {
+        Material floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
+        switch (RoomPageData.PageGenre)
+        {
+            case Genre.SciFi:
+                floorMaterial = Resources.Load("FloorTiles/sci-fi-tile") as Material;
+                break;
+            case Genre.Fantasy:
+                floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
+                break;
+            case Genre.GraphicNovel:
+                floorMaterial = Resources.Load("FloorTiles/comic-book-tile") as Material;
+                break;
+            case Genre.Horror:
+                floorMaterial = Resources.Load("FloorTiles/horror-tile") as Material;
+                break;
+        }
+        return floorMaterial;
     }
 }

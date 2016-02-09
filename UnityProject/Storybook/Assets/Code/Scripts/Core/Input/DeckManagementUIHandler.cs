@@ -82,6 +82,27 @@ public class DeckManagementUIHandler : UIHandler
         m_selectedInventoryPage.transform.SetParent(m_deckScrollRect.content, false);
         m_selectedDeckPage.InventoryId = previousInventoryPageId;
         m_selectedInventoryPage.InventoryId = previousDeckPageId;
+        _removeAllPageButtons();
+        PopulateMenu();
+    }
+
+    /// <summary>
+    /// Removes all the page buttons in both of the scroll rects
+    /// Used to refresh the menus
+    /// </summary>
+    private void _removeAllPageButtons()
+    {
+        PageButton[] inventoryPages = m_inventoryScrollRect.content.GetComponentsInChildren<PageButton>();
+        foreach(PageButton pb in inventoryPages)
+        {
+            Destroy(pb.gameObject);
+        }
+
+        PageButton[] deckPages = m_deckScrollRect.content.GetComponentsInChildren<PageButton>();
+        foreach(PageButton pb in deckPages)
+        {
+            Destroy(pb.gameObject);
+        }
     }
 
     public void PopulateMenu()
@@ -123,13 +144,14 @@ public class DeckManagementUIHandler : UIHandler
         }
     }
 
-    public void RegisterPlayerMover(StorybookPlayerMover playerMover)
-    {
-        
-    }
 
+    /// <summary>
+    /// Called when the finish button is clicked, this function destroys the deck management UI
+    /// </summary>
     public void FinishedClicked()
     {
-        Destroy(this.gameObject);
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnDeckManagementClosed();
+        Debug.Log("Destroying deck management menu");
+        Destroy(gameObject);
     }
 }

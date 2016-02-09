@@ -10,7 +10,8 @@ public class MatchMaker : Photon.PunBehaviour {
 
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("Benny");
+        // TODO
+        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 
@@ -31,9 +32,9 @@ public class MatchMaker : Photon.PunBehaviour {
             PhotonNetwork.LoadLevel("WorldMovementTest");
             Destroy(this);
         }
-        if (isFirst && GUILayout.Button("Start Inventory"))
+        if (isFirst && GUILayout.Button("Start Map Test"))
         {
-            PhotonNetwork.LoadLevel("TestInventory");
+            PhotonNetwork.LoadLevel("TestMapGeneration");
             Destroy(this);
         }
         if (isFirst && GUILayout.Button("Start Scene Fade"))

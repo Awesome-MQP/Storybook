@@ -24,22 +24,25 @@ public class StartRoom : RoomObject
         base.Awake();
     }
 
-    public override void OnRoomEnter()
+    protected override void OnRoomEnter(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_musicManager.MusicTracks = m_musicTracks;
         StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
-        return;
     }
 
-    public override void OnRoomEvent()
+    protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            yield break;
+
+        //TODO: If this is called for every room then it should be done in the base class. It also should be done by something that is not the UIEventDispatcher as there is no reason this is UI only code.
         EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
-        return;
     }
 
-    public override void OnRoomExit()
+    protected override void OnRoomExit(RoomMover mover)
     {
-        // TODO: Load next level; or clear current level, generate new start position, and move players there.
-        return;
     }
 }

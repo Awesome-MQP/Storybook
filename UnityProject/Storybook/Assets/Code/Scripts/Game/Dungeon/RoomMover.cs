@@ -20,8 +20,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     private bool m_atNode;
 
-    private RoomObject m_currentRoom;
-
     /// <summary>
     /// Gets the current room that this mover is considered in.
     /// </summary>
@@ -29,14 +27,11 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     {
         get
         {
-            /*
             MovementNode targetNode = TargetNode;
             if (targetNode)
                 return targetNode.GetComponentInParent<RoomObject>();
 
             return null;
-            */
-            return m_currentRoom;
         }
     }
 
@@ -82,8 +77,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         TargetNode = room.CenterNode;
         Position = room.CenterNode.transform.position;
 
-        m_currentRoom = room;
-
         StartCoroutine(_stateMachine());
     }
     /// <summary>
@@ -126,27 +119,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// <param name="newRoomLoc">The location of the room to move to</param>
     public void MoveToNextRoom(Location newRoomLoc)
     {
-        m_currentRoom.OnRoomExit();
         MapManager mapManager = FindObjectOfType<MapManager>();
         RoomObject newRoom = mapManager.GetRoom(newRoomLoc);
 
-        Camera.main.transform.position = newRoom.CameraNode.position;
-        Camera.main.transform.rotation = newRoom.CameraNode.rotation;
-
-        m_currentRoom = newRoom;
-        m_currentRoom.OnRoomEnter();
-
         SpawnInRoom(newRoom);
-    }
-
-    /// <summary>
-    /// Called when the game transitions from combat back to the dungeon
-    /// Moves the cameras to the room positions
-    /// </summary>
-    public void TransitionFromCombat()
-    {
-        Camera.main.transform.position = m_currentRoom.CameraNode.position;
-        Camera.main.transform.rotation = m_currentRoom.CameraNode.rotation;
     }
 
     protected sealed override void OnArriveAtNode(MovementNode node)
@@ -154,7 +130,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         if (node == CurrentRoom.CenterNode)
         {
             m_isAtRoomCenter = true;
-            m_currentRoom.OnRoomEvent();
         }
 
         m_atNode = true;

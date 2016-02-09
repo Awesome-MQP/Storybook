@@ -42,27 +42,33 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
-    public override void OnRoomEnter()
+    protected override void OnRoomEnter(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         Debug.Log("Welcome to the shop!");
         m_isCurrentRoom = true;
         m_musicManager.MusicTracks = m_musicTracks;
         StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
-        return;
     }
 
     // What do we do when all players reach the center of the room?
     // Most likely nothing, but that may change.
-    public override void OnRoomEvent()
+    protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            yield break;
+
         // TODO: open the shop UI.
         Debug.Log("Whaddya buyin'?");
         if (!(m_hasGeneratedPages && m_shopPages.Count <= 0))
         {
+            //TODO: Don't open the UI here, open it in an event handler.
+            //TODO: This is not network safe as this event is only called on the world owner (usually the master client).
             ShopUIHandler shopUI = Instantiate(m_shopUI).GetComponent<ShopUIHandler>();
             shopUI.RegisterShopRoom(this);
             shopUI.PopulateMenu(m_shopPages);
-            return;
         }
         else
         {
@@ -72,7 +78,7 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
 
     // What happens when the players leave this room?
     // Hint: Nothing.
-    public override void OnRoomExit()
+    protected override void OnRoomExit(RoomMover mover)
     {
         m_isCurrentRoom = false;
         return;

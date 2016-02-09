@@ -25,8 +25,11 @@ public class EmptyRoom : RoomObject {
 	}
 
     // On entering the room, do nothing since there is nothing special in this room.
-    public override void OnRoomEnter()
+    protected override void OnRoomEnter(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_musicManager.MusicTracks = m_musicTracks;
         StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
         Debug.Log("Room entered");
@@ -35,15 +38,15 @@ public class EmptyRoom : RoomObject {
 
     // What do we do when all players reach the center of the room?
     // Most likely nothing, but that may change.
-    public override void OnRoomEvent()
+    protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
         Debug.Log("Room event");
-        return;
+        yield break;
     }
 
     // What happens when the players leave this room?
     // Hint: Nothing.
-    public override void OnRoomExit()
+    protected override void OnRoomExit(RoomMover mover)
     {
         Debug.Log("Room exited");
         return;

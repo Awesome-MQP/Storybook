@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 
 // This is an empty room. There is nothing special about it.
@@ -52,8 +53,11 @@ public class CombatRoom : RoomObject {
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
-    public override void OnRoomEnter()
+    protected override void OnRoomEnter(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_musicManager.MusicTracks = m_musicTracks;
         if (!m_wonCombat)
         {
@@ -83,26 +87,31 @@ public class CombatRoom : RoomObject {
         return;
     }
 
-    public override void OnRoomEvent()
+    protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            yield break;
+
+        //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
             //TODO: m_gameManager.TransitionToCombat();
-            return;
         }
         else
         {
+            //TODO: We should just halt with yield return null
             StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
             EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
-            return;
         }
     }
 
-    public override void OnRoomExit()
+    protected override void OnRoomExit(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_wonCombat = true;
-        return;
     }
 
     public void DestroyEnemyWorldPawns()

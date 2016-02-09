@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 
-public class CombatMenuUIHandler : UIHandler, ICombatEventListener {
+public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
 
     private Vector3 m_player1InfoPosition = new Vector3(-349, 197, 0);
     private Vector3 m_player2InfoPosition = new Vector3(-131, 197, 0);

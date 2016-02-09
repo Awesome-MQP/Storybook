@@ -21,7 +21,16 @@ public class GameManager : Photon.PunBehaviour
     private PlayerTeam m_playerTeamForCombat;
 
     [SerializeField]
-    private CombatPlayer m_playerPawn;
+    private CombatPlayer m_comicCombatPawn;
+
+    [SerializeField]
+    private CombatPlayer m_horrorCombatPawn;
+
+    [SerializeField]
+    private CombatPlayer m_scifiCombatPawn;
+
+    [SerializeField]
+    private CombatPlayer m_fantasyCombatPawn;
 
     [SerializeField]
     private DungeonMaster m_dungeonMaster;
@@ -98,7 +107,9 @@ public class GameManager : Photon.PunBehaviour
 
             for(int i = 0; i < PhotonNetwork.playerList.Length; i++)
             {
-                playerTeam.GetComponent<CombatTeam>().AddPawnToSpawn(m_playerPawn);
+                PlayerObject po = m_playerObjects[PhotonNetwork.playerList[i]];
+                CombatPlayer playerToSpawn = _GetCombatPlayerFromGenre(po.GetComponent<PlayerEntity>().Genre);
+                playerTeam.GetComponent<CombatTeam>().AddPawnToSpawn(playerToSpawn);
             }
 
             playerTeam.GetComponent<CombatTeam>().TeamId = 1;
@@ -322,9 +333,21 @@ public class GameManager : Photon.PunBehaviour
     {
         Assert.IsTrue(IsMine);
 
+        /*
         PlayerObject playerObject = CreatePlayerObject(player);
         playerObject.Construct(player);
         PhotonNetwork.Spawn(playerObject.photonView);
+        */
+
+        PlayerObject playerObject = null;
+        foreach(PlayerObject po in FindObjectsOfType<PlayerObject>())
+        {
+            if (po.Player == PhotonNetwork.player)
+            {
+                playerObject = po;
+                break;
+            }
+        }
 
         m_playerObjects.Add(player, playerObject);
 
@@ -377,6 +400,22 @@ public class GameManager : Photon.PunBehaviour
             {
                 return pe;
             }
+        }
+        return null;
+    }
+
+    private CombatPlayer _GetCombatPlayerFromGenre(Genre genre)
+    {
+        switch (genre)
+        {
+            case Genre.GraphicNovel:
+                return m_comicCombatPawn;
+            case Genre.Horror:
+                return m_horrorCombatPawn;
+            case Genre.SciFi:
+                return m_scifiCombatPawn;
+            case Genre.Fantasy:
+                return m_fantasyCombatPawn;
         }
         return null;
     }

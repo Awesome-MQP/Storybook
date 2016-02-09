@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 
-public class DeckManagementUIHandler : UIHandler
+public class DeckManagementUIHandler : PageUIHandler
 {
     private float m_buttonHeight;
     private float m_buttonWidth;

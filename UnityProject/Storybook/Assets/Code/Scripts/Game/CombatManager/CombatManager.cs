@@ -16,11 +16,6 @@ public class CombatManager : Photon.PunBehaviour {
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
-    override protected void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
-
     // Use this for initialization
     void Start()
     {

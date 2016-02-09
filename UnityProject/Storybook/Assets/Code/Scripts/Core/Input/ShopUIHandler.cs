@@ -4,7 +4,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class ShopUIHandler : UIHandler {
+public class ShopUIHandler : PageUIHandler {
 
     [SerializeField]
     private ScrollRect m_playerInventoryPagesRect;

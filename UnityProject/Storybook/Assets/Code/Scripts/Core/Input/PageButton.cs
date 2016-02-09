@@ -14,7 +14,7 @@ public class PageButton : MonoBehaviour {
     /// </summary>
     public void OnClick()
     {
-        UIHandler currentUIHandler = FindObjectOfType<UIHandler>();
+        PageUIHandler currentUIHandler = FindObjectOfType<PageUIHandler>();
         currentUIHandler.PageButtonPressed(this);
     }
 

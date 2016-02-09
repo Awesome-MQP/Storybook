@@ -41,6 +41,11 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
         EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
     }
 
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().RemoveListener(this);
+    }
+
     // On entering the room, do nothing since there is nothing special in this room.
     public override void OnRoomEnter()
     {

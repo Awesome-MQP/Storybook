@@ -31,6 +31,12 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
         EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
     }
 
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<UIEventDispatcher>().RemoveListener(this);
+        Debug.Log("Mover destroyed");
+    }
+
     /// <summary>
     /// Sets the target position for all the players in the world pawns list
     /// </summary>

@@ -13,6 +13,18 @@ public class TestMovementSpawner : MonoBehaviour {
     private NetworkMover m_worldPlayer;
 
     [SerializeField]
+    private NetworkMover m_comicPlayer;
+
+    [SerializeField]
+    private NetworkMover m_fantasyPlayer;
+
+    [SerializeField]
+    private NetworkMover m_horrorPlayer;
+
+    [SerializeField]
+    private NetworkMover m_scifiPlayer;
+
+    [SerializeField]
     private RoomMover m_playerGroup;
 
     [SerializeField]
@@ -37,7 +49,16 @@ public class TestMovementSpawner : MonoBehaviour {
 
         for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
         {
-            GameObject playerObject = PhotonNetwork.Instantiate(m_worldPlayer.name, Vector3.zero, Quaternion.identity, 0);
+            NetworkMover selectedMover = null;
+            PlayerEntity[] allPlayerObjects = FindObjectsOfType<PlayerEntity>();
+            foreach(PlayerEntity pe in allPlayerObjects)
+            {
+                if (pe.Player == PhotonNetwork.playerList[i])
+                {
+                    selectedMover = _GetMoverByGenre(pe.Genre);
+                }
+            }
+            GameObject playerObject = PhotonNetwork.Instantiate(selectedMover.name, Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
 
             GameObject playerInventoryObject = PhotonNetwork.Instantiate(m_playerInventoryPrefab.name, Vector3.zero, Quaternion.identity, 0);
@@ -55,4 +76,20 @@ public class TestMovementSpawner : MonoBehaviour {
         PhotonNetwork.Spawn(gameManager.GetComponent<PhotonView>());
 	}
 	
+    private NetworkMover _GetMoverByGenre(Genre genre)
+    {
+        switch (genre)
+        {
+            case Genre.GraphicNovel:
+                return m_comicPlayer;
+            case Genre.Fantasy:
+                return m_fantasyPlayer;
+            case Genre.Horror:
+                return m_horrorPlayer;
+            case Genre.SciFi:
+                return m_scifiPlayer;
+        }
+        return null;
+    }
+
 }

@@ -47,7 +47,11 @@ MonoBehaviour:
     type: 2}
   m_playerTeamForCombat: {fileID: 11410636, guid: a49943d979983114882e7188e7795adb,
     type: 2}
-  m_playerPawn: {fileID: 11423406, guid: 952539b98084dc94bbb99f58a9671dca, type: 2}
+  m_comicCombatPawn: {fileID: 11423406, guid: 952539b98084dc94bbb99f58a9671dca, type: 2}
+  m_horrorCombatPawn: {fileID: 11471296, guid: 1d59de0c1b813ac409c7b5c9ec707f14, type: 2}
+  m_scifiCombatPawn: {fileID: 11492090, guid: d870f259ac5086a449cb3de1413ec4df, type: 2}
+  m_fantasyCombatPawn: {fileID: 11486058, guid: dcf52b5dfb3c0144c85986ea262f69ff,
+    type: 2}
   m_dungeonMaster: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d, type: 2}
   m_sceneFader: {fileID: 11488256, guid: 526dcdcaeb1249946982c061c9e843ea, type: 2}
   m_defaultPlayerObject: {fileID: 11454834, guid: 97374b48fbb82fa4f9f5fb0429583bdb,
@@ -123,6 +127,26 @@ Prefab:
       propertyPath: m_defaultPlayerObject
       value: 
       objectReference: {fileID: 11454834, guid: 97374b48fbb82fa4f9f5fb0429583bdb,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_comicCombatPawn
+      value: 
+      objectReference: {fileID: 11423406, guid: 952539b98084dc94bbb99f58a9671dca,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_fantasyCombatPawn
+      value: 
+      objectReference: {fileID: 11486058, guid: dcf52b5dfb3c0144c85986ea262f69ff,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_horrorCombatPawn
+      value: 
+      objectReference: {fileID: 11471296, guid: 1d59de0c1b813ac409c7b5c9ec707f14,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_scifiCombatPawn
+      value: 
+      objectReference: {fileID: 11492090, guid: d870f259ac5086a449cb3de1413ec4df,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

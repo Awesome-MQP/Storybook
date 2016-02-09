@@ -120,7 +120,6 @@ public class MapManager : Photon.PunBehaviour {
     {
         base.Awake();
 
-        DontDestroyOnLoad(this);
         s_instance = this;
     }
 

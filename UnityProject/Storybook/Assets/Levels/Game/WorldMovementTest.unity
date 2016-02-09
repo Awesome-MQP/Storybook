@@ -115,6 +115,10 @@ MonoBehaviour:
   m_mapManager: {fileID: 11496410, guid: 0254bbb1db9437c43b8b058d3ffb750d, type: 2}
   m_musicManager: {fileID: 11437630, guid: 703918c3bb84ec94eb7e0d50568b18e3, type: 2}
   m_worldPlayer: {fileID: 11480380, guid: e2f12397c7ea4d640adba24adfef13b5, type: 2}
+  m_comicPlayer: {fileID: 11480380, guid: e2f12397c7ea4d640adba24adfef13b5, type: 2}
+  m_fantasyPlayer: {fileID: 11481554, guid: 1927946571e4aa542b6c71d78033d065, type: 2}
+  m_horrorPlayer: {fileID: 11413378, guid: 4eaa88afd96638247840a9d6a992df59, type: 2}
+  m_scifiPlayer: {fileID: 11476212, guid: 6dc6b9707cf49b745b701db2de757998, type: 2}
   m_playerGroup: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292, type: 2}
   m_gameManager: {fileID: 11465666, guid: 6a7cd2a7332445748a5e8161a9c245e8, type: 2}
   m_playerInventoryPrefab: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e,

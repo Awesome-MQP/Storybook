@@ -6,7 +6,7 @@ public abstract class GameMenuUIHandler : UIHandler {
     public void StartNewGame()
     {
         SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("WorldMovementTest");
+        fader.LoadScene("CharacterSelect");
     }
 
     public void ExitGame()

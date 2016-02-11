@@ -764,10 +764,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de41b46137fa880488ee4b5d2f33a55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
-  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
-  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
-  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
+  m_greenPageButton: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95, type: 2}
+  m_redPageButton: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39, type: 2}
+  m_yellowPageButton: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05, type: 2}
+  m_bluePageButton: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c, type: 2}
   m_gridXPadding: 15
   m_gridYPadding: 15
   m_buttonHeight: 104
@@ -3418,22 +3418,22 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_greenPageButton
       value: 
-      objectReference: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b,
+      objectReference: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_yellowPageButton
       value: 
-      objectReference: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2,
+      objectReference: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_redPageButton
       value: 
-      objectReference: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86,
+      objectReference: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_bluePageButton
       value: 
-      objectReference: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709,
+      objectReference: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_gridXPadding

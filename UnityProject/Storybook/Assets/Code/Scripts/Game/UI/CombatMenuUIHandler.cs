@@ -53,6 +53,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
     private List<int> m_activePlayers = new List<int>();
     private List<int> m_activeEnemies = new List<int>();
     private int m_selectedMoveTargets;
+    private PageButton m_selectedPageButton = null;
 
     public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatEventDispatcher>(); } }
 
@@ -241,6 +242,14 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
         // Send PageData to the combat system
         if (m_isThinking)
         {
+            if (m_selectedPageButton != null)
+            {
+                m_selectedPageButton.DisplaySelectedImage(false);
+            }
+            m_selectedPageButton = pageButton;
+            pageButton.DisplaySelectedImage(true);
+            _hideEnemyTargetButtons();
+            _hidePlayerTargetButtons();
             m_handId = m_pageButtonList.IndexOf(pageButton);
             _displayTargetButtons(pageButton);
             if (pageButton.PageData.IsRare)
@@ -250,18 +259,6 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
             else
             {
                 m_selectedMoveTargets = 1;
-            }
-            /*
-            int handId = m_pageButtonList.IndexOf(pageButton);
-            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(handId);
-            Debug.Log("Sending a combatMoveChosen event, index: " + handId);
-            // Delete the page and shift pages
-            Destroy(pageButton.gameObject);
-            m_isThinking = false;
-            */
-            foreach (PageButton pb in m_pageButtonList)
-            {
-                pb.GetComponent<Button>().interactable = false;
             }
         }
         return;
@@ -387,9 +384,18 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
         if (m_targets.Count >= m_selectedMoveTargets)
         {
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnCombatMoveChosen(PhotonNetwork.player.ID, m_handId, m_targets.ToArray());
+            _disablePageButtons();
             m_activePlayers = new List<int>();
             m_activeEnemies = new List<int>();
             m_targets = new List<int>();
+        }
+    }
+
+    private void _disablePageButtons()
+    {
+        foreach (PageButton pb in m_pageButtonList)
+        {
+            pb.GetComponent<Button>().interactable = false;
         }
     }
 }

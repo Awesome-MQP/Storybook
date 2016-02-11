@@ -107,4 +107,17 @@ public class PageButton : MonoBehaviour {
             }
         }
     }
+
+    public void DisplaySelectedImage(bool isDisplay)
+    {
+        RawImage[] allImages = GetComponentsInChildren<RawImage>();
+        foreach(RawImage i in allImages)
+        {
+            if (i.name == "SelectedImage")
+            {
+                i.enabled = isDisplay;
+                break;
+            }
+        }
+    }
 }

@@ -15,8 +15,25 @@ public class HPBoostMove : AIMove
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.IncreasePawnHP(m_HPIncreaseValue);
+            int boostAmt = _calcBoostPotency();
+            combatPawn.IncreasePawnHP(boostAmt);
         }
+    }
+
+   /// <summary>
+   /// Calculate the power of a boost.
+   /// Adds the Ceil(level/2) to the inital value,
+   /// then adds a small bonus if the move owner's type and the move type match up
+   /// </summary>
+   private int _calcBoostPotency()
+    {
+        int totalBoost = m_HPIncreaseValue;
+        totalBoost += (int)Math.Ceiling((double)MoveLevel / 2);
+        if (MoveGenre == MoveOwner.PawnGenre)
+        {
+            totalBoost += 2;
+        }
+        return totalBoost;
     }
 
     /// <summary>

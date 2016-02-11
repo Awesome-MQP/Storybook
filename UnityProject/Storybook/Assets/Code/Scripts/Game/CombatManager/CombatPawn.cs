@@ -123,6 +123,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
         if (m_health <= 0)
         {
+            m_health = 0; // Keep HP at 0 if it goes below
             m_isAlive = false;
         }
 

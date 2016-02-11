@@ -69,9 +69,7 @@ public abstract class CombatPlayer : CombatPawn
 
             if (PhotonNetwork.player.ID == PawnId)
             {
-                //DrawPageOnScreen(currentPage, i);
                 EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, i);
-                //combatMenu.DrawPage(currentPage, i);
             }
         }
     }
@@ -122,9 +120,6 @@ public abstract class CombatPlayer : CombatPawn
         if (PhotonNetwork.player.ID == PawnId)
         {
             combatMenu.DestroyPage(SelectedPageIndex);
-            //Destroy(m_displayedPages[SelectedPageIndex]);
-            //combatMenu.ShiftPages(SelectedPageIndex);
-            //ShiftPages(SelectedPageIndex);
         }
 
 
@@ -186,7 +181,6 @@ public abstract class CombatPlayer : CombatPawn
         }
         if (PhotonNetwork.player.ID == PawnId)
         {
-            //DrawPageOnScreen(currentPage, 4);
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, 4);
         }
     }

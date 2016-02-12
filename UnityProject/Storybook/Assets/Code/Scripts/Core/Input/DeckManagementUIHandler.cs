@@ -58,11 +58,39 @@ public class DeckManagementUIHandler : PageUIHandler
 
         if (pageData.InventoryId < deckSize)
         {
-            m_selectedDeckPage = buttonPressed;
+            if (m_selectedDeckPage != null)
+            {
+                m_selectedDeckPage.DisplaySelectedImage(false);
+            }
+
+            if (m_selectedDeckPage == buttonPressed)
+            {
+                m_selectedDeckPage.DisplaySelectedImage(false);
+                m_selectedDeckPage = null;
+            }
+            else
+            {
+                m_selectedDeckPage = buttonPressed;
+                m_selectedDeckPage.DisplaySelectedImage(true);
+            }          
         }
         else
         {
-            m_selectedInventoryPage = buttonPressed;
+            if (m_selectedInventoryPage != null)
+            {
+                m_selectedInventoryPage.DisplaySelectedImage(false);
+            }
+
+            if (m_selectedInventoryPage == buttonPressed)
+            {
+                m_selectedInventoryPage.DisplaySelectedImage(false);
+                m_selectedInventoryPage = null;
+            }
+            else
+            {
+                m_selectedInventoryPage = buttonPressed;
+                m_selectedInventoryPage.DisplaySelectedImage(true);
+            }
         }
         _checkForSwap();
     }

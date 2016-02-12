@@ -16,6 +16,8 @@ public class CombatManager : Photon.PunBehaviour {
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
+    private int m_combatLevel;
+
     // Use this for initialization
     void Start()
     {
@@ -31,6 +33,7 @@ public class CombatManager : Photon.PunBehaviour {
             foreach (CombatTeam team in m_teamList)
             {
                 team.RegisterCombatManager(this);
+                team.TeamLevel = m_combatLevel;
             }
             _spawnTeams();
 
@@ -208,5 +211,11 @@ public class CombatManager : Photon.PunBehaviour {
             }
         }
         return null;
+    }
+
+    public int CombatLevel
+    {
+        get { return m_combatLevel; }
+        set { m_combatLevel = value; }
     }
 }

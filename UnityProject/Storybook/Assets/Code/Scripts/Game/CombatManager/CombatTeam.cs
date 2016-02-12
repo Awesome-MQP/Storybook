@@ -16,6 +16,8 @@ public abstract class CombatTeam : Photon.PunBehaviour {
 
     private int m_teamId;
 
+    private int m_teamLevel;
+
     /// <summary>
     /// Removes the pawn from the PawnsOnTeam list
     /// </summary>
@@ -194,5 +196,11 @@ public abstract class CombatTeam : Photon.PunBehaviour {
     {
         m_teamId = teamId;
         FindObjectOfType<CombatManager>().RegisterTeamLocal(this);
+    }
+
+    public int TeamLevel
+    {
+        get { return m_teamLevel; }
+        set { m_teamLevel = value; }
     }
 }

@@ -46,6 +46,18 @@ public class DungeonMaster : MonoBehaviour {
     private float m_isPageStatusProbability = 0.3f;
 
     [SerializeField]
+    private int m_hpIncreasePerLevel = 3;
+
+    [SerializeField]
+    private int m_attackIncreasePerLevel = 1;
+
+    [SerializeField]
+    private int m_defenseIncreasePerLevel = 1;
+
+    [SerializeField]
+    private int m_speedIncreasePerLevel = 1;
+
+    [SerializeField]
     private PageMove m_pageAttack;
 
     [SerializeField]
@@ -363,5 +375,29 @@ public class DungeonMaster : MonoBehaviour {
         bool isRare = _getIsPageRare(shopRoomPageData.PageLevel);
         MoveType pageType = _getPageMoveType();
         return new PageData(pageLevel, pageGenre, pageType, isRare);
+    }
+
+    public void ScalePawnByLevel(CombatPawn pawnToScale, int roomLevel)
+    {
+        // Increase HP based on level
+        int hpIncrease = m_hpIncreasePerLevel * roomLevel;
+        int newMax = hpIncrease + (int)pawnToScale.MaxHealth;
+        pawnToScale.SetMaxHealth(newMax);
+        pawnToScale.Health = newMax;
+
+        // Increase attack based on level
+        int attackIncrease = m_attackIncreasePerLevel * roomLevel;
+        int newAttack = attackIncrease + (int)pawnToScale.Attack;
+        pawnToScale.Attack = newAttack;
+
+        // Increase defense based on level
+        int defenseIncrease = m_defenseIncreasePerLevel * roomLevel;
+        int newDefense = defenseIncrease + (int)pawnToScale.Defense;
+        pawnToScale.Defense = newDefense;
+
+        // Increase speed based on level
+        int speedIncrease = m_speedIncreasePerLevel * roomLevel;
+        int newSpeed = speedIncrease + (int)pawnToScale.Speed;
+        pawnToScale.Speed = newSpeed;
     }
 }

@@ -528,7 +528,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22457662}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11408098}
   m_HandleRect: {fileID: 22403582}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -770,6 +770,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 11451434}
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 11451434}
         m_MethodName: FinishedClicked
         m_Mode: 1
@@ -1062,6 +1073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f8745a03cca9a4f8ad778f503a0e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
   m_greenPageButton: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95, type: 2}
   m_redPageButton: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39, type: 2}
   m_yellowPageButton: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05, type: 2}
@@ -1153,7 +1165,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11442502}
   m_HandleRect: {fileID: 22492142}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2134,6 +2146,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_clickSoundEffect
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 176862}

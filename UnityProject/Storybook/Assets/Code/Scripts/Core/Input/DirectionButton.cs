@@ -10,6 +10,7 @@ public class DirectionButton : MonoBehaviour {
     public void OnClick()
     {
         UIHandler currentUIHandler = FindObjectOfType<UIHandler>();
+        currentUIHandler.PlayClickSound();
         if (currentUIHandler is OverworldUIHandler)
         {
             OverworldUIHandler overworldUIHandler = (OverworldUIHandler)currentUIHandler;

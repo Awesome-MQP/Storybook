@@ -15,6 +15,7 @@ public class PageButton : MonoBehaviour {
     public void OnClick()
     {
         PageUIHandler currentUIHandler = FindObjectOfType<PageUIHandler>();
+        currentUIHandler.PlayClickSound();
         currentUIHandler.PageButtonPressed(this);
     }
 

@@ -97,6 +97,7 @@ GameObject:
   - 92: {fileID: 5093129}
   - 124: {fileID: 5093128}
   - 81: {fileID: 5093127}
+  - 114: {fileID: 5093132}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -171,6 +172,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &5093132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 5093126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5aa664018b49448a723ed54439228e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &143648656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,6 +1222,10 @@ MonoBehaviour:
   m_horrorEntity: {fileID: 11435922, guid: c91ce315a476641468e72deeca598d28, type: 2}
   m_scifiEntity: {fileID: 11459260, guid: 0b88c8cf0927a1d41aecda31ca9ed4f7, type: 2}
   m_fantasyEntity: {fileID: 11424838, guid: d3e7fefa2a074f74798e219251edc767, type: 2}
+  m_comicBookButton: {fileID: 1902483972}
+  m_horrorButton: {fileID: 979002210}
+  m_scifiButton: {fileID: 327519146}
+  m_fantasyButton: {fileID: 1130274229}
 --- !u!1 &1446683771
 GameObject:
   m_ObjectHideFlags: 0

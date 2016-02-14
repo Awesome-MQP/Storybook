@@ -200,6 +200,7 @@ public class DeckManagementUIHandler : PageUIHandler
     /// </summary>
     public void FinishedClicked()
     {
+        PlayClickSound();
         EventDispatcher.GetDispatcher<UIEventDispatcher>().OnDeckManagementClosed();
         Debug.Log("Destroying deck management menu");
         Destroy(gameObject);

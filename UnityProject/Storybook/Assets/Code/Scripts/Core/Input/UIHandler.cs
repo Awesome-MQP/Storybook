@@ -9,7 +9,6 @@ public abstract class UIHandler : MonoBehaviour {
 
     public void PlayClickSound()
     {
-        Debug.Log("Playing click sound");
         AudioSource clickSource = GetComponent<AudioSource>();
         if (clickSource == null)
         {

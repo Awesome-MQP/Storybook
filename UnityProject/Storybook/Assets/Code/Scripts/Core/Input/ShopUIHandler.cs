@@ -169,6 +169,7 @@ public class ShopUIHandler : PageUIHandler {
 
     public void ExitMenu()
     {
+        PlayClickSound();
         EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
         Destroy(gameObject);
     }
@@ -184,6 +185,7 @@ public class ShopUIHandler : PageUIHandler {
         // Only allow the trade if the total level of all the player pages is equal to or greater than the selected shop page
         if (_getTotalSelectedLevel() >= m_selectedShopPageButton.PageLevel)
         {
+            PlayClickSound();
             GameManager gameManager = FindObjectOfType<GameManager>();
             DungeonMaster dm = FindObjectOfType<DungeonMaster>();
             PlayerInventory pi = gameManager.GetLocalPlayerInventory();

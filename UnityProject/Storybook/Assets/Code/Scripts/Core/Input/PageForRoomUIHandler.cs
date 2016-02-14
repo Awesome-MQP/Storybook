@@ -119,6 +119,7 @@ public class PageForRoomUIHandler : PageUIHandler {
     /// </summary>
     public void SubmitPage()
     {
+        PlayClickSound();
         //_dropAndReplaceSelectedPage();
         Destroy(gameObject);
         EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);

@@ -41,8 +41,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pawnsToSpawn:
-  - {fileID: 11405134, guid: da68c150536b519459c7d0816f1d2e8a, type: 2}
-  - {fileID: 11405134, guid: da68c150536b519459c7d0816f1d2e8a, type: 2}
+  - {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68, type: 2}
+  - {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68, type: 2}
 --- !u!114 &11435440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,6 +81,16 @@ Prefab:
       propertyPath: m_Name
       value: SciFiTeam1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[0]
+      value: 
+      objectReference: {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pawnsToSpawn.Array.data[1]
+      value: 
+      objectReference: {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 192014}

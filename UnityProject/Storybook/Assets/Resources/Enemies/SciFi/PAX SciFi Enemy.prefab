@@ -703,8 +703,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 10
-  m_health: 10
+  m_maxHealth: 8
+  m_health: 8
   m_speed: 5
   m_defense: 2
   m_attack: 4
@@ -786,6 +786,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_defense
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_maxHealth
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_health
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

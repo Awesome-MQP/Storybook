@@ -1,54 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &183840
+--- !u!1 &131838
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 432884}
-  - 114: {fileID: 11478926}
-  - 114: {fileID: 11420456}
+  - 4: {fileID: 419624}
+  - 114: {fileID: 11475626}
+  - 114: {fileID: 11454834}
   m_Layer: 0
-  m_Name: HorrorTeam3
+  m_Name: ComicPlayerEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &432884
+--- !u!4 &419624
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183840}
+  m_GameObject: {fileID: 131838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.1153436, y: 4.399383, z: -1.754753}
+  m_LocalPosition: {x: 1.8203621, y: 8.360202, z: 1.3479714}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11420456
+--- !u!114 &11454834
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183840}
+  m_GameObject: {fileID: 131838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fbd1d4e0f3684e46abf582374b6c096, type: 3}
+  m_Script: {fileID: 11500000, guid: 02723a4934d147046860d5f64933f79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pawnsToSpawn:
-  - {fileID: 11426382, guid: dbc4a1162bf3c20429730c21f4bb0271, type: 2}
-  - {fileID: 11471296, guid: 1d59de0c1b813ac409c7b5c9ec707f14, type: 2}
---- !u!114 &11478926
+  m_hitPoints: 30
+  m_maxHitPoints: 30
+  m_attack: 6
+  m_defense: 1
+  m_speed: 7
+  m_luck: 1
+  m_genre: 4
+--- !u!114 &11475626
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183840}
+  m_GameObject: {fileID: 131838}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
@@ -63,7 +67,7 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 11420456}
+  - {fileID: 11454834}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -76,8 +80,36 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_attack
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_defense
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_speed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_hitPoints
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_maxHitPoints
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_genre
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Name
+      value: ComicPlayerEntity
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 183840}
+  m_RootGameObject: {fileID: 131838}
   m_IsPrefabParent: 1

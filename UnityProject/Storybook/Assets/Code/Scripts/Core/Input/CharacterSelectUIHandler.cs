@@ -99,7 +99,7 @@ public class CharacterSelectUIHandler : UIHandler {
 
     public void SubmitCharacter()
     {
-        GameObject entityObject = PhotonNetwork.Instantiate(m_selectedEntity.name, Vector3.zero, Quaternion.identity, 0);
+        GameObject entityObject = PhotonNetwork.Instantiate("PlayerEntity/" + m_selectedEntity.name, Vector3.zero, Quaternion.identity, 0);
         DontDestroyOnLoad(entityObject);
         PlayerEntity createdEntity = entityObject.GetComponent<PlayerEntity>();
         createdEntity.Construct(PhotonNetwork.player);

@@ -72,6 +72,9 @@ public class DungeonMaster : MonoBehaviour {
     [SerializeField]
     private PageMove m_pageSpeedBoost;
 
+    [SerializeField]
+    private int m_startingPageCount = 21;
+
     // When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
     void Awake() {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
@@ -352,7 +355,7 @@ public class DungeonMaster : MonoBehaviour {
 
     public void InitializeInventory(Inventory inventoryToInitialize)
     {
-        for (int i = 0; i < 21; i++)
+        for (int i = 0; i < m_startingPageCount; i++)
         {
             Page basicPage = GetBasicPage();
             inventoryToInitialize.Add(basicPage, i);

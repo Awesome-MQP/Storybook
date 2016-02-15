@@ -48,12 +48,11 @@ MonoBehaviour:
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
-  isRuntimeInstantiated: 1
+  isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
 --- !u!114 &11428374
@@ -75,14 +74,18 @@ MonoBehaviour:
   m_isMoveAttack: 0
   m_pageGenre: 1
   m_pageType: 1
-  m_HPIncrease: 3
+  m_HPIncrease: 5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_HPIncrease
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 107088}

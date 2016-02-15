@@ -773,10 +773,10 @@ MonoBehaviour:
   m_gridYPadding: 15
   m_buttonHeight: 104
   m_buttonWidth: 72
-  m_comicSprite: {fileID: 21300000, guid: 2b0f358b3db22e349af02c9d9d38331b, type: 3}
-  m_scifiSprite: {fileID: 21300000, guid: c1e55b465acff1e4c94f8181bf0b2edb, type: 3}
-  m_fantasySprite: {fileID: 21300000, guid: e0c7dae8f1181d944b841dada997ea18, type: 3}
-  m_horrorSprite: {fileID: 21300000, guid: e268b74aba5117249b50ea0443567065, type: 3}
+  m_comicSprite: {fileID: 21300000, guid: a5ef6f1850ee06c428e06884777e0f52, type: 3}
+  m_scifiSprite: {fileID: 21300000, guid: 3b14cd4f9c434374fa0297244d0fc791, type: 3}
+  m_fantasySprite: {fileID: 21300000, guid: ce6643d3369ee2644b7b2e38d8ae8073, type: 3}
+  m_horrorSprite: {fileID: 21300000, guid: 6f30ef405e587a4419f015a6fb43ef95, type: 3}
   m_playerTargetButtons: {fileID: 22434446}
   m_enemyTargetButtons: {fileID: 22452886}
 --- !u!114 &11406248

@@ -42,10 +42,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hitPoints: 30
   m_maxHitPoints: 30
-  m_attack: 4
+  m_attack: 5
   m_defense: 2
   m_speed: 10
-  m_luck: 1
+  m_luck: 2
   m_genre: 3
 --- !u!114 &11438332
 MonoBehaviour:
@@ -80,7 +80,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_attack
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_luck
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 138562}

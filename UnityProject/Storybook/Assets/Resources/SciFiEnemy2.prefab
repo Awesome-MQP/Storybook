@@ -1023,8 +1023,8 @@ MonoBehaviour:
   - {fileID: 433042}
   - {fileID: 11495362}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1051,6 +1051,7 @@ MonoBehaviour:
   m_enemyMoveList:
   - {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7, type: 2}
   - {fileID: 11471700, guid: 9729ea988ec12a6469d227ffaa7bfe14, type: 2}
+  - {fileID: 11480592, guid: 75cf1106a6022e3488fcfc6aa4bc0fcd, type: 2}
 --- !u!137 &13757438
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -1116,7 +1117,16 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11480592, guid: 75cf1106a6022e3488fcfc6aa4bc0fcd,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 145076}

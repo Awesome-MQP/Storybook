@@ -882,7 +882,7 @@ MonoBehaviour:
   m_currentMana: 4
   m_manaPerTurn: 2
   m_enemyMoveList:
-  - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
+  - {fileID: 11484758, guid: 2216a0f69be7de54294757b8a039c46d, type: 2}
   - {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e, type: 2}
 --- !u!114 &11449302
 MonoBehaviour:

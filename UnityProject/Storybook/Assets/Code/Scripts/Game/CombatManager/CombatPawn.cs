@@ -594,4 +594,9 @@ public abstract class CombatPawn : Photon.PunBehaviour
                 break;
         }
     }
+
+    public float MaxHealth
+    {
+        get { return m_maxHealth; }
+    }
 }

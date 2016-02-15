@@ -427,6 +427,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 11430800}
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11411154
@@ -468,7 +479,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22433604}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -617,12 +628,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fdf0767940590740a31f602dfa75cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
-  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
-  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
-  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
-  m_gridXPadding: 20
-  m_gridYPadding: 20
+  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
+  m_greenPageButton: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95, type: 2}
+  m_redPageButton: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39, type: 2}
+  m_yellowPageButton: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05, type: 2}
+  m_bluePageButton: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c, type: 2}
+  m_gridXPadding: 5
+  m_gridYPadding: 5
 --- !u!114 &11432644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1343,7 +1355,19 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_gridXPadding
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_gridYPadding
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_clickSoundEffect
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 101504}

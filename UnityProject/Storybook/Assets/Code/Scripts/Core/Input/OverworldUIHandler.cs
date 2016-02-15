@@ -24,6 +24,7 @@ public class OverworldUIHandler : UIHandler {
     /// <param name="selectedDirection">The direction that was pressed</param>
     public void DirectionButtonPressed(Door.Direction selectedDirection)
     {
+        PlayClickSound();
         EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitDirection(selectedDirection);
         Destroy(gameObject);
     }

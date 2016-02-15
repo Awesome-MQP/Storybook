@@ -88,7 +88,7 @@ public class CombatRoom : RoomObject {
         if (!m_wonCombat)
         {
             StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
-            m_gameManager.TransitionToCombat();
+            m_gameManager.TransitionToCombat(RoomPageData.PageLevel);
             return;
         }
         else

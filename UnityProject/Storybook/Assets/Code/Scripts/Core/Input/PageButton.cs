@@ -7,6 +7,9 @@ public class PageButton : MonoBehaviour {
     private PageData m_pageData;
 
     private int m_menuId;
+
+    [SerializeField]
+    private Sprite m_targetIcon;
     
     /// <summary>
     /// Called when the page button is pressed
@@ -83,6 +86,14 @@ public class PageButton : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// The rarity of the page tied to this button
+    /// </summary>
+    public bool Rarity
+    {
+        get { return PageData.IsRare; }
+    }
+
     public int MenuId
     {
         get { return m_menuId; }
@@ -92,6 +103,7 @@ public class PageButton : MonoBehaviour {
     /// <summary>
     /// Called when changes are maded to the page data of the button
     /// Updates the text fields of the page based on the changes
+    /// UPDATE: Also edits the target icons depending on the rarity of the page
     /// </summary>
     private void _updateButtonText()
     {
@@ -105,6 +117,28 @@ public class PageButton : MonoBehaviour {
             if (t.name == "Page Type")
             {
                 t.text = PageMoveType.ToString();
+            }
+        }
+        //Debug.Log("Is rare? " + Rarity);
+        Image[] allTargetIcons = GetComponentsInChildren<Image>();
+        foreach(Image i in allTargetIcons)
+        {
+            Debug.Log(i.name);
+            if(i.name.Contains("Target"))
+            {
+                Debug.Log(Rarity);
+                if (Rarity == true)
+                {
+                    i.enabled = true;
+                }
+                else
+                {
+                    if(i.name == "Target1")
+                    {
+                        i.enabled = true;
+                        // TODO: If number of targets = 1, center target
+                    }
+                }
             }
         }
     }

@@ -714,6 +714,7 @@ MonoBehaviour:
   m_manaPerTurn: 2
   m_enemyMoveList:
   - {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7, type: 2}
+  - {fileID: 11471700, guid: 9729ea988ec12a6469d227ffaa7bfe14, type: 2}
 --- !u!137 &13797668
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -780,6 +781,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_attack
       value: 4
       objectReference: {fileID: 0}
@@ -795,6 +800,11 @@ Prefab:
       propertyPath: m_health
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 157556}

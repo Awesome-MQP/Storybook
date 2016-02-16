@@ -883,6 +883,7 @@ MonoBehaviour:
   m_manaPerTurn: 2
   m_enemyMoveList:
   - {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e, type: 2}
+  - {fileID: 11484758, guid: 2216a0f69be7de54294757b8a039c46d, type: 2}
 --- !u!114 &11449302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -985,7 +986,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[0]
@@ -1003,7 +1004,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[1]
       value: 
-      objectReference: {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e,
+      objectReference: {fileID: 11484758, guid: 2216a0f69be7de54294757b8a039c46d,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

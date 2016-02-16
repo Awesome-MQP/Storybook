@@ -108,7 +108,7 @@ public class PageButton : MonoBehaviour {
     private void _updateButtonText()
     {
         Text[] allButtonTexts = GetComponentsInChildren<Text>();
-        foreach(Text t in allButtonTexts)
+        foreach (Text t in allButtonTexts)
         {
             if (t.name == "Level")
             {
@@ -119,14 +119,11 @@ public class PageButton : MonoBehaviour {
                 t.text = PageMoveType.ToString();
             }
         }
-        //Debug.Log("Is rare? " + Rarity);
         Image[] allTargetIcons = GetComponentsInChildren<Image>();
         foreach(Image i in allTargetIcons)
         {
-            Debug.Log(i.name);
             if(i.name.Contains("Target"))
             {
-                Debug.Log(Rarity);
                 if (Rarity == true)
                 {
                     i.enabled = true;

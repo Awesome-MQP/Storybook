@@ -349,7 +349,8 @@ MonoBehaviour:
   m_currentMana: 3
   m_manaPerTurn: 3
   m_enemyMoveList:
-  - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
+  - {fileID: 11491974, guid: 114cc39c67863d847a7ea57a88f7a8de, type: 2}
+  - {fileID: 11423028, guid: 23331cc0cc4b81349b04518fc0f028cd, type: 2}
 --- !u!137 &13737836
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -404,7 +405,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Controller
@@ -425,7 +426,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[1]
       value: 
-      objectReference: {fileID: 11446990, guid: 37606de87b761fd45b253b109fba84d9,
+      objectReference: {fileID: 11423028, guid: 23331cc0cc4b81349b04518fc0f028cd,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[2]
@@ -440,7 +441,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[0]
       value: 
-      objectReference: {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2,
+      objectReference: {fileID: 11491974, guid: 114cc39c67863d847a7ea57a88f7a8de,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_maxHealth

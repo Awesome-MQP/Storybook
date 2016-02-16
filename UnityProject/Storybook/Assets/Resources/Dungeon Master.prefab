@@ -88,7 +88,7 @@ MonoBehaviour:
   m_pageAttackBoost: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354, type: 2}
   m_pageDefenseBoost: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7, type: 2}
   m_pageSpeedBoost: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776, type: 2}
-  m_startingPageCount: 30
+  m_startingPageCount: 40
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -155,7 +155,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_startingPageCount
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

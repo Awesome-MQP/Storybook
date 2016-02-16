@@ -171,6 +171,38 @@ public class DungeonMaster : MonoBehaviour {
         return page;
     }
 
+    public Page ConstructBoostPage(int pageLevel, Genre pageGenre, bool isBasicPage)
+    {
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+
+        if (!isBasicPage)
+        {
+            page.Rarity = _getIsPageRare(pageLevel);
+        }
+        else
+        {
+            page.Rarity = false;
+        }
+
+        page.PageType = MoveType.Boost;
+        PageMove move = _getMovePrefab(page.PageType, pageGenre);
+        page.PlayerCombatMove = move;
+        move.transform.SetParent(page.transform, false);
+        move.MoveLevel = pageLevel;
+        move.MoveRarity = page.Rarity;
+        move.MoveGenre = pageGenre;
+        move.PageGenre = pageGenre;
+        if (page.Rarity)
+        {
+            move.SetNumberOfTargets(4);
+        }
+        else
+        {
+            move.SetNumberOfTargets(1);
+        }
+        return page;
+    }
+
     public Page ConstructPage(int pageLevel, Genre pageGenre, bool isBasicPage)
     {
         Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
@@ -357,7 +389,15 @@ public class DungeonMaster : MonoBehaviour {
     {
         for (int i = 0; i < m_startingPageCount; i++)
         {
-            Page basicPage = GetBasicPage();
+            Page basicPage;
+            if (m_startingPageCount - i > 3)
+            {
+                basicPage = GetBasicPage();
+            }
+            else
+            {
+                basicPage = ConstructBoostPage(1, Genre.Horror, true);
+            }
             inventoryToInitialize.Add(basicPage, i);
         }
     }

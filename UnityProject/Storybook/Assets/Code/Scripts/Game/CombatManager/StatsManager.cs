@@ -48,34 +48,26 @@ public static class StatsManager {
             case Genre.Fantasy:
                 if(ofAttack == Genre.Fantasy)
                 { return m_positiveSTABBonus; }
-                else if(ofAttack == Genre.GraphicNovel)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.GraphicNovel:
                 if(ofAttack == Genre.GraphicNovel)
                 { return m_positiveSTABBonus; }
-                else if(ofAttack == Genre.Fantasy)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.Horror:
                 if (ofAttack == Genre.Horror)
                 { return m_positiveSTABBonus; }
-                else if (ofAttack == Genre.SciFi)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.SciFi:
                 if (ofAttack == Genre.SciFi)
                 { return m_positiveSTABBonus; }
-                else if (ofAttack == Genre.Horror)
+                else 
                 { return m_neutralSTABBonus; }
-                else
-                { return m_negativeSTABBonus; }
 
             default:
                 return 1f;

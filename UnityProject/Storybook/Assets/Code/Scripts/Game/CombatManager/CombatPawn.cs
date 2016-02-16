@@ -404,6 +404,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
         {
             m_speedBoost -= 1;
         }
+        if (m_defenseBoost > 0)
+        { 
+            m_defenseBoost -= 1;
+        }
+        if (m_attackBoost > 0)
+        { 
+            m_attackBoost -= 1;
+        }
     }
 
     public float Attack

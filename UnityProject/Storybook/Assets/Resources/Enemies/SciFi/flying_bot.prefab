@@ -321,7 +321,7 @@ MonoBehaviour:
   m_currentMana: 3
   m_manaPerTurn: 3
   m_enemyMoveList:
-  - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
+  - {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7, type: 2}
 --- !u!137 &13768022
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -372,7 +372,12 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 170544}

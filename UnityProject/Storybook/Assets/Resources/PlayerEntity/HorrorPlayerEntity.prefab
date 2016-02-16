@@ -67,10 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02723a4934d147046860d5f64933f79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitPoints: 35
+  m_hitPoints: 60
   m_maxHitPoints: 35
   m_attack: 5
-  m_defense: 1
+  m_defense: 3
   m_speed: 6
   m_luck: 1
   m_genre: 1
@@ -87,11 +87,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_defense
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_hitPoints
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

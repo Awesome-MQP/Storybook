@@ -48,7 +48,7 @@ MonoBehaviour:
   m_isMoveAttack: 0
   m_pageGenre: 3
   m_pageType: 1
-  m_speedIncrease: 3
+  m_speedIncrease: 4
 --- !u!114 &11478740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
-  isRuntimeInstantiated: 1
+  isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
 --- !u!1001 &100100000
@@ -82,7 +82,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_speedIncrease
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 168540}

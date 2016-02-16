@@ -882,7 +882,6 @@ MonoBehaviour:
   m_currentMana: 4
   m_manaPerTurn: 2
   m_enemyMoveList:
-  - {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2, type: 2}
   - {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e, type: 2}
 --- !u!114 &11449302
 MonoBehaviour:
@@ -985,9 +984,13 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.data[0]
       value: 
-      objectReference: {fileID: 11448096, guid: 029d3c0ea8c412c4fb6aafcc75e7b9f2,
+      objectReference: {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_maxHealth
@@ -997,6 +1000,11 @@ Prefab:
       propertyPath: m_health
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_enemyMoveList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 139124}

@@ -350,7 +350,6 @@ MonoBehaviour:
   m_manaPerTurn: 3
   m_enemyMoveList:
   - {fileID: 11491974, guid: 114cc39c67863d847a7ea57a88f7a8de, type: 2}
-  - {fileID: 11423028, guid: 23331cc0cc4b81349b04518fc0f028cd, type: 2}
 --- !u!137 &13737836
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -405,7 +404,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_enemyMoveList.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Controller

@@ -125,6 +125,8 @@ MonoBehaviour:
     type: 2}
   m_dungeonMasterPrefab: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d,
     type: 2}
+  m_soundEffectsManager: {fileID: 11402954, guid: 5b0f6f442b7e8e1438f7e90673ce5c72,
+    type: 2}
 --- !u!4 &119488694
 Transform:
   m_ObjectHideFlags: 0

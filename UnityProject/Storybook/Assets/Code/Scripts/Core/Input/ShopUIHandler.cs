@@ -106,8 +106,7 @@ public class ShopUIHandler : UIHandler {
 
     public void PopulateMenu(List<PageData> shopPages)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+        PlayerInventory pi = GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
 
         // Populate the player inventory scroll rect
         for (int i = 0; i < pi.DynamicSize; i++)
@@ -129,7 +128,7 @@ public class ShopUIHandler : UIHandler {
         if (shopPages.Count <= 0)
         {
             // Populate the shop pages scroll rect, number of pages is determined by the level of the room
-            DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+            DungeonMaster dm = DungeonMaster.Instance;
             for (int i = 0; i < m_shopRoom.RoomPageData.PageLevel + 1; i++)
             {
                 PageData shopPageData = dm.GetShopPage(m_shopRoom.RoomPageData);
@@ -184,9 +183,9 @@ public class ShopUIHandler : UIHandler {
         // Only allow the trade if the total level of all the player pages is equal to or greater than the selected shop page
         if (_getTotalSelectedLevel() >= m_selectedShopPageButton.PageLevel)
         {
-            GameManager gameManager = FindObjectOfType<GameManager>();
-            DungeonMaster dm = FindObjectOfType<DungeonMaster>();
-            PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+            GameManager gameManager = GameManager.GetInstance<GameManager>();
+            DungeonMaster dm = DungeonMaster.Instance;
+            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
 
             /*
             foreach (PageButton pageButton in m_selectedPages)

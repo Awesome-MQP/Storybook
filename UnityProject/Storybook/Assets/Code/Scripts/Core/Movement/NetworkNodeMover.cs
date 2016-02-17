@@ -6,17 +6,12 @@ using System.Collections;
 /// </summary>
 public class NetworkNodeMover : NetworkMover
 {
-
-    [SerializeField]
     private MovementNode m_node;
+    private Vector3 m_lastNodePosition;
 
-    [SyncProperty]
     public override Vector3 TargetPosition
     {
-        get
-        {
-            return base.TargetPosition;
-        }
+        get { return base.TargetPosition; }
 
         set
         {
@@ -38,15 +33,39 @@ public class NetworkNodeMover : NetworkMover
             m_node = value;
 
             if (m_node)
+            {
                 base.TargetPosition = m_node.transform.position;
+                m_lastNodePosition = m_node.transform.position;
+            }
             else
+            {
                 base.TargetPosition = transform.position;
+            }
+
+            OnTargetNodeChanged(m_node);
 
             PropertyChanged();
         }
     }
 
+    protected virtual void LateUpdate()
+    {
+        if (m_node)
+        {
+            float distanceSq = (m_node.transform.position - m_lastNodePosition).sqrMagnitude;
+            if (distanceSq > 0.001f)
+            {
+                m_lastNodePosition = m_node.transform.position;
+            }
+        }
+    }
+
     protected virtual void OnArriveAtNode(MovementNode node)
+    {
+        
+    }
+
+    protected virtual void OnTargetNodeChanged(MovementNode node)
     {
         
     }
@@ -58,7 +77,8 @@ public class NetworkNodeMover : NetworkMover
 
     protected sealed override void OnArrive()
     {
-        if (m_node != null) {
+        if (m_node != null)
+        {
             if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
                 m_node.Enter(this);
 
@@ -68,7 +88,8 @@ public class NetworkNodeMover : NetworkMover
 
     protected sealed override void OnLeave()
     {
-        if (m_node != null) {
+        if (m_node != null)
+        {
             if (m_node.IsMine)//Only the owner is allowed to trigger an event on an object, thus we should respect that rule.
                 m_node.Leave(this);
 

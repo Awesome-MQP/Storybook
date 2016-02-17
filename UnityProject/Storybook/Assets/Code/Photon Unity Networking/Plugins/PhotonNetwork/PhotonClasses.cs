@@ -558,7 +558,7 @@ namespace Photon
 
                 if (isSyncProperty && hasGetAndSet)
                 {
-                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof(SyncProperty), true)[0] as SyncProperty;
+                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof(SyncProperty), false)[0] as SyncProperty;
 
                     if (syncProperty.IsReliable)
                     {

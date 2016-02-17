@@ -7,7 +7,7 @@ using Photon;
 // WorldPawns move around in the overworld, can be told to move to points, play animations, etc.
 // Inherits from NetworkMover, which already contains 
 
-public class WorldPawn : NetworkMover
+public class WorldPawn : NetworkNodeMover//TODO:Change to a node mover
 {
 
 }

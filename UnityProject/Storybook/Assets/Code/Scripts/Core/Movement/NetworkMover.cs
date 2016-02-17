@@ -7,7 +7,6 @@ using Photon;
 /// </summary>
 public class NetworkMover : PunBehaviour
 {
-
     [SerializeField]
     private Vector3 m_targetPosition;
 
@@ -19,6 +18,8 @@ public class NetworkMover : PunBehaviour
 
     [SerializeField]
     private float m_atTargetThreashHold = 0.1f;
+
+    private Vector3 m_velocity;
 
     [SyncProperty]
     public virtual Vector3 TargetPosition
@@ -49,34 +50,47 @@ public class NetworkMover : PunBehaviour
         }
     }
 
+    public Vector3 Velocity
+    {
+        get { return m_velocity; }
+    }
+
     protected virtual void OnArrive()
     {
-
     }
-    
+
     protected virtual void OnLeave()
     {
-
     }
 
     protected virtual void OnTargetChanged()
     {
-
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (m_isAtTarget)
+        {
+            m_velocity = Vector3.zero;
             return;
+        }
 
         Vector3 currentPosition = Position;
 
         Vector3 newPosition = Vector3.MoveTowards(currentPosition, m_targetPosition, m_maxSpeed * Time.deltaTime);
         if (Vector3.Distance(newPosition, m_targetPosition) <= m_atTargetThreashHold)
         {
+            m_velocity = Vector3.zero;
             m_isAtTarget = true;
-            OnArrive();
-            photonView.RPC("_RPCArrive", PhotonTargets.Others);
+            if (IsMine)
+            {
+                OnArrive();
+                photonView.RPC("_RPCArrive", PhotonTargets.Others);
+            }
+        }
+        else
+        {
+            m_velocity = (newPosition - currentPosition) * Time.deltaTime;
         }
 
         transform.position = newPosition;

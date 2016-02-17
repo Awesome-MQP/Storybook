@@ -83,12 +83,27 @@ public class PlayerEntity : PlayerObject
         }
     }
 
+    [SyncProperty]
+    public PlayerInventory OurInventory
+    {
+        get { return m_inventory;}
+        protected set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+
+            m_inventory = value;
+            PropertyChanged();
+        }
+    }
+
     public override void OnStartOwner(bool wasSpawn)
     {
-        m_inventory = GetComponentInChildren<Inventory>();
-        Assert.IsNotNull(m_inventory);
+        PlayerInventory newInventory = PhotonNetwork.Instantiate<PlayerInventory>(m_inventoryPrefab, Vector3.zero,
+            Quaternion.identity, 0);
+        //TODO: Inventory spawn code
+        PhotonNetwork.Spawn(newInventory.photonView);
 
-        m_inventory.photonView.TransferController(Player);
+        GameManager.GetInstance<BaseStorybookGame>().Mover.RegisterPlayer(this);
     }
 
     [SerializeField]
@@ -112,7 +127,10 @@ public class PlayerEntity : PlayerObject
     [SerializeField]
     private Genre m_genre = Genre.None;
 
-    private Inventory m_inventory;
+    [SerializeField]
+    private ResourceAsset m_inventoryPrefab = new ResourceAsset(typeof(PlayerInventory));
+
+    private PlayerInventory m_inventory;
 
     public void UpdateHitPoints(int newHitPoints)
     {

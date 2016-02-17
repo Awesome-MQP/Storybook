@@ -1430,7 +1430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cameraPos: {fileID: 450414}
-  m_teamList: []
 --- !u!114 &11448542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1477,8 +1476,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11447600}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 1
-  instantiationId: 1
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0

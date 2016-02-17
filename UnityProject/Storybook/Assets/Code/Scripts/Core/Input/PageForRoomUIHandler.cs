@@ -122,9 +122,9 @@ public class PageForRoomUIHandler : UIHandler {
     /// </summary>
     private void _dropAndReplaceSelectedPage()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
-        PlayerInventory currentPlayerInventory = null;//gameManager.GetLocalPlayerInventory();
+        DungeonMaster dm = DungeonMaster.Instance;
+        PlayerInventory currentPlayerInventory =
+            GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
         currentPlayerInventory.Drop(m_selectedPageButton.PageData.InventoryId);
         currentPlayerInventory.Add(dm.GetBasicPage(), m_selectedPageButton.PageData.InventoryId);
     }

@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 // Dungeon Master class is the handler for all statistics, as well as handling
 // the location of all room prefabs.
 [Serializable]
-public class DungeonMaster : ScriptableObject
+public class DungeonMaster : MonoBehaviour
 {
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
@@ -70,10 +70,10 @@ public class DungeonMaster : ScriptableObject
         get { return s_instance; }
     }
 
-    void OnEnable()
+    public void Awake()
     {
-            m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
-            s_instance = this;
+        m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
+        s_instance = this;
     }
 
     /// <summary>

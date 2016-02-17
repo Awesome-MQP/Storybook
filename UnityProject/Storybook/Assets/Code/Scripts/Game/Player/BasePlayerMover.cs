@@ -73,17 +73,4 @@ public abstract class BasePlayerMover : RoomMover
 
         return base.OnEnterRoom();
     }
-
-    protected override IEnumerable<StateDelegate> OnWaitingForInput()
-    {
-        foreach (var o in CurrentRoom.RoomEvent(this))
-        {
-            yield return null;
-        }
-
-        foreach (var o in base.OnWaitingForInput())
-        {
-            yield return o;
-        }
-    }
 }

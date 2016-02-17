@@ -30,6 +30,7 @@ public abstract class GameManager : Photon.PunBehaviour
 
     protected override void Awake()
     {
+        Resources.UnloadUnusedAssets();
         base.Awake();
 
         s_instance = this;
@@ -100,6 +101,16 @@ public abstract class GameManager : Photon.PunBehaviour
         PlayerObject playerObject;
         m_playerObjects.TryGetValue(player, out playerObject);
         return playerObject as T;
+    }
+
+    public PlayerObject GetLocalPlayer()
+    {
+        return GetPlayerObject(PhotonNetwork.player);
+    }
+
+    public T GetLocalPlayer<T>() where T : PlayerObject
+    {
+        return GetPlayerObject<T>(PhotonNetwork.player);
     }
 
     public void RegisterPlayerObject(PlayerObject playerObject)

@@ -400,6 +400,12 @@ public class DungeonMaster : MonoBehaviour {
             }
             inventoryToInitialize.Add(basicPage, i);
         }
+        if (inventoryToInitialize is PlayerInventory)
+        {
+            PlayerInventory playerInv = (PlayerInventory)inventoryToInitialize;
+            playerInv.SortInventory(0, 20);
+            playerInv.SortInventory(20, playerInv.DynamicSize);
+        }
     }
 
     public PageData GetShopPage(PageData shopRoomPageData)

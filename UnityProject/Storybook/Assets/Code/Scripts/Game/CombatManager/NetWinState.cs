@@ -63,6 +63,7 @@ public class NetWinState : NetworkState {
         // TODO: Use the number of items in the inventory to figure out the position to add to
         if (!localPlayerInventory.IsInventoryFull()) {
             localPlayerInventory.Add(pageDrop, localPlayerInventory.FirstOpenSlot());
+            localPlayerInventory.SortInventory(20, localPlayerInventory.DynamicSize);
         }
 
         if (pageDrop != null)

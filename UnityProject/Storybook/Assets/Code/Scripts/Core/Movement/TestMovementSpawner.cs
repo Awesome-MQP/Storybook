@@ -36,6 +36,9 @@ public class TestMovementSpawner : MonoBehaviour {
     [SerializeField]
     private DungeonMaster m_dungeonMasterPrefab;
 
+    [SerializeField]
+    private SoundEffectsManager m_soundEffectsManager;
+
 	// Use this for initialization
 	void Awake () {
         GameObject mapObject = PhotonNetwork.Instantiate(m_mapManager.name, Vector3.zero, Quaternion.identity, 0);
@@ -74,6 +77,9 @@ public class TestMovementSpawner : MonoBehaviour {
 
         GameObject gameManager = PhotonNetwork.Instantiate(m_gameManager.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(gameManager.GetComponent<PhotonView>());
+
+        GameObject soundManager = PhotonNetwork.Instantiate(m_soundEffectsManager.name, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(soundManager.GetComponent<PhotonView>());
 	}
 	
     private NetworkMover _GetMoverByGenre(Genre genre)

@@ -31,3 +31,8 @@ sysinfo.txt
 # Ignore CSharp and ShaderForge support files
 */CSharp60Support.*
 */ShaderForge.*
+
+#Ignore any Data files related to demo builds
+*[Dd]emo_[Dd]ata
+*[Dd]emo.exe
+*.pdb

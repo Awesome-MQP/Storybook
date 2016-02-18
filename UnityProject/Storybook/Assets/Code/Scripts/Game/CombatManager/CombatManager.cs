@@ -17,6 +17,7 @@ public class CombatManager : Photon.PunBehaviour {
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
     private int m_combatLevel;
+    private Genre m_combatGenre;
 
     // Use this for initialization
     void Start()
@@ -217,5 +218,11 @@ public class CombatManager : Photon.PunBehaviour {
     {
         get { return m_combatLevel; }
         set { m_combatLevel = value; }
+    }
+
+    public Genre CombatGenre
+    {
+        get { return m_combatGenre; }
+        set { m_combatGenre = value; }
     }
 }

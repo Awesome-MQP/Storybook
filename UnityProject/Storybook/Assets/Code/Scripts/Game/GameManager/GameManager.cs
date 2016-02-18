@@ -78,7 +78,7 @@ public class GameManager : Photon.PunBehaviour
     /// <summary>
     /// Starts a combat instance and sets the players for the combat manager to the list of players given to this function
     /// </summary>
-    public void StartCombat(int roomLevel)
+    public void StartCombat(int roomLevel, Genre roomGenre)
     {
         if (PhotonNetwork.isMasterClient)
         {
@@ -127,6 +127,7 @@ public class GameManager : Photon.PunBehaviour
             PhotonNetwork.Spawn(m_combatInstance.GetComponent<PhotonView>());
             CombatManager combatManager = m_combatInstance.GetComponent<CombatManager>();
             combatManager.CombatLevel = roomLevel;
+            combatManager.CombatGenre = roomGenre;
             combatManager.SetCombatTeamList(combatTeams);
 
 
@@ -156,12 +157,12 @@ public class GameManager : Photon.PunBehaviour
         Camera.main.transform.rotation = startRoom.CameraNode.rotation;
     }
 
-    public void TransitionToCombat(int roomLevel)
+    public void TransitionToCombat(int roomLevel, Genre roomGenre)
     {
-        StartCoroutine(_fadeScreenToCombat(roomLevel));
+        StartCoroutine(_fadeScreenToCombat(roomLevel, roomGenre));
     }
 
-    private IEnumerator _fadeScreenToCombat(int roomLevel)
+    private IEnumerator _fadeScreenToCombat(int roomLevel, Genre roomGenre)
     {
         GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/" + m_sceneFader.name, Vector3.zero, Quaternion.identity, 0);
         PhotonNetwork.Spawn(faderObject.GetPhotonView());
@@ -169,7 +170,7 @@ public class GameManager : Photon.PunBehaviour
         float fadeTime = fader.BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
         photonView.RPC("EnableMovementComponents", PhotonTargets.All, false);
-        StartCombat(roomLevel);
+        StartCombat(roomLevel, roomGenre);
         fader.LevelWasLoaded();
         yield return new WaitForSeconds(fadeTime);
         Destroy(fader.gameObject);
@@ -237,9 +238,6 @@ public class GameManager : Photon.PunBehaviour
         StartCoroutine(m_musicMgr.Fade(m_musicMgr.MusicTracks[0], 5, true));
 
         _TransitionToOverworld();
-
-        // Destroy the Combat UI
-        Destroy(m_combatCanvas);
 
         /*
         CameraManager m_camManager = FindObjectOfType<CameraManager>();

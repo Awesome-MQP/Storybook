@@ -17,3 +17,5 @@ EditorBuildSettings:
     path: Assets/Levels/Demo/LoadLevelBugScene.unity
   - enabled: 1
     path: Assets/Levels/Demo/TestMapGeneration.unity
+  - enabled: 1
+    path: Assets/Levels/Game/TestingLevel.unity

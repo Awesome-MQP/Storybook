@@ -98,8 +98,9 @@ public class PlayerEntity : PlayerObject
 
     public override void OnStartOwner(bool wasSpawn)
     {
-        PlayerInventory newInventory = PhotonNetwork.Instantiate<PlayerInventory>(m_inventoryPrefab, Vector3.zero,
+        GameObject newInventoryObject = PhotonNetwork.Instantiate(m_inventoryPrefab.name, Vector3.zero,
             Quaternion.identity, 0);
+        PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
         //TODO: Inventory spawn code
         PhotonNetwork.Spawn(newInventory.photonView);
 
@@ -128,7 +129,7 @@ public class PlayerEntity : PlayerObject
     private Genre m_genre = Genre.None;
 
     [SerializeField]
-    private ResourceAsset m_inventoryPrefab = new ResourceAsset(typeof(PlayerInventory));
+    private PlayerInventory m_inventoryPrefab;
 
     private PlayerInventory m_inventory;
 

@@ -67,12 +67,11 @@ MonoBehaviour:
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
-  instantiationId: 0
-  isRuntimeInstantiated: 1
+  instantiationId: -1
+  isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
 --- !u!1001 &100100000

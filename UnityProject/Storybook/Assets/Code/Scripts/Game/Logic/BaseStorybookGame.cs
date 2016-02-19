@@ -9,7 +9,7 @@ public class BaseStorybookGame : GameManager
     private DungeonMaster m_dungeonMaster;
 
     [SerializeField]
-    private ResourceAsset m_playerMoverPrefab = new ResourceAsset(typeof(StorybookPlayerMover));
+    private StorybookPlayerMover m_playerMoverPrefab;
 
     [SerializeField]
     private ResourceAsset m_defaultCombatManager = new ResourceAsset(typeof(CombatManager));
@@ -55,13 +55,25 @@ public class BaseStorybookGame : GameManager
         //Startup the map manager
         m_mapManager = GetComponent<MapManager>();
         m_mapManager.GenerateMap();
+        RoomObject startRoom = m_mapManager.PlaceStartRoom();
 
         //Spawn the player mover on the map
-        BasePlayerMover mover = PhotonNetwork.Instantiate<BasePlayerMover>(m_playerMoverPrefab,
-            Vector3.zero, Quaternion.identity, 0);
-        mover.Construct(m_mapManager.StartRoom);
-        Mover = mover;
+        GameObject moverObject = PhotonNetwork.Instantiate(m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
+        BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
         PhotonNetwork.Spawn(mover.photonView);
+        mover.SpawnInRoom(startRoom);
+        StorybookPlayerMover playerMover = mover.GetComponent<StorybookPlayerMover>();
+
+        List<PlayerWorldPawn> players = new List<PlayerWorldPawn>(FindObjectsOfType<PlayerWorldPawn>());
+        int i = 0;
+        foreach (PlayerWorldPawn player in players)
+        {
+            player.transform.position = playerMover.PlayerPositions[i].transform.position;
+            playerMover.RegisterPlayerWorldPawn(player);
+            i++;
+        }
+        Camera.main.transform.position = startRoom.CameraNode.position;
+        Camera.main.transform.rotation = startRoom.CameraNode.rotation;
     }
 
     public void StartCombat(CombatInstance combatInstance)

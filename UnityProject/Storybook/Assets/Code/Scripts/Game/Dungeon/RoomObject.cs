@@ -40,6 +40,9 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     [SerializeField]
     protected Transform m_floorObject;
 
+    [SerializeField]
+    protected List<Transform> m_sceneryNodes = new List<Transform>();
+
     private PageData m_roomPageData;
 
     protected override void Awake()
@@ -222,5 +225,61 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Iterates through all of the scenery nodes and randomly chooses whether or not it will place a scenery object there
+    /// If it does choose to place a scenery object there, it randomly selects one based on the genre
+    /// </summary>
+    public void PlaceScenery()
+    {
+
+        // If the room has no genre, do not place scenery objects
+        if (m_roomPageData.PageGenre == Genre.None)
+        {
+            return;
+        }
+
+        // If the room is a shop, do not place scenery objects
+        if (this is ShopRoom)
+        {
+            return;
+        }
+
+        foreach (Transform t in m_sceneryNodes)
+        {
+            System.Random random = new System.Random();
+            double randomDouble = random.NextDouble();
+            if (randomDouble >= 0.25)
+            {
+                _PlaceRandomSceneryObject(t);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Places a randomly selected scenery object based on room genre at the given transform position
+    /// </summary>
+    /// <param name="sceneryNode">The node to place the scenery object at</param>
+    /// <returns>The scenery object that was placed</returns>
+    private GameObject _PlaceRandomSceneryObject(Transform sceneryNode)
+    {
+        // TODO: Currently no scifi objects, so just return
+        if (m_roomPageData.PageGenre == Genre.SciFi)
+        {
+            return null;
+        }
+
+        string sceneryLoc = "Scenery/";
+        sceneryLoc += m_roomPageData.PageGenre + "/";
+        UnityEngine.Object[] allSceneryForGenre = Resources.LoadAll(sceneryLoc);
+        System.Random random = new System.Random();
+        int index = random.Next(0, allSceneryForGenre.Length);
+        string loc = sceneryLoc += allSceneryForGenre[index].name;
+        GameObject sceneryObject = PhotonNetwork.Instantiate(loc, sceneryNode.transform.position, Quaternion.identity, 0);
+        sceneryObject.transform.SetParent(this.transform);
+        PhotonNetwork.Spawn(sceneryObject.GetPhotonView());
+        sceneryObject.SetActive(true);
+        return sceneryObject;
     }
 }

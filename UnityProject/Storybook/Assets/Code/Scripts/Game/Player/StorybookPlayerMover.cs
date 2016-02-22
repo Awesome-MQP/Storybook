@@ -185,6 +185,7 @@ public class StorybookPlayerMover : BasePlayerMover,
         CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
         selectedDoor.IsConnectedRoomMade = true;
         selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
+        selectedDoor.OpenDoor();
         MoveInDirection(m_lastMoveDirection);
     }
 

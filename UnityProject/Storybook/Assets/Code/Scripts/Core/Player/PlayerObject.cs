@@ -79,7 +79,8 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
     /// <remarks>This code should be network safe.</remarks>
     public virtual PlayerObject GetNext()
     {
-        return GameManager.GetInstance<GameManager>().GetPlayerObject(m_player.GetNext());
+        PhotonPlayer player = m_player.GetNext();
+        return GameManager.GetInstance<GameManager>().GetPlayerObject(player);
     }
 
     /// <summary>

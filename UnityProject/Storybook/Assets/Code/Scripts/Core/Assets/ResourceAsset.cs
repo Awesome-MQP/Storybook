@@ -34,7 +34,7 @@ public sealed class ResourceAsset
 
     public string AssetName
     {
-        get { return m_baseTypeName; }
+        get { return m_asset; }
     }
 
     public ResourceAsset()

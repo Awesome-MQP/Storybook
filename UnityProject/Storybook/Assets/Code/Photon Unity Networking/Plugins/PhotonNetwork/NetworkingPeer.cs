@@ -3440,10 +3440,29 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         PhotonView[] views = photonViewList.Values.ToArray();
 
-        foreach (PhotonView view in views)
+        if (!PhotonNetwork.inRoom)
         {
-            if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated && view.isMine)
-                PhotonNetwork.Spawn(view);
+            foreach (PhotonView view in views)
+            {
+                view.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            foreach (PhotonView view in views)
+            {
+                if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated)
+                    view.gameObject.SetActive(false);
+            }
+
+            foreach (PhotonView view in views)
+            {
+                if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated &&
+                    view.isMine)
+                {
+                    PhotonNetwork.Spawn(view);
+                }
+            }
         }
     }
 

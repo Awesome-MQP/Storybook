@@ -553,7 +553,7 @@ namespace Photon
             int propCount = 0;
             foreach (PropertyInfo propertyInfo in properties)
             {
-                bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), true);
+                bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), false);
                 bool hasGetAndSet = propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null;
 
                 if (isSyncProperty && hasGetAndSet)

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof (Animator))]
+//[RequireComponent(typeof (Animator))]
 public class StorybookPlayerMover : BasePlayerMover,
     UIEventDispatcher.IPageForRoomEventListener,
     UIEventDispatcher.IDeckManagementEventListener,
@@ -22,6 +22,8 @@ public class StorybookPlayerMover : BasePlayerMover,
     private bool m_isMenuOpen = false;
 
     private GameObject m_canvas;
+
+    private Door.Direction m_lastMoveDirection = Door.Direction.Unknown;
 
     //Stores the animator for this player mover.
     private Animator m_animator;
@@ -43,10 +45,10 @@ public class StorybookPlayerMover : BasePlayerMover,
         set
         {
             Assert.IsTrue(ShouldBeChanging);
-            if (IsMine)
-                OwnerOnPlayerCountChanged(value);
-            else
-                PeerOnPlayerCountChanged(value);
+            //if (IsMine)
+            //    OwnerOnPlayerCountChanged(value);
+            //else
+            //    PeerOnPlayerCountChanged(value);
             PropertyChanged();
         }
     }
@@ -58,6 +60,11 @@ public class StorybookPlayerMover : BasePlayerMover,
         m_animator = GetComponent<Animator>();
 
         base.Awake();
+    }
+
+    void Start()
+    {
+        OpenDeckManagementMenu();
     }
 
     /// <summary>
@@ -174,12 +181,11 @@ public class StorybookPlayerMover : BasePlayerMover,
     public void SubmitPageForRoom(PageData pageToUseData)
     {
         m_isMenuOpen = false;
-        Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
+        Door selectedDoor = CurrentRoom.GetDoorByDirection(m_lastMoveDirection);
         CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
         selectedDoor.IsConnectedRoomMade = true;
         selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
-        TargetNode = selectedDoor;
-        StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
+        MoveInDirection(m_lastMoveDirection);
     }
 
     /// <summary>
@@ -190,19 +196,33 @@ public class StorybookPlayerMover : BasePlayerMover,
     {
         Debug.Log("MoveDirection = " + moveDirection);
         MoveInDirection(moveDirection);
+    }
 
-        // If the selected room has not been created yet, open the PageForRoom menu
-        if (!CurrentRoom.GetDoorByDirection(moveDirection).IsConnectedRoomMade)
-        {
-            OpenPageForRoomMenu();
-        }
+    protected override IEnumerable<StateDelegate> OnWaitingForInput()
+    {
+        _playIdleAnimations();
 
-        // If the selected room has already been created, move to the door
-        else
-        {
-            TargetNode = CurrentRoom.GetDoorByDirection(moveDirection);
-            StartCoroutine(MoveToDoor(CurrentRoom.GetDoorByDirection(moveDirection).NextRoomLocation));
-        }
+        return base.OnWaitingForInput();
+    }
+
+    protected override IEnumerable<StateDelegate> OnFailMoveInDirection()
+    {
+        m_lastMoveDirection = MoveDirection;
+        OpenPageForRoomMenu();
+
+        return base.OnFailMoveInDirection();
+    }
+
+    protected override IEnumerable<StateDelegate> OnLeavingRoom()
+    {
+        _playWalkAnimations();
+
+        return base.OnLeavingRoom();
+    }
+
+    protected override IEnumerable<StateDelegate> OnMoveBetweenRooms()
+    {
+        return base.OnMoveBetweenRooms();
     }
 
     private void _playWalkAnimations()

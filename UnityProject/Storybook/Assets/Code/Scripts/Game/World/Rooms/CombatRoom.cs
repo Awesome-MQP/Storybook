@@ -89,6 +89,7 @@ public class CombatRoom : RoomObject {
 
     protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+        //TODO: Integrate with new game manager code to start combat
         if (!(mover is BasePlayerMover))
             yield break;
 

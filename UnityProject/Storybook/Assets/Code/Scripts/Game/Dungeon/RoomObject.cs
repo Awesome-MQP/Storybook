@@ -200,7 +200,7 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException("direction", direction, null);
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
 
         return doorToReturn.IsDoorEnabled ? doorToReturn : null;

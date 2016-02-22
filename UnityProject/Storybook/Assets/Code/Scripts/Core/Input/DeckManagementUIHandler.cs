@@ -107,15 +107,16 @@ public class DeckManagementUIHandler : UIHandler
 
     public void PopulateMenu()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = null;//gameManager.GetLocalPlayerInventory();
+        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
+        PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
 
         ScrollRect[] allScrollRects = GetComponentsInChildren<ScrollRect>();
 
         RectTransform deckContent = m_deckScrollRect.content;
         RectTransform outOfDeckContent = m_inventoryScrollRect.content;
 
-        for (int i = 0; i < 0 /*gameManager.DeckSize*/; i++)
+        //TODO: Store the deck size in inventory
+        for (int i = 0; i < 20; i++)
         {
             Inventory.Slot currentSlot = pi[i];
             if (!currentSlot.IsEmpty)
@@ -129,7 +130,7 @@ public class DeckManagementUIHandler : UIHandler
             }
         }
 
-        for (int i = 0 /*gameManager.DeckSize*/; i < pi.DynamicSize; i++)
+        for (int i = 20; i < pi.DynamicSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
             if (!currentSlot.IsEmpty)

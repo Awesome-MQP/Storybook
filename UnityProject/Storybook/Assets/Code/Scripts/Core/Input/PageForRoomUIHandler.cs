@@ -48,8 +48,7 @@ public class PageForRoomUIHandler : UIHandler {
     /// </summary>
     public void PopulateMenu()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = null;//gameManager.GetLocalPlayerInventory();
+        PlayerInventory pi = GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;//gameManager.GetLocalPlayerInventory();
 
         ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollContent = scrollView.content;

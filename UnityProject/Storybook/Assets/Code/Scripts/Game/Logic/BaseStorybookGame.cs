@@ -50,8 +50,6 @@ public class BaseStorybookGame : GameManager
 
     public override void OnStartOwner(bool wasSpawn)
     {
-        base.OnStartOwner(wasSpawn);
-
         //Startup the map manager
         m_mapManager = GetComponent<MapManager>();
         m_mapManager.GenerateMap();
@@ -60,20 +58,14 @@ public class BaseStorybookGame : GameManager
         //Spawn the player mover on the map
         GameObject moverObject = PhotonNetwork.Instantiate(m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
         BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
+        m_mover = mover;
         PhotonNetwork.Spawn(mover.photonView);
-        mover.SpawnInRoom(startRoom);
-        StorybookPlayerMover playerMover = mover.GetComponent<StorybookPlayerMover>();
-
-        List<PlayerWorldPawn> players = new List<PlayerWorldPawn>(FindObjectsOfType<PlayerWorldPawn>());
-        int i = 0;
-        foreach (PlayerWorldPawn player in players)
-        {
-            player.transform.position = playerMover.PlayerPositions[i].transform.position;
-            playerMover.RegisterPlayerWorldPawn(player);
-            i++;
-        }
+        m_mover.Construct(startRoom);
+        
         Camera.main.transform.position = startRoom.CameraNode.position;
         Camera.main.transform.rotation = startRoom.CameraNode.rotation;
+
+        base.OnStartOwner(wasSpawn);
     }
 
     public void StartCombat(CombatInstance combatInstance)
@@ -101,7 +93,7 @@ public class BaseStorybookGame : GameManager
     public virtual ResourceAsset GetWorldPawnForGenre(Genre genre)
     {
         //Generate the world pawn string from the data as a default implementation.
-        const string resourcePathTemplate = "Resources/Player/WorldPawn/{0}WorldPawn";
+        const string resourcePathTemplate = "Player/WorldPawn/{0}WorldPawn";
         return new ResourceAsset(string.Format(resourcePathTemplate, genre), typeof(WorldPawn));
     }
 }

@@ -223,7 +223,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         while (m_currentState != null)
         {
             StateDelegate next = null;
-            IEnumerable<StateDelegate> enumerable = m_currentState();
 
             foreach (StateDelegate stateDelegate in m_currentState())
             {

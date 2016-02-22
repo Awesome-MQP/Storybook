@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class UIEventDispatcher : EventDispatcher {
-
+    
     public void OnShopClosed()
     {
         foreach (IShopEventListener listener in IterateListeners<IShopEventListener>())

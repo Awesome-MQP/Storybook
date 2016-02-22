@@ -78,6 +78,6 @@ public class CombatSummaryUIHandler : PageUIHandler {
             }
         }
         playerInv.Add(selectedPage, openSlot);
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().CombatSummarySubmitted();
+        EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().CombatSummarySubmitted();
     }
 }

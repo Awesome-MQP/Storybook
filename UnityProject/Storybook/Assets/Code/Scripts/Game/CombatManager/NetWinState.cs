@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetWinState : NetworkState, UIEventDispatcher.ICombatSummaryListener {
+public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSummaryListener {
 
     private bool m_exitCombat = false;
     private bool m_isClientReady = false;
     private int m_playersReady = 0;
     private GameObject m_combatSummaryUI;
 
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
 
     override protected void Awake()
     {
@@ -18,12 +18,12 @@ public class NetWinState : NetworkState, UIEventDispatcher.ICombatSummaryListene
     void Start()
     {
         _openCombatSummaryMenu();
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().RegisterEventListener(this);
     }
 
     void OnDestroy()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().RemoveListener(this);
     }
 
     void Update()

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
-public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
+public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
     [SerializeField]
     private AudioClip m_roomMusic;
 
@@ -25,7 +25,7 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
 
     private List<PageData> m_shopPages = new List<PageData>();
 
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<ShopEventDispatcher>(); } }
 
     private bool m_isCurrentRoom;
 
@@ -38,7 +38,7 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
 
     void Start()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<ShopEventDispatcher>().RegisterEventListener(this);
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
@@ -72,7 +72,7 @@ public class ShopRoom : RoomObject, UIEventDispatcher.IShopEventListener {
         }
         else
         {
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+            EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         }
     }
 

@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetWinState : NetworkState {
+public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSummaryListener {
 
     private bool m_exitCombat = false;
     private bool m_isClientReady = false;
     private int m_playersReady = 0;
     private int m_trigger = 0;
+
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
 
     override protected void Awake()
     {
@@ -77,5 +79,11 @@ public class NetWinState : NetworkState {
         {
             Debug.Log("No page was dropped");
         }
+    }
+
+    public void CombatSummarySubmitted()
+    {
+        //Destroy(m_combatSummaryUI);
+        GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
     }
 }

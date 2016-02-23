@@ -103,7 +103,7 @@ public class CombatRoom : RoomObject {
         {
             //TODO: We should just halt with yield return null
             StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+            EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         }
     }
 

@@ -151,7 +151,7 @@ public class DeckManagementUIHandler : UIHandler
     /// </summary>
     public void FinishedClicked()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnDeckManagementClosed();
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().OnDeckManagementClosed();
         Debug.Log("Destroying deck management menu");
         Destroy(gameObject);
     }

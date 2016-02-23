@@ -113,7 +113,7 @@ public class PageForRoomUIHandler : UIHandler {
     {
         //_dropAndReplaceSelectedPage();
         Destroy(gameObject);
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
     /// <summary>

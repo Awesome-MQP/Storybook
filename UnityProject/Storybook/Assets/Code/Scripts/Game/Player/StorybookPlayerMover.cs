@@ -5,10 +5,10 @@ using UnityEngine.Assertions;
 
 //[RequireComponent(typeof (Animator))]
 public class StorybookPlayerMover : BasePlayerMover,
-    UIEventDispatcher.IPageForRoomEventListener,
-    UIEventDispatcher.IDeckManagementEventListener,
-    UIEventDispatcher.IOverworldEventListener, 
-    UIEventDispatcher.IRoomEventListener
+    PageForRoomEventDispatcher.IPageForRoomEventListener,
+    DeckManagementEventDispatcher.IDeckManagementEventListener,
+    OverworldEventDispatcher.IOverworldEventListener, 
+    RoomEventEventDispatcher.IRoomEventListener
 {
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
 
@@ -33,10 +33,10 @@ public class StorybookPlayerMover : BasePlayerMover,
         get { return m_playerPositions.ToArray(); }
     }
 
-    public EventDispatcher Dispatcher
-    {
-        get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); }
-    }
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>(); } }
+    public EventDispatcher DeckMgmtDispatcher { get { return EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>(); } }
+    public EventDispatcher OverworldEventDispatcher { get { return EventDispatcher.GetDispatcher<OverworldEventDispatcher>(); } }
+    public EventDispatcher RoomEventEventDispatcher { get { return EventDispatcher.GetDispatcher<RoomEventEventDispatcher>(); } }
 
     [SyncProperty]
     private int NetPlayerCountEvent
@@ -55,7 +55,10 @@ public class StorybookPlayerMover : BasePlayerMover,
 
     protected override void Awake()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RegisterEventListener(this);
 
         m_animator = GetComponent<Animator>();
 
@@ -65,6 +68,17 @@ public class StorybookPlayerMover : BasePlayerMover,
     void Start()
     {
         OpenDeckManagementMenu();
+    }
+
+    // I copied this in from Dev, don't know how recent it is, but I couldn't find another place to have the listeners be destroyed.
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
+
+        Debug.Log("Mover destroyed");
     }
 
     /// <summary>

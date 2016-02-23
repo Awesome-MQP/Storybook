@@ -137,7 +137,7 @@ public class ShopUIHandler : UIHandler {
                 button.GetComponent<PageButton>().MenuId = m_shopInventoryMenuId;
                 m_shopPages.Add(shopPageData);
             }
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
+            EventDispatcher.GetDispatcher<ShopEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
         }
 
         // If the pages have already been generated for the shop, use the list passed in
@@ -168,7 +168,7 @@ public class ShopUIHandler : UIHandler {
 
     public void ExitMenu()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         Destroy(gameObject);
     }
 
@@ -201,7 +201,7 @@ public class ShopUIHandler : UIHandler {
             m_shopPages.Remove(m_selectedShopPageButton.PageData);
 
             // Send out a page traded event
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
+            EventDispatcher.GetDispatcher<ShopEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
             _clearSelected();
 
             // Exit the menu if all the pages have been traded for

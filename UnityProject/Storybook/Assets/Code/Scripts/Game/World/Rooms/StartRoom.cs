@@ -39,7 +39,7 @@ public class StartRoom : RoomObject
             yield break;
 
         //TODO: If this is called for every room then it should be done in the base class. It also should be done by something that is not the UIEventDispatcher as there is no reason this is UI only code.
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
     }
 
     protected override void OnRoomExit(RoomMover mover)

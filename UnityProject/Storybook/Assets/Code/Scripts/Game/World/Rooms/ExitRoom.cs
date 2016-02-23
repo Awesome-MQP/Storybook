@@ -42,7 +42,7 @@ public class ExitRoom : RoomObject
         if (!(mover is BasePlayerMover))
             yield break;
 
-        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+        ClearRoom();
     }
 
     // What happens when the players leave this room?

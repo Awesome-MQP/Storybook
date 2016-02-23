@@ -237,4 +237,9 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     protected abstract IEnumerable OnRoomEvent(RoomMover mover);
 
     protected abstract void OnRoomExit(RoomMover mover);
+
+    protected void ClearRoom()
+    {
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+    }
 }

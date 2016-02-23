@@ -72,7 +72,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
         }
         else
         {
-            EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+            ClearRoom();
         }
     }
 

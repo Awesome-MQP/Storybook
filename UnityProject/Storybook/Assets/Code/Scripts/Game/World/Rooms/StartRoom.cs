@@ -38,8 +38,7 @@ public class StartRoom : RoomObject
         if (!(mover is BasePlayerMover))
             yield break;
 
-        //TODO: If this is called for every room then it should be done in the base class. It also should be done by something that is not the UIEventDispatcher as there is no reason this is UI only code.
-        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+        ClearRoom();
     }
 
     protected override void OnRoomExit(RoomMover mover)

@@ -13,7 +13,7 @@ using UnityEngine.Assertions;
 // X 4 X
 
 // Construct the PlayerWorldPawn using a Transform - this transform is the node that the pawn will adhere to!
-public class PlayerWorldPawn : WorldPawn
+public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
 {
     private int m_playerNum = 0;
     private float m_playerSpeed = 1.0f;
@@ -45,20 +45,9 @@ public class PlayerWorldPawn : WorldPawn
         }
     }
 
-    // Use this for initialization
-    void Start ()
+    public void Construct(PlayerEntity playerEntity)
     {
-        m_playerNum = PhotonNetwork.player.ID;
-        m_animator = GetComponent<Animator>();
-    }
 
-    private void GetIntoPosition(int id)
-    {
-        Vector3 newTargetPosition = Vector3.zero;
-
-        Assert.IsTrue(IsMine);
-
-        TargetPosition = newTargetPosition;
     }
 
     //Set the node that we want to go towards.
@@ -68,6 +57,7 @@ public class PlayerWorldPawn : WorldPawn
     }
 
     // Animation transitions
+
     public void SwitchCharacterToWalking()
     {
         IsWalking = true;

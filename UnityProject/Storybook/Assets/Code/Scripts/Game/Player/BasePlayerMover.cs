@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
+/// <summary>
+/// Base class for player movers.
+/// </summary>
 public abstract class BasePlayerMover : RoomMover
 {
     private HashSet<PlayerObject> m_registeredPlayers = new HashSet<PlayerObject>();

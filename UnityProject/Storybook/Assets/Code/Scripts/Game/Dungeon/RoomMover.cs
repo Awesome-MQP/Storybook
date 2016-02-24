@@ -143,6 +143,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         m_atNode = false;
     }
 
+    /// <summary>
+    /// State when the room mover is waiting for input on which direction to move in.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnWaitingForInput()
     {
         m_nextMoveDirection = Door.Direction.Unknown;
@@ -155,6 +159,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         yield return OnMoveInDirection;
     }
 
+    /// <summary>
+    /// State when the mover try to move in a direction.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnMoveInDirection()
     {
         Door nextDoor = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
@@ -169,11 +177,19 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
+    /// <summary>
+    /// State when the mover fail to move in a direction.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnFailMoveInDirection()
     {
         yield return OnWaitingForInput;
     }
 
+    /// <summary>
+    /// State when the mover starts to leave through a door.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnLeavingRoom()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
@@ -188,6 +204,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         yield return OnMoveBetweenRooms;
     }
 
+    /// <summary>
+    /// State when the mover is moving between rooms.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnMoveBetweenRooms()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection).LinkedDoor;
@@ -200,6 +220,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         yield return OnEnterRoom;
     }
 
+    /// <summary>
+    /// State when the mover enters a room and should move into position. This state will also by default wait for the room event to end.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnEnterRoom()
     {
         CurrentRoom.RoomEntered(this);

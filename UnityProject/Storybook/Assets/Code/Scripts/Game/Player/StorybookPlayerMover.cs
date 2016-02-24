@@ -283,7 +283,8 @@ public class StorybookPlayerMover : BasePlayerMover,
             return false;
 
         ResourceAsset asset = GameManager.GetInstance<BaseStorybookGame>().GetWorldPawnForGenre(playerEntity.Genre);
-        WorldPawn pawn = PhotonNetwork.Instantiate<WorldPawn>(asset, Vector3.zero, Quaternion.identity, 0);
+        PlayerWorldPawn pawn = PhotonNetwork.Instantiate<PlayerWorldPawn>(asset, Vector3.zero, Quaternion.identity, 0);
+        pawn.Construct(playerEntity);
 
         PhotonNetwork.Spawn(pawn.photonView);
 

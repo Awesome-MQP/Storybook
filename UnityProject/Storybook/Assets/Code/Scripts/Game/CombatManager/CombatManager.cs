@@ -17,6 +17,9 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
+    private AudioClip m_previousMusic;
+    private AudioClip m_combatMusic;
+
     override protected void Awake()
     {
         DontDestroyOnLoad(this);

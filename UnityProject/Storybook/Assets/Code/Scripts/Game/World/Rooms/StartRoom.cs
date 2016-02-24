@@ -5,15 +5,7 @@ public class StartRoom : RoomObject
 {
     [SerializeField]
     private AudioClip m_roomMusic;
-
-    [SerializeField]
-    private AudioClip[] m_musicTracks; // This array holds all music tracks for a room, in an effort to make it more general. 
-                                       // To make accessing tracks from this more easy to follow, use this standard for putting tracks into the array
-                                       // INDEX | TRACK
-                                       // 0.......RoomMusic
-                                       // 1.......FightMusic
-                                       // 2+......Miscellaneous
-
+    
     private MusicManager m_musicManager;
 
     protected override void Awake()

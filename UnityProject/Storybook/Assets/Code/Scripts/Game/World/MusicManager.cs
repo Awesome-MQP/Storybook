@@ -15,6 +15,11 @@ public class MusicManager : MonoBehaviour {
 
     private AudioSource m_musicSource;
 
+    public AudioSource Music
+    {
+        get { return m_musicSource; }
+    }
+
     [SerializeField]
     private float m_musicVolume = 5.0f;
 

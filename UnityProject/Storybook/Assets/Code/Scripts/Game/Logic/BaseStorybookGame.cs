@@ -81,6 +81,9 @@ public class BaseStorybookGame : GameManager
     {
         Assert.IsTrue(IsMine);
 
+        AudioClip prevMusic = FindObjectOfType<GameManager>().GetComponent<MusicManager>().Music.clip;
+       // AudioClip fightMusic = m_mover.CurrentRoom.RoomMusic[1];
+
         combatManager.Construct(combatInstance);
         PhotonNetwork.Spawn(combatManager.photonView);
     }

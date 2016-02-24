@@ -183,6 +183,8 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
             yield return null;
         }
 
+        CurrentRoom.RoomExit(this);
+
         yield return OnMoveBetweenRooms;
     }
 
@@ -200,9 +202,15 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     protected virtual IEnumerable<StateDelegate> OnEnterRoom()
     {
+        CurrentRoom.RoomEntered(this);
         TargetNode = CurrentRoom.CenterNode;
 
         while (!m_atNode)
+        {
+            yield return null;
+        }
+
+        foreach (var v in CurrentRoom.RoomEvent(this))
         {
             yield return null;
         }

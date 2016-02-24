@@ -28,6 +28,11 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
         CombatTeam[] teams = combatInfo.CreateTeams();
         m_teamList = new List<CombatTeam>(teams);
+
+        foreach (CombatTeam team in teams)
+        {
+            PhotonNetwork.Spawn(team.photonView);
+        }
     }
 
     // Use this for initialization

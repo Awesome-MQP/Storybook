@@ -79,10 +79,10 @@ public class CombatRoom : RoomObject {
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
+            m_musicManager.Fade(m_musicTracks[1], 5, true);
             return;
         }
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.Fade(m_musicTracks[0], 5, true);
 
         return;
     }
@@ -96,13 +96,13 @@ public class CombatRoom : RoomObject {
         //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
+            m_musicManager.Fade(m_musicTracks[1], 5, true);
             //TODO: m_gameManager.TransitionToCombat();
         }
         else
         {
             //TODO: We should just halt with yield return null
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+            m_musicManager.Fade(m_musicTracks[0], 5, true);
             ClearRoom();
         }
     }

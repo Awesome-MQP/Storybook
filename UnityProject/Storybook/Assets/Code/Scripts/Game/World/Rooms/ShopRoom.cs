@@ -35,7 +35,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     void OnDestroy()
     {
-        EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<ShopEventDispatcher>().RemoveListener(this);
     }
 
     // On entering the room, do nothing since there is nothing special in this room.

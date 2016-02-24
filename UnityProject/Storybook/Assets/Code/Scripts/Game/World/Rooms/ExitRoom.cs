@@ -37,7 +37,6 @@ public class ExitRoom : RoomObject
         //EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
         SceneFading fader = SceneFading.Instance();
         fader.LoadScene("DemoCompleteScene");
-        return;
     }
 
     // What happens when the players leave this room?

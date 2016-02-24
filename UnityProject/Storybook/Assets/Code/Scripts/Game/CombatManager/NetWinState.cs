@@ -10,8 +10,6 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
 
     public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
 
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
-
     override protected void Awake()
     {
         SetCombatManager(FindObjectOfType<CombatManager>());

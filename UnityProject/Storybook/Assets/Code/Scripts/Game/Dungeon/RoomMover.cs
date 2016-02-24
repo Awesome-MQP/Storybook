@@ -117,6 +117,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// Moves all the players to the next room
     /// </summary>
     /// <param name="newRoomLoc">The location of the room to move to</param>
+    [Obsolete]
     public void MoveToNextRoom(Location newRoomLoc)
     {
         MapManager mapManager = FindObjectOfType<MapManager>();
@@ -126,8 +127,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         Camera.main.GetComponent<GameCamera>().trackObject(Camera.main, newRoom.CameraNode);
         Camera.main.transform.rotation = newRoom.CameraNode.rotation;
 
-        m_currentRoom = newRoom;
-        m_currentRoom.OnRoomEnter();
         SpawnInRoom(newRoom);
     }
 

@@ -167,7 +167,7 @@ public class ShopUIHandler : PageUIHandler {
     }
 
     public void ExitMenu()
-    
+    { 
         PlayClickSound();
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         Destroy(gameObject);
@@ -187,7 +187,7 @@ public class ShopUIHandler : PageUIHandler {
 			PlayClickSound();
             GameManager gameManager = GameManager.GetInstance<GameManager>();
             DungeonMaster dm = DungeonMaster.Instance;
-            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory
+            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
 
             /*
             foreach (PageButton pageButton in m_selectedPages)

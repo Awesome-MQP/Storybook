@@ -12,7 +12,7 @@ public class StartRoom : RoomObject
     {
         m_musicManager = FindObjectOfType<MusicManager>();
         m_musicManager.MusicTracks = m_musicTracks;
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.Fade(m_musicTracks[0], 5, true);
         base.Awake();
     }
 
@@ -22,7 +22,7 @@ public class StartRoom : RoomObject
             return;
 
         m_musicManager.MusicTracks = m_musicTracks;
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.Fade(m_musicTracks[0], 5, true);
     }
 
     protected override IEnumerable OnRoomEvent(RoomMover mover)

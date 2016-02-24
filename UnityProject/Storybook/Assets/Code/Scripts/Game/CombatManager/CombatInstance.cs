@@ -6,4 +6,5 @@ public abstract class CombatInstance
 {
     public abstract CombatTeam[] CreateTeams();
     public abstract AudioClip GetCombatMusic();
+    public abstract AudioClip GetPreviousMusic();
 }

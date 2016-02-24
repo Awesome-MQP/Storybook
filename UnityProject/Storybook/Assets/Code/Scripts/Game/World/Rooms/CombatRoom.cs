@@ -71,7 +71,7 @@ public class CombatRoom : RoomObject {
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-            m_musicManager.Fade(m_musicTracks[1], 5, true);
+            //m_musicManager.Fade(m_musicTracks[1], 5, true);
             return;
         }
         m_musicManager.Fade(m_musicTracks[0], 5, true);

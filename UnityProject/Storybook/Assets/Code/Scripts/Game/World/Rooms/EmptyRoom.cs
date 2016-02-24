@@ -23,7 +23,7 @@ public class EmptyRoom : RoomObject {
             return;
 
         m_musicManager.MusicTracks = m_musicTracks;
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.Fade(m_musicTracks[0], 5, true);
         Debug.Log("Room entered");
         return;
     }

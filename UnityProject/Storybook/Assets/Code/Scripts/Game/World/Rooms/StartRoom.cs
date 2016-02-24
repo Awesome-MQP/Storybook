@@ -30,7 +30,7 @@ public class StartRoom : RoomObject
         if (!(mover is BasePlayerMover))
             yield break;
 
-        ClearRoom();
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
     }
 
     protected override void OnRoomExit(RoomMover mover)

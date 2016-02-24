@@ -17,11 +17,6 @@ public class OverworldUIHandler : UIHandler {
     [SerializeField]
     Button m_westButton;
 
-    public override void PageButtonPressed(PageButton pageButton)
-    {
-        
-    }
-
     /// <summary>
     /// Called by direction buttons in the overworld menu
     /// Submits the direction to the player mover
@@ -29,6 +24,7 @@ public class OverworldUIHandler : UIHandler {
     /// <param name="selectedDirection">The direction that was pressed</param>
     public void DirectionButtonPressed(Door.Direction selectedDirection)
     {
+        PlayClickSound();
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().SubmitDirection(selectedDirection);
         Destroy(gameObject);
     }

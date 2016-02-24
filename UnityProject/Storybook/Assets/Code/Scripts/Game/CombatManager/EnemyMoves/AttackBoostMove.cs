@@ -15,8 +15,25 @@ public class AttackBoostMove : AIMove
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.IncreasePawnAttack(m_attackIncreaseValue);
+            int boostAmt = _calcBoostPotency();
+            combatPawn.IncreasePawnAttack(boostAmt);
         }
+    }
+
+    /// <summary>
+    /// Calculate the power of a boost.
+    /// Adds the Ceil(level/2) to the inital value,
+    /// then adds a small bonus if the move owner's type and the move type match up
+    /// </summary>
+    private int _calcBoostPotency()
+    {
+        int totalBoost = m_attackIncreaseValue;
+        totalBoost += (int)Math.Ceiling((double)MoveLevel / 2);
+        if (MoveGenre == MoveOwner.PawnGenre)
+        {
+            totalBoost += 2;
+        }
+        return totalBoost;
     }
 
     /// <summary>

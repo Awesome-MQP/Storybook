@@ -20,10 +20,15 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
     private AudioClip m_previousMusic;
     private AudioClip m_combatMusic;
 
+    private int m_combatLevel;
+    private Genre m_combatGenre;
+
     override protected void Awake()
     {
         DontDestroyOnLoad(this);
     }
+
+    
 
     public void Construct(CombatInstance combatInfo)
     {
@@ -58,6 +63,7 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
             foreach (CombatTeam team in m_teamList)
             {
                 team.RegisterCombatManager(this);
+                team.TeamLevel = m_combatLevel;
             }
             _spawnTeams();
 
@@ -237,5 +243,17 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
             }
         }
         return null;
+    }
+
+    public int CombatLevel
+    {
+        get { return m_combatLevel; }
+        set { m_combatLevel = value; }
+    }
+
+    public Genre CombatGenre
+    {
+        get { return m_combatGenre; }
+        set { m_combatGenre = value; }
     }
 }

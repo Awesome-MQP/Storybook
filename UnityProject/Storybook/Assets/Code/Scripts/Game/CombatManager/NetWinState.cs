@@ -6,7 +6,9 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
     private bool m_exitCombat = false;
     private bool m_isClientReady = false;
     private int m_playersReady = 0;
-    private int m_trigger = 0;
+    private GameObject m_combatSummaryUI;
+
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
 
     public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>(); } }
 
@@ -15,18 +17,19 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
         SetCombatManager(FindObjectOfType<CombatManager>());
     }
 
+    void Start()
+    {
+        _openCombatSummaryMenu();
+        EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().RegisterEventListener(this);
+    }
+
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().RemoveListener(this);
+    }
+
     void Update()
     {
-        if (!m_isClientReady)
-        {
-            m_trigger += 1;
-            if (m_trigger > 20)
-            {
-                m_isClientReady = true;
-                _getPageDrop();
-                GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
-            }
-        }
         if (m_playersReady >= PhotonNetwork.playerList.Length)
         {
             m_exitCombat = true;
@@ -57,7 +60,7 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
     private void _getPageDrop()
     {
         DungeonMaster dm = GameManager.GetInstance<BaseStorybookGame>().DM;
-        Page pageDrop = dm.GetPageDropFromCombat(Genre.GraphicNovel, 1);
+        Page pageDrop = dm.GetPageDropFromCombat(CManager.CombatGenre, CManager.CombatLevel);
 
         GameManager gm = FindObjectOfType<GameManager>();
         PlayerInventory localPlayerInventory = null;//gm.GetLocalPlayerInventory();
@@ -65,6 +68,7 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
         // TODO: Use the number of items in the inventory to figure out the position to add to
         if (!localPlayerInventory.IsInventoryFull()) {
             localPlayerInventory.Add(pageDrop, localPlayerInventory.FirstOpenSlot());
+            localPlayerInventory.SortInventory(20, localPlayerInventory.DynamicSize);
         }
 
         if (pageDrop != null)
@@ -81,9 +85,19 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
         }
     }
 
+    private void _openCombatSummaryMenu()
+    {
+        CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
+        Destroy(combatMenu.gameObject);
+        GameObject uiGameObject = Resources.Load("UIPrefabs/CombatSummaryUI") as GameObject;
+        m_combatSummaryUI = Instantiate(uiGameObject);
+        CombatSummaryUIHandler uiHandler = m_combatSummaryUI.GetComponent<CombatSummaryUIHandler>();
+        uiHandler.PopulateMenu(CManager.CombatLevel, CManager.CombatGenre);
+    }
+
     public void CombatSummarySubmitted()
     {
-        //Destroy(m_combatSummaryUI);
+        Destroy(m_combatSummaryUI);
         GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);
     }
 }

@@ -42,6 +42,7 @@ public class CombatRoom : RoomObject {
     {
         Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
         floorRenderer.material = _getFloorMaterial();
+        _setRoomMusic();
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
@@ -65,7 +66,7 @@ public class CombatRoom : RoomObject {
             {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 Quaternion currentEnemyRot = m_enemyPosList[i].rotation;
-                GameObject pawnGameObject = PhotonNetwork.Instantiate(pawn.name, currentEnemyPos, currentEnemyRot, 0);
+                GameObject pawnGameObject = PhotonNetwork.Instantiate("Enemies/" + pawn.PawnGenre + "/" + pawn.name, currentEnemyPos, currentEnemyRot, 0);
                 pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
                 m_enemyWorldPawns.Add(pawnGameObject);
@@ -171,5 +172,28 @@ public class CombatRoom : RoomObject {
                 break;
         }
         return floorMaterial;
+    }
+
+    // Similar to get floor material, set the room's music based on the genre
+    private void _setRoomMusic()
+    {
+        switch(RoomPageData.PageGenre)
+        {
+            case Genre.GraphicNovel:
+                m_musicTracks[0] = m_musicTracks[2];
+                break;
+            case Genre.Fantasy:
+                m_musicTracks[0] = m_musicTracks[3];
+                break;
+            case Genre.Horror:
+                m_musicTracks[0] = m_musicTracks[4];
+                break;
+            case Genre.SciFi:
+                m_musicTracks[0] = m_musicTracks[5];
+                break;
+            default:
+                m_musicTracks[0] = m_musicTracks[0];
+                break;
+        }
     }
 }

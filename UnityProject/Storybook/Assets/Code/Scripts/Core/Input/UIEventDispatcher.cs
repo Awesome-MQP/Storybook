@@ -10,7 +10,7 @@ For example rather than having OnShopClose have a generic event OnPlayerReady an
 We can have rooms that wait on players listen for these events from all players and this is useful because it's generic and reusable.
 */
 public class UIEventDispatcher : EventDispatcher {
-
+    
     public void OnShopClosed()
     {
         foreach (IShopEventListener listener in IterateListeners<IShopEventListener>())
@@ -67,6 +67,14 @@ public class UIEventDispatcher : EventDispatcher {
         }
     }
 
+    public void CombatSummarySubmitted()
+    {
+        foreach(ICombatSummaryListener listener in IterateListeners<ICombatSummaryListener>())
+        {
+            listener.CombatSummarySubmitted();
+        }
+    }
+
     public interface IShopEventListener : IEventListener
     {
         void OnShopClosed();
@@ -94,6 +102,11 @@ public class UIEventDispatcher : EventDispatcher {
     public interface IRoomEventListener : IEventListener
     {
         void OnRoomCleared();
+    }
+
+    public interface ICombatSummaryListener : IEventListener
+    {
+        void CombatSummarySubmitted();
     }
 
     public abstract class UIEventListener : IEventListener

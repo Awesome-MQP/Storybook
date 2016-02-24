@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class PlayerInventory : Inventory {
 
-    [SerializeField]
-    private Page m_testPage;
-
     private int m_playerId;
 
     void OnStartOwner()
@@ -51,6 +48,52 @@ public class PlayerInventory : Inventory {
     protected override bool CanMoveItem(int fromIndex, int toIndex)
     {
         return true;
+    }
+
+    public void SortInventory(int startingIndex, int endIndex)
+    {
+        List<int> horrorPageIndices = new List<int>();
+        List<int> fantasyPageIndices = new List<int>();
+        List<int> comicBookPageIndices = new List<int>();
+        List<int> scifiPageIndices = new List<int>();
+        int currentIndex = startingIndex;
+
+        currentIndex = _SortByGenre(Genre.Horror, currentIndex, startingIndex, endIndex);
+        currentIndex = _SortByGenre(Genre.Fantasy, currentIndex, startingIndex, endIndex);
+        currentIndex = _SortByGenre(Genre.SciFi, currentIndex, startingIndex, endIndex);
+        currentIndex = _SortByGenre(Genre.GraphicNovel, currentIndex, startingIndex, endIndex);
+    }
+
+    private int _SortByGenre(Genre genre, int currentIndex, int startingIndex, int endIndex)
+    {
+        List<int> genreIndices = _GetIndicesByGenre(genre, startingIndex, endIndex);
+        for (int i = 0; i < genreIndices.Count; i++)
+        {
+            int pageIndex = genreIndices[i];
+            if (pageIndex != currentIndex)
+            {
+                Move(pageIndex, currentIndex);
+            }
+            currentIndex++;
+        }
+        return currentIndex;
+    }
+
+    private List<int> _GetIndicesByGenre(Genre genre, int startingIndex, int endIndex)
+    {
+        List<int> indexList = new List<int>();
+        for (int i = startingIndex; i < endIndex; i++)
+        {
+            Page currentPage = (Page)this[i].SlotItem;
+            if (currentPage != null)
+            {
+                if (currentPage.PageGenre == genre)
+                {
+                    indexList.Add(i);
+                }
+            }
+        }
+        return indexList;
     }
 
     public int PlayerId

@@ -49,6 +49,18 @@ public class DungeonMaster : MonoBehaviour
     private float m_isPageStatusProbability = 0.3f;
 
     [SerializeField]
+    private int m_hpIncreasePerLevel = 3;
+
+    [SerializeField]
+    private int m_attackIncreasePerLevel = 1;
+
+    [SerializeField]
+    private int m_defenseIncreasePerLevel = 1;
+
+    [SerializeField]
+    private int m_speedIncreasePerLevel = 1;
+
+    [SerializeField]
     private PageMove m_pageAttack;
 
     [SerializeField]
@@ -62,6 +74,9 @@ public class DungeonMaster : MonoBehaviour
 
     [SerializeField]
     private PageMove m_pageSpeedBoost;
+
+    [SerializeField]
+    private int m_startingPageCount = 21;
 
     private static DungeonMaster s_instance;
 
@@ -140,6 +155,38 @@ public class DungeonMaster : MonoBehaviour
         move.MoveRarity = page.Rarity;
         move.MoveGenre = data.PageGenre;
         move.PageGenre = data.PageGenre;
+        if (page.Rarity)
+        {
+            move.SetNumberOfTargets(4);
+        }
+        else
+        {
+            move.SetNumberOfTargets(1);
+        }
+        return page;
+    }
+
+    public Page ConstructBoostPage(int pageLevel, Genre pageGenre, bool isBasicPage)
+    {
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+
+        if (!isBasicPage)
+        {
+            page.Rarity = _getIsPageRare(pageLevel);
+        }
+        else
+        {
+            page.Rarity = false;
+        }
+
+        page.PageType = MoveType.Boost;
+        PageMove move = _getMovePrefab(page.PageType, pageGenre);
+        page.PlayerCombatMove = move;
+        move.transform.SetParent(page.transform, false);
+        move.MoveLevel = pageLevel;
+        move.MoveRarity = page.Rarity;
+        move.MoveGenre = pageGenre;
+        move.PageGenre = pageGenre;
         if (page.Rarity)
         {
             move.SetNumberOfTargets(4);
@@ -336,10 +383,24 @@ public class DungeonMaster : MonoBehaviour
 
     public void InitializeInventory(Inventory inventoryToInitialize)
     {
-        for (int i = 0; i < 21; i++)
+        for (int i = 0; i < m_startingPageCount; i++)
         {
-            Page basicPage = GetBasicPage();
+            Page basicPage;
+            if (m_startingPageCount - i > 3)
+            {
+                basicPage = GetBasicPage();
+            }
+            else
+            {
+                basicPage = ConstructBoostPage(1, Genre.Horror, true);
+            }
             inventoryToInitialize.Add(basicPage, i);
+        }
+        if (inventoryToInitialize is PlayerInventory)
+        {
+            PlayerInventory playerInv = (PlayerInventory)inventoryToInitialize;
+            playerInv.SortInventory(0, 20);
+            playerInv.SortInventory(20, playerInv.DynamicSize);
         }
     }
 
@@ -359,5 +420,29 @@ public class DungeonMaster : MonoBehaviour
         bool isRare = _getIsPageRare(shopRoomPageData.PageLevel);
         MoveType pageType = _getPageMoveType();
         return new PageData(pageLevel, pageGenre, pageType, isRare);
+    }
+
+    public void ScalePawnByLevel(CombatPawn pawnToScale, int roomLevel)
+    {
+        // Increase HP based on level
+        int hpIncrease = m_hpIncreasePerLevel * roomLevel;
+        int newMax = hpIncrease + (int)pawnToScale.MaxHealth;
+        pawnToScale.SetMaxHealth(newMax);
+        pawnToScale.Health = newMax;
+
+        // Increase attack based on level
+        int attackIncrease = m_attackIncreasePerLevel * roomLevel;
+        int newAttack = attackIncrease + (int)pawnToScale.Attack;
+        pawnToScale.Attack = newAttack;
+
+        // Increase defense based on level
+        int defenseIncrease = m_defenseIncreasePerLevel * roomLevel;
+        int newDefense = defenseIncrease + (int)pawnToScale.Defense;
+        pawnToScale.Defense = newDefense;
+
+        // Increase speed based on level
+        int speedIncrease = m_speedIncreasePerLevel * roomLevel;
+        int newSpeed = speedIncrease + (int)pawnToScale.Speed;
+        pawnToScale.Speed = newSpeed;
     }
 }

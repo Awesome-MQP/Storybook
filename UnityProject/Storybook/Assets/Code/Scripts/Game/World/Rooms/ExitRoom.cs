@@ -34,7 +34,10 @@ public class ExitRoom : RoomObject
         if (!(mover is BasePlayerMover))
             yield break;
 
-        ClearRoom();
+        //EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        SceneFading fader = SceneFading.Instance();
+        fader.LoadScene("DemoCompleteScene");
+        return;
     }
 
     // What happens when the players leave this room?

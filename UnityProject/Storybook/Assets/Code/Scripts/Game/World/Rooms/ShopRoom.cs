@@ -33,6 +33,11 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
         EventDispatcher.GetDispatcher<ShopEventDispatcher>().RegisterEventListener(this);
     }
 
+    void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().RemoveListener(this);
+    }
+
     // On entering the room, do nothing since there is nothing special in this room.
     protected override void OnRoomEnter(RoomMover mover)
     {
@@ -64,7 +69,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
         }
         else
         {
-            ClearRoom();
+            EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         }
     }
 

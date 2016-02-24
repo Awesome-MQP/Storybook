@@ -875,7 +875,7 @@ MonoBehaviour:
   m_maxHealth: 20
   m_health: 20
   m_speed: 7
-  m_defense: 2
+  m_defense: 1
   m_attack: 5
   m_genre: 4
   m_pageToUse: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
@@ -982,7 +982,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_defense
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_maxHealth
@@ -990,7 +990,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_health

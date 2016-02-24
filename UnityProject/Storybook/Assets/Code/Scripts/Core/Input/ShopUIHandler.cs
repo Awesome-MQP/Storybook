@@ -4,7 +4,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class ShopUIHandler : UIHandler {
+public class ShopUIHandler : PageUIHandler {
 
     [SerializeField]
     private ScrollRect m_playerInventoryPagesRect;
@@ -167,7 +167,8 @@ public class ShopUIHandler : UIHandler {
     }
 
     public void ExitMenu()
-    {
+    
+        PlayClickSound();
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         Destroy(gameObject);
     }
@@ -183,9 +184,10 @@ public class ShopUIHandler : UIHandler {
         // Only allow the trade if the total level of all the player pages is equal to or greater than the selected shop page
         if (_getTotalSelectedLevel() >= m_selectedShopPageButton.PageLevel)
         {
+			PlayClickSound();
             GameManager gameManager = GameManager.GetInstance<GameManager>();
             DungeonMaster dm = DungeonMaster.Instance;
-            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
+            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory
 
             /*
             foreach (PageButton pageButton in m_selectedPages)

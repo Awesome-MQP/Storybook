@@ -21,7 +21,7 @@ public class MusicManager : MonoBehaviour {
     }
 
     [SerializeField]
-    private float m_musicVolume = 5.0f;
+    private float m_musicVolume = 0.5f;
 
     private AudioClip m_nextMusicToPlay = null; 
     private float m_nextMusicVolume;

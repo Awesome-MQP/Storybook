@@ -80,7 +80,6 @@ public class MapManager : Photon.PunBehaviour {
     {
         base.Awake();
 
-        DontDestroyOnLoad(this);
         s_instance = this;
     }
 
@@ -122,6 +121,7 @@ public class MapManager : Photon.PunBehaviour {
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
         room.RoomPageData = pageToUseData;
         room.Construct(currentRoomData);
+        room.PlaceScenery();
         PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
     }

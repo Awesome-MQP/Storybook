@@ -170,7 +170,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// </summary>
     public void OpenDeckManagementMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
+        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
         uiHandler.PopulateMenu();

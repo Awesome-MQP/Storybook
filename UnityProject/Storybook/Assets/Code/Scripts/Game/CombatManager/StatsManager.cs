@@ -3,10 +3,10 @@ using System.Collections;
 
 public static class StatsManager {
 
-    private static float m_positiveSTABBonus = 1.5f;
+    private static float m_positiveSTABBonus = 1.25f;
     private static float m_neutralSTABBonus = 1f;
     private static float m_negativeSTABBonus = 0.75f;
-    private static float m_positiveTypeMatchBonus = 1.5f;
+    private static float m_positiveTypeMatchBonus = 1.25f;
     private static float m_neutralTypeMatchBonus = 1.0f;
     private static float m_negativeTypeMatchBonus = 0.75f;
 
@@ -24,9 +24,9 @@ public static class StatsManager {
         float sameTypeMoveBonus = GetSameTypeBonus(attackerGenre, attackerMoveGenre);
         float typeAdvantageBonus = GetTypeAdvantageBonus(attackerMoveGenre, defenderGenre);
 
-        float totalDmg = (pageLevel + attackerStr) * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
+        float totalDmg = (pageLevel + attackerStr + 1) * (sameTypeMoveBonus * typeAdvantageBonus) - defenderDef;
 
-        if (totalDmg <= 0)
+        if (totalDmg <= 1)
         { return 1; }
         else
         { return Mathf.FloorToInt(totalDmg); }
@@ -48,34 +48,26 @@ public static class StatsManager {
             case Genre.Fantasy:
                 if(ofAttack == Genre.Fantasy)
                 { return m_positiveSTABBonus; }
-                else if(ofAttack == Genre.GraphicNovel)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.GraphicNovel:
                 if(ofAttack == Genre.GraphicNovel)
                 { return m_positiveSTABBonus; }
-                else if(ofAttack == Genre.Fantasy)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.Horror:
                 if (ofAttack == Genre.Horror)
                 { return m_positiveSTABBonus; }
-                else if (ofAttack == Genre.SciFi)
-                { return m_neutralSTABBonus; }
                 else
-                { return m_negativeSTABBonus; }
+                { return m_neutralSTABBonus; }
 
             case Genre.SciFi:
                 if (ofAttack == Genre.SciFi)
                 { return m_positiveSTABBonus; }
-                else if (ofAttack == Genre.Horror)
+                else 
                 { return m_neutralSTABBonus; }
-                else
-                { return m_negativeSTABBonus; }
 
             default:
                 return 1f;

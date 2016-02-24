@@ -41,7 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pawnsToSpawn:
-  - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
+  - {fileID: 11492892, guid: a8c0fe8ae61e9884ca0a425c53423bc0, type: 2}
   - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
   - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
 --- !u!114 &11476198
@@ -81,8 +81,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_pawnsToSpawn.Array.data[0]
       value: 
-      objectReference: {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_pawnsToSpawn.Array.data[1]
       value: 

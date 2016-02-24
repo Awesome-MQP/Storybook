@@ -8,7 +8,7 @@ public abstract class GameManager : Photon.PunBehaviour
 {
     [SerializeField]
     [Tooltip("The player object to spawn for all players in the game.")]
-    private PlayerObject m_defaultPlayerObject;
+    private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
     
     [SerializeField]
     [Tooltip("When false all old player objects will be destroyed when this game manager starts up.")]
@@ -125,7 +125,7 @@ public abstract class GameManager : Photon.PunBehaviour
     /// <returns>The player object for a player.</returns>
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
-        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
 

@@ -146,6 +146,122 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1 &720761768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 720761771}
+  - 114: {fileID: 720761769}
+  - 82: {fileID: 720761770}
+  m_Layer: 0
+  m_Name: SFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &720761769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720761768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b951d1a912a164caec336853ccb19a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 720761770}
+  m_clickSoundEffect: {fileID: 0}
+--- !u!82 &720761770
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720761768}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+--- !u!4 &720761771
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720761768}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!1 &794301185
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,8 +294,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfa99f7de5240d4d8f31d64af359cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_defaultPlayerObject: {fileID: 11454834, guid: 97374b48fbb82fa4f9f5fb0429583bdb,
-    type: 2}
+  m_defaultPlayerObject:
+    m_asset: PlayerEntity/ComicPlayerEntity
+    m_baseTypeName: PlayerObject
+    m_editorAsset: Assets/Resources/PlayerEntity/ComicPlayerEntity.prefab
   m_keepOldPlayerObjects: 0
   m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
     type: 2}
@@ -350,11 +468,16 @@ MonoBehaviour:
   m_isPageAttackProbability: 0.5
   m_isPageSupportProbability: 0.5
   m_isPageStatusProbability: 0
+  m_hpIncreasePerLevel: 3
+  m_attackIncreasePerLevel: 1
+  m_defenseIncreasePerLevel: 1
+  m_speedIncreasePerLevel: 1
   m_pageAttack: {fileID: 11426778, guid: a70588006b9d1ce44b1a211bb466b490, type: 2}
   m_pageHPBoost: {fileID: 11428374, guid: 4e8f802c87a5a1242942ec9251a542cf, type: 2}
   m_pageAttackBoost: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354, type: 2}
   m_pageDefenseBoost: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7, type: 2}
   m_pageSpeedBoost: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776, type: 2}
+  m_startingPageCount: 21
 --- !u!4 &794301192
 Transform:
   m_ObjectHideFlags: 0

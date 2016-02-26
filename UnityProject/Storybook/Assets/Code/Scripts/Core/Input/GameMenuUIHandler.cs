@@ -9,6 +9,12 @@ public abstract class GameMenuUIHandler : UIHandler {
         fader.LoadScene("CharacterSelect");
     }
 
+    public void JoinGame()
+    {
+        SceneFading fader = SceneFading.Instance();
+        fader.LoadScene("JoinGameMenu");
+    }
+
     public void ExitGame()
     {
         Application.Quit();

@@ -27,3 +27,5 @@ EditorBuildSettings:
     path: Assets/Levels/Game/DemoCompleteScene.unity
   - enabled: 1
     path: Assets/Levels/Game/CharacterSelect.unity
+  - enabled: 1
+    path: Assets/Levels/Game/JoinGameMenu.unity

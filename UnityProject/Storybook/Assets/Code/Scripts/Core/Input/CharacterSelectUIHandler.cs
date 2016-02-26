@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class CharacterSelectUIHandler : UIHandler {
+public class CharacterSelectUIHandler : Photon.PunBehaviour {
 
-    private Genre m_selectedGenre;
-    private PlayerEntity m_selectedEntity;
+    private Dictionary<PhotonPlayer, Genre> m_playerToCharacter = new Dictionary<PhotonPlayer, Genre>();
+    private int m_playersReady = 0;
 
     [SerializeField]
     private Animator m_comicBookModel;
@@ -43,70 +44,118 @@ public class CharacterSelectUIHandler : UIHandler {
     [SerializeField]
     private Button m_fantasyButton;
 
-    private Button m_selectedButton = null;
+    [SerializeField]
+    private Button m_submitButton;
+
+    protected override void Awake()
+    {
+        photonView.RPC("InitializeDictionary", PhotonTargets.All, PhotonNetwork.player);
+        m_submitButton.interactable = false;
+        MainMenuUIHandler mainMenu = FindObjectOfType<MainMenuUIHandler>();
+        Destroy(mainMenu);
+    }
 
     public void SelectComicBook()
     {
         StartCoroutine(_AnimateComicBook());
-        if (m_selectedButton != null)
-        {
-            m_selectedButton.interactable = true;
-        }
-        m_comicBookButton.interactable = false;
-        m_selectedButton = m_comicBookButton;
-        m_selectedGenre = Genre.GraphicNovel;
-        m_selectedEntity = m_comicBookEntity;
+        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.GraphicNovel);
     }
 
     public void SelectHorror()
     {
         StartCoroutine(_AnimateHorror());
-        if (m_selectedButton != null)
-        {
-            m_selectedButton.interactable = true;
-        }
-        m_horrorButton.interactable = false;
-        m_selectedButton = m_horrorButton;
-        m_selectedGenre = Genre.Horror;
-        m_selectedEntity = m_horrorEntity;
+        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.Horror);
     }
 
     public void SelectSciFi()
     {
         StartCoroutine(_AnimateSciFi());
-        if (m_selectedButton != null)
-        {
-            m_selectedButton.interactable = true;
-        }
-        m_scifiButton.interactable = false;
-        m_selectedButton = m_scifiButton;
-        m_selectedGenre = Genre.SciFi;
-        m_selectedEntity = m_scifiEntity;
+        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.SciFi);
     }
 
     public void SelectFantasy()
     {
         StartCoroutine(_AnimateFantasy());
-        if (m_selectedButton != null)
-        {
-            m_selectedButton.interactable = true;
-        }
-        m_fantasyButton.interactable = false;
-        m_selectedButton = m_fantasyButton;
-        m_selectedGenre = Genre.Fantasy;
-        m_selectedEntity = m_fantasyEntity;
+        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.Fantasy);
     }
 
     public void SubmitCharacter()
     {
-        GameObject entityObject = PhotonNetwork.Instantiate("PlayerEntity/" + m_selectedEntity.name, Vector3.zero, Quaternion.identity, 0);
-        DontDestroyOnLoad(entityObject);
-        PlayerEntity createdEntity = entityObject.GetComponent<PlayerEntity>();
-        createdEntity.Construct(PhotonNetwork.player);
-        PhotonNetwork.Spawn(entityObject.GetPhotonView());
-        SceneFading.Instance().LoadScene("WorldMovementTest");
+        foreach(PhotonPlayer player in m_playerToCharacter.Keys)
+        {
+            Genre playerGenre = m_playerToCharacter[player];
+            PlayerEntity playerCharacterEntity = _GenreToEntity(playerGenre);
+            GameObject entityObject = PhotonNetwork.Instantiate("PlayerEntity/" + playerCharacterEntity.name, Vector3.zero, Quaternion.identity, 0);
+            DontDestroyOnLoad(entityObject);
+            PlayerEntity createdEntity = entityObject.GetComponent<PlayerEntity>();
+            createdEntity.Construct(PhotonNetwork.player);
+            PhotonNetwork.Spawn(entityObject.GetPhotonView());
+            SceneFading.Instance().LoadScene("WorldMovementTest");
+        }
     }
-	
+
+    private Button _GenreToButton(Genre characterGenre)
+    {
+        switch (characterGenre)
+        {
+            case Genre.Fantasy:
+                return m_fantasyButton;
+            case Genre.GraphicNovel:
+                return m_comicBookButton;
+            case Genre.Horror:
+                return m_horrorButton;
+            case Genre.SciFi:
+                return m_scifiButton;
+        }
+        return null;
+    }
+
+    private PlayerEntity _GenreToEntity(Genre characterGenre)
+    {
+        switch (characterGenre)
+        {
+            case Genre.Fantasy:
+                return m_fantasyEntity;
+            case Genre.GraphicNovel:
+                return m_comicBookEntity;
+            case Genre.Horror:
+                return m_horrorEntity;
+            case Genre.SciFi:
+                return m_scifiEntity;
+        }
+        return null;
+    }
+
+    [PunRPC]
+    public void SelectCharacter(PhotonPlayer player, int selectedGenre)
+    {
+        Debug.Log("Character selected");
+        Genre playerGenre = m_playerToCharacter[player];
+        if (playerGenre != Genre.None)
+        {
+            Button genreButton = _GenreToButton(playerGenre);
+            genreButton.interactable = true;
+        }
+        m_playerToCharacter.Remove(player);
+
+        Button selectedButton = _GenreToButton((Genre)selectedGenre);
+        selectedButton.interactable = false;
+        m_playerToCharacter.Add(player, (Genre)selectedGenre);
+
+        m_playersReady += 1;
+
+        if (m_playersReady == PhotonNetwork.playerList.Length && IsMasterClient)
+        {
+            m_submitButton.interactable = true;
+        }
+    }
+
+    [PunRPC]
+    public void InitializeDictionary(PhotonPlayer player)
+    {
+        m_playerToCharacter.Add(player, Genre.None);
+    }
+
     private IEnumerator _AnimateComicBook()
     {
         m_comicBookModel.SetBool("IdleToIdle", false);

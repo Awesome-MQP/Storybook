@@ -72,4 +72,6 @@ MonoBehaviour:
   - _rpcMoveInDirection
   - BeginFadeOverNetwork
   - _rpcOnStartGame
+  - InitializeDictionary
+  - SelectCharacter
   DisableAutoOpenWizard: 1

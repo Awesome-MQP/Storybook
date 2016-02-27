@@ -123,6 +123,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
         if (m_health <= 0)
         {
+            m_health = 0; // Keep HP at 0 if it goes below
             m_isAlive = false;
         }
 
@@ -403,6 +404,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
         {
             m_speedBoost -= 1;
         }
+        if (m_defenseBoost > 0)
+        { 
+            m_defenseBoost -= 1;
+        }
+        if (m_attackBoost > 0)
+        { 
+            m_attackBoost -= 1;
+        }
     }
 
     public float Attack
@@ -592,5 +601,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
                 }
                 break;
         }
+    }
+
+    public float MaxHealth
+    {
+        get { return m_maxHealth; }
     }
 }

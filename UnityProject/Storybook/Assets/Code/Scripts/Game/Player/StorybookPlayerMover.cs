@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForRoomEventListener, UIEventDispatcher.IDeckManagementEventListener,
-    UIEventDispatcher.IOverworldEventListener, UIEventDispatcher.IRoomEventListener
+public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatcher.IPageForRoomEventListener, DeckManagementEventDispatcher.IDeckManagementEventListener,
+    OverworldEventDispatcher.IOverworldEventListener, RoomEventEventDispatcher.IRoomEventListener
 {
 
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
@@ -24,11 +25,35 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
         get { return m_playerPositions.ToArray(); }
     }
 
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
+    //public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
+    
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>(); } }
+    public EventDispatcher DeckMgmtDispatcher { get { return EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>(); } }
+    public EventDispatcher OverworldEventDispatcher { get { return EventDispatcher.GetDispatcher<OverworldEventDispatcher>(); } }
+    public EventDispatcher RoomEventEventDispatcher { get { return EventDispatcher.GetDispatcher<RoomEventEventDispatcher>(); } }
+    
 
     public void Start()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        //EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        
+        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RegisterEventListener(this);
+        
+    }
+
+    void OnDestroy()
+    {
+        //EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
+        
+        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
+        
+        Debug.Log("Mover destroyed");
     }
 
     /// <summary>
@@ -108,7 +133,7 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
     /// </summary>
     public void OpenPageForRoomMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
+        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
         m_canvas = (GameObject)Instantiate(loadedObject);
         m_UIHandler = m_canvas.GetComponent<PageForRoomUIHandler>();
         m_UIHandler.PopulateMenu();
@@ -120,7 +145,7 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
     /// </summary>
     public void OpenDeckManagementMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
+        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
         uiHandler.PopulateMenu();
@@ -131,7 +156,7 @@ public class StorybookPlayerMover : BasePlayerMover, UIEventDispatcher.IPageForR
     /// </summary>
     public void OpenOverworldMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
+        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
         GameObject canvas = (GameObject)Instantiate(loadedObject);
         OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
         uiHandler.PopulateMenu(CurrentRoom);

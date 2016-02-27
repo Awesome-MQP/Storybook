@@ -6,15 +6,17 @@ public class EnemyTeam : CombatTeam {
 
     public override void SpawnTeam()
     {
+        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
         GetComponent<PhotonView>().RPC("RegisterTeamLocal", PhotonTargets.Others, TeamId);
         int i = 0;
         List<EnemyPositionNode> positionNodes = new List<EnemyPositionNode>(FindObjectsOfType<EnemyPositionNode>()); 
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
             EnemyPositionNode nodeToUse = _getPositionNodeById(positionNodes, i + 1);
-            GameObject enemyObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
+            GameObject enemyObject = PhotonNetwork.Instantiate("Enemies/" + PawnsToSpawn[i].PawnGenre + "/" + PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
             PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
+            dm.ScalePawnByLevel(enemyPawn, TeamLevel);
             enemyPawn.transform.SetParent(nodeToUse.transform);
             enemyPawn.PawnId = i + 1;
             enemyPawn.TeamId = TeamId;

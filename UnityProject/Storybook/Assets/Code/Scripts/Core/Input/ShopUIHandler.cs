@@ -4,7 +4,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class ShopUIHandler : UIHandler {
+public class ShopUIHandler : PageUIHandler {
 
     [SerializeField]
     private ScrollRect m_playerInventoryPagesRect;
@@ -138,7 +138,7 @@ public class ShopUIHandler : UIHandler {
                 button.GetComponent<PageButton>().MenuId = m_shopInventoryMenuId;
                 m_shopPages.Add(shopPageData);
             }
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
+            EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
         }
 
         // If the pages have already been generated for the shop, use the list passed in
@@ -169,7 +169,8 @@ public class ShopUIHandler : UIHandler {
 
     public void ExitMenu()
     {
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
+        PlayClickSound();
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
         Destroy(gameObject);
     }
 
@@ -184,6 +185,7 @@ public class ShopUIHandler : UIHandler {
         // Only allow the trade if the total level of all the player pages is equal to or greater than the selected shop page
         if (_getTotalSelectedLevel() >= m_selectedShopPageButton.PageLevel)
         {
+            PlayClickSound();
             GameManager gameManager = FindObjectOfType<GameManager>();
             DungeonMaster dm = FindObjectOfType<DungeonMaster>();
             PlayerInventory pi = gameManager.GetLocalPlayerInventory();
@@ -202,7 +204,7 @@ public class ShopUIHandler : UIHandler {
             m_shopPages.Remove(m_selectedShopPageButton.PageData);
 
             // Send out a page traded event
-            EventDispatcher.GetDispatcher<UIEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
+            EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
             _clearSelected();
 
             // Exit the menu if all the pages have been traded for

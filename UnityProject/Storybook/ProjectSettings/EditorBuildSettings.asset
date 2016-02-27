@@ -6,14 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Levels/Demo/GameLobby.unity
+    path: Assets/Levels/Game/GameStartup.unity
+  - enabled: 1
+    path: Assets/Levels/Game/GameLobby.unity
   - enabled: 1
     path: Assets/Levels/Demo/DemoCombatScene.unity
   - enabled: 1
-    path: Assets/Levels/Demo/WorldMovementTest.unity
-  - enabled: 1
     path: Assets/Levels/Demo/TestInventory.unity
+  - enabled: 1
+    path: Assets/Levels/Game/WorldMovementTest.unity
   - enabled: 1
     path: Assets/Levels/Demo/LoadLevelBugScene.unity
   - enabled: 1
     path: Assets/Levels/Demo/TestMapGeneration.unity
+  - enabled: 1
+    path: Assets/Levels/Game/GameOverScene.unity
+  - enabled: 1
+    path: Assets/Levels/Game/MainMenu.unity
+  - enabled: 1
+    path: Assets/Levels/Game/DemoCompleteScene.unity
+  - enabled: 1
+    path: Assets/Levels/Game/CharacterSelect.unity

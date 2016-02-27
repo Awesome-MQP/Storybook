@@ -680,10 +680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97efc9c955ab1ec498bcb1449b141cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
-  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
-  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
-  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
+  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
   m_northButton: {fileID: 11423076}
   m_eastButton: {fileID: 11483010}
   m_southButton: {fileID: 11401976}
@@ -956,7 +953,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_clickSoundEffect
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 185002}

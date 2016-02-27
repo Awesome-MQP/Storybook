@@ -38,6 +38,11 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
         EventDispatcher.GetDispatcher<CombatEventDispatcher>().RegisterEventListener(this);
     }
 
+    public void OnDestroy()
+    {
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().RemoveListener(this);
+    }
+
     // Waits for input of a move
     public override void OnThink()
     {

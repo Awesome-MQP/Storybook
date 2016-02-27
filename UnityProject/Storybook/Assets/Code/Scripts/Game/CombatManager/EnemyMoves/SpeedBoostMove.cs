@@ -15,8 +15,29 @@ public class SpeedBoostMove : AIMove
     {
         foreach (CombatPawn combatPawn in MoveTargets)
         {
-            combatPawn.IncreasePawnSpeed(m_speedIncreaseValue);
+            int boostAmt = _calcBoostPotency();
+            combatPawn.IncreasePawnSpeed(boostAmt);
         }
+    }
+
+    /// <summary>
+    /// Calculate the power of a boost.
+    /// Adds the Ceil(level/2) to the inital value,
+    /// then adds a small bonus if the move owner's type and the move type match up
+    /// </summary>
+    private int _calcBoostPotency()
+    {
+        int totalBoost = m_speedIncreaseValue;
+        Debug.Log("Boost " + MoveGenre.ToString() + " amount: " + totalBoost);
+        totalBoost += (int)Math.Ceiling((double)MoveLevel / 2);
+        Debug.Log("Boost " + MoveGenre.ToString() + " amount: " + totalBoost);
+        if (MoveGenre == MoveOwner.PawnGenre)
+        {
+            totalBoost += 2;
+            Debug.Log("Got a same-type boost");
+        }
+        Debug.Log("Boost " + MoveGenre.ToString() + " amount: " + totalBoost);
+        return totalBoost;
     }
 
     /// <summary>

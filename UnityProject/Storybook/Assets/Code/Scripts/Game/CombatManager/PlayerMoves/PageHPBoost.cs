@@ -18,7 +18,13 @@ public class PageHPBoost : PageMove
         foreach(CombatPawn pawn in MoveTargets)
         {
             Debug.Log("Increasing pawn HP");
-            pawn.IncreasePawnHP(m_HPIncrease);
+            int totalStatBoost = m_HPIncrease;
+            totalStatBoost += (int)Math.Ceiling((double)MoveLevel / 2); //This may look kind of hacky, pls don't yell at me :-) - Connor
+            if (MoveGenre == this.MoveOwner.PawnGenre)
+            {
+                totalStatBoost += 2; // Give a small boost if the types match up. We won't take the full type chart into effect here.
+            }
+            pawn.IncreasePawnHP(totalStatBoost);
         }
     }
 

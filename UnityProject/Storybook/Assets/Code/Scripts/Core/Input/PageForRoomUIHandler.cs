@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PageForRoomUIHandler : UIHandler {
+public class PageForRoomUIHandler : PageUIHandler {
 
     [SerializeField]
     private float m_gridXPadding;
@@ -17,6 +17,7 @@ public class PageForRoomUIHandler : UIHandler {
     private float m_contentHeight;
 
     private PageButton m_selectedPageButton;
+    private PageButton m_pageButtonInScroll = null;
     private Button m_selectedButton;
     private Button m_submitPageButton;
 
@@ -76,6 +77,12 @@ public class PageForRoomUIHandler : UIHandler {
     /// <param name="buttonPressed">The page button that was pressed</param>
     public override void PageButtonPressed(PageButton buttonPressed)
     {
+        if (m_pageButtonInScroll != null)
+        {
+            m_pageButtonInScroll.DisplaySelectedImage(false);
+        }
+        m_pageButtonInScroll = buttonPressed;
+        buttonPressed.DisplaySelectedImage(true);
         Button selectedButton = _initializePageButton(buttonPressed.PageData);
         selectedButton.enabled = false;
         RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
@@ -112,9 +119,10 @@ public class PageForRoomUIHandler : UIHandler {
     /// </summary>
     public void SubmitPage()
     {
+        PlayClickSound();
         //_dropAndReplaceSelectedPage();
         Destroy(gameObject);
-        EventDispatcher.GetDispatcher<UIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
+        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
     /// <summary>

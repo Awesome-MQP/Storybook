@@ -16,6 +16,23 @@ public class SceneFading : Photon.PunBehaviour {
     private bool m_isFading = false;
     private bool m_shouldFlipDirection = false;
 
+    private static SceneFading m_instance = null;
+
+    public static SceneFading Instance()
+    {
+        if (m_instance != null)
+        {
+            return m_instance;
+        }
+        else
+        {
+            GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/Fader", Vector3.zero, Quaternion.identity, 0);
+            PhotonNetwork.Spawn(faderObject.GetPhotonView());
+            m_instance = faderObject.GetComponent<SceneFading>();
+            return m_instance;
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(this);
@@ -75,5 +92,19 @@ public class SceneFading : Photon.PunBehaviour {
             m_shouldFlipDirection = false;
         }
         return m_fadeSpeed;
+    }
+
+    public void LoadScene(string sceneToLoad)
+    {
+        StartCoroutine(_LoadNextScene(sceneToLoad));
+    }
+
+    private IEnumerator _LoadNextScene(string sceneToLoad)
+    {
+        float fadeTime = BeginFade(1);
+        yield return new WaitForSeconds(fadeTime);
+        PhotonNetwork.LoadLevel(sceneToLoad);
+        LevelWasLoaded();
+        yield return new WaitForSeconds(fadeTime);
     }
 }

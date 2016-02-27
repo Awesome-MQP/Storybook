@@ -19,7 +19,7 @@ public class NetLoseState : NetworkState {
         if (!m_isClientReady)
         {
             m_trigger += 1;
-            if (m_trigger > 250)
+            if (m_trigger > 10)
             {
                 m_isClientReady = true;
                 GetComponent<PhotonView>().RPC("IncrementPlayersReady", PhotonTargets.All);

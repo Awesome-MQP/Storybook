@@ -7,6 +7,9 @@ public class PageButton : MonoBehaviour {
     private PageData m_pageData;
 
     private int m_menuId;
+
+    [SerializeField]
+    private Sprite m_targetIcon;
     
     /// <summary>
     /// Called when the page button is pressed
@@ -14,7 +17,8 @@ public class PageButton : MonoBehaviour {
     /// </summary>
     public void OnClick()
     {
-        UIHandler currentUIHandler = FindObjectOfType<UIHandler>();
+        PageUIHandler currentUIHandler = FindObjectOfType<PageUIHandler>();
+        currentUIHandler.PlayClickSound();
         currentUIHandler.PageButtonPressed(this);
     }
 
@@ -82,6 +86,14 @@ public class PageButton : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// The rarity of the page tied to this button
+    /// </summary>
+    public bool Rarity
+    {
+        get { return PageData.IsRare; }
+    }
+
     public int MenuId
     {
         get { return m_menuId; }
@@ -91,11 +103,12 @@ public class PageButton : MonoBehaviour {
     /// <summary>
     /// Called when changes are maded to the page data of the button
     /// Updates the text fields of the page based on the changes
+    /// UPDATE: Also edits the target icons depending on the rarity of the page
     /// </summary>
     private void _updateButtonText()
     {
         Text[] allButtonTexts = GetComponentsInChildren<Text>();
-        foreach(Text t in allButtonTexts)
+        foreach (Text t in allButtonTexts)
         {
             if (t.name == "Level")
             {
@@ -104,6 +117,38 @@ public class PageButton : MonoBehaviour {
             if (t.name == "Page Type")
             {
                 t.text = PageMoveType.ToString();
+            }
+        }
+        Image[] allTargetIcons = GetComponentsInChildren<Image>();
+        foreach(Image i in allTargetIcons)
+        {
+            if(i.name.Contains("Target"))
+            {
+                if (Rarity == true)
+                {
+                    i.enabled = true;
+                }
+                else
+                {
+                    if(i.name == "Target1")
+                    {
+                        i.enabled = true;
+                        // TODO: If number of targets = 1, center target
+                    }
+                }
+            }
+        }
+    }
+
+    public void DisplaySelectedImage(bool isDisplay)
+    {
+        RawImage[] allImages = GetComponentsInChildren<RawImage>();
+        foreach(RawImage i in allImages)
+        {
+            if (i.name == "SelectedImage")
+            {
+                i.enabled = isDisplay;
+                break;
             }
         }
     }

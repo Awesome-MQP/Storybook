@@ -764,18 +764,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de41b46137fa880488ee4b5d2f33a55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_greenPageButton: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b, type: 2}
-  m_redPageButton: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86, type: 2}
-  m_yellowPageButton: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2, type: 2}
-  m_bluePageButton: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709, type: 2}
+  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
+  m_greenPageButton: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95, type: 2}
+  m_redPageButton: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39, type: 2}
+  m_yellowPageButton: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05, type: 2}
+  m_bluePageButton: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c, type: 2}
   m_gridXPadding: 15
   m_gridYPadding: 15
   m_buttonHeight: 104
   m_buttonWidth: 72
-  m_comicSprite: {fileID: 21300000, guid: 2b0f358b3db22e349af02c9d9d38331b, type: 3}
-  m_scifiSprite: {fileID: 21300000, guid: c1e55b465acff1e4c94f8181bf0b2edb, type: 3}
-  m_fantasySprite: {fileID: 21300000, guid: e0c7dae8f1181d944b841dada997ea18, type: 3}
-  m_horrorSprite: {fileID: 21300000, guid: e268b74aba5117249b50ea0443567065, type: 3}
+  m_comicSprite: {fileID: 21300000, guid: a5ef6f1850ee06c428e06884777e0f52, type: 3}
+  m_scifiSprite: {fileID: 21300000, guid: 3b14cd4f9c434374fa0297244d0fc791, type: 3}
+  m_fantasySprite: {fileID: 21300000, guid: ce6643d3369ee2644b7b2e38d8ae8073, type: 3}
+  m_horrorSprite: {fileID: 21300000, guid: 6f30ef405e587a4419f015a6fb43ef95, type: 3}
   m_playerTargetButtons: {fileID: 22434446}
   m_enemyTargetButtons: {fileID: 22452886}
 --- !u!114 &11406248
@@ -831,6 +832,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11435254}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -976,6 +988,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11437334}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1357,6 +1380,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11440794
@@ -1454,6 +1488,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11468418}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1575,6 +1620,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11448172
@@ -1651,6 +1707,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11425182}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1906,6 +1973,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11498608}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2189,7 +2267,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22405692}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2324,6 +2402,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11434778}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11405276}
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3418,22 +3507,22 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_greenPageButton
       value: 
-      objectReference: {fileID: 11427596, guid: f6c49f8c486155c4e8cc845be16a3b1b,
+      objectReference: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_yellowPageButton
       value: 
-      objectReference: {fileID: 11468376, guid: 0f277d1fb7bbf0a409d43cc256f94ca2,
+      objectReference: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_redPageButton
       value: 
-      objectReference: {fileID: 11401842, guid: 334192298482fb54fa6a63696216fc86,
+      objectReference: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_bluePageButton
       value: 
-      objectReference: {fileID: 11465700, guid: 217d205c7abce3242917f28adedd7709,
+      objectReference: {fileID: 11448180, guid: 36df60e91c55c4b4aacdda3a8058ca6c,
         type: 2}
     - target: {fileID: 0}
       propertyPath: m_gridXPadding
@@ -3467,6 +3556,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_clickSoundEffect
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 171882}

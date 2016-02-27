@@ -234,7 +234,7 @@ GameObject:
   - 4: {fileID: 437842}
   - 33: {fileID: 3371838}
   - 23: {fileID: 2317880}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +536,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 187128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3821.5146, y: 2558.149, z: 2174.2603}
+  m_LocalPosition: {x: 126.244484, y: 20.090832, z: -30.205223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 450414}

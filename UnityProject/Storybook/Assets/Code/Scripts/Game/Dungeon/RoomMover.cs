@@ -130,7 +130,8 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         MapManager mapManager = FindObjectOfType<MapManager>();
         RoomObject newRoom = mapManager.GetRoom(newRoomLoc);
 
-        Camera.main.transform.position = newRoom.CameraNode.position;
+        //Camera.main.transform.position = newRoom.CameraNode.position;
+        Camera.main.GetComponent<GameCamera>().trackObject(Camera.main, newRoom.CameraNode);
         Camera.main.transform.rotation = newRoom.CameraNode.rotation;
 
         m_currentRoom = newRoom;

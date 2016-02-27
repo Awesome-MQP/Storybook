@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class UIEventDispatcher : EventDispatcher {
-
+    
     public void OnShopClosed()
     {
         foreach (IShopEventListener listener in IterateListeners<IShopEventListener>())
@@ -59,6 +59,14 @@ public class UIEventDispatcher : EventDispatcher {
         }
     }
 
+    public void CombatSummarySubmitted()
+    {
+        foreach(ICombatSummaryListener listener in IterateListeners<ICombatSummaryListener>())
+        {
+            listener.CombatSummarySubmitted();
+        }
+    }
+
     public interface IShopEventListener : IEventListener
     {
         void OnShopClosed();
@@ -86,6 +94,11 @@ public class UIEventDispatcher : EventDispatcher {
     public interface IRoomEventListener : IEventListener
     {
         void OnRoomCleared();
+    }
+
+    public interface ICombatSummaryListener : IEventListener
+    {
+        void CombatSummarySubmitted();
     }
 
     public abstract class UIEventListener : IEventListener

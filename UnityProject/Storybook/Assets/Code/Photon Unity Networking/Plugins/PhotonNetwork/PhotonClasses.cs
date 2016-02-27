@@ -1108,7 +1108,7 @@ namespace Photon
         private object SerializeNetworkObjectProperty(object value, PropertyInfo info)
         {
             MethodInfo serializeMethod = value.GetType()
-                .GetMethod("OnSerialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                .GetMethod("OnSerialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonStream)}, null);
 
             Assert.IsNotNull(serializeMethod, "No serialize method found on struct being sent over the network.");
@@ -1192,7 +1192,7 @@ namespace Photon
                 propertyValue = Activator.CreateInstance(info.PropertyType);
 
             MethodInfo deserializeMethod = propertyValue.GetType()
-                .GetMethod("OnDeserialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                .GetMethod("OnDeserialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonStream)}, null);
 
             Assert.IsNotNull(deserializeMethod, "No deserialize method on struct being sent over the network.");

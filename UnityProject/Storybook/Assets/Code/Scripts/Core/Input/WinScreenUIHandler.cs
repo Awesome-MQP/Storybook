@@ -12,5 +12,4 @@ public class WinScreenUIHandler : GameMenuUIHandler {
             Destroy(po.gameObject);
         }
     }
-
 }

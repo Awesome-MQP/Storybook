@@ -45,10 +45,10 @@ public class StorybookPlayerMover : BasePlayerMover,
         set
         {
             Assert.IsTrue(ShouldBeChanging);
-            //if (IsMine)
-            //    OwnerOnPlayerCountChanged(value);
-            //else
-            //    PeerOnPlayerCountChanged(value);
+            if (IsMine)
+                OwnerOnPlayerCountChanged(value);
+            else
+                PeerOnPlayerCountChanged(value);
             PropertyChanged();
         }
     }
@@ -284,6 +284,7 @@ public class StorybookPlayerMover : BasePlayerMover,
 
         ResourceAsset asset = GameManager.GetInstance<BaseStorybookGame>().GetWorldPawnForGenre(playerEntity.Genre);
         PlayerWorldPawn pawn = PhotonNetwork.Instantiate<PlayerWorldPawn>(asset, Vector3.zero, Quaternion.identity, 0);
+        m_playerWorldPawns.Add(pawn);
         pawn.Construct(playerEntity);
 
         PhotonNetwork.Spawn(pawn.photonView);
@@ -295,16 +296,17 @@ public class StorybookPlayerMover : BasePlayerMover,
 
     protected virtual void OwnerOnPlayerCountChanged(int newPlayerCount)
     {
-        m_animator.SetInteger("PlayerCount", newPlayerCount);
+        //m_animator.SetInteger("PlayerCount", newPlayerCount);
 
         for (int i = 0; i < newPlayerCount; i++)
         {
+            m_playerWorldPawns[i].Position = m_playerPositions[i].transform.position;
             m_playerWorldPawns[i].TargetNode = m_playerPositions[i];
         }
     }
 
     protected virtual void PeerOnPlayerCountChanged(int newPlayerCount)
     {
-        m_animator.SetInteger("PlayerCount", newPlayerCount);
+        //m_animator.SetInteger("PlayerCount", newPlayerCount);
     }
 }

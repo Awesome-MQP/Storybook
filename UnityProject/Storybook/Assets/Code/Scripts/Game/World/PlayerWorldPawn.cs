@@ -45,6 +45,13 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
         }
     }
 
+    protected override void Awake()
+    {
+        m_animator = GetComponent<Animator>();
+
+        base.Awake();
+    }
+
     public void Construct(PlayerEntity playerEntity)
     {
 

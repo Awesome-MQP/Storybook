@@ -53,26 +53,27 @@ public class NetworkNodeMover : NetworkMover
         if (m_node)
         {
             float distanceSq = (m_node.transform.position - m_lastNodePosition).sqrMagnitude;
-            if (distanceSq > 0.001f)
+            if (distanceSq > 0.001f)//When the node moves more than a fraction from its last position update our positional info.
             {
                 m_lastNodePosition = m_node.transform.position;
+                base.TargetPosition = m_lastNodePosition;//This will refresh the movement info.
             }
         }
     }
 
     protected virtual void OnArriveAtNode(MovementNode node)
     {
-        
+        //No default implementation.
     }
 
     protected virtual void OnTargetNodeChanged(MovementNode node)
     {
-        
+        //No default implementation.
     }
 
     protected virtual void OnLeaveNode(MovementNode node)
     {
-
+        //No default implementation.
     }
 
     protected sealed override void OnArrive()

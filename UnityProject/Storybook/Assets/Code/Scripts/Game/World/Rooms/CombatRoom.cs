@@ -89,8 +89,8 @@ public class CombatRoom : RoomObject {
         //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
-            m_musicManager.Fade(m_musicTracks[1], 5, true);
-            //TODO: m_gameManager.TransitionToCombat();
+            //m_musicManager.Fade(m_musicTracks[1], 5, true);
+            //GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance());
         }
         else
         {

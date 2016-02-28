@@ -93,6 +93,10 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
 
     public void RoomEntered(RoomMover mover)
     {
+        // Moves the camera to the new room
+        Camera.main.GetComponent<GameCamera>().trackObject(Camera.main, CameraNode);
+        Camera.main.transform.rotation = CameraNode.rotation;
+
         OnRoomEnter(mover);
     }
 

@@ -62,7 +62,6 @@ public class BaseStorybookGame : GameManager
         PhotonNetwork.Spawn(mover.photonView);
         m_mover.Construct(startRoom);
 
-        Debug.Log("Moving the camera to the start room camera node");
         Camera.main.transform.position = startRoom.CameraNode.position;
         Camera.main.transform.rotation = startRoom.CameraNode.rotation;
 

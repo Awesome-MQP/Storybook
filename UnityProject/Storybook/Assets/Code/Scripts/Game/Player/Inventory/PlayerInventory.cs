@@ -6,6 +6,16 @@ public class PlayerInventory : Inventory {
 
     private int m_playerId;
 
+    void OnStartOwner()
+    {
+        DungeonMaster dm = DungeonMaster.Instance;
+        for (int i = 0; i < 21; i++)
+        {
+            Page basicPage = dm.GetBasicPage();
+            Add(basicPage, i);
+        }
+    }
+
     void Start()
     {
         /*

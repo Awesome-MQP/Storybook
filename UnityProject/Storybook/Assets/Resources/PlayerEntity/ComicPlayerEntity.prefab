@@ -47,6 +47,7 @@ MonoBehaviour:
   m_speed: 7
   m_luck: 1
   m_genre: 4
+  m_inventoryPrefab: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e, type: 2}
 --- !u!114 &11475626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,9 +107,18 @@ Prefab:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 0}
-      propertyPath: m_Name
-      value: ComicPlayerEntity
+      propertyPath: m_inventoryPrefab.m_asset
+      value: Resources/Player Inventory
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_inventoryPrefab.m_editorAsset
+      value: Assets/Resources/Player Inventory.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_inventoryPrefab
+      value: 
+      objectReference: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 131838}

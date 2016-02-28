@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 
 // This is an empty room. There is nothing special about it.
@@ -9,14 +10,6 @@ public class CombatRoom : RoomObject {
 
     [SerializeField]
     private AudioClip m_fightMusic;
-
-    [SerializeField]
-    private AudioClip[] m_musicTracks; // This array holds all music tracks for a room, in an effort to make it more general. 
-                                       // To make accessing tracks from this more easy to follow, use this standard for putting tracks into the array
-                                       // INDEX | TRACK
-                                       // 0.......RoomMusic
-                                       // 1.......FightMusic
-                                       // 2+......Miscellaneous
 
     [SerializeField]
     private List<GameObject> m_roomEnemiesOverworld = new List<GameObject>();
@@ -53,14 +46,18 @@ public class CombatRoom : RoomObject {
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
-    public override void OnRoomEnter()
+    protected override void OnRoomEnter(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_musicManager.MusicTracks = m_musicTracks;
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
-            m_gameManager.EnemyTeamForCombat = m_roomEnemies;
-            m_gameManager.EnemyTeamPrefabLoc = m_roomEnemiesPrefabLoc;
+            //m_gameManager.EnemyTeamForCombat = m_roomEnemies;
+            //m_gameManager.EnemyTeamPrefabLoc = m_roomEnemiesPrefabLoc;
+
 
             int i = 0;
 
@@ -75,34 +72,40 @@ public class CombatRoom : RoomObject {
                 m_enemyWorldPawns.Add(pawnGameObject);
                 i++;
             }
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
+            //m_musicManager.Fade(m_musicTracks[1], 5, true);
             return;
         }
-        StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
+        m_musicManager.Fade(m_musicTracks[0], 5, true);
 
         return;
     }
 
-    public override void OnRoomEvent()
+    protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+        //TODO: Integrate with new game manager code to start combat
+        if (!(mover is BasePlayerMover))
+            yield break;
+
+        //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[1], 5, true));
-            m_gameManager.TransitionToCombat(RoomPageData.PageLevel, RoomPageData.PageGenre);
-            return;
+            //m_musicManager.Fade(m_musicTracks[1], 5, true);
+            //GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance());
         }
         else
         {
-            StartCoroutine(m_musicManager.Fade(m_musicTracks[0], 5, true));
-            EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
-            return;
+            //TODO: We should just halt with yield return null
+            m_musicManager.Fade(m_musicTracks[0], 5, true);
+            ClearRoom();
         }
     }
 
-    public override void OnRoomExit()
+    protected override void OnRoomExit(RoomMover mover)
     {
+        if (!(mover is BasePlayerMover))
+            return;
+
         m_wonCombat = true;
-        return;
     }
 
     public void DestroyEnemyWorldPawns()

@@ -2293,6 +2293,11 @@ public static class PhotonNetwork
             view.viewID = id;
         }
 
+        for (int i = views.Length - 1; i >= 0; i--)
+        {
+            views[i].gameObject.SetActive(false);
+        }
+
         InternalTryCreateOnPlayers(views, otherPlayers);
 
         return newObject;

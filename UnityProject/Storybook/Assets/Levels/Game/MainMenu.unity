@@ -219,7 +219,6 @@ GameObject:
   - 92: {fileID: 1092121197}
   - 124: {fileID: 1092121196}
   - 81: {fileID: 1092121195}
-  - 114: {fileID: 1092121200}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -294,17 +293,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &1092121200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1092121194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf5aa664018b49448a723ed54439228e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1273768166
 Prefab:
   m_ObjectHideFlags: 0
@@ -383,6 +371,10 @@ Prefab:
     - target: {fileID: 22420014, guid: b76abaebac8760640b5be2c000c784c0, type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11496692, guid: b76abaebac8760640b5be2c000c784c0, type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: JoinGame
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b76abaebac8760640b5be2c000c784c0, type: 2}

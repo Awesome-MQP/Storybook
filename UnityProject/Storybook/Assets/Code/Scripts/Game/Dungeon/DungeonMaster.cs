@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Random = UnityEngine.Random;
 
 // Dungeon Master class is the handler for all statistics, as well as handling
 // the location of all room prefabs.
-public class DungeonMaster : MonoBehaviour {
-
+[Serializable]
+public class DungeonMaster : MonoBehaviour
+{
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
     [SerializeField]
@@ -75,31 +78,34 @@ public class DungeonMaster : MonoBehaviour {
     [SerializeField]
     private int m_startingPageCount = 21;
 
-    // When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
-    void Awake() {
+    private static DungeonMaster s_instance;
+
+    public static DungeonMaster Instance
+    {
+        get { return s_instance; }
+    }
+
+    public void Awake()
+    {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
+        s_instance = this;
     }
 
     /// <summary>
     /// Gets a room prefab to place in the world based on certain input criteria.
     /// </summary>
-    /// <param name="size">The specified size of the room to search for.</param>
     /// <param name="genre">The specified Genre of the room to search for.</param>
     /// <param name="features">The specified features of the room to search for.</param>
     /// <returns>The room if a match is found, or null if no match is found.</returns>
-    RoomObject GetRoomPrefab(int size, Genre genre, params string[] features)
+    RoomObject GetRoomPrefab(Genre genre, params string[] features)
     {
         // List of "good" rooms - ones that match the criteria passed in.
-        List<RoomObject> goodRooms = new List<RoomObject>();
+        List<RoomObject> goodRooms = new List<RoomObject>(m_rooms.Length);
 
         // Check each room to see if there is a match
         foreach (RoomObject r in m_rooms)
         {
-            if (r.RoomSize != size)
-            {
-                continue;
-            }
-            else if (r.RoomPageData.PageGenre != genre)
+            if (true/*r.RoomGenre != genre*/)
             {
                 continue;
             }
@@ -123,18 +129,7 @@ public class DungeonMaster : MonoBehaviour {
         int roomChooser = Random.Range(0, goodRooms.Count);
         RoomObject roomToBuild = goodRooms[roomChooser];
 
-        // TODO: Send to WorldManager.placeRoom()?
         return roomToBuild;
-    }
-
-    /// <summary>
-    /// Tests the GetRoomPrefab function.
-    /// </summary>
-    void TestGetRoomPrefab()
-    {
-        GetRoomPrefab(1, Genre.SciFi, "Curse");
-        GetRoomPrefab(4, Genre.Horror, "Shop");
-        GetRoomPrefab(2, Genre.Fantasy, "Treasure");
     }
 
     /// <summary>
@@ -241,6 +236,7 @@ public class DungeonMaster : MonoBehaviour {
         if (pageType == MoveType.Attack)
         {
             prefabName += m_pageAttack.name;
+            Debug.Log("Prefab name = " + prefabName);
         }
         else if (pageType == MoveType.Boost)
         {

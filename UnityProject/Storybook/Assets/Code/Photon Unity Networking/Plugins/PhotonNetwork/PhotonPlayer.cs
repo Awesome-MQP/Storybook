@@ -342,7 +342,7 @@ public class PhotonPlayer
 
     public PhotonPlayer GetNextFor(int currentPlayerId)
     {
-        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
+        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 1)
         {
             return null;
         }
@@ -372,7 +372,7 @@ public class PhotonPlayer
 
     public PhotonPlayer GetPrevFor(int currentPlayerId)
     {
-        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
+        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 1)
         {
             return null;
         }

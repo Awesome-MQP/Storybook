@@ -231,7 +231,7 @@ public abstract class CombatPlayer : CombatPawn
     {
         GameManager gm = FindObjectOfType<GameManager>();
         List<Page> deckPages = new List<Page>();
-        for (int i = 0; i < gm.DeckSize; i++)
+        for (int i = 0; i < 0; i++)
         {
             Page page = (Page)playerInventory[i].SlotItem;
             deckPages.Add(page);

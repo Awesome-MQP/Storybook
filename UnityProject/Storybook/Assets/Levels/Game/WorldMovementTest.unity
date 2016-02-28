@@ -120,7 +120,7 @@ MonoBehaviour:
   m_horrorPlayer: {fileID: 11413378, guid: 4eaa88afd96638247840a9d6a992df59, type: 2}
   m_scifiPlayer: {fileID: 11476212, guid: 6dc6b9707cf49b745b701db2de757998, type: 2}
   m_playerGroup: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292, type: 2}
-  m_gameManager: {fileID: 11465666, guid: 6a7cd2a7332445748a5e8161a9c245e8, type: 2}
+  m_gameManager: {fileID: 0}
   m_playerInventoryPrefab: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e,
     type: 2}
   m_dungeonMasterPrefab: {fileID: 11456690, guid: a6beba8a9fa136e429c417b4d263c92d,

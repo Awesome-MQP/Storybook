@@ -117,7 +117,8 @@ public class Page : Item  {
 
         if (m_isRare) // Rare page, target all enemies
         {
-            m_allTargets = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam.ToArray();
+            //TODO: Fix this?
+            m_allTargets = null;//m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam.ToArray();
             foreach (CombatPawn enemyPawn in m_allTargets)
             {
                 moveDamage = StatsManager.CalcDamage(m_moveOwner.PawnGenre,
@@ -146,7 +147,8 @@ public class Page : Item  {
     {
         if (m_isRare) // Rare page, target all allies
         {
-            m_allTargets = m_gameManager.PlayerTeamForCombat.ActivePawnsOnTeam.ToArray();
+            //TODO: Fix this?
+            m_allTargets = null;//m_gameManager.PlayerTeamForCombat.ActivePawnsOnTeam.ToArray();
             foreach (CombatPawn allyPawn in m_allTargets)
             {
                 allyPawn.IncreasePawnSpeed(PageLevel);
@@ -163,7 +165,8 @@ public class Page : Item  {
     {
         if(m_isRare) // Rare page, target all foes
         {
-            m_allTargets = m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam.ToArray();
+            //TODO: Fix this?
+            m_allTargets = null;//m_gameManager.EnemyTeamForCombat.ActivePawnsOnTeam.ToArray();
             foreach(CombatPawn enemyPawn in m_allTargets)
             {
                 enemyPawn.InflictStatus(PageLevel);

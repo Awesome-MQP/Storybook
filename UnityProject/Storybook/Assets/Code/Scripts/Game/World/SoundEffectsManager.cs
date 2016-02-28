@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundEffectsManager : Photon.PunBehaviour {
+public class SoundEffectsManager : MonoBehaviour
+{
 
     private static SoundEffectsManager s_instance;
 
@@ -17,8 +18,8 @@ public class SoundEffectsManager : Photon.PunBehaviour {
     private AudioClip m_clickSoundEffect;
 
 	// Use this for initialization
-	protected override void Awake () {
-        base.Awake();
+	protected void Awake ()
+    {
         s_instance = this;
 	}
 	

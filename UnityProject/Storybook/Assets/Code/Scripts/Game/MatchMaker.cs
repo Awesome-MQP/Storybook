@@ -11,8 +11,8 @@ public class MatchMaker : Photon.PunBehaviour {
     void Start()
     {
         // TODO
-        PhotonNetwork.offlineMode = true;
-        //PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
+        //PhotonNetwork.offlineMode = true;
+        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 
@@ -45,6 +45,11 @@ public class MatchMaker : Photon.PunBehaviour {
         if (isFirst && GUILayout.Button("Load Level Bug"))
         {
             PhotonNetwork.LoadLevel("LoadLevelBugScene");
+            Destroy(this);
+        }
+        if (isFirst && GUILayout.Button("Start Demo"))
+        {
+            PhotonNetwork.LoadLevel("TestingLevel");
             Destroy(this);
         }
     }

@@ -33,10 +33,10 @@ public class PlayerTeam : CombatTeam {
             if (playerPawn is CombatPlayer)
             {
                 CombatPlayer player = (CombatPlayer)playerPawn;
-                GameManager gameManager = FindObjectOfType<GameManager>();
+                GameManager gameManager = GameManager.GetInstance<GameManager>();
                 PlayerEntity currentPlayerEntity = _findPlayerEntity(playerPawn.PawnId);
                 player.InitializePlayerPawn(currentPlayerEntity);
-                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
+                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
                 player.CreateDeck(currentPlayerInventory);
             }
 

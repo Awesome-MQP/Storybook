@@ -20,8 +20,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     private bool m_atNode;
 
-    private RoomObject m_currentRoom;
-
     /// <summary>
     /// Gets the current room that this mover is considered in.
     /// </summary>
@@ -29,14 +27,11 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     {
         get
         {
-            /*
             MovementNode targetNode = TargetNode;
             if (targetNode)
                 return targetNode.GetComponentInParent<RoomObject>();
 
             return null;
-            */
-            return m_currentRoom;
         }
     }
 
@@ -82,8 +77,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         TargetNode = room.CenterNode;
         Position = room.CenterNode.transform.position;
 
-        m_currentRoom = room;
-
         StartCoroutine(_stateMachine());
     }
     /// <summary>
@@ -124,9 +117,9 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// Moves all the players to the next room
     /// </summary>
     /// <param name="newRoomLoc">The location of the room to move to</param>
+    [Obsolete]
     public void MoveToNextRoom(Location newRoomLoc)
     {
-        m_currentRoom.OnRoomExit();
         MapManager mapManager = FindObjectOfType<MapManager>();
         RoomObject newRoom = mapManager.GetRoom(newRoomLoc);
 
@@ -134,20 +127,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         Camera.main.GetComponent<GameCamera>().trackObject(Camera.main, newRoom.CameraNode);
         Camera.main.transform.rotation = newRoom.CameraNode.rotation;
 
-        m_currentRoom = newRoom;
-        m_currentRoom.OnRoomEnter();
-
         SpawnInRoom(newRoom);
-    }
-
-    /// <summary>
-    /// Called when the game transitions from combat back to the dungeon
-    /// Moves the cameras to the room positions
-    /// </summary>
-    public void TransitionFromCombat()
-    {
-        Camera.main.transform.position = m_currentRoom.CameraNode.position;
-        Camera.main.transform.rotation = m_currentRoom.CameraNode.rotation;
     }
 
     protected sealed override void OnArriveAtNode(MovementNode node)
@@ -155,7 +135,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         if (node == CurrentRoom.CenterNode)
         {
             m_isAtRoomCenter = true;
-            m_currentRoom.OnRoomEvent();
         }
 
         m_atNode = true;
@@ -169,6 +148,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         m_atNode = false;
     }
 
+    /// <summary>
+    /// State when the room mover is waiting for input on which direction to move in.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnWaitingForInput()
     {
         m_nextMoveDirection = Door.Direction.Unknown;
@@ -181,6 +164,10 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         yield return OnMoveInDirection;
     }
 
+    /// <summary>
+    /// State when the mover try to move in a direction.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnMoveInDirection()
     {
         Door nextDoor = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
@@ -195,11 +182,19 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
+    /// <summary>
+    /// State when the mover fail to move in a direction.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnFailMoveInDirection()
     {
         yield return OnWaitingForInput;
     }
 
+    /// <summary>
+    /// State when the mover starts to leave through a door.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnLeavingRoom()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
@@ -209,9 +204,15 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
             yield return null;
         }
 
+        CurrentRoom.RoomExit(this);
+
         yield return OnMoveBetweenRooms;
     }
 
+    /// <summary>
+    /// State when the mover is moving between rooms.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnMoveBetweenRooms()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection).LinkedDoor;
@@ -224,11 +225,21 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         yield return OnEnterRoom;
     }
 
+    /// <summary>
+    /// State when the mover enters a room and should move into position. This state will also by default wait for the room event to end.
+    /// </summary>
+    /// <returns>The next state to go to.</returns>
     protected virtual IEnumerable<StateDelegate> OnEnterRoom()
     {
+        CurrentRoom.RoomEntered(this);
         TargetNode = CurrentRoom.CenterNode;
 
         while (!m_atNode)
+        {
+            yield return null;
+        }
+
+        foreach (var v in CurrentRoom.RoomEvent(this))
         {
             yield return null;
         }
@@ -249,7 +260,6 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         while (m_currentState != null)
         {
             StateDelegate next = null;
-            IEnumerable<StateDelegate> enumerable = m_currentState();
 
             foreach (StateDelegate stateDelegate in m_currentState())
             {

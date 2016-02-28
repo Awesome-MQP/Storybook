@@ -3,7 +3,6 @@ using System.Collections;
 
 public interface IEventListener
 {
-    EventDispatcher Dispatcher { get; }
 }
 
 public abstract class EventListener<T> : IEventListener where T : EventDispatcher, new()

@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 /// <summary>
 /// An object that represents a player.
 /// </summary>
-public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>
+public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstructable<PlayerObject>
 {
     private PhotonPlayer m_player;
 
@@ -30,12 +30,46 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>
         }
     }
 
+    protected override void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+        base.Awake();
+    }
+
     public void Construct(PhotonPlayer player)
     {
         Assert.IsTrue(IsMine);
 
         Player = player;
         photonView.TransferController(player);
+    }
+
+    public void Construct(PlayerObject oldPlayer)
+    {
+        Assert.IsTrue(IsMine);
+
+        Player = oldPlayer.Player;
+        photonView.TransferController(Player);
+
+        OnTakeOver(oldPlayer);
+    }
+
+    public override void OnStartPeer(bool wasSpawn)
+    {
+        if (wasSpawn)
+        {
+            GameManager gameManager = GameManager.GetInstance<GameManager>();
+            gameManager.RegisterPlayerObject(this);
+        }
+    }
+
+    public override void OnStartController(bool wasSpawn)
+    {
+        if (wasSpawn)
+        {
+            GameManager gameManager = GameManager.GetInstance<GameManager>();
+            gameManager.RegisterPlayerObject(this);
+        }
     }
 
     /// <summary>
@@ -45,7 +79,8 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>
     /// <remarks>This code should be network safe.</remarks>
     public virtual PlayerObject GetNext()
     {
-        return GameManager.GetInstance<GameManager>().GetPlayerObject(m_player.GetNext());
+        PhotonPlayer player = m_player.GetNext();
+        return GameManager.GetInstance<GameManager>().GetPlayerObject(player);
     }
 
     /// <summary>
@@ -56,5 +91,10 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>
     public virtual PlayerObject GetPrev()
     {
         return GameManager.GetInstance<GameManager>().GetPlayerObject(m_player.GetPrev());
+    }
+
+    protected virtual void OnTakeOver(PlayerObject oldPlayer)
+    {
+        
     }
 }

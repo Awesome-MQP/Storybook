@@ -2,13 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
-public class CombatManager : Photon.PunBehaviour {
+public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
+{
 
     [SerializeField]
     private Transform m_cameraPos;
 
-    [SerializeField]
     private List<CombatTeam> m_teamList = new List<CombatTeam>();
 
     private Animator m_combatStateMachine;
@@ -16,8 +17,36 @@ public class CombatManager : Photon.PunBehaviour {
 
     private Dictionary<CombatPawn, CombatMove> m_pawnToCombatMove = new Dictionary<CombatPawn, CombatMove>();
 
+    private AudioClip m_previousMusic;
+    private AudioClip m_combatMusic;
+
     private int m_combatLevel;
     private Genre m_combatGenre;
+
+    override protected void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
+    
+
+    public void Construct(CombatInstance combatInfo)
+    {
+        Assert.IsTrue(IsMine);
+
+        m_previousMusic = combatInfo.GetPreviousMusic();
+        m_combatMusic = combatInfo.GetCombatMusic();
+
+        FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_combatMusic, 5, true);
+
+        CombatTeam[] teams = combatInfo.CreateTeams();
+        m_teamList = new List<CombatTeam>(teams);
+
+        foreach (CombatTeam team in teams)
+        {
+            PhotonNetwork.Spawn(team.photonView);
+        }
+    }
 
     // Use this for initialization
     void Start()
@@ -110,7 +139,9 @@ public class CombatManager : Photon.PunBehaviour {
     /// </summary>
     public void EndCurrentCombat()
     {
-        FindObjectOfType<GameManager>().EndCombat();
+        //FindObjectOfType<GameManager>().EndCombat();
+
+        FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_previousMusic, 5, true);
     }
 
     /// <summary>

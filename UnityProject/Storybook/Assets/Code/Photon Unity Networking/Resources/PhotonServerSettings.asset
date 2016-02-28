@@ -74,4 +74,5 @@ MonoBehaviour:
   - _rpcOnStartGame
   - InitializeDictionary
   - SelectCharacter
+  - InitializeCamera
   DisableAutoOpenWizard: 1

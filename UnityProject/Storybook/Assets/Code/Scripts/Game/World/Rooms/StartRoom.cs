@@ -10,10 +10,14 @@ public class StartRoom : RoomObject
 
     protected override void Awake()
     {
-        m_musicManager = FindObjectOfType<MusicManager>();
+        base.Awake();
+    }
+
+    void Start()
+    {
+        m_musicManager = MusicManager.Instance;
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
-        base.Awake();
     }
 
     protected override void OnRoomEnter(RoomMover mover)

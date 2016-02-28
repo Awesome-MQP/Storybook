@@ -62,10 +62,22 @@ public class BaseStorybookGame : GameManager
         PhotonNetwork.Spawn(mover.photonView);
         m_mover.Construct(startRoom);
 
-        Camera.main.transform.position = startRoom.CameraNode.position;
-        Camera.main.transform.rotation = startRoom.CameraNode.rotation;
+        InitializeCamera(startRoom.CameraNode.position, startRoom.CameraNode.rotation);
+        photonView.RPC(nameof(InitializeCamera), PhotonTargets.Others, startRoom.CameraNode.position, startRoom.CameraNode.rotation);
 
         base.OnStartOwner(wasSpawn);
+    }
+
+    [PunRPC]
+    public void InitializeCamera(Vector3 position, Quaternion rotation)
+    {
+        Camera.main.transform.position = position;
+        Camera.main.transform.rotation = rotation;
+    }
+
+    public override void OnSerializeReliable(PhotonStream stream, PhotonMessageInfo info, bool isInit)
+    {
+        base.OnSerializeReliable(stream, info, isInit);
     }
 
     public void StartCombat(CombatInstance combatInstance)

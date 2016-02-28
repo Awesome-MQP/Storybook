@@ -3411,6 +3411,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         if (this.loadingLevelAndPausedNetwork)
         {
+            SetLevelPrefix((short) SceneManager.GetActiveScene().buildIndex);
             this.loadingLevelAndPausedNetwork = false;
             PhotonNetwork.isMessageQueueRunning = true;
         }

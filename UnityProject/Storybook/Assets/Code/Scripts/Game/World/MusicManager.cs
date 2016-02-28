@@ -2,7 +2,10 @@
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
-public class MusicManager : MonoBehaviour {
+public class MusicManager : MonoBehaviour
+{
+
+    private static MusicManager s_instance;
 
     [SerializeField]
     private AudioClip m_currentMusicTrack = null;
@@ -37,6 +40,11 @@ public class MusicManager : MonoBehaviour {
 
     private AudioClip[] m_currentMusicTracks;
 
+    public static MusicManager Instance
+    {
+        get { return s_instance; }
+    }
+
     // ====PROPERTIES====
     public AudioClip[] MusicTracks
     {
@@ -47,6 +55,7 @@ public class MusicManager : MonoBehaviour {
     // ====METHODS====
     void Awake()
     {
+        s_instance = this;
         m_musicSource = GetComponent<AudioSource>();
         m_musicSource.volume = 0f;
     }

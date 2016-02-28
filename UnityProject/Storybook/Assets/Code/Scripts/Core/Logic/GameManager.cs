@@ -215,7 +215,7 @@ public abstract class GameManager : Photon.PunBehaviour
     }
 
     [PunRPC]
-    private void _rpcOnStartGame()
+    protected void _rpcOnStartGame()
     {
         OnStartGame();
     }

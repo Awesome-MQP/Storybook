@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfa99f7de5240d4d8f31d64af359cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 100
   m_defaultPlayerObject:
     m_asset: PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
@@ -406,6 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec58f83a8006e243af3aa680bcd238a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 184
   m_worldMaxXSize: 4
   m_worldMaxYSize: 4
   m_combatRoomPrefab: {fileID: 11415158, guid: 161d5de8108f55f4caecd3945c4ab885, type: 2}

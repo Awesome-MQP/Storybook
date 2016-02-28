@@ -90,7 +90,7 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
             PlayerEntity createdEntity = entityObject.GetComponent<PlayerEntity>();
             createdEntity.Construct(PhotonNetwork.player);
             PhotonNetwork.Spawn(entityObject.GetPhotonView());
-            SceneFading.Instance().LoadScene("WorldMovementTest");
+            SceneFading.Instance().LoadScene("TestingLevel");
         }
     }
 
@@ -129,7 +129,6 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
     [PunRPC]
     public void SelectCharacter(PhotonPlayer player, int selectedGenre)
     {
-        Debug.Log("Character selected");
         Genre playerGenre = m_playerToCharacter[player];
         if (playerGenre != Genre.None)
         {

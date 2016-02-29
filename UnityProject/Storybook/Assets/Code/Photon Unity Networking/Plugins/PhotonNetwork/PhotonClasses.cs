@@ -594,7 +594,7 @@ namespace Photon
                         m_propertiesByName.Add(propertyInfo.Name, propertyInfo);
                         m_propertiesByNumber.Add(propCount, propertyInfo);
                         m_propertyNumbersByName.Add(propertyInfo.Name, propCount);
-                        m_propertiesBySetter.Add(propertyInfo.GetSetMethod(true), propertyInfo);
+                        m_propertiesBySetter.Add(propertyInfo.GetSetMethod(true).Name, propertyInfo);
 
                         propCount++;
                     }
@@ -653,7 +653,7 @@ namespace Photon
             MethodBase setter = stackTrace.GetFrame(1).GetMethod();
 
             PropertyInfo property;
-            m_propertiesBySetter.TryGetValue(setter, out property);
+            m_propertiesBySetter.TryGetValue(setter.Name, out property);
 
             if (property == null)
                 return;
@@ -1255,7 +1255,7 @@ namespace Photon
         private Dictionary<string, PropertyInfo> m_propertiesByName = new Dictionary<string, PropertyInfo>();
         private Dictionary<int, PropertyInfo> m_propertiesByNumber = new Dictionary<int, PropertyInfo>();
         private Dictionary<string, int> m_propertyNumbersByName = new Dictionary<string, int>(); 
-        private Dictionary<MethodBase, PropertyInfo> m_propertiesBySetter = new Dictionary<MethodBase, PropertyInfo>(); 
+        private Dictionary<string, PropertyInfo> m_propertiesBySetter = new Dictionary<string, PropertyInfo>(); 
         private uint m_dirtyBits = 0;
 
         private bool m_hasBuildProperties;

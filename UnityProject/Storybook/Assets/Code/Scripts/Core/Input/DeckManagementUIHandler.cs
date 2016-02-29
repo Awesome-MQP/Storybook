@@ -135,8 +135,33 @@ public class DeckManagementUIHandler : PageUIHandler
 
     public void PopulateMenu()
     {
+        StartCoroutine(_waitForInventory());
+    }
+
+
+    /// <summary>
+    /// Called when the finish button is clicked, this function destroys the deck management UI
+    /// </summary>
+    public void FinishedClicked()
+    {
+        PlayClickSound();
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().OnDeckManagementClosed();
+        Debug.Log("Destroying deck management menu");
+        Destroy(gameObject);
+    }
+
+    private IEnumerator _waitForInventory()
+    {
         BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
-        PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
+        PlayerEntity localPlayer = gameManager.GetLocalPlayer<PlayerEntity>();
+
+        while (!localPlayer)
+        {
+            yield return null;
+            localPlayer = gameManager.GetLocalPlayer<PlayerEntity>();
+        }
+
+        PlayerInventory pi = localPlayer.OurInventory;
 
         ScrollRect[] allScrollRects = GetComponentsInChildren<ScrollRect>();
 
@@ -171,17 +196,5 @@ public class DeckManagementUIHandler : PageUIHandler
                 pageButton.transform.SetParent(outOfDeckContent, false);
             }
         }
-    }
-
-
-    /// <summary>
-    /// Called when the finish button is clicked, this function destroys the deck management UI
-    /// </summary>
-    public void FinishedClicked()
-    {
-        PlayClickSound();
-        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().OnDeckManagementClosed();
-        Debug.Log("Destroying deck management menu");
-        Destroy(gameObject);
     }
 }

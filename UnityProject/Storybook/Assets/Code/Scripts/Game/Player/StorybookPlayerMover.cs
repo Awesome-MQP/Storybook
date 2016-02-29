@@ -65,7 +65,7 @@ public class StorybookPlayerMover : BasePlayerMover,
         base.Awake();
     }
 
-    void Start()
+    protected override void OnRegistered()
     {
         OpenDeckManagementMenu();
     }

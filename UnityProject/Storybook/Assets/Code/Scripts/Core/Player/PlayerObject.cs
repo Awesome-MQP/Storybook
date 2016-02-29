@@ -1,4 +1,5 @@
 ﻿using Photon;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 /// <summary>
@@ -49,7 +50,7 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
         Assert.IsTrue(IsMine);
 
         Player = oldPlayer.Player;
-        photonView.TransferController(Player);
+        //photonView.TransferController(Player);
 
         OnTakeOver(oldPlayer);
     }

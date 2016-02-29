@@ -76,9 +76,13 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         
         TargetNode = room.CenterNode;
         Position = room.CenterNode.transform.position;
+    }
 
+    public override void OnStartOwner(bool wasSpawn)
+    {
         StartCoroutine(_stateMachine());
     }
+
     /// <summary>
     /// Tells the mover to move in a certain direction.
     /// </summary>
@@ -257,7 +261,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     {
         yield return null;//wait for one full frame to pass.
 
-        while (m_currentState != null)
+        while (m_currentState != null && gameObject.activeSelf)
         {
             StateDelegate next = null;
 

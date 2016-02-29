@@ -75,4 +75,5 @@ MonoBehaviour:
   - InitializeDictionary
   - SelectCharacter
   - InitializeCamera
+  - _rpcOnRegistered
   DisableAutoOpenWizard: 1

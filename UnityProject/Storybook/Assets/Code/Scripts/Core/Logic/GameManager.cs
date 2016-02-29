@@ -160,10 +160,9 @@ public abstract class GameManager : Photon.PunBehaviour
         Assert.IsTrue(IsMine);
 
         PlayerObject playerObject = CreatePlayerObject(player);
+        m_playerObjects.Add(player, playerObject);
         playerObject.Construct(player);
         PhotonNetwork.Spawn(playerObject.photonView);
-
-        m_playerObjects.Add(player, playerObject);
 
         return playerObject;
     }
@@ -175,10 +174,9 @@ public abstract class GameManager : Photon.PunBehaviour
         PhotonPlayer player = oldPlayer.Player;
 
         PlayerObject playerObject = CreatePlayerObject(player);
+        m_playerObjects.Add(player, playerObject);
         playerObject.Construct(oldPlayer);
         PhotonNetwork.Spawn(playerObject.photonView);
-
-        m_playerObjects.Add(player, playerObject);
 
         return playerObject;
     }

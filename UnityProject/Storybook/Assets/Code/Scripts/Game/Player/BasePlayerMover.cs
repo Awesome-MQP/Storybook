@@ -57,7 +57,13 @@ public abstract class BasePlayerMover : RoomMover
     public void RegisterPlayer(PlayerObject player)
     {
         if(OnRegisterPlayer(player))
+        {
             m_registeredPlayers.Add(player);
+            if (player.Player.isLocal)
+                OnRegistered();
+            else
+                photonView.RPC(nameof(_rpcOnRegistered), player.Player);
+        }
     }
 
     /// <summary>
@@ -70,10 +76,21 @@ public abstract class BasePlayerMover : RoomMover
         return true;
     }
 
+    protected virtual void OnRegistered()
+    {
+        
+    }
+
     protected override IEnumerable<StateDelegate> OnEnterRoom()
     {
         ChangeLeader();
 
         return base.OnEnterRoom();
+    }
+
+    [PunRPC]
+    protected void _rpcOnRegistered()
+    {
+        OnRegistered();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Photon;
+using UnityEngine.Assertions;
 
 /// <summary>
 /// A class for moving an object to a target over a network.
@@ -45,6 +46,7 @@ public class NetworkMover : PunBehaviour
         get { return transform.position; }
         set
         {
+            Assert.IsTrue(ShouldBeChanging);
             transform.position = value;
             PropertyChanged();
         }

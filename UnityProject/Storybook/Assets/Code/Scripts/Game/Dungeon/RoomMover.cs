@@ -252,7 +252,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     }
 
     [PunRPC]
-    private void _rpcMoveInDirection(byte directionIndex)
+    protected void _rpcMoveInDirection(byte directionIndex)
     {
         MoveInDirection((Door.Direction) directionIndex);
     }

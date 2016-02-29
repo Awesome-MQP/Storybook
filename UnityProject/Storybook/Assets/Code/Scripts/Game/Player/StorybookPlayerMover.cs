@@ -287,9 +287,9 @@ public class StorybookPlayerMover : BasePlayerMover,
         m_playerWorldPawns.Add(pawn);
         pawn.Construct(playerEntity);
 
-        PhotonNetwork.Spawn(pawn.photonView);
-
         NetPlayerCountEvent = m_playerWorldPawns.Count;
+
+        PhotonNetwork.Spawn(pawn.photonView);
 
         return true;
     }

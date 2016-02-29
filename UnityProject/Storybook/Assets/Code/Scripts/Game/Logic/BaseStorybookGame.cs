@@ -59,8 +59,8 @@ public class BaseStorybookGame : GameManager
         GameObject moverObject = PhotonNetwork.Instantiate(m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
         BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
         m_mover = mover;
-        PhotonNetwork.Spawn(mover.photonView);
         m_mover.Construct(startRoom);
+        PhotonNetwork.Spawn(mover.photonView);
 
         InitializeCamera(startRoom.CameraNode.position, startRoom.CameraNode.rotation);
         photonView.RPC(nameof(InitializeCamera), PhotonTargets.Others, startRoom.CameraNode.position, startRoom.CameraNode.rotation);

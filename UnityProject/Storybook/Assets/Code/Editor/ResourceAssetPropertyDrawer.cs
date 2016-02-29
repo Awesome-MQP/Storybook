@@ -42,14 +42,14 @@ public class ResourceAssetPropertyDrawer : PropertyDrawer
         if (dotIndex > -1)
             assetPath = assetPath.Substring(0, dotIndex);
 
-        int resourcesIndex = assetPath.LastIndexOf("/Resources", StringComparison.CurrentCulture);
+        int resourcesIndex = assetPath.LastIndexOf("/Resources/", StringComparison.CurrentCulture);
         if (resourcesIndex < 0)
         {
             Debug.LogWarning("Resource assets require an asset in the resources folder.");
             return;
         }
 
-        assetPath = assetPath.Substring(resourcesIndex + 1);
+        assetPath = assetPath.Substring(resourcesIndex + "/Resources/".Length);
 
         assetNameProperty.stringValue = assetPath;
         fullAssetNameProperty.stringValue = fullAssetPath;

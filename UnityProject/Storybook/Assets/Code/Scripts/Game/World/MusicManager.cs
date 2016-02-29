@@ -2,16 +2,26 @@
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
-public class MusicManager : MonoBehaviour {
+public class MusicManager : MonoBehaviour
+{
+
+    private static MusicManager s_instance;
 
     [SerializeField]
     private AudioClip m_currentMusicTrack = null;
 
-    public float FadeOutThreshold = 0.05f;
-    public float FadeSpeed = 0.05f;
+    [SerializeField]
+    private float m_fadeOutThreshold = 0.05f;
 
     [SerializeField]
-    private AudioSource m_musicSource = null;
+    private float m_fadeSpeed = 0.05f;
+
+    private AudioSource m_musicSource;
+
+    public AudioSource Music
+    {
+        get { return m_musicSource; }
+    }
 
     [SerializeField]
     private float m_musicVolume = 0.5f;
@@ -30,6 +40,11 @@ public class MusicManager : MonoBehaviour {
 
     private AudioClip[] m_currentMusicTracks;
 
+    public static MusicManager Instance
+    {
+        get { return s_instance; }
+    }
+
     // ====PROPERTIES====
     public AudioClip[] MusicTracks
     {
@@ -40,6 +55,7 @@ public class MusicManager : MonoBehaviour {
     // ====METHODS====
     void Awake()
     {
+        s_instance = this;
         m_musicSource = GetComponent<AudioSource>();
         m_musicSource.volume = 0f;
     }
@@ -47,12 +63,12 @@ public class MusicManager : MonoBehaviour {
     
     // Fade in to a music track
     // Fade function is all-in-one, can fade in from no music playing, can fade from one track to another, and can fade out to silence.
-    public IEnumerator Fade(AudioClip clip, float volume, bool loop)
+    public void Fade(AudioClip clip, float volume, bool loop)
     {
         if (clip == null || clip == this.m_musicSource.clip)
         {
             Debug.Log("no clip/clip is the same as the one we already have");
-            yield return null;
+            return;
         }
 
         m_nextMusicToPlay = clip;
@@ -68,13 +84,11 @@ public class MusicManager : MonoBehaviour {
             else
             {
                 FadeToNextClip();
-                yield return null;
             }
         }
         else
         {
             FadeToNextClip();
-            yield return null;
         }
     }
 
@@ -127,11 +141,11 @@ public class MusicManager : MonoBehaviour {
 
         if (m_currentFadeState == FadeState.fadeOut)
         {
-            if (m_musicSource.volume > this.FadeOutThreshold)
+            if (m_musicSource.volume > this.m_fadeOutThreshold)
             {
                 Debug.Log("Fading out. vol= " + m_musicSource.volume);
                 // Fade out current clip.
-                m_musicSource.volume -= this.FadeSpeed * Time.deltaTime;
+                m_musicSource.volume -= this.m_fadeSpeed * Time.deltaTime;
             }
             else
             {
@@ -145,7 +159,7 @@ public class MusicManager : MonoBehaviour {
             if (m_musicSource.volume < m_nextMusicVolume)
             {
                 // Fade in next clip.
-                m_musicSource.volume += this.FadeSpeed * Time.deltaTime;
+                m_musicSource.volume += this.m_fadeSpeed * Time.deltaTime;
             }
             else
             {

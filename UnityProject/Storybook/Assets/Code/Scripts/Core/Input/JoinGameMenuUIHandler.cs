@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Photon;
 using System.Collections;
+using System;
 
 public class JoinGameMenuUIHandler : Photon.PunBehaviour {
 
@@ -28,10 +29,42 @@ public class JoinGameMenuUIHandler : Photon.PunBehaviour {
 
     public void OnSearchButtonClick()
     {
+        
+        InputField search = GetComponentInChildren<InputField>();
+        String searchText = search.text;
 
+        // Only search for a game if 
+        if(!String.IsNullOrEmpty(searchText))
+        {
+            bool foundRoom = false;
+
+            foreach (RoomInfo room in PhotonNetwork.GetRoomList())
+            {
+                if (room.name == searchText)
+                {
+                    PhotonNetwork.JoinRoom(searchText);
+                    foundRoom = true;
+                    break;
+                }
+            }
+            // if the room exists, join it
+            if (foundRoom == true)
+            {
+                PhotonNetwork.JoinRoom(searchText);
+            }
+            // otherwise make a new room
+            if (foundRoom == false)
+            {
+                RoomOptions options = new RoomOptions();
+                options.maxPlayers = 4;
+                PhotonNetwork.CreateRoom(searchText, options, null);
+            }
+            SceneFading fader = SceneFading.Instance();
+            fader.LoadScene("PreGameLobby");
+        }
     }
 
-    public void _setAvailableGamesText()
+    private void _setAvailableGamesText()
     {
         Text[] text = GetComponentsInChildren<Text>();
         foreach(Text t in text)

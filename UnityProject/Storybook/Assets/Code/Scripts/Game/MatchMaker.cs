@@ -11,8 +11,8 @@ public class MatchMaker : Photon.PunBehaviour {
     void Start()
     {
         // TODO
-        PhotonNetwork.offlineMode = true;
-        //PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
+        //PhotonNetwork.offlineMode = true;
+        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 
@@ -23,28 +23,14 @@ public class MatchMaker : Photon.PunBehaviour {
         {
             PhotonNetwork.LoadLevel("TestRoomPlacement");
         }
-        if (isFirst && GUILayout.Button("Start Combat"))
+        if (isFirst && GUILayout.Button("Test"))
         {
-            PhotonNetwork.LoadLevel("DemoCombatScene");
+            PhotonNetwork.LoadLevel("PhotonTest");
             Destroy(this);
         }
-        if (isFirst && GUILayout.Button("Start World Movement"))
+        if (isFirst && GUILayout.Button("Start Demo"))
         {
-            PhotonNetwork.LoadLevel("WorldMovementTest");
-            Destroy(this);
-        }
-        if (isFirst && GUILayout.Button("Start Map Test"))
-        {
-            PhotonNetwork.LoadLevel("TestMapGeneration");
-            Destroy(this);
-        }
-        if (isFirst && GUILayout.Button("Start Scene Fade"))
-        {
-            PhotonNetwork.LoadLevel("FaderScene1");
-        }
-        if (isFirst && GUILayout.Button("Load Level Bug"))
-        {
-            PhotonNetwork.LoadLevel("LoadLevelBugScene");
+            PhotonNetwork.LoadLevel("TestingLevel");
             Destroy(this);
         }
     }

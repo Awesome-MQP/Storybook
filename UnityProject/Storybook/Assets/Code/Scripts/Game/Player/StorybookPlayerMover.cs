@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine.Assertions;
 
-public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatcher.IPageForRoomEventListener, DeckManagementEventDispatcher.IDeckManagementEventListener,
-    OverworldEventDispatcher.IOverworldEventListener, RoomEventEventDispatcher.IRoomEventListener
+//[RequireComponent(typeof (Animator))]
+public class StorybookPlayerMover : BasePlayerMover,
+    PageForRoomEventDispatcher.IPageForRoomEventListener,
+    DeckManagementEventDispatcher.IDeckManagementEventListener,
+    OverworldEventDispatcher.IOverworldEventListener, 
+    RoomEventEventDispatcher.IRoomEventListener
 {
-
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
 
     [SerializeField]
@@ -20,39 +23,61 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
 
     private GameObject m_canvas;
 
+    private Door.Direction m_lastMoveDirection = Door.Direction.Unknown;
+
+    //Stores the animator for this player mover.
+    private Animator m_animator;
+
     public PlayerNode[] PlayerPositions
     {
         get { return m_playerPositions.ToArray(); }
     }
 
-    //public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<UIEventDispatcher>(); } }
-    
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>(); } }
+    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>(); } }
     public EventDispatcher DeckMgmtDispatcher { get { return EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>(); } }
     public EventDispatcher OverworldEventDispatcher { get { return EventDispatcher.GetDispatcher<OverworldEventDispatcher>(); } }
     public EventDispatcher RoomEventEventDispatcher { get { return EventDispatcher.GetDispatcher<RoomEventEventDispatcher>(); } }
-    
 
-    public void Start()
+    [SyncProperty]
+    private int NetPlayerCountEvent
     {
-        //EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
-        
-        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().RegisterEventListener(this);
+        get { return m_playerWorldPawns.Count; }
+        set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            if (IsMine)
+                OwnerOnPlayerCountChanged(value);
+            else
+                PeerOnPlayerCountChanged(value);
+            PropertyChanged();
+        }
+    }
+
+    protected override void Awake()
+    {
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().RegisterEventListener(this);
         EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RegisterEventListener(this);
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RegisterEventListener(this);
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RegisterEventListener(this);
-        
+
+        m_animator = GetComponent<Animator>();
+
+        base.Awake();
     }
 
+    protected override void OnRegistered()
+    {
+        OpenDeckManagementMenu();
+    }
+
+    // I copied this in from Dev, don't know how recent it is, but I couldn't find another place to have the listeners be destroyed.
     void OnDestroy()
     {
-        //EventDispatcher.GetDispatcher<UIEventDispatcher>().RegisterEventListener(this);
-        
-        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
-        
+
         Debug.Log("Mover destroyed");
     }
 
@@ -62,7 +87,7 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     /// <param name="nodeForPlayers">The position to be used as the target</param>
     public void MovePlayersToNode(Vector3 nodeForPlayers)
     {
-        foreach(PlayerWorldPawn playerPawn in m_playerWorldPawns)
+        foreach (PlayerWorldPawn playerPawn in m_playerWorldPawns)
         {
             playerPawn.TargetPosition = nodeForPlayers;
         }
@@ -117,7 +142,7 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     public void ExitCombat()
     {
         m_isInCombat = false;
-        CombatRoom currentCombatRoom = (CombatRoom)CurrentRoom;
+        CombatRoom currentCombatRoom = (CombatRoom) CurrentRoom;
         currentCombatRoom.DestroyEnemyWorldPawns();
         foreach (PlayerWorldPawn pawn in m_playerWorldPawns)
         {
@@ -133,8 +158,8 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     /// </summary>
     public void OpenPageForRoomMenu()
     {
-        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
-        m_canvas = (GameObject)Instantiate(loadedObject);
+        Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
+        m_canvas = (GameObject) Instantiate(loadedObject);
         m_UIHandler = m_canvas.GetComponent<PageForRoomUIHandler>();
         m_UIHandler.PopulateMenu();
         m_isMenuOpen = true;
@@ -156,8 +181,8 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     /// </summary>
     public void OpenOverworldMenu()
     {
-        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
-        GameObject canvas = (GameObject)Instantiate(loadedObject);
+        Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
+        GameObject canvas = (GameObject) Instantiate(loadedObject);
         OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
         uiHandler.PopulateMenu(CurrentRoom);
     }
@@ -170,12 +195,12 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     public void SubmitPageForRoom(PageData pageToUseData)
     {
         m_isMenuOpen = false;
-        Door selectedDoor = CurrentRoom.GetDoorByDirection(MoveDirection);
+        Door selectedDoor = CurrentRoom.GetDoorByDirection(m_lastMoveDirection);
         CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
         selectedDoor.IsConnectedRoomMade = true;
         selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
-        TargetNode = selectedDoor;
-        StartCoroutine(MoveToDoor(selectedDoor.NextRoomLocation));
+        selectedDoor.OpenDoor();
+        MoveInDirection(m_lastMoveDirection);
     }
 
     /// <summary>
@@ -186,24 +211,38 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     {
         Debug.Log("MoveDirection = " + moveDirection);
         MoveInDirection(moveDirection);
+    }
 
-        // If the selected room has not been created yet, open the PageForRoom menu
-        if (!CurrentRoom.GetDoorByDirection(moveDirection).IsConnectedRoomMade)
-        {
-            OpenPageForRoomMenu();
-        }
+    protected override IEnumerable<StateDelegate> OnWaitingForInput()
+    {
+        _playIdleAnimations();
 
-        // If the selected room has already been created, move to the door
-        else
-        {
-            TargetNode = CurrentRoom.GetDoorByDirection(moveDirection);
-            StartCoroutine(MoveToDoor(CurrentRoom.GetDoorByDirection(moveDirection).NextRoomLocation));
-        }
+        return base.OnWaitingForInput();
+    }
+
+    protected override IEnumerable<StateDelegate> OnFailMoveInDirection()
+    {
+        m_lastMoveDirection = MoveDirection;
+        OpenPageForRoomMenu();
+
+        return base.OnFailMoveInDirection();
+    }
+
+    protected override IEnumerable<StateDelegate> OnLeavingRoom()
+    {
+        _playWalkAnimations();
+
+        return base.OnLeavingRoom();
+    }
+
+    protected override IEnumerable<StateDelegate> OnMoveBetweenRooms()
+    {
+        return base.OnMoveBetweenRooms();
     }
 
     private void _playWalkAnimations()
     {
-        foreach(PlayerWorldPawn pawn in m_playerWorldPawns)
+        foreach (PlayerWorldPawn pawn in m_playerWorldPawns)
         {
             pawn.SwitchCharacterToWalking();
         }
@@ -211,7 +250,7 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
 
     private void _playIdleAnimations()
     {
-        foreach(PlayerWorldPawn pawn in m_playerWorldPawns)
+        foreach (PlayerWorldPawn pawn in m_playerWorldPawns)
         {
             pawn.SwitchCharacterToIdle();
         }
@@ -229,5 +268,45 @@ public class StorybookPlayerMover : BasePlayerMover, PageForRoomUIEventDispatche
     public void OnRoomCleared()
     {
         OpenDeckManagementMenu();
+    }
+
+    public void TransitionFromCombat()
+    {
+        Camera.main.transform.position = CurrentRoom.CameraNode.position;
+        Camera.main.transform.rotation = CurrentRoom.CameraNode.rotation;
+    }
+
+    protected override bool OnRegisterPlayer(PlayerObject player)
+    {
+        PlayerEntity playerEntity = player as PlayerEntity;
+        if (!playerEntity)
+            return false;
+
+        ResourceAsset asset = GameManager.GetInstance<BaseStorybookGame>().GetWorldPawnForGenre(playerEntity.Genre);
+        PlayerWorldPawn pawn = PhotonNetwork.Instantiate<PlayerWorldPawn>(asset, Vector3.zero, Quaternion.identity, 0);
+        m_playerWorldPawns.Add(pawn);
+        pawn.Construct(playerEntity);
+
+        PhotonNetwork.Spawn(pawn.photonView);
+
+        NetPlayerCountEvent = m_playerWorldPawns.Count;
+
+        return true;
+    }
+
+    protected virtual void OwnerOnPlayerCountChanged(int newPlayerCount)
+    {
+        //m_animator.SetInteger("PlayerCount", newPlayerCount);
+
+        for (int i = 0; i < newPlayerCount; i++)
+        {
+            m_playerWorldPawns[i].Position = m_playerPositions[i].transform.position;
+            m_playerWorldPawns[i].TargetNode = m_playerPositions[i];
+        }
+    }
+
+    protected virtual void PeerOnPlayerCountChanged(int newPlayerCount)
+    {
+        //m_animator.SetInteger("PlayerCount", newPlayerCount);
     }
 }

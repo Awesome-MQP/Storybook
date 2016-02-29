@@ -2293,6 +2293,11 @@ public static class PhotonNetwork
             view.viewID = id;
         }
 
+        for (int i = views.Length - 1; i >= 0; i--)
+        {
+            views[i].gameObject.SetActive(false);
+        }
+
         InternalTryCreateOnPlayers(views, otherPlayers);
 
         return newObject;
@@ -2384,7 +2389,7 @@ public static class PhotonNetwork
                 [(byte)2] = view.instantiationId,
                 [(byte)3] = view.reliableSerializedData,
                 [(byte)4] = view.unreliableSerializedData,
-                [(byte)5] = (short)view.gameObject.scene.buildIndex
+                [(byte)5] = (short)view.prefix
             };
 
             // Store the parent view if we are the root
@@ -2595,7 +2600,7 @@ public static class PhotonNetwork
         {
             [(byte) 0] = networkingPeer.ServerTimeInMilliSeconds,
             [(byte) 1] = root.prefabName,
-            [(byte) 2] = (short) root.gameObject.scene.buildIndex,
+            [(byte) 2] = (short) root.prefix,
             [(byte) 3] = viewIds,
             [(byte) 4] = root.@group,
             [(byte) 5] = root.transform.position,

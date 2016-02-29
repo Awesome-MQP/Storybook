@@ -49,8 +49,7 @@ public class PageForRoomUIHandler : PageUIHandler {
     /// </summary>
     public void PopulateMenu()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+        PlayerInventory pi = GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;//gameManager.GetLocalPlayerInventory();
 
         ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollContent = scrollView.content;
@@ -122,7 +121,7 @@ public class PageForRoomUIHandler : PageUIHandler {
         PlayClickSound();
         //_dropAndReplaceSelectedPage();
         Destroy(gameObject);
-        EventDispatcher.GetDispatcher<PageForRoomUIEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
+        EventDispatcher.GetDispatcher<PageForRoomEventDispatcher>().SubmitPageForRoom(m_selectedPageButton.PageData);
     }
 
     /// <summary>
@@ -130,9 +129,9 @@ public class PageForRoomUIHandler : PageUIHandler {
     /// </summary>
     private void _dropAndReplaceSelectedPage()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
-        PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
+        DungeonMaster dm = DungeonMaster.Instance;
+        PlayerInventory currentPlayerInventory =
+            GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
         currentPlayerInventory.Drop(m_selectedPageButton.PageData.InventoryId);
         currentPlayerInventory.Add(dm.GetBasicPage(), m_selectedPageButton.PageData.InventoryId);
     }

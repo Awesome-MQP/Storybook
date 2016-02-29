@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+TODO: The idea of an event dispatcher is to remove dependecies across systems.
+While this does work as an event dispatcher, it in reality is creating a dependicy that these events go to a UI.
+This would make since if the events where UI dependent but many of them are not.
+Try splitting these up into different categories and possibley re-thinking the event structure.
+For example rather than having OnShopClose have a generic event OnPlayerReady and put it in a PlayerEventDispatcher.
+We can have rooms that wait on players listen for these events from all players and this is useful because it's generic and reusable.
+*/
 public class UIEventDispatcher : EventDispatcher {
     
     public void OnShopClosed()

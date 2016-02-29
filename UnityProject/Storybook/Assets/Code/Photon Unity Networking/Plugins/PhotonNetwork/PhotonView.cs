@@ -336,7 +336,7 @@ public class PhotonView : Photon.MonoBehaviour
     }
 
     /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
-    protected internal void Awake()
+    protected void Awake()
     {
         BuildParent();
 
@@ -346,8 +346,6 @@ public class PhotonView : Photon.MonoBehaviour
             PhotonNetwork.networkingPeer.RegisterPhotonView(this);
             this.instantiationDataField = PhotonNetwork.networkingPeer.FetchInstantiationData(this.instantiationId);
         }
-
-        gameObject.SetActive(false);
 
         if (!isSceneView)
         {

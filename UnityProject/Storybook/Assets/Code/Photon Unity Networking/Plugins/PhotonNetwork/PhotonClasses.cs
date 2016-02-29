@@ -29,6 +29,7 @@ using ExitGames.Client.Photon;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Random = System.Random;
 
 
 /// <summary>Defines the OnPhotonSerializeView method to make it easy to implement correctly for observable scripts.</summary>
@@ -538,8 +539,36 @@ namespace Photon
 
         protected virtual void OnValidate()
         {
-            if (photonView && !photonView.ObservedComponents.Contains(this))
+            if (!photonView)
+                return;
+
+            if(photonView.ObservedComponents == null)
+                photonView.ObservedComponents = new List<Component>();
+
+            if (!photonView.ObservedComponents.Contains(this))
                 photonView.ObservedComponents.Add(this);
+
+            if (m_componentId == 0)
+            {
+                bool failedGeneration = false;
+                Random generator = new Random();
+
+                do
+                {
+                    failedGeneration = false;
+                    m_componentId = generator.Next(1, 255);
+
+                    foreach (Component component in photonView.ObservedComponents)
+                    {
+                        PunBehaviour punBehaviour = component as PunBehaviour;
+                        if (punBehaviour && punBehaviour != this && punBehaviour.m_componentId == m_componentId)
+                        {
+                            failedGeneration = true;
+                            break;
+                        }
+                    }
+                } while (failedGeneration);
+            }
         }
 
         private void BuildPropertyInfo()
@@ -553,12 +582,12 @@ namespace Photon
             int propCount = 0;
             foreach (PropertyInfo propertyInfo in properties)
             {
-                bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), true);
+                bool isSyncProperty = propertyInfo.IsDefined(typeof(SyncProperty), false);
                 bool hasGetAndSet = propertyInfo.GetGetMethod(true) != null && propertyInfo.GetSetMethod(true) != null;
 
                 if (isSyncProperty && hasGetAndSet)
                 {
-                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof(SyncProperty), true)[0] as SyncProperty;
+                    SyncProperty syncProperty = propertyInfo.GetCustomAttributes(typeof(SyncProperty), false)[0] as SyncProperty;
 
                     if (syncProperty.IsReliable)
                     {
@@ -1050,13 +1079,13 @@ namespace Photon
                 return null;
 
             //Check to see that we are a component that is not a photon view
-            if(!info.PropertyType.IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
+            if(!typeof(PhotonView).IsAssignableFrom(info.PropertyType) && typeof(Component).IsAssignableFrom(info.PropertyType))
             {
                 return SerializeComponentProperty(value, info);
             }
 
             //Check to see that we are an array of components that is not an array of photon views
-            if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
+            if (info.PropertyType.IsArray && !typeof(PhotonView).IsAssignableFrom(info.PropertyType.GetElementType()) && typeof(Component).IsAssignableFrom(info.PropertyType.GetElementType()))
             {
                 return SerializeComponentArrayProperty(value, info);
             }
@@ -1108,7 +1137,7 @@ namespace Photon
         private object SerializeNetworkObjectProperty(object value, PropertyInfo info)
         {
             MethodInfo serializeMethod = value.GetType()
-                .GetMethod("OnSerialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                .GetMethod("OnSerialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonStream)}, null);
 
             Assert.IsNotNull(serializeMethod, "No serialize method found on struct being sent over the network.");
@@ -1121,11 +1150,14 @@ namespace Photon
 
         private void DeserializeProperty(object value, PropertyInfo info)
         {
-            if (!info.PropertyType.IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.IsAssignableFrom(typeof(Component)))
+            if (!typeof(PhotonView).IsAssignableFrom(info.PropertyType) 
+                && typeof(Component).IsAssignableFrom(info.PropertyType))
             {
                 DeserializeComponentProperty(value, info);
             }
-            else if (info.PropertyType.IsArray && !info.PropertyType.GetElementType().IsAssignableFrom(typeof(PhotonView)) && info.PropertyType.GetElementType().IsAssignableFrom(typeof(Component)))
+            else if (info.PropertyType.IsArray 
+                && !typeof(PhotonView).IsAssignableFrom(info.PropertyType.GetElementType()) 
+                && typeof(Component).IsAssignableFrom(info.PropertyType.GetElementType()))
             {
                 DeserializeComponentArrayProperty(value, info);
             }
@@ -1192,7 +1224,7 @@ namespace Photon
                 propertyValue = Activator.CreateInstance(info.PropertyType);
 
             MethodInfo deserializeMethod = propertyValue.GetType()
-                .GetMethod("OnDeserialize", BindingFlags.Public | BindingFlags.NonPublic, null,
+                .GetMethod("OnDeserialize", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
                     new[] {typeof (PhotonStream)}, null);
 
             Assert.IsNotNull(deserializeMethod, "No deserialize method on struct being sent over the network.");
@@ -1231,6 +1263,9 @@ namespace Photon
         private List<PropertyInfo> m_unreliableProperties = new List<PropertyInfo>();
 
         private bool m_isDeserializing;
+
+        [SerializeField, HideInInspector]
+        private int m_componentId;
     }
 }
 

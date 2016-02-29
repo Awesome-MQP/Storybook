@@ -57,11 +57,11 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
 
     private void _getPageDrop()
     {
-        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+        DungeonMaster dm = GameManager.GetInstance<BaseStorybookGame>().DM;
         Page pageDrop = dm.GetPageDropFromCombat(CManager.CombatGenre, CManager.CombatLevel);
 
         GameManager gm = FindObjectOfType<GameManager>();
-        PlayerInventory localPlayerInventory = gm.GetLocalPlayerInventory();
+        PlayerInventory localPlayerInventory = null;//gm.GetLocalPlayerInventory();
 
         // TODO: Use the number of items in the inventory to figure out the position to add to
         if (!localPlayerInventory.IsInventoryFull()) {

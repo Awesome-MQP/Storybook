@@ -65,7 +65,7 @@ public class CombatSummaryUIHandler : PageUIHandler {
     public void SubmitPressed()
     {
         GameManager gm = GameManager.GetInstance<GameManager>();
-        PlayerInventory playerInv = gm.GetLocalPlayerInventory();
+        PlayerInventory playerInv = gm.GetLocalPlayer<PlayerEntity>().OurInventory;
         int openSlot = playerInv.FirstOpenSlot();
         Page selectedPage = m_pageDrops[m_selectedPage.InventoryId];
         for (int i = 0; i < m_pageDrops.Count; i++)

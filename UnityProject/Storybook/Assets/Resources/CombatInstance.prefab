@@ -1430,7 +1430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cameraPos: {fileID: 450414}
-  m_teamList: []
 --- !u!114 &11448542
 MonoBehaviour:
   m_ObjectHideFlags: 1

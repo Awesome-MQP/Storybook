@@ -10,6 +10,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     OverworldEventDispatcher.IOverworldEventListener, 
     RoomEventEventDispatcher.IRoomEventListener
 {
+
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
 
     [SerializeField]
@@ -39,7 +40,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     public EventDispatcher RoomEventEventDispatcher { get { return EventDispatcher.GetDispatcher<RoomEventEventDispatcher>(); } }
 
     [SyncProperty]
-    private int NetPlayerCountEvent
+    protected int NetPlayerCountEvent
     {
         get { return m_playerWorldPawns.Count; }
         set
@@ -67,7 +68,7 @@ public class StorybookPlayerMover : BasePlayerMover,
 
     protected override void OnRegistered()
     {
-        OpenDeckManagementMenu();
+        //OpenDeckManagementMenu();
     }
 
     // I copied this in from Dev, don't know how recent it is, but I couldn't find another place to have the listeners be destroyed.
@@ -79,45 +80,6 @@ public class StorybookPlayerMover : BasePlayerMover,
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
 
         Debug.Log("Mover destroyed");
-    }
-
-    /// <summary>
-    /// Sets the target position for all the players in the world pawns list
-    /// </summary>
-    /// <param name="nodeForPlayers">The position to be used as the target</param>
-    public void MovePlayersToNode(Vector3 nodeForPlayers)
-    {
-        foreach (PlayerWorldPawn playerPawn in m_playerWorldPawns)
-        {
-            playerPawn.TargetPosition = nodeForPlayers;
-        }
-    }
-
-    /// <summary>
-    /// Adds the given PlayerWorldPawn to the list of world pawns
-    /// </summary>
-    /// <param name="pawnToRegister">The pawn to add to the list</param>
-    public void RegisterPlayerWorldPawn(PlayerWorldPawn pawnToRegister)
-    {
-        m_playerWorldPawns.Add(pawnToRegister);
-        pawnToRegister.transform.parent = transform;
-    }
-
-    /// <summary>
-    /// Waits until the players have moved to the door
-    /// When the players reach the door, calls the MoveToNextRoom function to move the players to the room that the door connects
-    /// </summary>
-    /// <param name="newRoomLoc">The location of the room to move to</param>
-    /// <returns></returns>
-    public IEnumerator MoveToDoor(Location newRoomLoc)
-    {
-        _playWalkAnimations();
-        while (!IsAtTarget)
-        {
-            yield return new WaitForFixedUpdate();
-        }
-
-        MoveToNextRoom(newRoomLoc);
     }
 
     /// <summary>
@@ -194,13 +156,20 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// <param name="pageToUseData">The page data from the page that the player selected for the room</param>
     public void SubmitPageForRoom(PageData pageToUseData)
     {
-        m_isMenuOpen = false;
-        Door selectedDoor = CurrentRoom.GetDoorByDirection(m_lastMoveDirection);
-        CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
-        selectedDoor.IsConnectedRoomMade = true;
-        selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
-        selectedDoor.OpenDoor();
-        MoveInDirection(m_lastMoveDirection);
+        if (IsMine)
+        {
+            m_isMenuOpen = false;
+            Door selectedDoor = CurrentRoom.GetDoorByDirection(m_lastMoveDirection);
+            CreateRoom(selectedDoor.NextRoomLocation, pageToUseData);
+            selectedDoor.IsConnectedRoomMade = true;
+            selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
+            selectedDoor.OpenDoor();
+            MoveInDirection(m_lastMoveDirection);
+        }
+        else
+        {
+            photonView.RPC(nameof(_rpcSubmitPageForCreation), Owner, pageToUseData.InventoryId, pageToUseData.IsRare, pageToUseData.PageGenre, pageToUseData.PageLevel, pageToUseData.PageMoveType);
+        }
     }
 
     /// <summary>
@@ -209,35 +178,8 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// <param name="moveDirection"></param>
     public void SubmitDirection(Door.Direction moveDirection)
     {
-        Debug.Log("MoveDirection = " + moveDirection);
+        m_lastMoveDirection = moveDirection;
         MoveInDirection(moveDirection);
-    }
-
-    protected override IEnumerable<StateDelegate> OnWaitingForInput()
-    {
-        _playIdleAnimations();
-
-        return base.OnWaitingForInput();
-    }
-
-    protected override IEnumerable<StateDelegate> OnFailMoveInDirection()
-    {
-        m_lastMoveDirection = MoveDirection;
-        OpenPageForRoomMenu();
-
-        return base.OnFailMoveInDirection();
-    }
-
-    protected override IEnumerable<StateDelegate> OnLeavingRoom()
-    {
-        _playWalkAnimations();
-
-        return base.OnLeavingRoom();
-    }
-
-    protected override IEnumerable<StateDelegate> OnMoveBetweenRooms()
-    {
-        return base.OnMoveBetweenRooms();
     }
 
     private void _playWalkAnimations()
@@ -276,6 +218,22 @@ public class StorybookPlayerMover : BasePlayerMover,
         Camera.main.transform.rotation = CurrentRoom.CameraNode.rotation;
     }
 
+    protected override void OnWaitForInput()
+    {
+        if (Leader == GameManager.GetInstance<GameManager>().GetLocalPlayer())
+        {
+            OpenOverworldMenu();
+        }
+    }
+
+    protected override void OnFailToMove()
+    {
+        if (Leader == GameManager.GetInstance<GameManager>().GetLocalPlayer())
+        {
+            OpenPageForRoomMenu();
+        }
+    }
+
     protected override bool OnRegisterPlayer(PlayerObject player)
     {
         PlayerEntity playerEntity = player as PlayerEntity;
@@ -308,5 +266,10 @@ public class StorybookPlayerMover : BasePlayerMover,
     protected virtual void PeerOnPlayerCountChanged(int newPlayerCount)
     {
         //m_animator.SetInteger("PlayerCount", newPlayerCount);
+    }
+
+    private void _rpcSubmitPageForCreation(int inventoryId, bool isRare, Genre genre, int level, MoveType moveType)
+    {
+        SubmitPageForRoom(new PageData(level, genre, moveType, isRare));
     }
 }

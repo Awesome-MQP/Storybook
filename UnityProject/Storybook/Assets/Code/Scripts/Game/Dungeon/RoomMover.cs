@@ -9,6 +9,15 @@ using UnityEngine.Assertions;
 /// </summary>
 public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 {
+    public enum NetState
+    {
+        None,
+        WaitingForInput,
+        FailedToMove,
+        WaitingForRoomEvent,
+        MovingBetweenRooms
+    }
+
     protected delegate IEnumerable<StateDelegate> StateDelegate();
 
     private bool m_isAtRoomCenter;
@@ -17,6 +26,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     private Door.Direction m_nextMoveDirection = Door.Direction.Unknown;
 
     private StateDelegate m_currentState;
+    private NetState m_netState;
 
     private bool m_atNode;
 
@@ -58,9 +68,25 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
+    /// <summary>
+    /// Variable that is synced over the network to allow information about the current mover state on other clients.
+    /// </summary>
+    [SyncProperty]
+    protected NetState NetworkedMovementState
+    {
+        get { return m_netState; }
+        set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_netState = value;
+            _onNetStateChanged();
+            PropertyChanged();
+        }
+    }
+
     public virtual void Construct(RoomObject room)
     {
-        m_currentState = OnWaitingForInput;
+        m_currentState = StateWaitingForInput;
 
         SpawnInRoom(room);
     }
@@ -152,37 +178,60 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         m_atNode = false;
     }
 
+    protected virtual void OnWaitForInput()
+    {
+        
+    }
+
+    protected virtual void OnFailToMove()
+    {
+        
+    }
+
+    protected virtual void OnMovingBetweenRooms()
+    {
+        
+    }
+
+    protected virtual void OnWaitingForRoomEvent()
+    {
+        
+    }
+
     /// <summary>
     /// State when the room mover is waiting for input on which direction to move in.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnWaitingForInput()
+    protected virtual IEnumerable<StateDelegate> StateWaitingForInput()
     {
         m_nextMoveDirection = Door.Direction.Unknown;
+
+        if(NetworkedMovementState != NetState.FailedToMove)
+            NetworkedMovementState = NetState.WaitingForInput;
 
         while (m_nextMoveDirection == Door.Direction.Unknown || !CanMove)
         {
             yield return null;
         }
 
-        yield return OnMoveInDirection;
+        yield return StateMoveInDirection;
     }
 
     /// <summary>
     /// State when the mover try to move in a direction.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnMoveInDirection()
+    protected virtual IEnumerable<StateDelegate> StateMoveInDirection()
     {
         Door nextDoor = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
 
         if (nextDoor == null || !nextDoor.IsDoorEnabled || !nextDoor.IsDoorOpen)
         {
-            yield return OnFailMoveInDirection;
+            yield return StateFailMoveInDirection;
         }
         else
         {
-            yield return OnLeavingRoom;
+            yield return StateLeavingRoom;
         }
     }
 
@@ -190,18 +239,21 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// State when the mover fail to move in a direction.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnFailMoveInDirection()
+    protected virtual IEnumerable<StateDelegate> StateFailMoveInDirection()
     {
-        yield return OnWaitingForInput;
+        NetworkedMovementState = NetState.FailedToMove;
+        
+        yield return StateWaitingForInput;
     }
 
     /// <summary>
     /// State when the mover starts to leave through a door.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnLeavingRoom()
+    protected virtual IEnumerable<StateDelegate> StateLeavingRoom()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection);
+        NetworkedMovementState = NetState.MovingBetweenRooms;
 
         while (!m_atNode)
         {
@@ -210,14 +262,14 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
         CurrentRoom.RoomExit(this);
 
-        yield return OnMoveBetweenRooms;
+        yield return StateMoveBetweenRooms;
     }
 
     /// <summary>
     /// State when the mover is moving between rooms.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnMoveBetweenRooms()
+    protected virtual IEnumerable<StateDelegate> StateMoveBetweenRooms()
     {
         TargetNode = CurrentRoom.GetDoorByDirection(m_nextMoveDirection).LinkedDoor;
 
@@ -226,14 +278,14 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
             yield return null;
         }
 
-        yield return OnEnterRoom;
+        yield return StateEnterRoom;
     }
 
     /// <summary>
     /// State when the mover enters a room and should move into position. This state will also by default wait for the room event to end.
     /// </summary>
     /// <returns>The next state to go to.</returns>
-    protected virtual IEnumerable<StateDelegate> OnEnterRoom()
+    protected virtual IEnumerable<StateDelegate> StateEnterRoom()
     {
         CurrentRoom.RoomEntered(this);
         TargetNode = CurrentRoom.CenterNode;
@@ -243,18 +295,26 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
             yield return null;
         }
 
+        NetworkedMovementState = NetState.WaitingForRoomEvent;
+
         foreach (var v in CurrentRoom.RoomEvent(this))
         {
             yield return null;
         }
 
-        yield return OnWaitingForInput;
+        yield return StateWaitingForInput;
     }
 
     [PunRPC]
     protected void _rpcMoveInDirection(byte directionIndex)
     {
         MoveInDirection((Door.Direction) directionIndex);
+    }
+
+    protected Door.Direction MoveDirection
+    {
+        get { return m_nextMoveDirection; }
+        set { m_nextMoveDirection = value; }
     }
 
     private IEnumerator _stateMachine()
@@ -280,9 +340,26 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
         }
     }
 
-    protected Door.Direction MoveDirection
+    private void _onNetStateChanged()
     {
-        get { return m_nextMoveDirection; }
-        set { m_nextMoveDirection = value; }
+        switch (m_netState)
+        {
+            case NetState.None:
+                break;
+            case NetState.WaitingForInput:
+                OnWaitForInput();
+                break;
+            case NetState.FailedToMove:
+                OnFailToMove();
+                break;
+            case NetState.WaitingForRoomEvent:
+                OnWaitingForRoomEvent();
+                break;
+            case NetState.MovingBetweenRooms:
+                OnMovingBetweenRooms();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

@@ -81,11 +81,11 @@ public abstract class BasePlayerMover : RoomMover
         
     }
 
-    protected override IEnumerable<StateDelegate> OnEnterRoom()
+    protected override IEnumerable<StateDelegate> StateEnterRoom()
     {
         ChangeLeader();
 
-        return base.OnEnterRoom();
+        return base.StateEnterRoom();
     }
 
     [PunRPC]

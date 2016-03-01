@@ -2275,7 +2275,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             //If we own the object and the sender is not the controller then ignore
             if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
             {
-                Debug.LogError("Error: Sender from non controller object is illegal on {0}.", photonNetview);
+                Debug.LogErrorFormat("Error: Sender from non controller object is illegal on {0} with command {1}.", photonNetview, inMethodName);
                 return;
             }
 

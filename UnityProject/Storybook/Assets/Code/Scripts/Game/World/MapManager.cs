@@ -119,10 +119,10 @@ public class MapManager : Photon.PunBehaviour {
 
         GameObject roomGameObject = PhotonNetwork.Instantiate(roomPrefab.name, roomGridLocation, new Quaternion(), 0);
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
+        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         room.RoomPageData = pageToUseData;
         room.Construct(currentRoomData);
         room.PlaceScenery();
-        PhotonNetwork.Spawn(roomGameObject.GetComponent<PhotonView>());
         return room;
     }
 

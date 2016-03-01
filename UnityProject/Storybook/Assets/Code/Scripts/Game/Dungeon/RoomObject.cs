@@ -189,7 +189,19 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     public PageData RoomPageData
     {
         get { return m_roomPageData; }
-        set { m_roomPageData = value; }
+        set { m_roomPageData = value;
+            photonView.RPC("SendPageData", PhotonTargets.Others, value.PageLevel, value.PageGenre, value.PageMoveType, value.IsRare); }
+    }
+
+    /// <summary>
+    /// Sends page data over network
+    /// </summary>
+    [PunRPC]
+    protected void SendPageData(int level, int genre, int type, bool rare)
+    {
+        Debug.Log("Sending page data over network.");
+        PageData roomPageData = new PageData(level, (Genre)genre, (MoveType)type, rare);
+        m_roomPageData = roomPageData;
     }
 
     /// <summary>

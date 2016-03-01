@@ -56,7 +56,12 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
     {
         if (!(mover is BasePlayerMover))
             yield break;
+        photonView.RPC("NetworkedRoomEvent", PhotonTargets.All);
+    }
 
+    [PunRPC]
+    protected void NetworkedRoomEvent()
+    {
         // TODO: open the shop UI.
         Debug.Log("Whaddya buyin'?");
         if (!(m_hasGeneratedPages && m_shopPages.Count <= 0))

@@ -40,7 +40,7 @@ public abstract class GameManager : Photon.PunBehaviour
     {
         _startup();
         OnStartGame();
-        photonView.RPC(nameof(_rpcOnStartGame), PhotonTargets.Others);
+        photonView.RPC("_rpcOnStartGame", PhotonTargets.Others);
     }
 
     protected virtual void OnStartGame()

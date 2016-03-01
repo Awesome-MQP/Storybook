@@ -40,8 +40,8 @@ public class CombatRoom : RoomObject {
 
     protected void Start()
     {
-        Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
-        floorRenderer.material = _getFloorMaterial();
+
+        photonView.RPC("NetworkedSetFloorMaterial", PhotonTargets.All);
         _setRoomMusic();
     }
 
@@ -153,9 +153,12 @@ public class CombatRoom : RoomObject {
         }
     }
 
-    private Material _getFloorMaterial()
+    [PunRPC]
+    protected void NetworkedSetFloorMaterial()
     {
+        Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
         Material floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;
+
         switch (RoomPageData.PageGenre)
         {
             case Genre.SciFi:
@@ -171,7 +174,8 @@ public class CombatRoom : RoomObject {
                 floorMaterial = Resources.Load("FloorTiles/horror-tile") as Material;
                 break;
         }
-        return floorMaterial;
+
+        floorRenderer.material = floorMaterial;
     }
 
     // Similar to get floor material, set the room's music based on the genre

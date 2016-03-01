@@ -76,4 +76,7 @@ MonoBehaviour:
   - SelectCharacter
   - InitializeCamera
   - _rpcOnRegistered
+  - NetworkedRoomEvent
+  - SendPageData
+  - NetworkedSetFloorMaterial
   DisableAutoOpenWizard: 1

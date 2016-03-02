@@ -10,6 +10,9 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
     [SerializeField]
     private Transform m_cameraPos;
 
+    [SerializeField]
+    private GameObject m_combatUIPrefab;
+
     private List<CombatTeam> m_teamList = new List<CombatTeam>();
 
     private Animator m_combatStateMachine;
@@ -23,16 +26,19 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
     private int m_combatLevel;
     private Genre m_combatGenre;
 
+    private bool m_isRunning = true;
+
     override protected void Awake()
     {
         DontDestroyOnLoad(this);
     }
 
-    
-
     public void Construct(CombatInstance combatInfo)
     {
         Assert.IsTrue(IsMine);
+
+        m_combatLevel = combatInfo.GetLevel();
+        m_combatGenre = combatInfo.GetGenre();
 
         m_previousMusic = combatInfo.GetPreviousMusic();
         m_combatMusic = combatInfo.GetCombatMusic();
@@ -49,8 +55,11 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
     }
 
     // Use this for initialization
+    //TODO use network safe start
     void Start()
     {
+        Instantiate(m_combatUIPrefab);
+
         Camera.main.transform.position = CameraPos.position;
         Camera.main.transform.rotation = Quaternion.identity;
 
@@ -141,6 +150,10 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
     {
         //FindObjectOfType<GameManager>().EndCombat();
 
+        DestroyAllTeams();
+        Destroy(gameObject);
+
+        m_isRunning = false;
         FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_previousMusic, 5, true);
     }
 
@@ -245,15 +258,32 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
         return null;
     }
 
+    [SyncProperty]
     public int CombatLevel
     {
         get { return m_combatLevel; }
-        set { m_combatLevel = value; }
+        private set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_combatLevel = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public Genre CombatGenre
     {
         get { return m_combatGenre; }
-        set { m_combatGenre = value; }
+        set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_combatGenre = value;
+            PropertyChanged();
+        }
+    }
+
+    public bool IsRunning
+    {
+        get { return m_isRunning; }
     }
 }

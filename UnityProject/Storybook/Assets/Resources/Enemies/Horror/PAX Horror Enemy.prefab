@@ -685,7 +685,6 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 11494728}
-  - {fileID: 426938}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -703,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 62
   m_maxHealth: 10
   m_health: 10
   m_speed: 5
@@ -784,6 +784,10 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_attack
       value: 4
       objectReference: {fileID: 0}
@@ -801,6 +805,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11433056, guid: 7e9b9856bfea81241abe0a39b978b7b6,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
+      objectReference: {fileID: 426938}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 103756}

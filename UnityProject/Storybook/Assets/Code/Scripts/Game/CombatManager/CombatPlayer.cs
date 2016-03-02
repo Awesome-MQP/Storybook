@@ -229,9 +229,9 @@ public abstract class CombatPlayer : CombatPawn
     //TODO: Get the player inventory from the given PlayerEntity
     private CombatDeck _initializePlayerDeck(PlayerInventory playerInventory)
     {
-        GameManager gm = FindObjectOfType<GameManager>();
+        BaseStorybookGame game = GameManager.GetInstance<BaseStorybookGame>();
         List<Page> deckPages = new List<Page>();
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 20; i++)//TODO Change
         {
             Page page = (Page)playerInventory[i].SlotItem;
             deckPages.Add(page);

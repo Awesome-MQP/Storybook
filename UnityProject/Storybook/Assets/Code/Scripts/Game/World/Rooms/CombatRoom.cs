@@ -76,8 +76,6 @@ public class CombatRoom : RoomObject {
             return;
         }
         m_musicManager.Fade(m_musicTracks[0], 5, true);
-
-        return;
     }
 
     protected override IEnumerable OnRoomEvent(RoomMover mover)
@@ -89,8 +87,20 @@ public class CombatRoom : RoomObject {
         //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
+            ResourceAsset playerTeam = GameManager.GetInstance<BaseStorybookGame>().DefaultPlayerTeam;
+            ResourceAsset enemyTeam = new ResourceAsset(m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name, typeof(EnemyTeam));
+
             //m_musicManager.Fade(m_musicTracks[1], 5, true);
-            //GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance());
+            CombatManager cm = GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance(playerTeam, enemyTeam, RoomPageData.PageGenre, RoomPageData.PageLevel));
+
+            while (cm.IsRunning)
+            {
+                yield return null;
+            }
+
+            photonView.RPC(nameof(_resetCameraAfterCombat), PhotonTargets.All);
+
+            DestroyEnemyWorldPawns();
         }
         else
         {
@@ -199,5 +209,12 @@ public class CombatRoom : RoomObject {
                 m_musicTracks[0] = m_musicTracks[0];
                 break;
         }
+    }
+
+    [PunRPC]
+    protected void _resetCameraAfterCombat()
+    {
+        Camera.main.transform.position = CameraNode.position;
+        Camera.main.transform.rotation = CameraNode.rotation;
     }
 }

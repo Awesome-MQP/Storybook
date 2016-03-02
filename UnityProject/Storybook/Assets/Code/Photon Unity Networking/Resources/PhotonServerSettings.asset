@@ -80,4 +80,5 @@ MonoBehaviour:
   - SendPageData
   - NetworkedSetFloorMaterial
   - _moveCameraTo
+  - _resetCameraAfterCombat
   DisableAutoOpenWizard: 1

@@ -5,7 +5,7 @@ public class TestLobby : Photon.PunBehaviour
 {
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("alpha");
+        PhotonNetwork.ConnectUsingSettings("Benny");
     }
 
     public override void OnConnectedToMaster()
@@ -13,7 +13,7 @@ public class TestLobby : Photon.PunBehaviour
 #if !UNITY_EDITOR
         PhotonNetwork.CreateRoom("AlphaRoom");
 #else
-        PhotonNetwork.JoinRoom("AlphaRoom");
+        PhotonNetwork.JoinRoom("Benny");
 #endif
     }
 

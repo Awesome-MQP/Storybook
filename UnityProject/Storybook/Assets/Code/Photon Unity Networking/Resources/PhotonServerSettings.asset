@@ -79,4 +79,5 @@ MonoBehaviour:
   - NetworkedRoomEvent
   - SendPageData
   - NetworkedSetFloorMaterial
+  - _moveCameraTo
   DisableAutoOpenWizard: 1

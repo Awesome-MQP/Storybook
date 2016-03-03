@@ -1057,8 +1057,12 @@ public class PhotonView : Photon.MonoBehaviour
         if (isMine)
         {
             BuildParent();
-            RebuildNetworkRelavance();
-            PhotonNetwork.UpdateViewParent(this);
+
+            if (HasSpawned)
+            {
+                RebuildNetworkRelavance();
+                PhotonNetwork.UpdateViewParent(this);
+            }
         }
     }
 

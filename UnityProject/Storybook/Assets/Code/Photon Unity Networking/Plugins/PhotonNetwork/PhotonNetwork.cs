@@ -2298,7 +2298,7 @@ public static class PhotonNetwork
             views[i].gameObject.SetActive(false);
         }
 
-        InternalTryCreateOnPlayers(views, otherPlayers);
+        InternalTryCreateOnPlayers(views[0], otherPlayers);
 
         return newObject;
     }
@@ -2343,22 +2343,17 @@ public static class PhotonNetwork
     private static void _spawnStructureRoot(PhotonView view, PhotonPlayer[] players)
     {
         // Get all views that are children of the main view
-        PhotonView[] allViews = view.GetComponentsInChildren<PhotonView>(true);
-        // Get views that are a part of this prefab
-        PhotonView[] prefabViews =
-            allViews.Where(photonView => photonView.instantiationId == view.instantiationId).ToArray();
-
         view.RebuildRelevance();
 
         // Create the object on relevant players
-        InternalTryCreateOnPlayers(prefabViews, players);
+        InternalTryCreateOnPlayers(view, players);
 
         // Spawn the actual view structure
-        _spawnStructurePiece(view, players, prefabViews);
+        _spawnStructurePiece(view, players);
     }
 
     //Spawn all members of a view
-    private static void _spawnStructurePiece(PhotonView view, PhotonPlayer[] players, PhotonView[] structure)
+    private static void _spawnStructurePiece(PhotonView view, PhotonPlayer[] players)
     {
         if (!view.HasSpawned)
             view.OnSpawn();
@@ -2404,16 +2399,15 @@ public static class PhotonNetwork
         }
 
         // Spawn all child parts
-        foreach (PhotonView structureView in structure)
+        foreach (PhotonView structureView in view.GetComponentsInChildren<PhotonView>(true))
         {
             if (structureView.ParentView == view)
             {
                 // Spawn pieces of the prefab without checking to spawn again
                 if (structureView.instantiationId == view.viewID)
-                    _spawnStructurePiece(structureView, targetPlayers,
-                        structure.Where(photonView => photonView.ParentView == structureView).ToArray());
+                    _spawnStructurePiece(structureView, players);
                 else
-                    _spawnStructureRoot(structureView, targetPlayers);
+                    _spawnStructureRoot(structureView, players);
             }
         }
     }
@@ -2448,6 +2442,12 @@ public static class PhotonNetwork
             return;
         }
 
+        if (evData.ContainsKey((byte)6))
+        {
+            PhotonView parent = PhotonView.Find((int)evData[(byte)6]);
+            view.transform.parent = parent.transform;
+        }
+
         view.controllerId = controllerId;
         view.instantiationId = instantiationId;
 
@@ -2455,12 +2455,6 @@ public static class PhotonNetwork
         networkingPeer.OnSerializeUnreliableRead(serializedUnreliableData, player, time);
 
         view.OnSpawn();
-
-        if (evData.ContainsKey((byte)6))
-        {
-            PhotonView parent = PhotonView.Find((int)evData[(byte)5]);
-            view.transform.parent = parent.transform;
-        }
     }
 
     internal static void HandleCreate(Hashtable evData, PhotonPlayer sender)
@@ -2569,10 +2563,8 @@ public static class PhotonNetwork
         }
     }
 
-    private static void InternalTryCreateOnPlayers(PhotonView[] viewStructure, PhotonPlayer[] players)
+    private static void InternalTryCreateOnPlayers(PhotonView root, PhotonPlayer[] players)
     {
-        PhotonView root = viewStructure[0];
-
         //Get all players that need this view structure created on them
         List<PhotonPlayer> targetPlayerList = new List<PhotonPlayer>(players);
         targetPlayerList.RemoveAll(photonPlayer => !root.ShouldCreateOnPlayer(photonPlayer));
@@ -2585,7 +2577,7 @@ public static class PhotonNetwork
         int[] playerIds = targetPlayerList.Select(photonPlayer => photonPlayer.ID).ToArray();
 
         //Get the view ids in the structure
-        int[] viewIds = viewStructure.Select(delegate(PhotonView view)
+        int[] viewIds = root.GetComponentsInChildren<PhotonView>(true).Where(child => child.instantiationId == root.viewID).Select(delegate(PhotonView view)
         {
             foreach (PhotonPlayer photonPlayer in targetPlayerList)
             {

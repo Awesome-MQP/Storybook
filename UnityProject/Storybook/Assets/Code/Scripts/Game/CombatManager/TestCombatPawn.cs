@@ -15,8 +15,8 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
         // Only do this if thinking!
         if(m_isThinking && pawnId == PawnId)
         {
-            Debug.Log("Got a CombatMoveChosen event, index: " + handIndex);
-            Debug.Log("Target = " + targets[0]);
+            //Debug.Log("Got a CombatMoveChosen event, index: " + handIndex);
+            //Debug.Log("Target = " + targets[0]);
             m_selectedHandIndex = handIndex;
             m_selectedTargets = targets;
         }
@@ -84,7 +84,7 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
             SetMoveForTurn(chosenMove);
             SetHasSubmittedMove(true);
             
-            PageMove pm = new PageMoveObject() as PageMove; // I had to create a child class that inherits PageMove in order to do stuff with it.
+            PageMove pm = new PageMoveObject(); // I had to create a child class that inherits PageMove in order to do stuff with it.
             pm.Construct(chosenPage);
 
             int[] targetIds = new int[4];
@@ -94,7 +94,7 @@ public class TestCombatPawn : CombatPlayer, ICombatEventListener
                 targetIds[i] = target.PawnId;
             }
 
-            GetComponent<PhotonView>().RPC("SendPlayerMoveOverNetwork", PhotonTargets.Others, PawnId, targetIds, m_selectedHandIndex);
+            GetComponent<PhotonView>().RPC(nameof(SendPlayerMoveOverNetwork), PhotonTargets.Others, PawnId, targetIds, m_selectedHandIndex);
             m_selectedHandIndex = -1; // Reset it.
             m_isThinking = false;
         }

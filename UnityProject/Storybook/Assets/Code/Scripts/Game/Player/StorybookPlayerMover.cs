@@ -168,7 +168,14 @@ public class StorybookPlayerMover : BasePlayerMover,
         }
         else
         {
-            photonView.RPC(nameof(_rpcSubmitPageForCreation), Owner, pageToUseData.InventoryId, pageToUseData.IsRare, pageToUseData.PageGenre, pageToUseData.PageLevel, pageToUseData.PageMoveType);
+            photonView.RPC(nameof(_rpcSubmitPageForCreation),
+                Owner,
+                pageToUseData.InventoryId,
+                pageToUseData.IsRare,
+                (int)pageToUseData.PageGenre,
+                pageToUseData.PageLevel,
+                (int)pageToUseData.PageMoveType,
+                (int)m_lastMoveDirection);
         }
     }
 
@@ -268,8 +275,10 @@ public class StorybookPlayerMover : BasePlayerMover,
         //m_animator.SetInteger("PlayerCount", newPlayerCount);
     }
 
-    private void _rpcSubmitPageForCreation(int inventoryId, bool isRare, Genre genre, int level, MoveType moveType)
+    [PunRPC]
+    protected void _rpcSubmitPageForCreation(int inventoryId, bool isRare, int genre, int level, int moveType, int lastDirection)
     {
-        SubmitPageForRoom(new PageData(level, genre, moveType, isRare));
+        m_lastMoveDirection = (Door.Direction) lastDirection;
+        SubmitPageForRoom(new PageData(level, (Genre) genre, (MoveType) moveType, isRare));
     }
 }

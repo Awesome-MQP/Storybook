@@ -81,4 +81,6 @@ MonoBehaviour:
   - NetworkedSetFloorMaterial
   - _moveCameraTo
   - _resetCameraAfterCombat
+  - InitializePlayerPawn
+  - _rpcSubmitPageForCreation
   DisableAutoOpenWizard: 1

@@ -54,20 +54,37 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
         }
     }
 
-    // Use this for initialization
-    //TODO use network safe start
-    void Start()
+    public override void OnStartOwner(bool wasSpawn)
+    {
+        _startup();
+    }
+
+    public override void OnStartPeer(bool wasSpawn)
+    {
+        _startup();
+
+        m_combatStateMachine.enabled = false;
+    }
+
+    private void _startup()
     {
         Instantiate(m_combatUIPrefab);
 
         Camera.main.transform.position = CameraPos.position;
         Camera.main.transform.rotation = Quaternion.identity;
 
-        Debug.Log("Teams in combat = " + m_teamList.Count);
-
-        // Get the state machine and get it out of the start state by setting the StartCombat trigger
         m_combatStateMachine = GetComponent<Animator>();
-        if (PhotonNetwork.isMasterClient)
+    }
+
+    // Use this for initialization
+    //TODO use network safe start
+    void Start()
+    {
+        if(!IsMine)
+        {
+            m_combatStateMachine.enabled = false;
+        }
+        else
         {
             foreach (CombatTeam team in m_teamList)
             {
@@ -88,11 +105,6 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
             m_combatStateMachine.SetBool("StartToThink", true);
         }
-        else
-        {
-            m_combatStateMachine.enabled = false;
-        }
-            
     }
 
     /// <summary>

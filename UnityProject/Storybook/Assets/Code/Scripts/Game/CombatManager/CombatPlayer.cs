@@ -5,8 +5,6 @@ using System;
 
 public abstract class CombatPlayer : CombatPawn
 {
-
-    [SerializeField]
     private static int m_handSize = 4;
 
     [SerializeField]
@@ -359,8 +357,11 @@ public abstract class CombatPlayer : CombatPawn
         }
     }
 
-    public void InitializePlayerPawn(PlayerEntity playerData)
+    [PunRPC]
+    public void InitializePlayerPawn(PhotonView playerEntityView)
     {
+        PlayerEntity playerData = playerEntityView.GetComponent<PlayerEntity>();
+
         SetMaxHealth(playerData.MaxHitPoints);
         Health = playerData.HitPoints;
         Defense = playerData.Defense;

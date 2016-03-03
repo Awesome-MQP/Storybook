@@ -53,7 +53,7 @@ public class PlayerTeam : CombatTeam
                 CombatPlayer player = (CombatPlayer)playerPawn;
                 GameManager gameManager = GameManager.GetInstance<GameManager>();
                 PlayerEntity currentPlayerEntity = _findPlayerEntity(playerPawn.PawnId);
-                player.InitializePlayerPawn(currentPlayerEntity);
+                player.photonView.RPC("InitializePlayerPawn", PhotonTargets.All, currentPlayerEntity.photonView);
                 PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
                 player.CreateDeck(currentPlayerInventory);
             }
@@ -66,9 +66,9 @@ public class PlayerTeam : CombatTeam
         }
     }
 
-    private PlayerPositionNode _getPositionNodeById(List<PlayerPositionNode> enemyPositions, int positionId)
+    private PlayerPositionNode _getPositionNodeById(List<PlayerPositionNode> playerPositions, int positionId)
     {
-        foreach (PlayerPositionNode playerNode in enemyPositions)
+        foreach (PlayerPositionNode playerNode in playerPositions)
         {
             Debug.Log("Node Id = " + playerNode.PositionId);
             if (playerNode.PositionId == positionId)

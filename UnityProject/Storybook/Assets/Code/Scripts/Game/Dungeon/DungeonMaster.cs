@@ -342,10 +342,10 @@ public class DungeonMaster : MonoBehaviour
     private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel)
     {
         GameObject pageObject = PhotonNetwork.Instantiate(m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
         Page page = pageObject.GetComponent<Page>();
         page.PageLevel = pageLevel;
         page.PageGenre = pageGenre;
+        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
         return page;
     }
 

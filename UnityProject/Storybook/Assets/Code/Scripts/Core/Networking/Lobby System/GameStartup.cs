@@ -21,7 +21,9 @@ public class GameStartup : Photon.PunBehaviour {
     /// </summary>
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.JoinRandomRoom();
+
+        PhotonNetwork.LoadLevel("MainMenu");
+        //PhotonNetwork.JoinRandomRoom();
     }
 
     /// <summary>
@@ -38,6 +40,6 @@ public class GameStartup : Photon.PunBehaviour {
     /// </summary>
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel("MainMenu");
+        //PhotonNetwork.LoadLevel("MainMenu");
     }
 }

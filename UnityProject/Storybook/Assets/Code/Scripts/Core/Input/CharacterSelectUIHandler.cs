@@ -11,14 +11,37 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
     [SerializeField]
     private Animator m_comicBookModel;
 
+    public Animator ComicModel
+    {
+        set { m_comicBookModel = value; }
+    }
+
     [SerializeField]
     private Animator m_horrorModel;
+
+    public Animator HorrorModel
+    {
+        set { m_horrorModel = value; }
+    }
+
 
     [SerializeField]
     private Animator m_scifiModel;
 
+    public Animator SciFiModel
+    {
+        set { m_scifiModel = value; }
+    }
+
+
     [SerializeField]
     private Animator m_fantasyModel;
+
+    public Animator FantasyModel
+    {
+        set { m_fantasyModel = value; }
+    }
+
 
     [SerializeField]
     private PlayerEntity m_comicBookEntity;
@@ -47,12 +70,13 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
     [SerializeField]
     private Button m_submitButton;
 
-    protected override void Awake()
+    protected  void Start()
     {
         photonView.RPC("InitializeDictionary", PhotonTargets.All, PhotonNetwork.player);
         m_submitButton.interactable = false;
         MainMenuUIHandler mainMenu = FindObjectOfType<MainMenuUIHandler>();
         Destroy(mainMenu);
+        
     }
 
     public void SelectComicBook()

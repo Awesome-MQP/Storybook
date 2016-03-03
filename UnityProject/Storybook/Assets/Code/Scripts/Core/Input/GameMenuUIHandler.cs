@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public abstract class GameMenuUIHandler : UIHandler {
 
@@ -11,8 +12,7 @@ public abstract class GameMenuUIHandler : UIHandler {
 
     public void JoinGame()
     {
-        SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("JoinGameMenu");
+        SceneManager.LoadScene("JoinGameMenu");
     }
 
     public void ExitGame()
@@ -23,16 +23,13 @@ public abstract class GameMenuUIHandler : UIHandler {
     public void ReturnToMainMenu()
     {
         PhotonNetwork.LeaveRoom();
-        SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("GameStartup");
+        SceneManager.LoadScene("GameStartup");
     }
 
     public void ReturnToLobby()
     {
-        string roomName = PhotonNetwork.room.name;
         PhotonNetwork.LeaveRoom();
-        SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("JoinGameMenu");
+        SceneManager.LoadScene("JoinGameMenu");
     }
 
 }

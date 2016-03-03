@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Photon;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System;
 
 public class JoinGameMenuUIHandler : Photon.PunBehaviour {
@@ -13,7 +14,7 @@ public class JoinGameMenuUIHandler : Photon.PunBehaviour {
         _setAvailableGamesText();
     }
 
-    public void OnGUI()
+    public void Update()
     {
         // Populate the available games list
         m_availGamesText.text = "";
@@ -59,9 +60,19 @@ public class JoinGameMenuUIHandler : Photon.PunBehaviour {
                 options.maxPlayers = 4;
                 PhotonNetwork.CreateRoom(searchText, options, null);
             }
-            SceneFading fader = SceneFading.Instance();
-            fader.LoadScene("PreGameLobby");
         }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        if(PhotonNetwork.isMasterClient)
+        {
+            InputField search = GetComponentInChildren<InputField>();
+            String searchText = search.text;
+            PhotonNetwork.room.name = searchText;
+        }
+
+        SceneManager.LoadScene("PreGameLobby");
     }
 
     private void _setAvailableGamesText()

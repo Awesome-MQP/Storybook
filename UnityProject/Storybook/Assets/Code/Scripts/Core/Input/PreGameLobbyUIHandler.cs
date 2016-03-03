@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PreGameLobbyUIHandler : Photon.PunBehaviour {
 
@@ -41,6 +42,11 @@ public class PreGameLobbyUIHandler : Photon.PunBehaviour {
         }
     }
 
+    public override void OnJoinedRoom()
+    {
+
+    }
+
     private void _setPlayersText()
     {
         Text[] text = GetComponentsInChildren<Text>();
@@ -56,11 +62,7 @@ public class PreGameLobbyUIHandler : Photon.PunBehaviour {
 
     public void onStartButtonClicked()
     {
-        if(PhotonNetwork.isMasterClient)
-        {
-            // only load if we are the master client
-            PhotonNetwork.LoadLevel("CharacterSelect");
-        }
+        PhotonNetwork.LoadLevel("CharacterSelect");
     }
 
     public void OnGUI()

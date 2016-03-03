@@ -14,6 +14,9 @@ public class BaseStorybookGame : GameManager
     [SerializeField]
     private ResourceAsset m_defaultCombatManager = new ResourceAsset(typeof(CombatManager));
 
+    [SerializeField]
+    private ResourceAsset m_defaultPlayerTeam = new ResourceAsset(typeof(PlayerTeam));
+
     private MapManager m_mapManager;
 
     private BasePlayerMover m_mover;
@@ -39,6 +42,11 @@ public class BaseStorybookGame : GameManager
             m_mover = value;
             PropertyChanged();
         }
+    }
+
+    public ResourceAsset DefaultPlayerTeam
+    {
+        get { return m_defaultPlayerTeam; }
     }
 
     protected override void Awake()
@@ -80,13 +88,15 @@ public class BaseStorybookGame : GameManager
         base.OnSerializeReliable(stream, info, isInit);
     }
 
-    public void StartCombat(CombatInstance combatInstance)
+    public CombatManager StartCombat(CombatInstance combatInstance)
     {
         Assert.IsTrue(IsMine);
 
         CombatManager newManager = PhotonNetwork.Instantiate<CombatManager>(m_defaultCombatManager, Vector3.zero,
             Quaternion.identity, 0);
         StartCombat(newManager, combatInstance);
+
+        return newManager;
     }
 
     public void StartCombat(CombatManager combatManager, CombatInstance combatInstance)

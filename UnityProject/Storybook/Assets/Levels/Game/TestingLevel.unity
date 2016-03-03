@@ -303,9 +303,13 @@ MonoBehaviour:
   m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
     type: 2}
   m_defaultCombatManager:
-    m_asset: Resources/CombatInstance
+    m_asset: CombatInstance
     m_baseTypeName: CombatManager
     m_editorAsset: Assets/Resources/CombatInstance.prefab
+  m_defaultPlayerTeam:
+    m_asset: TestPlayerTeam
+    m_baseTypeName: PlayerTeam
+    m_editorAsset: Assets/Resources/TestPlayerTeam.prefab
 --- !u!114 &794301187
 MonoBehaviour:
   m_ObjectHideFlags: 0

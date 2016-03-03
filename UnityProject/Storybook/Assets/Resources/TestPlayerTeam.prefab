@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.0089703, y: 3.9258728, z: 23.3381424}
+  m_LocalPosition: {x: -10.00897, y: 3.9258728, z: 23.338142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 11410636}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -67,8 +67,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c8e783f3074e924fa2a4ec837aa6ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 105
   m_pawnsToSpawn: []
   m_pageToUse: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
+  m_comicCombatPawn:
+    m_asset: PAX Comic Combat Pawn
+    m_baseTypeName: CombatPlayer
+    m_editorAsset: Assets/Resources/PAX Comic Combat Pawn.prefab
+  m_horrorCombatPawn:
+    m_asset: HorrorCombatPawn
+    m_baseTypeName: CombatPlayer
+    m_editorAsset: Assets/Resources/HorrorCombatPawn.prefab
+  m_fantasyCombatPawn:
+    m_asset: FantasyCombatPawn
+    m_baseTypeName: CombatPlayer
+    m_editorAsset: Assets/Resources/FantasyCombatPawn.prefab
+  m_scifiCombatPawn:
+    m_asset: SciFiCombatPawn
+    m_baseTypeName: CombatPlayer
+    m_editorAsset: Assets/Resources/SciFiCombatPawn.prefab
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -102,6 +119,38 @@ Prefab:
       value: 
       objectReference: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba,
         type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_horrorCombatPawn.m_asset
+      value: HorrorCombatPawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_horrorCombatPawn.m_editorAsset
+      value: Assets/Resources/HorrorCombatPawn.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_fantasyCombatPawn.m_asset
+      value: FantasyCombatPawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_fantasyCombatPawn.m_editorAsset
+      value: Assets/Resources/FantasyCombatPawn.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_scifiCombatPawn.m_asset
+      value: SciFiCombatPawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_scifiCombatPawn.m_editorAsset
+      value: Assets/Resources/SciFiCombatPawn.prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_comicCombatPawn.m_asset
+      value: PAX Comic Combat Pawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_comicCombatPawn.m_editorAsset
+      value: Assets/Resources/PAX Comic Combat Pawn.prefab
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 195522}

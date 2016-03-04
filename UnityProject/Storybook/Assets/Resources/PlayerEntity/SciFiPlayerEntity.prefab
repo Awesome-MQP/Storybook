@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 141904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.96187353, y: 12.453014, z: -5.8867993}
+  m_LocalPosition: {x: 57.038704, y: 1.5106986, z: -86.56527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02723a4934d147046860d5f64933f79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 199
   m_hitPoints: 50
   m_maxHitPoints: 50
   m_attack: 5
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_speed: 7
   m_luck: 1
   m_genre: 2
+  m_inventoryPrefab: {fileID: 11438290, guid: eb747d2a214130e4290033510bc70c7e, type: 2}
 --- !u!114 &11498934
 MonoBehaviour:
   m_ObjectHideFlags: 1

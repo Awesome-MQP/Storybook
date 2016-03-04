@@ -703,9 +703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e24d57218d21cf408d8860a2d2d5886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 204
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
-  m_maxSpeed: 1
+  m_maxSpeed: 10
   m_atTargetThreashHold: 0.1
 --- !u!137 &13787988
 SkinnedMeshRenderer:

@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 118188}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1672.1665, y: 2481.24658, z: -5351.22363}
+  m_LocalPosition: {x: 1672.1665, y: 2481.2466, z: -5351.2236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -40,10 +40,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a25d0b378927a1e4bbc7e5b7bd96540f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 0
   m_isRare: 0
   m_pageLevel: 1
   m_pageGenre: 4
   m_pageMoveType: 0
+  m_pageAttack: {fileID: 11426778, guid: a70588006b9d1ce44b1a211bb466b490, type: 2}
+  m_pageHPBoost: {fileID: 11428374, guid: 4e8f802c87a5a1242942ec9251a542cf, type: 2}
+  m_pageAttackBoost: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354, type: 2}
+  m_pageDefenseBoost: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7, type: 2}
+  m_pageSpeedBoost: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776, type: 2}
   m_playerCombatMove: {fileID: 11469260, guid: c985d2bbae29ad54ab31a616723bee8f, type: 2}
 --- !u!114 &11481794
 MonoBehaviour:
@@ -91,6 +97,31 @@ Prefab:
       propertyPath: ObservedComponents.Array.data[1]
       value: 
       objectReference: {fileID: 11418718}
+    - target: {fileID: 0}
+      propertyPath: m_pageAttack
+      value: 
+      objectReference: {fileID: 11426778, guid: a70588006b9d1ce44b1a211bb466b490,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageDefenseBoost
+      value: 
+      objectReference: {fileID: 11493394, guid: 3add23641538b9742b856627a53c8ae7,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageHPBoost
+      value: 
+      objectReference: {fileID: 11428374, guid: 4e8f802c87a5a1242942ec9251a542cf,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageAttackBoost
+      value: 
+      objectReference: {fileID: 11419240, guid: 9ee0d9b69727d354ba4e903a0e1d7354,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_pageSpeedBoost
+      value: 
+      objectReference: {fileID: 11478226, guid: b86e04e82d728b74d830decb6764a776,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 118188}

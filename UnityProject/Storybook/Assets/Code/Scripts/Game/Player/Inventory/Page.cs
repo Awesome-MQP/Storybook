@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System;
 
-public class Page : Item  {
+public class Page : Item
+{
 
     // Is it rare? Rare pages affect all targets, not just one.
     [SerializeField]
@@ -19,6 +20,21 @@ public class Page : Item  {
     // Move Type
     [SerializeField]
     private MoveType m_pageMoveType;
+
+    [SerializeField]
+    private PageMove m_pageAttack;
+
+    [SerializeField]
+    private PageMove m_pageHPBoost;
+
+    [SerializeField]
+    private PageMove m_pageAttackBoost;
+
+    [SerializeField]
+    private PageMove m_pageDefenseBoost;
+
+    [SerializeField]
+    private PageMove m_pageSpeedBoost;
 
     // Initialize mods to 0. They are set based on Genre when the page is initiated
     private int m_strengthMod = 0;
@@ -44,12 +60,43 @@ public class Page : Item  {
     [SerializeField]
     private PlayerMove m_playerCombatMove;
 
-	// Use this for initialization
-	protected override void Awake () {
+    // Use this for initialization
+    protected override void Awake()
+    {
         base.Awake();
     }
 
-    public void InitializePage()
+    public override void OnStartOwner(bool wasSpawn)
+    {
+        _CreatePageMove();
+    }
+
+    public override void OnStartPeer(bool wasSpawn)
+    {
+        _CreatePageMove();
+    }
+
+    private void _CreatePageMove()
+    {
+        PageMove move = _getMovePrefab(PageType, m_pageGenre);
+        PlayerCombatMove = move;
+        move.transform.SetParent(transform, false);
+        move.MoveLevel = m_pageLevel;
+        move.MoveRarity = Rarity;
+        move.MoveGenre = m_pageGenre;
+        move.PageGenre = m_pageGenre;
+
+        if (Rarity)
+        {
+            move.SetNumberOfTargets(4);
+        }
+        else
+        {
+            move.SetNumberOfTargets(1);
+        }
+    }
+
+public void InitializePage()
     {
         m_timeSinceMoveStarted = 0;
         m_isMoveEffectDone = false;
@@ -309,5 +356,41 @@ public class Page : Item  {
     {
         get { return m_playerCombatMove; }
         set { m_playerCombatMove = value; }
+    }
+
+    private PageMove _getMovePrefab(MoveType pageType, Genre pageGenre)
+    {
+        string prefabName = "PlayerMoves/";
+        if (pageType == MoveType.Attack)
+        {
+            prefabName += m_pageAttack.name;
+            Debug.Log("Prefab name = " + prefabName);
+        }
+        else if (pageType == MoveType.Boost)
+        {
+            switch (pageGenre)
+            {
+                case Genre.SciFi:
+                    prefabName += "SciFi/";
+                    prefabName += m_pageDefenseBoost.name;
+                    break;
+                case Genre.Fantasy:
+                    prefabName += "Fantasy/";
+                    prefabName += m_pageSpeedBoost.name;
+                    break;
+                case Genre.Horror:
+                    prefabName += "Horror/";
+                    prefabName += m_pageHPBoost.name;
+                    break;
+                case Genre.GraphicNovel:
+                    prefabName += "ComicBook/";
+                    prefabName += m_pageAttackBoost.name;
+                    break;
+            }
+        }
+
+        GameObject pageMoveObject = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity, 0);
+        PhotonNetwork.Spawn(pageMoveObject.GetPhotonView());
+        return pageMoveObject.GetComponent<PageMove>();
     }
 }

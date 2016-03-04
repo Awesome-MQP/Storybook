@@ -145,88 +145,44 @@ public class DungeonMaster : MonoBehaviour
 
     public Page ConstructPageFromData(PageData data)
     {
-        Page page = _spawnPageOnNetwork(data.PageGenre, data.PageLevel);
-        page.Rarity = data.IsRare;
-        page.PageType = data.PageMoveType;
-        PageMove move = _getMovePrefab(page.PageType, page.PageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = page.PageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = data.PageGenre;
-        move.PageGenre = data.PageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(data.PageGenre, data.PageLevel, data.PageMoveType, data.IsRare);
+
         return page;
     }
 
     public Page ConstructBoostPage(int pageLevel, Genre pageGenre, bool isBasicPage)
     {
-        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
-
+        bool isRare;
         if (!isBasicPage)
         {
-            page.Rarity = _getIsPageRare(pageLevel);
+            isRare = _getIsPageRare(pageLevel);
         }
         else
         {
-            page.Rarity = false;
+            isRare = false;
         }
 
-        page.PageType = MoveType.Boost;
-        PageMove move = _getMovePrefab(page.PageType, pageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = pageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = pageGenre;
-        move.PageGenre = pageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel, MoveType.Boost, isRare);
+
         return page;
     }
 
     public Page ConstructPage(int pageLevel, Genre pageGenre, bool isBasicPage)
     {
-        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+        MoveType move = _getPageMoveType();
 
+        bool isRare;
         if (!isBasicPage)
         {
-            page.Rarity = _getIsPageRare(pageLevel);
+            isRare = _getIsPageRare(pageLevel);
         }
         else
         {
-            page.Rarity = false;
+            isRare = false;
         }
 
-        page.PageType = _getPageMoveType();
-        PageMove move = _getMovePrefab(page.PageType, pageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = pageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = pageGenre;
-        move.PageGenre = pageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel, move, isRare);
+
         return page;
     }
 
@@ -339,12 +295,14 @@ public class DungeonMaster : MonoBehaviour
         return allGenresArray[genreIndex];
     }
 
-    private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel)
+    private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel, MoveType pageMoveType, bool isRare)
     {
         GameObject pageObject = PhotonNetwork.Instantiate(m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
         Page page = pageObject.GetComponent<Page>();
         page.PageLevel = pageLevel;
         page.PageGenre = pageGenre;
+        page.PageType = pageMoveType;
+        page.Rarity = isRare;
         PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
         return page;
     }

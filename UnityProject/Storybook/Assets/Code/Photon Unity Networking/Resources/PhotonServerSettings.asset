@@ -83,4 +83,5 @@ MonoBehaviour:
   - _resetCameraAfterCombat
   - InitializePlayerPawn
   - _rpcSubmitPageForCreation
+  - _playerFinished
   DisableAutoOpenWizard: 1

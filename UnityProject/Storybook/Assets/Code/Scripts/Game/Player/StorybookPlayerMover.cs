@@ -216,7 +216,6 @@ public class StorybookPlayerMover : BasePlayerMover,
 
     public void OnRoomCleared()
     {
-        OpenDeckManagementMenu();
     }
 
     public void TransitionFromCombat()

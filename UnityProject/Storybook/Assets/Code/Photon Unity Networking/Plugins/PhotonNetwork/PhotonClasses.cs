@@ -1230,6 +1230,8 @@ namespace Photon
             Assert.IsNotNull(deserializeMethod, "No deserialize method on struct being sent over the network.");
 
             deserializeMethod.Invoke(propertyValue, new[] {value});
+
+            info.SetValue(this, propertyValue, null);
         }
 
         public virtual bool IsRelevantTo(PhotonPlayer player)

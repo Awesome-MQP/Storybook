@@ -59,6 +59,8 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
 
     protected override void Awake()
     {
+        photonView.AllowFullCommunication = true;
+
         base.Awake();
 
         m_featureSet = new HashSet<string>();
@@ -184,6 +186,7 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_cameraNode; }
     }
 
+    //TODO: Change to collection of sync properties
     public PageData RoomPageData
     {
         get { return m_roomPageData; }

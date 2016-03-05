@@ -283,9 +283,11 @@ public class PhotonView : Photon.MonoBehaviour
         get { return parentView; }
     }
 
+    [Obsolete]
     public bool AllowFullCommunication
     {
         get { return allowFullCommunication; }
+        set { allowFullCommunication = value; }
     }
 
     protected internal bool didAwake;

@@ -21,6 +21,8 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     private bool m_isCurrentRoom;
 
+    private HashSet<PhotonPlayer> m_readyPlayers = new HashSet<PhotonPlayer>(); 
+
     // Use this for initialization
     protected override void Awake ()
     {
@@ -56,18 +58,23 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
     {
         if (!(mover is BasePlayerMover))
             yield break;
+
+        m_readyPlayers.Clear();
+
         photonView.RPC("NetworkedRoomEvent", PhotonTargets.All);
+
+        while (m_readyPlayers.Count < PhotonNetwork.countOfPlayers)
+        {
+            yield return null;
+        }
     }
 
     [PunRPC]
     protected void NetworkedRoomEvent()
     {
-        // TODO: open the shop UI.
         Debug.Log("Whaddya buyin'?");
         if (!(m_hasGeneratedPages && m_shopPages.Count <= 0))
         {
-            //TODO: Don't open the UI here, open it in an event handler.
-            //TODO: This is not network safe as this event is only called on the world owner (usually the master client).
             ShopUIHandler shopUI = Instantiate(m_shopUI).GetComponent<ShopUIHandler>();
             shopUI.RegisterShopRoom(this);
             shopUI.PopulateMenu(m_shopPages);
@@ -88,7 +95,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     public void OnShopClosed()
     {
-
+        photonView.RPC(nameof(_playerFinished), Owner, PhotonNetwork.player);
     }
 
     public void PagesGenerated(PageData[] pagesGenerated)
@@ -108,5 +115,11 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
             Debug.Log("Shop - PageTraded");
             m_shopPages.Remove(pageTraded);
         }
+    }
+
+    [PunRPC(AllowFullCommunication = true)]
+    protected void _playerFinished(PhotonPlayer player)
+    {
+        m_readyPlayers.Add(player);
     }
 }

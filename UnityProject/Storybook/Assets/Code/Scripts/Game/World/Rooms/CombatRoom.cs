@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
-public class CombatRoom : RoomObject {
+public class CombatRoom : RoomObject
+{
     [SerializeField]
     private AudioClip m_roomMusic;
 
@@ -40,9 +41,19 @@ public class CombatRoom : RoomObject {
 
     protected void Start()
     {
-
-        photonView.RPC("NetworkedSetFloorMaterial", PhotonTargets.All);
         _setRoomMusic();
+    }
+
+    public override void OnStartOwner(bool wasSpawn)
+    {
+        base.OnStartOwner(wasSpawn);
+        _setFloorMaterial();
+    }
+
+    public override void OnStartPeer(bool wasSpawn)
+    {
+        base.OnStartPeer(wasSpawn);
+        _setFloorMaterial();
     }
 
     // On entering the room, do nothing since there is nothing special in this room.
@@ -163,8 +174,7 @@ public class CombatRoom : RoomObject {
         }
     }
 
-    [PunRPC]
-    protected void NetworkedSetFloorMaterial()
+    private void _setFloorMaterial()
     {
         Renderer floorRenderer = m_floorObject.GetComponent<Renderer>();
         Material floorMaterial = Resources.Load("FloorTiles/fantasy-tile") as Material;

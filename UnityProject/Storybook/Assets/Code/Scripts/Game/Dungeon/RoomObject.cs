@@ -127,7 +127,8 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         protected set
         {
             m_roomLocation = value;
-            MapManager.Instance.RegisterRoom(this);
+            if(IsMine)
+                MapManager.Instance.RegisterRoom(this);
             PropertyChanged();
         }
     }
@@ -186,23 +187,16 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_cameraNode; }
     }
 
-    //TODO: Change to collection of sync properties
+    [SyncProperty]
     public PageData RoomPageData
     {
         get { return m_roomPageData; }
-        set { m_roomPageData = value;
-            photonView.RPC("SendPageData", PhotonTargets.Others, value.PageLevel, value.PageGenre, value.PageMoveType, value.IsRare); }
-    }
-
-    /// <summary>
-    /// Sends page data over network
-    /// </summary>
-    [PunRPC]
-    protected void SendPageData(int level, int genre, int type, bool rare)
-    {
-        Debug.Log("Sending page data over network.");
-        PageData roomPageData = new PageData(level, (Genre)genre, (MoveType)type, rare);
-        m_roomPageData = roomPageData;
+        set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_roomPageData = value;
+            PropertyChanged();
+        }
     }
 
     /// <summary>

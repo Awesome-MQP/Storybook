@@ -243,34 +243,37 @@ public class MapManager : Photon.PunBehaviour {
             }
         }
 
+        Door.Direction direction = (Door.Direction) doorIndex;
         Door exitDoor = null;
+
+        Location newLocation = currentLoc + direction;
+
+        RoomObject partnerRoom = m_worldGrid[newLocation.X, newLocation.Y];
+        if (!partnerRoom)
+            return null;
 
         if (doorIndex == (int)Door.Direction.North)
         {
             Location exitDoorLoc = new Location(currentLoc.X - 1, currentLoc.Y);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.SouthDoor;
+            exitDoor = partnerRoom.SouthDoor;
         }
 
         else if (doorIndex == (int)Door.Direction.East)
         {
             Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y + 1);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.WestDoor;
+            exitDoor = partnerRoom.WestDoor;
         }
 
         else if (doorIndex == (int)Door.Direction.South)
         {
             Location exitDoorLoc = new Location(currentLoc.X + 1, currentLoc.Y);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.NorthDoor;
+            exitDoor = partnerRoom.NorthDoor;
         }
 
         else if (doorIndex == (int)Door.Direction.West)
         {
             Location exitDoorLoc = new Location(currentLoc.X, currentLoc.Y - 1);
-            RoomObject exitRoom = m_worldGrid[exitDoorLoc.X, exitDoorLoc.Y];
-            exitDoor = exitRoom.EastDoor;
+            exitDoor = partnerRoom.EastDoor;
         }
 
         return exitDoor;

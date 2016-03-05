@@ -36,6 +36,15 @@ public class Door : MovementNode
         base.Awake();
     }
 
+    public override void OnStartOwner(bool wasSpawn)
+    {
+        if (IsDoorEnabled && LinkedDoor)
+        {
+            IsDoorOpen = true;
+            LinkedDoor.IsDoorOpen = true;
+        }
+    }
+
     /// <summary>
     /// True if the door is enabled in the room, false otherwise
     /// </summary>
@@ -141,6 +150,7 @@ public class Door : MovementNode
         if (IsMine)
         {
             IsDoorOpen = true;
+            LinkedDoor.IsDoorOpen = true;
         }
     }
 
@@ -149,6 +159,7 @@ public class Door : MovementNode
         if (IsMine)
         {
             IsDoorOpen = false;
+            LinkedDoor.IsDoorOpen = false;
         }
     }
 

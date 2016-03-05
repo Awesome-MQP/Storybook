@@ -17,6 +17,18 @@ public class BaseStorybookGame : GameManager
     [SerializeField]
     private ResourceAsset m_defaultPlayerTeam = new ResourceAsset(typeof(PlayerTeam));
 
+    [SerializeField]
+    private ResourceAsset m_comicBookPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
+    [SerializeField]
+    private ResourceAsset m_sciFiPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
+    [SerializeField]
+    private ResourceAsset m_horrorPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
+    [SerializeField]
+    private ResourceAsset m_fantasyPlayerObject = new ResourceAsset(typeof(PlayerObject));
+
     private MapManager m_mapManager;
 
     private BasePlayerMover m_mover;
@@ -120,5 +132,36 @@ public class BaseStorybookGame : GameManager
         //Generate the world pawn string from the data as a default implementation.
         const string resourcePathTemplate = "Player/WorldPawn/{0}WorldPawn";
         return new ResourceAsset(string.Format(resourcePathTemplate, genre), typeof(WorldPawn));
+    }
+
+    protected override PlayerObject CreatePlayerObject(PlayerObject playerObject)
+    {
+        PlayerEntity lastPlayerEntity = playerObject as PlayerEntity;
+        if (lastPlayerEntity)
+        {
+            ResourceAsset prefabForGenre = _GetEntityByGenre(lastPlayerEntity.Genre);
+            return PhotonNetwork.Instantiate<PlayerEntity>(prefabForGenre, Vector3.zero, Quaternion.identity, 0);
+        }
+        else
+        {
+            return base.CreatePlayerObject(playerObject);
+        }
+    }
+
+    private ResourceAsset _GetEntityByGenre(Genre oldGenre)
+    {
+        switch (oldGenre)
+        {
+            case Genre.Fantasy:
+                return m_fantasyPlayerObject;
+            case Genre.Horror:
+                return m_horrorPlayerObject;
+            case Genre.SciFi:
+                return m_sciFiPlayerObject;
+            case Genre.GraphicNovel:
+                return m_comicBookPlayerObject;
+        }
+
+        return null;
     }
 }

@@ -11,18 +11,6 @@ public abstract class GameManager : Photon.PunBehaviour
     private ResourceAsset m_defaultPlayerObject = new ResourceAsset(typeof(PlayerObject));
 
     [SerializeField]
-    private ResourceAsset m_comicBookPlayerObject = new ResourceAsset(typeof(PlayerObject));
-
-    [SerializeField]
-    private ResourceAsset m_sciFiPlayerObject = new ResourceAsset(typeof(PlayerObject));
-
-    [SerializeField]
-    private ResourceAsset m_horrorPlayerObject = new ResourceAsset(typeof(PlayerObject));
-
-    [SerializeField]
-    private ResourceAsset m_fantasyPlayerObject = new ResourceAsset(typeof(PlayerObject));
-
-    [SerializeField]
     [Tooltip("When false all old player objects will be destroyed when this game manager starts up.")]
     private bool m_keepOldPlayerObjects = false;
 
@@ -141,11 +129,9 @@ public abstract class GameManager : Photon.PunBehaviour
         return playerObj;
     }
 
-    protected virtual PlayerObject CreatePlayerObject(PlayerEntity entity)
+    protected virtual PlayerObject CreatePlayerObject(PlayerObject playerObject)
     {
-        Debug.Log("Creating player object from entity");
-        ResourceAsset objectToSpawn = _GetEntityByGenre(entity.Genre);
-        PlayerObject playerObj = PhotonNetwork.Instantiate(objectToSpawn, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
 
@@ -189,13 +175,11 @@ public abstract class GameManager : Photon.PunBehaviour
 
     private PlayerObject _setupPlayer(PlayerObject oldPlayer)
     {
-        Debug.Log("Setting up player based on existing entity");
         Assert.IsTrue(IsMine);
 
         PhotonPlayer player = oldPlayer.Player;
-        PlayerEntity oldPlayerEntity = (PlayerEntity)oldPlayer;
 
-        PlayerObject playerObject = CreatePlayerObject(oldPlayerEntity);
+        PlayerObject playerObject = CreatePlayerObject(oldPlayer);
         m_playerObjects.Add(player, playerObject);
         playerObject.Construct(oldPlayer);
         PhotonNetwork.Spawn(playerObject.photonView);
@@ -220,7 +204,7 @@ public abstract class GameManager : Photon.PunBehaviour
             {
                 Debug.Log("Setting up player");
                 _setupPlayer(existingPlayer);
-                Destroy(existingPlayer);
+                Destroy(existingPlayer.gameObject);
             }
         }
 
@@ -239,22 +223,5 @@ public abstract class GameManager : Photon.PunBehaviour
     protected void _rpcOnStartGame()
     {
         OnStartGame();
-    }
-
-    private ResourceAsset _GetEntityByGenre(Genre oldGenre)
-    {
-        switch (oldGenre)
-        {
-            case Genre.Fantasy:
-                return m_fantasyPlayerObject;
-            case Genre.Horror:
-                return m_horrorPlayerObject;
-            case Genre.SciFi:
-                return m_sciFiPlayerObject;
-            case Genre.GraphicNovel:
-                return m_comicBookPlayerObject;
-        }
-
-        return null;
     }
 }

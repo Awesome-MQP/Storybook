@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class CharacterSelectUIHandler : Photon.PunBehaviour {
-
+public class CharacterSelectUIHandler : Photon.PunBehaviour
+{
     private Dictionary<PhotonPlayer, Genre> m_playerToCharacter = new Dictionary<PhotonPlayer, Genre>();
     private int m_playersReady = 0;
 
@@ -72,7 +72,7 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
 
     protected  void Start()
     {
-        photonView.RPC("InitializeDictionary", PhotonTargets.All, PhotonNetwork.player);
+        photonView.RPC(nameof(InitializeDictionary), PhotonTargets.All, PhotonNetwork.player);
         m_submitButton.interactable = false;
         MainMenuUIHandler mainMenu = FindObjectOfType<MainMenuUIHandler>();
         Destroy(mainMenu);
@@ -82,25 +82,25 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
     public void SelectComicBook()
     {
         StartCoroutine(_AnimateComicBook());
-        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.GraphicNovel);
+        photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.GraphicNovel);
     }
 
     public void SelectHorror()
     {
         StartCoroutine(_AnimateHorror());
-        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.Horror);
+        photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.Horror);
     }
 
     public void SelectSciFi()
     {
         StartCoroutine(_AnimateSciFi());
-        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.SciFi);
+        photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.SciFi);
     }
 
     public void SelectFantasy()
     {
         StartCoroutine(_AnimateFantasy());
-        photonView.RPC("SelectCharacter", PhotonTargets.All, PhotonNetwork.player, Genre.Fantasy);
+        photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.Fantasy);
     }
 
     public void SubmitCharacter()
@@ -108,12 +108,7 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour {
         foreach(PhotonPlayer player in m_playerToCharacter.Keys)
         {
             Genre playerGenre = m_playerToCharacter[player];
-            PlayerEntity playerCharacterEntity = _GenreToEntity(playerGenre);
-            GameObject entityObject = PhotonNetwork.Instantiate("PlayerEntity/" + playerCharacterEntity.name, Vector3.zero, Quaternion.identity, 0);
-            DontDestroyOnLoad(entityObject);
-            PlayerEntity createdEntity = entityObject.GetComponent<PlayerEntity>();
-            createdEntity.Construct(PhotonNetwork.player);
-            PhotonNetwork.Spawn(entityObject.GetPhotonView());
+            GameManager.GetInstance<GameManager>().GetPlayerObject<CharacterSelectPlayerEntity>(player).PlayerGenre = playerGenre;
             SceneFading.Instance().LoadScene("TestingLevel");
         }
     }

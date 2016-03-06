@@ -137,9 +137,15 @@ public class BaseStorybookGame : GameManager
     protected override PlayerObject CreatePlayerObject(PlayerObject playerObject)
     {
         PlayerEntity lastPlayerEntity = playerObject as PlayerEntity;
+        CharacterSelectPlayerEntity playerSelectEntity = playerObject as CharacterSelectPlayerEntity;
         if (lastPlayerEntity)
         {
             ResourceAsset prefabForGenre = _GetEntityByGenre(lastPlayerEntity.Genre);
+            return PhotonNetwork.Instantiate<PlayerEntity>(prefabForGenre, Vector3.zero, Quaternion.identity, 0);
+        }
+        else if (playerSelectEntity)
+        {
+            ResourceAsset prefabForGenre = _GetEntityByGenre(playerSelectEntity.PlayerGenre);
             return PhotonNetwork.Instantiate<PlayerEntity>(prefabForGenre, Vector3.zero, Quaternion.identity, 0);
         }
         else

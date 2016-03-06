@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterSelectStartup : MonoBehaviour {
-
+public class CharacterSelectStartup : GameManager
+{
     [SerializeField]
-    private ResourceAsset m_characterSelectPrefab;
+    private ResourceAsset m_characterSelectPrefab = new ResourceAsset(typeof(CharacterSelectUIHandler));
 
 	// Use this for initialization
-	void Awake () {
+    protected override void Awake ()
+    {
+        base.Awake();
+
         // Spawn the UI if we are the host
-        if (PhotonNetwork.isMasterClient)
+        if (IsMine)
         {
             CharacterSelectUIHandler ui = PhotonNetwork.Instantiate<CharacterSelectUIHandler>(m_characterSelectPrefab, Vector3.zero, Quaternion.identity, 1);
             ui.FantasyModel = GameObject.Find("FantasyCharacter").GetComponent<Animator>();

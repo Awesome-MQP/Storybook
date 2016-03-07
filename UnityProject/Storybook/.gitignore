@@ -36,5 +36,7 @@ sysinfo.txt
 *[Dd]emo_[Dd]ata
 *[Dd]emo.exe
 *.pdb
-*[Tt]est_[Dd]ata
-*[Tt]est.exe
+*[Tt]est*_[Dd]ata
+*[Tt]est*.exe
+*_[Dd]ata
+*.exe

@@ -109,8 +109,9 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
         {
             Genre playerGenre = m_playerToCharacter[player];
             GameManager.GetInstance<GameManager>().GetPlayerObject<CharacterSelectPlayerEntity>(player).PlayerGenre = playerGenre;
-            SceneFading.Instance().LoadScene("TestingLevel");
         }
+
+        SceneFading.Instance().LoadScene("TestingLevel");
     }
 
     private Button _GenreToButton(Genre characterGenre)

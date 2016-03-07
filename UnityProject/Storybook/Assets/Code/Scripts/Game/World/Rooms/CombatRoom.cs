@@ -98,20 +98,20 @@ public class CombatRoom : RoomObject
         //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
         if (!m_wonCombat)
         {
-            //ResourceAsset playerTeam = GameManager.GetInstance<BaseStorybookGame>().DefaultPlayerTeam;
-            //ResourceAsset enemyTeam = new ResourceAsset(m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name, typeof(EnemyTeam));
+            ResourceAsset playerTeam = GameManager.GetInstance<BaseStorybookGame>().DefaultPlayerTeam;
+            ResourceAsset enemyTeam = new ResourceAsset(m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name, typeof(EnemyTeam));
 
-            ////m_musicManager.Fade(m_musicTracks[1], 5, true);
-            //CombatManager cm = GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance(playerTeam, enemyTeam, RoomPageData.PageGenre, RoomPageData.PageLevel));
+            m_musicManager.Fade(m_musicTracks[1], 5, true);
+            CombatManager cm = GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance(playerTeam, enemyTeam, RoomPageData.PageGenre, RoomPageData.PageLevel));
 
-            //while (cm.IsRunning)
-            //{
-            //    yield return null;
-            //}
+            while (cm.IsRunning)
+            {
+                yield return null;
+            }
 
-            //photonView.RPC(nameof(_resetCameraAfterCombat), PhotonTargets.All);
+            photonView.RPC(nameof(_resetCameraAfterCombat), PhotonTargets.All);
 
-            //DestroyEnemyWorldPawns();
+            DestroyEnemyWorldPawns();
         }
         else
         {

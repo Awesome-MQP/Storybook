@@ -60,10 +60,12 @@ public abstract class CombatPlayer : CombatPawn
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
 
+            /*
             if (PhotonNetwork.isMasterClient)
             {
                 AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
             }
+            */
 
             if (PhotonNetwork.player.ID == PawnId)
             {
@@ -110,10 +112,12 @@ public abstract class CombatPlayer : CombatPawn
 
         m_playerHand.Remove(pageToRemove);
 
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             AddOrRemoveMod(pageToRemove.PageGenre, pageToRemove.PageLevel, false);
         }
+        */
 
         if (PhotonNetwork.player.ID == PawnId)
         {
@@ -173,10 +177,14 @@ public abstract class CombatPlayer : CombatPawn
 
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
+
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
         }
+        */
+
         if (PhotonNetwork.player.ID == PawnId)
         {
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, 4);

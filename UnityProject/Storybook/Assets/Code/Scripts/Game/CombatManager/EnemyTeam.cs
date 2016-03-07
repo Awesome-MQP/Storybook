@@ -15,7 +15,7 @@ public class EnemyTeam : CombatTeam {
             EnemyPositionNode nodeToUse = _getPositionNodeById(positionNodes, i + 1);
             GameObject enemyObject = PhotonNetwork.Instantiate("Enemies/" + PawnsToSpawn[i].PawnGenre + "/" + PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
-            dm.ScalePawnByLevel(enemyPawn, TeamLevel);
+            //dm.ScalePawnByLevel(enemyPawn, TeamLevel);
             enemyPawn.transform.SetParent(nodeToUse.transform);
             PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
             enemyPawn.PawnId = i + 1;

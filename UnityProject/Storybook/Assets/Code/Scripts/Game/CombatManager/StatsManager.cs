@@ -21,6 +21,8 @@ public static class StatsManager {
     /// <returns></returns>
     public static int CalcDamage(Genre attackerGenre, Genre defenderGenre, Genre attackerMoveGenre, float pageLevel, float attackerStr, float defenderDef)
     {
+        Debug.Log("Attacker strength = " + attackerStr);
+        Debug.Log("Defender def = " + defenderDef);
         float sameTypeMoveBonus = GetSameTypeBonus(attackerGenre, attackerMoveGenre);
         float typeAdvantageBonus = GetTypeAdvantageBonus(attackerMoveGenre, defenderGenre);
 

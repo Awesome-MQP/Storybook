@@ -115,6 +115,7 @@ public abstract class GameManager : Photon.PunBehaviour
 
     public void RegisterPlayerObject(PlayerObject playerObject)
     {
+        m_playerObjects.Remove(playerObject.Player);
         m_playerObjects.Add(playerObject.Player, playerObject);
     }
 
@@ -165,6 +166,8 @@ public abstract class GameManager : Photon.PunBehaviour
     {
         Assert.IsTrue(IsMine);
 
+        m_playerObjects.Remove(player);
+
         PlayerObject playerObject = CreatePlayerObject(player);
         m_playerObjects.Add(player, playerObject);
         playerObject.Construct(player);
@@ -178,6 +181,7 @@ public abstract class GameManager : Photon.PunBehaviour
         Assert.IsTrue(IsMine);
 
         PhotonPlayer player = oldPlayer.Player;
+        m_playerObjects.Remove(player);
 
         PlayerObject playerObject = CreatePlayerObject(oldPlayer);
         m_playerObjects.Add(player, playerObject);

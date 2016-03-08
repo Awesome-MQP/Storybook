@@ -89,7 +89,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
         for (int i = 1; i <= PhotonNetwork.playerList.Length; i++)
         {
             PhotonPlayer player = PhotonNetwork.playerList[i - 1]; // the current player
-            GameManager gm = FindObjectOfType<GameManager>();
+            GameManager gm = GameManager.GetInstance<GameManager>();
             PlayerEntity pe = gm.GetPlayerObject<PlayerEntity>(player);
 
             Debug.Log("Children count = " + gameObject.GetComponentsInChildren<Image>().Length);

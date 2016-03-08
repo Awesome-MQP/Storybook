@@ -2012,6 +2012,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
 
             case PunEvent.DestroyPlayer:
+            {
                 Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
                 int targetPlayerId = (int)evData[(byte)0];
                 if (targetPlayerId >= 0)
@@ -2023,17 +2024,23 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     if (this.DebugOut >= DebugLevel.INFO) Debug.Log("Ev DestroyAll! By PlayerId: " + actorNr);
                     this.DestroyAll(true);
                 }
+            }
                 break;
 
             case PunEvent.Destroy:
-                PhotonNetwork.HandleDestroy((int[]) photonEvent[ParameterCode.Data]);
-
+            {
+                Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
+                PhotonNetwork.HandleDestroy((short) evData[(byte) 0], (int[]) evData[(byte) 1]);
+                
+            }
                 break;
 
             case PunEvent.AssignMaster:
-                evData = (Hashtable)photonEvent[ParameterCode.Data];
+            {
+                Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
                 int newMaster = (int)evData[(byte)1];
                 this.SetMasterClient(newMaster, false);
+            }
                 break;
 
             case EventCode.LobbyStats:
@@ -2910,6 +2917,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     /// </summary>
     private void ServerCleanInstantiateAndDestroy(int instantiateId, int creatorId, bool isRuntimeInstantiated)
     {
+        PhotonView view = GetPhotonView(instantiateId);
+
         Hashtable removeFilter = new Hashtable();
         removeFilter[(byte)7] = instantiateId;
 
@@ -2918,7 +2927,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         //this.OpRaiseEvent(PunEvent.Instantiation, removeFilter, true, 0, new int[] { actorNr }, EventCaching.RemoveFromRoomCache);
 
         Hashtable evData = new Hashtable();
-        evData[(byte)0] = instantiateId;
+        evData[(byte) 0] = (short)view.prefix;
+        evData[(byte)1] = new [] {instantiateId};
         options = null;
         if (!isRuntimeInstantiated)
         {

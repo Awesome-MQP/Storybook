@@ -2829,18 +2829,24 @@ public static class PhotonNetwork
             viewIds[i] = photonView.viewID;
         }
 
+        Hashtable evData = new Hashtable
+        {
+            [(byte) 0] = (short) targetView.prefix,
+            [(byte) 1] = viewIds
+        };
+
         RaiseEventOptions options = new RaiseEventOptions();
         options.TargetActors = playerIds;
 
-        RaiseEvent(PunEvent.Destroy, viewIds, true, options);
+        RaiseEvent(PunEvent.Destroy, evData, true, options);
     }
 
-    internal static void HandleDestroy(int[] viewStructureIds)
+    internal static void HandleDestroy(short levelPrefix, int[] viewStructureIds)
     {
         PhotonView rootView = PhotonView.Find(viewStructureIds[0]);
 
-        //Handle delete silently if the view does not exist, delete can be sent to views that do not exist on the client
-        if(rootView)
+        //Only delete if the view was found and the level prefix matches.
+        if(rootView && rootView.prefix == levelPrefix)
             Object.Destroy(rootView.gameObject);
     }
 

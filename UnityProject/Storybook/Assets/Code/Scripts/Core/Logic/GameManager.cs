@@ -40,7 +40,7 @@ public abstract class GameManager : Photon.PunBehaviour
     {
         _startup();
         OnStartGame();
-        photonView.RPC("_rpcOnStartGame", PhotonTargets.Others);
+        photonView.RPC(nameof(_rpcOnStartGame), PhotonTargets.Others);
     }
 
     protected virtual void OnStartGame()
@@ -117,6 +117,11 @@ public abstract class GameManager : Photon.PunBehaviour
     {
         m_playerObjects.Remove(playerObject.Player);
         m_playerObjects.Add(playerObject.Player, playerObject);
+    }
+
+    public void UnRegisterPlayerObject(PlayerObject playerObject)
+    {
+        m_playerObjects.Remove(playerObject.Player);
     }
 
     /// <summary>

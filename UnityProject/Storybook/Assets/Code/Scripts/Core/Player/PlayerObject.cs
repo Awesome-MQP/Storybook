@@ -20,7 +20,7 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
             PropertyChanged();
         }
     }
-
+    
     public string Name
     {
         get { return m_player.name; }
@@ -50,7 +50,7 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
         Assert.IsTrue(IsMine);
 
         Player = oldPlayer.Player;
-        //photonView.TransferController(Player);
+        photonView.TransferController(Player);
 
         OnTakeOver(oldPlayer);
     }

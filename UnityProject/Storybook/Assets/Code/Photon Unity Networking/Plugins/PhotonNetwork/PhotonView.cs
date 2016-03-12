@@ -494,7 +494,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     protected internal void OnDestroy()
     {
-        if (isMine)
+        if (isMine && !PhotonNetwork.isInLevelLoad)
         {
             PhotonNetwork.Destroy(this);
         }

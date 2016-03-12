@@ -76,7 +76,7 @@ public class BaseStorybookGame : GameManager
         RoomObject startRoom = m_mapManager.PlaceStartRoom();
 
         //Spawn the player mover on the map
-        GameObject moverObject = PhotonNetwork.Instantiate(m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
+        GameObject moverObject = PhotonNetwork.Instantiate("Rooms/RoomFeatures/" + m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
         BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
         m_mover = mover;
         m_mover.Construct(startRoom);

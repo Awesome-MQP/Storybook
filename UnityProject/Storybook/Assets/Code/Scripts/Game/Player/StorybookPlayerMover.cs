@@ -120,7 +120,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// </summary>
     public void OpenPageForRoomMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/ChoosePageForRoomCanvas");
+        Object loadedObject = Resources.Load("UI/ChoosePageForRoomCanvas");
         m_canvas = (GameObject) Instantiate(loadedObject);
         m_UIHandler = m_canvas.GetComponent<PageForRoomUIHandler>();
         m_UIHandler.PopulateMenu();
@@ -132,7 +132,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// </summary>
     public void OpenDeckManagementMenu()
     {
-        UnityEngine.Object loadedObject = Resources.Load("UIPrefabs/DeckManagementCanvas");
+        UnityEngine.Object loadedObject = Resources.Load("UI/DeckManagementCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         DeckManagementUIHandler uiHandler = canvas.GetComponent<DeckManagementUIHandler>();
         uiHandler.PopulateMenu();
@@ -143,7 +143,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// </summary>
     public void OpenOverworldMenu()
     {
-        Object loadedObject = Resources.Load("UIPrefabs/OverworldCanvas");
+        Object loadedObject = Resources.Load("UI/OverworldCanvas");
         GameObject canvas = (GameObject) Instantiate(loadedObject);
         OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
         uiHandler.PopulateMenu(CurrentRoom);

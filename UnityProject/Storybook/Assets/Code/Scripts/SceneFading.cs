@@ -26,7 +26,7 @@ public class SceneFading : Photon.PunBehaviour {
         }
         else
         {
-            GameObject faderObject = PhotonNetwork.Instantiate("UIPrefabs/Fader", Vector3.zero, Quaternion.identity, 0);
+            GameObject faderObject = PhotonNetwork.Instantiate("UI/Fader", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(faderObject.GetPhotonView());
             m_instance = faderObject.GetComponent<SceneFading>();
             return m_instance;

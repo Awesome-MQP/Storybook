@@ -123,8 +123,7 @@ MonoBehaviour:
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -143,9 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_currentMusicTrack: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
-  FadeOutThreshold: 1
-  FadeSpeed: 0.5
-  m_musicSource: {fileID: 0}
+  m_fadeOutThreshold: 0.05
+  m_fadeSpeed: 0.05
   m_musicVolume: 0.5
   testAudio: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
 --- !u!1001 &100100000

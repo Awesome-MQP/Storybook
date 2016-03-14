@@ -134,17 +134,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfa99f7de5240d4d8f31d64af359cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_componentId: 0
+  m_componentId: 79
   m_defaultPlayerObject:
-    m_asset: 
+    m_asset: Player/PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: 
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/ComicPlayerEntity.prefab
   m_keepOldPlayerObjects: 0
-  m_playerMoverPrefab: {fileID: 0}
+  m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
+    type: 2}
   m_defaultCombatManager:
     m_asset: 
     m_baseTypeName: CombatManager
     m_editorAsset: 
+  m_defaultPlayerTeam:
+    m_asset: CombatStateMachine/TestPlayerTeam
+    m_baseTypeName: PlayerTeam
+    m_editorAsset: Assets/Resources/CombatStateMachine/TestPlayerTeam.prefab
+  m_comicBookPlayerObject:
+    m_asset: Player/PlayerEntity/ComicPlayerEntity
+    m_baseTypeName: PlayerObject
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/ComicPlayerEntity.prefab
+  m_sciFiPlayerObject:
+    m_asset: Player/PlayerEntity/SciFiPlayerEntity
+    m_baseTypeName: PlayerObject
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/SciFiPlayerEntity.prefab
+  m_horrorPlayerObject:
+    m_asset: Player/PlayerEntity/HorrorPlayerEntity
+    m_baseTypeName: PlayerObject
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/HorrorPlayerEntity.prefab
+  m_fantasyPlayerObject:
+    m_asset: Player/PlayerEntity/FantasyPlayerEntity
+    m_baseTypeName: PlayerObject
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
 --- !u!114 &11436648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec58f83a8006e243af3aa680bcd238a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_componentId: 0
+  m_componentId: 51
   m_worldMaxXSize: 4
   m_worldMaxYSize: 4
   m_combatRoomPrefab: {fileID: 0}
@@ -188,7 +209,8 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 11436648}
+  - {fileID: 11432030}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

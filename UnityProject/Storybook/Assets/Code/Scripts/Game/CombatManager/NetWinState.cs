@@ -87,7 +87,7 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
     {
         CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
         Destroy(combatMenu.gameObject);
-        GameObject uiGameObject = Resources.Load("UIPrefabs/CombatSummaryUI") as GameObject;
+        GameObject uiGameObject = Resources.Load("UI/CombatSummaryUI") as GameObject;
         m_combatSummaryUI = Instantiate(uiGameObject);
         CombatSummaryUIHandler uiHandler = m_combatSummaryUI.GetComponent<CombatSummaryUIHandler>();
         uiHandler.PopulateMenu(CManager.CombatLevel, CManager.CombatGenre);

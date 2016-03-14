@@ -104,8 +104,7 @@ public class BaseStorybookGame : GameManager
     {
         Assert.IsTrue(IsMine);
 
-        CombatManager newManager = PhotonNetwork.Instantiate<CombatManager>(m_defaultCombatManager, Vector3.zero,
-            Quaternion.identity, 0);
+        CombatManager newManager = PhotonNetwork.Instantiate<CombatManager>(m_defaultCombatManager, Vector3.zero, Quaternion.identity, 0);
         StartCombat(newManager, combatInstance);
 
         return newManager;

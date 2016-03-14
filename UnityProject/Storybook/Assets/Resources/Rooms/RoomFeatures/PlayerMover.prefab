@@ -187,6 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 70
 --- !u!114 &11416478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -198,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 70
 --- !u!114 &11424732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 70
 --- !u!114 &11470836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -274,6 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef744aaa2de57a444b8c305c05aee82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 70
 --- !u!114 &11488356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -339,11 +343,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e69fadc132e0a0f4c98de973a22074f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 70
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
   m_maxSpeed: 10
   m_atTargetThreashHold: 0.1
-  m_node: {fileID: 0}
   m_playerPositions:
   - {fileID: 11415434}
   - {fileID: 11463602}

@@ -67,9 +67,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0ed8b272d8d2dc46a5ac0194bc3d3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 0
   m_staticSize: 80
   m_dynamicSize: 80
-  m_testPage: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

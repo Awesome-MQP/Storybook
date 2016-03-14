@@ -24,7 +24,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 136282}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1672.1665, y: 2481.24658, z: -5351.22363}
+  m_LocalPosition: {x: 1672.1665, y: 2481.2466, z: -5351.2236}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -40,10 +40,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a25d0b378927a1e4bbc7e5b7bd96540f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 0
   m_isRare: 0
   m_pageLevel: 1
   m_pageGenre: 4
   m_pageMoveType: 1
+  m_pageAttack: {fileID: 0}
+  m_pageHPBoost: {fileID: 0}
+  m_pageAttackBoost: {fileID: 0}
+  m_pageDefenseBoost: {fileID: 0}
+  m_pageSpeedBoost: {fileID: 0}
   m_playerCombatMove: {fileID: 11471238, guid: d669a65758f7d5a46a33892fcfc49db0, type: 2}
 --- !u!114 &11423434
 MonoBehaviour:

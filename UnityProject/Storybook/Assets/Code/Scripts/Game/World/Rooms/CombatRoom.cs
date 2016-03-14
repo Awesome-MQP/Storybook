@@ -77,7 +77,7 @@ public class CombatRoom : RoomObject
             {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 Quaternion currentEnemyRot = m_enemyPosList[i].rotation;
-                GameObject pawnGameObject = PhotonNetwork.Instantiate("Enemies/" + pawn.PawnGenre + "/" + pawn.name, currentEnemyPos, currentEnemyRot, 0);
+                GameObject pawnGameObject = PhotonNetwork.Instantiate("Enemies/EnemyTypes/" + pawn.PawnGenre + "/" + pawn.name, currentEnemyPos, currentEnemyRot, 0);
                 pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
                 m_enemyWorldPawns.Add(pawnGameObject);
@@ -150,20 +150,20 @@ public class CombatRoom : RoomObject
         switch (RoomPageData.PageGenre)
         {
             case Genre.Fantasy:
-                m_roomEnemiesPrefabLoc = "EnemyTeams/Fantasy/";
-                teams = Resources.LoadAll("EnemyTeams/Fantasy");
+                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Fantasy/";
+                teams = Resources.LoadAll("Enemies/EnemyTeams/Fantasy");
                 break;
             case Genre.GraphicNovel:
-                m_roomEnemiesPrefabLoc = "EnemyTeams/Comic/";
-                teams = Resources.LoadAll("EnemyTeams/Comic");
+                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Comic/";
+                teams = Resources.LoadAll("Enemies/EnemyTeams/Comic");
                 break;
             case Genre.Horror:
-                m_roomEnemiesPrefabLoc = "EnemyTeams/Horror/";
-                teams = Resources.LoadAll("EnemyTeams/Horror");
+                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Horror/";
+                teams = Resources.LoadAll("Enemies/EnemyTeams/Horror");
                 break;
             case Genre.SciFi:
-                m_roomEnemiesPrefabLoc = "EnemyTeams/SciFi/";
-                teams = Resources.LoadAll("EnemyTeams/SciFi");
+                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/SciFi/";
+                teams = Resources.LoadAll("Enemies/EnemyTeams/SciFi");
                 break;
         }
 

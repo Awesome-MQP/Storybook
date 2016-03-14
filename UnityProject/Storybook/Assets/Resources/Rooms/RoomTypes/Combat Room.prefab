@@ -1302,6 +1302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11408880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1394,6 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1693d95d7fffe438e70030aeb5087e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
   m_cameraNode: {fileID: 442616}
   m_roomSize: 0
   m_roomFeatures: []
@@ -1403,13 +1405,6 @@ MonoBehaviour:
   m_westDoor: {fileID: 11402286}
   m_centerNode: {fileID: 11432198}
   m_floorObject: {fileID: 453728}
-  m_sceneryNodes:
-  - {fileID: 403402}
-  - {fileID: 421494}
-  - {fileID: 470486}
-  - {fileID: 429072}
-  m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
-  m_fightMusic: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
   m_musicTracks:
   - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
   - {fileID: 8300000, guid: 592adf1700739fa4ba34cc3661c191fa, type: 3}
@@ -1417,6 +1412,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 463447fa7c1620e4fa532e877f43664d, type: 3}
   - {fileID: 8300000, guid: 58b1888d8b86fda408dd3977630ddd44, type: 3}
   - {fileID: 8300000, guid: 503079fc46fcc9745bc2ce3eb493af42, type: 3}
+  m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+  m_fightMusic: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
   m_roomEnemiesOverworld: []
   m_roomEnemies: {fileID: 0}
   m_enemyPosList:
@@ -1463,6 +1460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a96e77769a0921498c327cab51a2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
   m_nodeDoor: {fileID: 11467042}
 --- !u!114 &11418170
 MonoBehaviour:
@@ -1475,6 +1473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11420794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1513,6 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11431620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1551,6 +1551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c43731e61b8aba42bed52c8a03eccd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11436740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1670,6 +1671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11459702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1681,6 +1683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11463074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1719,6 +1722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11467210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1730,6 +1734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a96e77769a0921498c327cab51a2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
   m_nodeDoor: {fileID: 11402286}
 --- !u!114 &11468904
 MonoBehaviour:
@@ -1742,6 +1747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a96e77769a0921498c327cab51a2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
   m_nodeDoor: {fileID: 11470268}
 --- !u!114 &11470268
 MonoBehaviour:
@@ -1754,6 +1760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c55c571315d5174484da21eb2dc713a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11471502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1846,6 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29c87065b10ff144a85fc25ece96ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
 --- !u!114 &11499984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1857,6 +1865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a96e77769a0921498c327cab51a2ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 205
   m_nodeDoor: {fileID: 11429042}
 --- !u!135 &13504564
 SphereCollider:

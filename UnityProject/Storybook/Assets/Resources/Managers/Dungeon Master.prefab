@@ -48,8 +48,7 @@ MonoBehaviour:
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -75,7 +74,7 @@ MonoBehaviour:
   m_pageSameGenreProbability: 0.75
   m_rarePageProbability: 0.05
   m_rarePageLevelIncrease: 0.025
-  m_pagePrefab: {fileID: 11418718, guid: e1917b3e339e8af4db5ee0b43dc864ba, type: 2}
+  m_pagePrefab: {fileID: 0}
   m_isPageAttackProbability: 0.5
   m_isPageSupportProbability: 0.5
   m_isPageStatusProbability: 0

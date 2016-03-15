@@ -35,12 +35,11 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
 
     public bool IsWalking
     {
-        get { return m_isIdle; }
+        get { return m_isWalking; }
         protected set
         {
             Assert.IsTrue(ShouldBeChanging);
             m_isWalking = value;
-            m_animator.SetBool("IsWalking", value);
             PropertyChanged();
         }
     }
@@ -69,11 +68,23 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
     {
         IsWalking = true;
         IsIdle = false;
+
+        // Handle the animator bools for setting character to walking
+        m_animator.SetBool("IdleToIdle", false);
+        m_animator.SetBool("WalkToWalk", true);
+        m_animator.SetBool("WalkToIdle", false);
+        m_animator.SetBool("IdleToWalk", true);
     }
 
     public void SwitchCharacterToIdle()
     {
         IsWalking = false;
         IsIdle = true;
+
+        // Handle the animator bools for setting the character to walking
+        m_animator.SetBool("IdleToIdle", true);
+        m_animator.SetBool("WalkToWalk", false);
+        m_animator.SetBool("IdleToWalk", false);
+        m_animator.SetBool("WalkToIdle", true);
     }
 }

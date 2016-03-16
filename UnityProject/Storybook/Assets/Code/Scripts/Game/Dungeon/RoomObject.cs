@@ -288,17 +288,13 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
             return;
         }
 
-        Debug.Log("Placing scenery");
-
         System.Random random = new System.Random();
 
         foreach (Transform t in m_sceneryNodes)
         {
-            Debug.Log("Checking scenery node");
             double randomDouble = random.NextDouble();
             if (randomDouble >= 0.25)
             {
-                Debug.Log("Placing random scenery object");
                 _PlaceRandomSceneryObject(t);
             }
         }

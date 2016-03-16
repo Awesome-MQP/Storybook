@@ -29,6 +29,14 @@ public class BaseStorybookGame : GameManager
     [SerializeField]
     private ResourceAsset m_fantasyPlayerObject = new ResourceAsset(typeof(PlayerObject));
 
+    [SerializeField]
+    [Tooltip("The number of pages that will be in the player decks")]
+    private int m_deckSize = 20;
+
+    [SerializeField]
+    [Tooltip("The number of pages that each player starts with")]
+    private int m_startingPages = 30;
+
     private MapManager m_mapManager;
 
     private BasePlayerMover m_mover;
@@ -168,5 +176,15 @@ public class BaseStorybookGame : GameManager
         }
 
         return null;
+    }
+
+    public int DeckSize
+    {
+        get { return m_deckSize; }
+    }
+
+    public int StartingPages
+    {
+        get { return m_startingPages; }
     }
 }

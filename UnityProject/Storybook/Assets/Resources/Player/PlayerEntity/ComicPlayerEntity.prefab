@@ -43,7 +43,7 @@ MonoBehaviour:
   m_componentId: 160
   m_hitPoints: 50
   m_maxHitPoints: 50
-  m_attack: 6
+  m_attack: 600
   m_defense: 3
   m_speed: 7
   m_luck: 1

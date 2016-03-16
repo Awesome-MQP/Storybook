@@ -8,7 +8,8 @@ public class StorybookPlayerMover : BasePlayerMover,
     PageForRoomEventDispatcher.IPageForRoomEventListener,
     DeckManagementEventDispatcher.IDeckManagementEventListener,
     OverworldEventDispatcher.IOverworldEventListener, 
-    RoomEventEventDispatcher.IRoomEventListener
+    RoomEventEventDispatcher.IRoomEventListener,
+    IPlayerRoomEventListener
 {
 
     List<PlayerWorldPawn> m_playerWorldPawns = new List<PlayerWorldPawn>();
@@ -60,6 +61,7 @@ public class StorybookPlayerMover : BasePlayerMover,
         EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RegisterEventListener(this);
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RegisterEventListener(this);
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RegisterEventListener(this);
+        EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>().RegisterEventListener(this);
 
         m_animator = GetComponent<Animator>();
 
@@ -78,6 +80,7 @@ public class StorybookPlayerMover : BasePlayerMover,
         EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
+        EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>().RemoveListener(this);
 
         Debug.Log("Mover destroyed");
     }
@@ -165,6 +168,7 @@ public class StorybookPlayerMover : BasePlayerMover,
             selectedDoor.LinkedDoor.IsConnectedRoomMade = true;
             selectedDoor.OpenDoor();
             MoveInDirection(m_lastMoveDirection);
+            _playWalkAnimations();
         }
         else
         {
@@ -279,5 +283,27 @@ public class StorybookPlayerMover : BasePlayerMover,
     {
         m_lastMoveDirection = (Door.Direction) lastDirection;
         SubmitPageForRoom(new PageData(level, (Genre) genre, (MoveType) moveType, isRare));
+    }
+
+    public void OnEnteredRoom(BasePlayerMover mover, RoomObject room)
+    {
+    }
+
+    public void OnExitRoom(BasePlayerMover mover, RoomObject room)
+    {
+    }
+
+    public void OnPreRoomEvent(BasePlayerMover mover, RoomObject room)
+    {
+        Debug.Log("On Pre-Room Event called");
+        _playIdleAnimations();
+    }
+
+    public void OnPostRoomEvent(BasePlayerMover mover, RoomObject room)
+    {
+    }
+
+    public void OnWaitingForInput(BasePlayerMover mover)
+    {
     }
 }

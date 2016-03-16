@@ -92,11 +92,12 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
             GameManager gm = GameManager.GetInstance<GameManager>();
             PlayerEntity pe = gm.GetPlayerObject<PlayerEntity>(player);
 
+
             Debug.Log("Children count = " + gameObject.GetComponentsInChildren<Image>().Length);
 
             // Set and enable the corresponding player icon
             Image playerImage = null;
-            string iconName = "Player" + i + "Icon";
+            string iconName = "Player" + player.ID + "Icon";
             foreach(Image image in GetComponentsInChildren<Image>())
             {
                 Debug.Log("Image name = " + image.name);
@@ -110,7 +111,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
 
             // Set and enable the corresponding player ID text
             Text playerIdText = null;
-            string idName = "Player" + i + "ID";
+            string idName = "Player" + player.ID + "ID";
             foreach (Text text in GetComponentsInChildren<Text>())
             {
                 if (text.name == idName)
@@ -123,7 +124,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
 
             // Set and enable the corresponding player HP text
             Text playerHP = null;
-            string hpName = "Player" + i + "HP";
+            string hpName = "Player" + player.ID + "HP";
             foreach (Text text in GetComponentsInChildren<Text>())
             {
                 if (text.name == hpName)

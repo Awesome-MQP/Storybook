@@ -46,11 +46,10 @@ public class DeckManagementUIHandler : PageUIHandler
 
     public override void PageButtonPressed(PageButton buttonPressed)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        int deckSize = 0;//gameManager.DeckSize;
+        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
         PageData pageData = buttonPressed.PageData;
 
-        if (pageData.InventoryId < deckSize)
+        if (pageData.InventoryId < gameManager.DeckSize)
         {
             if (m_selectedDeckPage != null)
             {
@@ -94,7 +93,7 @@ public class DeckManagementUIHandler : PageUIHandler
         if (m_selectedDeckPage != null && m_selectedInventoryPage != null)
         {
             GameManager gameManager = FindObjectOfType<GameManager>();
-            PlayerInventory localInventory = null;//gameManager.GetLocalPlayerInventory();
+            PlayerInventory localInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
             localInventory.Move(m_selectedDeckPage.PageData.InventoryId, m_selectedInventoryPage.PageData.InventoryId);
             _swapPagesInMenu();
             m_selectedInventoryPage = null;
@@ -169,7 +168,7 @@ public class DeckManagementUIHandler : PageUIHandler
         RectTransform outOfDeckContent = m_inventoryScrollRect.content;
 
         //TODO: Store the deck size in inventory
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < gameManager.DeckSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
             if (!currentSlot.IsEmpty)
@@ -183,7 +182,7 @@ public class DeckManagementUIHandler : PageUIHandler
             }
         }
 
-        for (int i = 20; i < pi.DynamicSize; i++)
+        for (int i = gameManager.DeckSize; i < pi.DynamicSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
             if (!currentSlot.IsEmpty)

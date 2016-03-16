@@ -9,7 +9,8 @@ public class PlayerInventory : Inventory {
     public override void OnStartOwner(bool wasSpawn)
     {
         DungeonMaster dm = DungeonMaster.Instance;
-        for (int i = 0; i < 21; i++)
+        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
+        for (int i = 0; i < gameManager.StartingPages; i++)
         {
             Page basicPage = dm.GetBasicPage();
             Add(basicPage, i);

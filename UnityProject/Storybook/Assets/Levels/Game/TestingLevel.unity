@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 4.38
   m_AmbientMode: 3
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: bec0d3871ff735549ba31ac5b0eef843, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -299,6 +299,17 @@ MonoBehaviour:
     m_asset: PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
     m_editorAsset: Assets/Resources/PlayerEntity/ComicPlayerEntity.prefab
+  m_keepOldPlayerObjects: 0
+  m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
+    type: 2}
+  m_defaultCombatManager:
+    m_asset: CombatInstance
+    m_baseTypeName: CombatManager
+    m_editorAsset: Assets/Resources/CombatInstance.prefab
+  m_defaultPlayerTeam:
+    m_asset: TestPlayerTeam
+    m_baseTypeName: PlayerTeam
+    m_editorAsset: Assets/Resources/TestPlayerTeam.prefab
   m_comicBookPlayerObject:
     m_asset: PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
@@ -315,17 +326,6 @@ MonoBehaviour:
     m_asset: PlayerEntity/FantasyPlayerEntity
     m_baseTypeName: PlayerObject
     m_editorAsset: Assets/Resources/PlayerEntity/FantasyPlayerEntity.prefab
-  m_keepOldPlayerObjects: 0
-  m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
-    type: 2}
-  m_defaultCombatManager:
-    m_asset: CombatInstance
-    m_baseTypeName: CombatManager
-    m_editorAsset: Assets/Resources/CombatInstance.prefab
-  m_defaultPlayerTeam:
-    m_asset: TestPlayerTeam
-    m_baseTypeName: PlayerTeam
-    m_editorAsset: Assets/Resources/TestPlayerTeam.prefab
 --- !u!114 &794301187
 MonoBehaviour:
   m_ObjectHideFlags: 0

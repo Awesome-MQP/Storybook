@@ -53,6 +53,7 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_musicTracks; }
     }
     
+    [SerializeField]
     protected List<Transform> m_sceneryNodes = new List<Transform>();
 
     private PageData m_roomPageData;
@@ -287,12 +288,17 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
             return;
         }
 
+        Debug.Log("Placing scenery");
+
+        System.Random random = new System.Random();
+
         foreach (Transform t in m_sceneryNodes)
         {
-            System.Random random = new System.Random();
+            Debug.Log("Checking scenery node");
             double randomDouble = random.NextDouble();
             if (randomDouble >= 0.25)
             {
+                Debug.Log("Placing random scenery object");
                 _PlaceRandomSceneryObject(t);
             }
         }
@@ -305,12 +311,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     /// <returns>The scenery object that was placed</returns>
     private GameObject _PlaceRandomSceneryObject(Transform sceneryNode)
     {
-        // TODO: Currently no scifi objects, so just return
-        if (m_roomPageData.PageGenre == Genre.SciFi)
-        {
-            return null;
-        }
-
         string sceneryLoc = "Scenery/";
         sceneryLoc += m_roomPageData.PageGenre + "/";
         UnityEngine.Object[] allSceneryForGenre = Resources.LoadAll(sceneryLoc);

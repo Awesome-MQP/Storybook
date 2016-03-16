@@ -131,13 +131,14 @@ public abstract class GameManager : Photon.PunBehaviour
     /// <returns>The player object for a player.</returns>
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
-        PlayerObject playerObj = PhotonNetwork.Instantiate("Player/" + m_defaultPlayerObject.AssetName, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        Debug.Log(m_defaultPlayerObject.AssetName);
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
 
     protected virtual PlayerObject CreatePlayerObject(PlayerObject playerObject)
     {
-        PlayerObject playerObj = PhotonNetwork.Instantiate("Player/" + m_defaultPlayerObject.AssetName, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
+        PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
 

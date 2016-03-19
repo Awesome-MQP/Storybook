@@ -117,7 +117,7 @@ public class MapManager : Photon.PunBehaviour {
         RoomData currentRoomData = m_worldMapData[placeX, placeY];
         RoomObject roomPrefab = _getRoomPrefab(currentRoomData);
 
-        GameObject roomGameObject = PhotonNetwork.Instantiate(roomPrefab.name, roomGridLocation, new Quaternion(), 0);
+        GameObject roomGameObject = PhotonNetwork.Instantiate("Rooms/RoomTypes/" + roomPrefab.name, roomGridLocation, new Quaternion(), 0);
         RoomObject room = roomGameObject.GetComponent<RoomObject>();
         room.RoomPageData = pageToUseData;
         room.Construct(currentRoomData);

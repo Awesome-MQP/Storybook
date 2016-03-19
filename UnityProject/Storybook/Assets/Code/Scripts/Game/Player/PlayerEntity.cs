@@ -98,7 +98,7 @@ public class PlayerEntity : PlayerObject
 
     public override void OnStartOwner(bool wasSpawn)
     {
-        GameObject newInventoryObject = PhotonNetwork.Instantiate(m_inventoryPrefab.name, Vector3.zero,
+        GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
             Quaternion.identity, 0);
         PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
         m_inventory = newInventory;

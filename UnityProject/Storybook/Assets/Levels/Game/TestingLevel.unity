@@ -311,21 +311,21 @@ MonoBehaviour:
     m_baseTypeName: PlayerTeam
     m_editorAsset: Assets/Resources/TestPlayerTeam.prefab
   m_comicBookPlayerObject:
-    m_asset: PlayerEntity/ComicPlayerEntity
+    m_asset: Player/PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerEntity/ComicPlayerEntity.prefab
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/ComicPlayerEntity.prefab
   m_sciFiPlayerObject:
-    m_asset: PlayerEntity/SciFiPlayerEntity
+    m_asset: Player/PlayerEntity/SciFiPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerEntity/SciFiPlayerEntity.prefab
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/SciFiPlayerEntity.prefab
   m_horrorPlayerObject:
-    m_asset: PlayerEntity/HorrorPlayerEntity
+    m_asset: Player/PlayerEntity/HorrorPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerEntity/HorrorPlayerEntity.prefab
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/HorrorPlayerEntity.prefab
   m_fantasyPlayerObject:
-    m_asset: PlayerEntity/FantasyPlayerEntity
+    m_asset: Player/PlayerEntity/FantasyPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerEntity/FantasyPlayerEntity.prefab
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
 --- !u!114 &794301187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
   m_startRoomPrefab: {fileID: 11428004, guid: d4ceebab9eabfb2438e01fdf4c39c69f, type: 2}
   m_exitRoomPrefab: {fileID: 11409198, guid: 6bafd727926567d4194c1fea36f5c2cb, type: 2}
   m_shopRoomPrefab: {fileID: 11481726, guid: 41b604e7c8d099e4290e620b176b1f09, type: 2}
-  m_emptyRoomPrefab: {fileID: 11458190, guid: d259cbd957a4ecd4c90c07e3e7b7a3ab, type: 2}
+  m_emptyRoomPrefab: {fileID: 0}
   m_minRoomsStartToExit: 4
   m_additionalHallsMax: 4
   m_additionalHallsMin: 2

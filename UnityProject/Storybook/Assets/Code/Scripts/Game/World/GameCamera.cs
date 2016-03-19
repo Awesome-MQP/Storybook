@@ -25,16 +25,7 @@ public class GameCamera : MonoBehaviour {
     // Lerp the camera to another position
     public void trackObject(Camera camToLerp, Transform newCameraNode)
     {
-        Debug.Log("hey there, I'm lerping to " + newCameraNode.position);
         toNode = newCameraNode;
         traveling = true;
-        /*
-        while(!(camToLerp.transform.position == newCameraNode.position))
-        {
-            Vector3 position = newCameraNode.transform.position;
-            Vector3 move = new Vector3(position.x * cameraMoveSpeed, position.y * cameraMoveSpeed, position.z * cameraMoveSpeed);
-            camToLerp.transform.Translate(move);
-        }
-        */
     }
 }

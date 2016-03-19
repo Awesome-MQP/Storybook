@@ -39,6 +39,7 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
         m_combatLevel = combatInfo.GetLevel();
         m_combatGenre = combatInfo.GetGenre();
+        Debug.Log("Combat Level: " + m_combatLevel + " Genre: " + m_combatGenre);
 
         m_previousMusic = combatInfo.GetPreviousMusic();
         m_combatMusic = combatInfo.GetCombatMusic();
@@ -50,6 +51,8 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
         foreach (CombatTeam team in teams)
         {
+
+            Debug.Log("Combat Team: " + team.name);
             PhotonNetwork.Spawn(team.photonView);
         }
     }

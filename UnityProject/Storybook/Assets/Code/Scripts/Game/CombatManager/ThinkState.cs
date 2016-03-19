@@ -23,7 +23,7 @@ public class ThinkState : CombatState {
         // If it is the master client, instantiate a NetThinkState for all players to receive
         if (PhotonNetwork.isMasterClient)
         {
-            m_netThinkStateObject = PhotonNetwork.Instantiate("NetThinkState", Vector3.zero, Quaternion.identity, 0);
+            m_netThinkStateObject = PhotonNetwork.Instantiate("CombatStateMachine/NetThinkState", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_netThinkStateObject.GetComponent<PhotonView>());
             m_netThinkState = m_netThinkStateObject.GetComponent<NetThinkState>();
         }

@@ -296,9 +296,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_componentId: 100
   m_defaultPlayerObject:
-    m_asset: PlayerEntity/ComicPlayerEntity
+    m_asset: Player/PlayerEntity/ComicPlayerEntity
     m_baseTypeName: PlayerObject
-    m_editorAsset: Assets/Resources/PlayerEntity/ComicPlayerEntity.prefab
+    m_editorAsset: Assets/Resources/Player/PlayerEntity/ComicPlayerEntity.prefab
   m_keepOldPlayerObjects: 0
   m_playerMoverPrefab: {fileID: 11491578, guid: b47496fdeb899844c906a38905bd1292,
     type: 2}
@@ -326,6 +326,8 @@ MonoBehaviour:
     m_asset: Player/PlayerEntity/FantasyPlayerEntity
     m_baseTypeName: PlayerObject
     m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
+  m_deckSize: 20
+  m_startingPages: 30
 --- !u!114 &794301187
 MonoBehaviour:
   m_ObjectHideFlags: 0

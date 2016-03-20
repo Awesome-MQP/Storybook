@@ -48,8 +48,11 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
         Debug.Log("Welcome to the shop!");
         m_isCurrentRoom = true;
+        /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
+        */
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnShopEntered();
     }
 
     // What do we do when all players reach the center of the room?

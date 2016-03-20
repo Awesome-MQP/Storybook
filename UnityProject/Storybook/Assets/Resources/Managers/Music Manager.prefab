@@ -141,11 +141,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3cded2205cdf04da8ec55316bdcb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentMusicTrack: {fileID: 8300000, guid: 4dc84cecfa959b248bb1f01d461a9b81, type: 3}
+  m_startRoomMusic: {fileID: 0}
+  m_fantasyRoomMusic: {fileID: 0}
+  m_comicRoomMusic: {fileID: 0}
+  m_horrorRoomMusic: {fileID: 0}
+  m_scifiRoomMusic: {fileID: 0}
+  m_shopRoomMusic: {fileID: 0}
+  m_combatMusic: {fileID: 0}
   m_fadeOutThreshold: 0.05
   m_fadeSpeed: 0.05
   m_musicVolume: 0.5
-  testAudio: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -44,7 +44,9 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
         m_previousMusic = combatInfo.GetPreviousMusic();
         m_combatMusic = combatInfo.GetCombatMusic();
 
-        FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_combatMusic, 5, true);
+
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnCombatStart();
+        //FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_combatMusic, 5, true);
 
         CombatTeam[] teams = combatInfo.CreateTeams();
         m_teamList = new List<CombatTeam>(teams);
@@ -169,7 +171,9 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
         Destroy(gameObject);
 
         m_isRunning = false;
-        FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_previousMusic, 5, true);
+
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnCombatEnd();
+        //FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_previousMusic, 5, true);
     }
 
     /// <summary>

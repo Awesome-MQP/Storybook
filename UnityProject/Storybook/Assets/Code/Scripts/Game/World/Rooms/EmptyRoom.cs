@@ -21,10 +21,12 @@ public class EmptyRoom : RoomObject {
     {
         if (!(mover is BasePlayerMover))
             return;
-
+        /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
         Debug.Log("Room entered");
+        */
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnRoomMusicChange(RoomPageData.PageGenre);
         return;
     }
 

@@ -16,17 +16,22 @@ public class StartRoom : RoomObject
     void Start()
     {
         m_musicManager = MusicManager.Instance;
+        /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
+        */
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnStartRoomEntered();
     }
 
     protected override void OnRoomEnter(RoomMover mover)
     {
         if (!(mover is BasePlayerMover))
             return;
-
+        /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
+        */
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnStartRoomEntered();
     }
 
     protected override IEnumerable OnRoomEvent(RoomMover mover)

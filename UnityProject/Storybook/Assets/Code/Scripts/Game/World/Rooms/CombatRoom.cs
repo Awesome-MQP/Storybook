@@ -62,7 +62,8 @@ public class CombatRoom : RoomObject
         if (!(mover is BasePlayerMover))
             return;
 
-        m_musicManager.MusicTracks = m_musicTracks;
+        //m_musicManager.MusicTracks = m_musicTracks;
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnRoomMusicChange(RoomPageData.PageGenre);
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -86,7 +87,7 @@ public class CombatRoom : RoomObject
             //m_musicManager.Fade(m_musicTracks[1], 5, true);
             return;
         }
-        m_musicManager.Fade(m_musicTracks[0], 5, true);
+        //m_musicManager.Fade(m_musicTracks[0], 5, true);
     }
 
     protected override IEnumerable OnRoomEvent(RoomMover mover)
@@ -101,7 +102,10 @@ public class CombatRoom : RoomObject
             ResourceAsset playerTeam = GameManager.GetInstance<BaseStorybookGame>().DefaultPlayerTeam;
             ResourceAsset enemyTeam = new ResourceAsset(m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name, typeof(EnemyTeam));
 
-            m_musicManager.Fade(m_musicTracks[1], 5, true);
+
+
+            EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnCombatStart();
+            //m_musicManager.Fade(m_musicTracks[1], 5, true);
             CombatManager cm = GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance(playerTeam, enemyTeam, RoomPageData.PageGenre, RoomPageData.PageLevel));
 
             while (cm.IsRunning)
@@ -116,7 +120,7 @@ public class CombatRoom : RoomObject
         else
         {
             //TODO: We should just halt with yield return null
-            m_musicManager.Fade(m_musicTracks[0], 5, true);
+            //m_musicManager.Fade(m_musicTracks[0], 5, true);
             ClearRoom();
         }
     }

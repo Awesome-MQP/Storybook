@@ -22,9 +22,11 @@ public class ExitRoom : RoomObject
     {
         if (!(mover is BasePlayerMover))
             return;
-
+        /*
         m_musicManager.Fade(m_musicTracks[0], 5, true);
         m_musicManager.MusicTracks = m_musicTracks;
+        */
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnRoomMusicChange(RoomPageData.PageGenre);
     }
 
     // What do we do when all players reach the center of the room?

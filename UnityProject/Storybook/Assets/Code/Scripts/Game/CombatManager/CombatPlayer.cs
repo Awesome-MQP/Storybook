@@ -379,10 +379,20 @@ public abstract class CombatPlayer : CombatPawn
 
     public override void DealDamageToPawn(int damageAmount)
     {
-
         base.DealDamageToPawn(damageAmount);
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health, (int)m_maxHealth);
+        PhotonPlayer photonPlayer = null;
+
+        foreach(PhotonPlayer p in PhotonNetwork.playerList)
+        {
+            if (p.ID == PawnId)
+            {
+                photonPlayer = p;
+                break;
+            }
+        }
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)Health, (int)m_maxHealth);
         // Adds support to UI
     }
 

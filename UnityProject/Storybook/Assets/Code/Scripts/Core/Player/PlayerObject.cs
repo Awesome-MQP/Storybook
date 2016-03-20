@@ -9,6 +9,8 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
 {
     private PhotonPlayer m_player;
 
+    protected int m_floorNumber = 0;
+
     [SyncProperty]
     public PhotonPlayer Player
     {
@@ -96,6 +98,11 @@ public class PlayerObject : PunBehaviour, IConstructable<PhotonPlayer>, IConstru
 
     protected virtual void OnTakeOver(PlayerObject oldPlayer)
     {
-        
+        m_floorNumber = oldPlayer.m_floorNumber + 1;
+    }
+
+    public int FloorNumber
+    {
+        get { return m_floorNumber; }
     }
 }

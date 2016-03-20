@@ -192,6 +192,11 @@ public abstract class GameManager : Photon.PunBehaviour
         PlayerObject playerObject = CreatePlayerObject(oldPlayer);
         m_playerObjects.Add(player, playerObject);
         playerObject.Construct(oldPlayer);
+        Debug.Log("Old player floor number = " + oldPlayer.FloorNumber);
+        if (oldPlayer.FloorNumber != 0)
+        {
+            playerObject.GetComponent<PlayerEntity>().TransitionFloors((PlayerEntity)oldPlayer);
+        }
         PhotonNetwork.Spawn(playerObject.photonView);
 
         return playerObject;

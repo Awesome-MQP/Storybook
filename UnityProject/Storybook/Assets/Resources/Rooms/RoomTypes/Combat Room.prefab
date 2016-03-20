@@ -167,6 +167,7 @@ GameObject:
   - 4: {fileID: 462552}
   - 114: {fileID: 11436740}
   - 114: {fileID: 11432198}
+  - 135: {fileID: 13517310}
   m_Layer: 0
   m_Name: CenterNode
   m_TagString: Untagged
@@ -566,7 +567,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 126224}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 109.15066, y: -1.6348624, z: -114.34251}
+  m_LocalPosition: {x: 1102.1809, y: 300.3537, z: 452.61182}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 423718}
@@ -730,7 +731,7 @@ Transform:
   m_GameObject: {fileID: 107574}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.41601562, y: -1.4000001, z: 1.1228027}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2507107, y: 1.2507108, z: 1.2507108}
   m_Children: []
   m_Father: {fileID: 423718}
   m_RootOrder: 0
@@ -741,7 +742,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 126244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.97, z: 0.22}
+  m_LocalPosition: {x: -0.3, y: -1.36, z: 1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 410718}
@@ -1881,6 +1882,18 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &13517310
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126244}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

@@ -218,7 +218,18 @@ public abstract class CombatPawn : Photon.PunBehaviour
             m_health = m_maxHealth;
         }
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)m_health, (int)m_maxHealth);
+        PhotonPlayer photonPlayer = null;
+
+        foreach (PhotonPlayer p in PhotonNetwork.playerList)
+        {
+            if (p.ID == PawnId)
+            {
+                photonPlayer = p;
+                break;
+            }
+        }
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
     }
 
     /// <summary>
@@ -281,10 +292,15 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// <summary>
     /// The speed value (stat) for the combat pawn, used to determine turn order
     /// </summary>
+    [SyncProperty]
     public float Speed
     {
         get { return m_speed + m_speedBoost + m_speedMod; }
-        set { m_speed = value; }
+        set
+        {
+            m_speed = value;
+            PropertyChanged();
+        }
     }
 
     /// <summary>
@@ -298,7 +314,14 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     public void SetMaxHealth(float newMaxHealth)
     {
+        photonView.RPC(nameof(RPCSetMaxHealth), PhotonTargets.All, newMaxHealth);
+    }
+
+    [PunRPC]
+    public void RPCSetMaxHealth(float newMaxHealth)
+    {
         m_maxHealth = newMaxHealth;
+        m_health = newMaxHealth;
     }
 
 
@@ -414,16 +437,26 @@ public abstract class CombatPawn : Photon.PunBehaviour
         }
     }
 
+    [SyncProperty]
     public float Attack
     {
         get { return m_attack + m_attackBoost + m_attackMod; }
-        set { m_attack = value; }
+        set
+        {
+            m_attack = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
-        set { m_defense = value; }
+        set
+        {
+            m_defense = value;
+            PropertyChanged();
+        }
     }
 
     [SyncProperty]

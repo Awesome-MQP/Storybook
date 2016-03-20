@@ -773,7 +773,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 92.01193, y: 18.148506, z: -184.02545}
+  m_LocalPosition: {x: 1081.996, y: 294.7537, z: 459.49344}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 409502}
@@ -824,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 125158}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.41601562, y: -1.4000001, z: 1.1228027}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2507107, y: 1.2507108, z: 1.2507108}
   m_Children: []
   m_Father: {fileID: 409502}
   m_RootOrder: 0
@@ -1837,6 +1837,7 @@ MonoBehaviour:
   m_floorObject: {fileID: 447730}
   m_musicTracks:
   - {fileID: 8300000, guid: 5e5ae6cfa0632dc49b34d57c151ab983, type: 3}
+  m_sceneryNodes: []
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
 --- !u!114 &11413164
 MonoBehaviour:

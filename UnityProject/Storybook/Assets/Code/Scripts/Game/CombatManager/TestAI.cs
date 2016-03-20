@@ -22,6 +22,9 @@ public class TestAI : CombatAI
             {
                 CombatPawn target = moveSelected.MoveTargets[i];
                 targetIds[i] = target.PawnId;
+
+                Debug.Log("Target pawn ID = " + target.PawnId);
+                Debug.Log("Target genre = " + target.PawnGenre);
             }
             int moveIndex;
             for (moveIndex = 0; moveIndex < EnemyMoves.Length; moveIndex++)
@@ -72,6 +75,9 @@ public class TestAI : CombatAI
             if (targetIds.Contains(pawn.PawnId))
             {
                 targets.Add(pawn);
+
+                Debug.Log("Target pawn ID = " + pawn.PawnId);
+                Debug.Log("Target pawn genre = " + pawn.PawnGenre);
             }
         }
 

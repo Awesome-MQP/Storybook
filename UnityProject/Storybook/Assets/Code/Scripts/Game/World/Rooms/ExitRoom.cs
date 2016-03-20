@@ -31,12 +31,14 @@ public class ExitRoom : RoomObject
     // Most likely nothing, but that may change.
     protected override IEnumerable OnRoomEvent(RoomMover mover)
     {
+
+
         if (!(mover is BasePlayerMover))
             yield break;
 
         //EventDispatcher.GetDispatcher<UIEventDispatcher>().OnRoomCleared();
         SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("DemoCompleteScene");
+        fader.LoadScene("TestingLevel");
     }
 
     // What happens when the players leave this room?

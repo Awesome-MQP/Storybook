@@ -98,12 +98,16 @@ public class PlayerEntity : PlayerObject
 
     public override void OnStartOwner(bool wasSpawn)
     {
-        GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
-            Quaternion.identity, 0);
-        PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
-        m_inventory = newInventory;
-        //TODO: Inventory spawn code
-        PhotonNetwork.Spawn(newInventory.photonView);
+        // Create the inventory only on the first floor of the game
+        if (m_floorNumber == 1)
+        {
+            GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
+                Quaternion.identity, 0);
+            PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
+            m_inventory = newInventory;
+            //TODO: Inventory spawn code
+            PhotonNetwork.Spawn(newInventory.photonView);
+        }
 
         GameManager.GetInstance<BaseStorybookGame>().Mover.RegisterPlayer(this);
     }
@@ -142,5 +146,11 @@ public class PlayerEntity : PlayerObject
     public void SetGenre(Genre playerGenre)
     {
         m_genre = playerGenre;
+    }
+
+    public void TransitionFloors(PlayerEntity oldPlayer)
+    {
+        HitPoints = oldPlayer.HitPoints;
+        OurInventory = oldPlayer.OurInventory;
     }
 }

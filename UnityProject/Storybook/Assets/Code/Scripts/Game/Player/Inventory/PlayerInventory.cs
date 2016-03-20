@@ -6,6 +6,11 @@ public class PlayerInventory : Inventory {
 
     private int m_playerId;
 
+    public void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public override void OnStartOwner(bool wasSpawn)
     {
         DungeonMaster dm = DungeonMaster.Instance;

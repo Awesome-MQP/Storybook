@@ -1809,8 +1809,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11422814}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 25
-  instantiationId: 25
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1885,8 +1885,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11462576}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 22
-  instantiationId: 22
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1925,8 +1925,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11458506}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 26
-  instantiationId: 26
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -1978,8 +1978,8 @@ MonoBehaviour:
   - {fileID: 440792}
   - {fileID: 11409198}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 28
-  instantiationId: 28
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2005,8 +2005,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11413164}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 23
-  instantiationId: 23
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2032,8 +2032,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11442050}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 24
-  instantiationId: 24
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2108,8 +2108,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11453128}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 15
-  instantiationId: 15
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2135,8 +2135,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11475104}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 17
-  instantiationId: 17
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2187,8 +2187,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11421018}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 19
-  instantiationId: 19
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2214,8 +2214,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11438022}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 16
-  instantiationId: 16
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2253,8 +2253,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11417644}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 27
-  instantiationId: 27
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2280,8 +2280,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11403354}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 18
-  instantiationId: 18
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2307,8 +2307,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11422466}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 21
-  instantiationId: 21
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0
@@ -2334,8 +2334,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 11444436}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 20
-  instantiationId: 20
+  viewIdField: 0
+  instantiationId: -1
   isRuntimeInstantiated: 0
   prefabName: 
   allowFullCommunication: 0

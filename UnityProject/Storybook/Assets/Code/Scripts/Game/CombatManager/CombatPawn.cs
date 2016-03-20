@@ -218,7 +218,18 @@ public abstract class CombatPawn : Photon.PunBehaviour
             m_health = m_maxHealth;
         }
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)m_health, (int)m_maxHealth);
+        PhotonPlayer photonPlayer = null;
+
+        foreach (PhotonPlayer p in PhotonNetwork.playerList)
+        {
+            if (p.ID == PawnId)
+            {
+                photonPlayer = p;
+                break;
+            }
+        }
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
     }
 
     /// <summary>

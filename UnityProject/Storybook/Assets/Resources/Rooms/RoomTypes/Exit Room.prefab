@@ -773,7 +773,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1081.996, y: 294.7537, z: 459.49344}
+  m_LocalPosition: {x: 102.72081, y: 128.7632, z: 451.16257}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 409502}
@@ -1836,9 +1836,19 @@ MonoBehaviour:
   m_centerNode: {fileID: 11442050}
   m_floorObject: {fileID: 447730}
   m_musicTracks:
-  - {fileID: 8300000, guid: 5e5ae6cfa0632dc49b34d57c151ab983, type: 3}
+  - {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+  - {fileID: 8300000, guid: 592adf1700739fa4ba34cc3661c191fa, type: 3}
+  - {fileID: 8300000, guid: 0802e0108be12a9419ebfedc8638d4f8, type: 3}
+  - {fileID: 8300000, guid: 463447fa7c1620e4fa532e877f43664d, type: 3}
+  - {fileID: 8300000, guid: 58b1888d8b86fda408dd3977630ddd44, type: 3}
+  - {fileID: 8300000, guid: 503079fc46fcc9745bc2ce3eb493af42, type: 3}
   m_sceneryNodes: []
   m_roomMusic: {fileID: 8300000, guid: 24e4729b1669a674caae5bd327f9542b, type: 3}
+  m_enemyPosList:
+  - {fileID: 411374}
+  - {fileID: 427746}
+  - {fileID: 473628}
+  - {fileID: 486558}
 --- !u!114 &11413164
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -85,7 +85,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_attack
-      value: 600
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_defense

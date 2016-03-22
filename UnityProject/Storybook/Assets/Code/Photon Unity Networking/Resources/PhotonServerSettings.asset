@@ -85,4 +85,5 @@ MonoBehaviour:
   - _rpcSubmitPageForCreation
   - _playerFinished
   - RPCSetMaxHealth
+  - MoveToNextFloorMaster
   DisableAutoOpenWizard: 1

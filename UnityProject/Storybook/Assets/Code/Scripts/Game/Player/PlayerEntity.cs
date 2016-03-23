@@ -99,7 +99,7 @@ public class PlayerEntity : PlayerObject
     public override void OnStartOwner(bool wasSpawn)
     {
         // Create the inventory only on the first floor of the game
-        if (m_floorNumber == 1)
+        if (m_floorNumber <= 1)
         {
             GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
                 Quaternion.identity, 0);

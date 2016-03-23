@@ -21,6 +21,7 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
     private bool m_isIdle;
     private bool m_isWalking;
 
+    [SyncProperty]
     public bool IsIdle
     {
         get { return m_isIdle; }
@@ -28,11 +29,12 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
         {
             Assert.IsTrue(ShouldBeChanging);
             m_isIdle = value;
-            m_animator.SetBool("IsIdle", value);
+            _setAnimatorToIdle();
             PropertyChanged();
         }
     }
 
+    [SyncProperty]
     public bool IsWalking
     {
         get { return m_isWalking; }
@@ -40,6 +42,7 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
         {
             Assert.IsTrue(ShouldBeChanging);
             m_isWalking = value;
+            _setAnimatorToWalking();
             PropertyChanged();
         }
     }
@@ -64,24 +67,40 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
 
     // Animation transitions
 
+    /// <summary>
+    /// Switches the character to walking animation for all clients
+    /// </summary>
     public void SwitchCharacterToWalking()
     {
         IsWalking = true;
         IsIdle = false;
 
-        // Handle the animator bools for setting character to walking
+        _setAnimatorToWalking();
+    }
+
+    // Handle the animator bools for setting character to walking
+    private void _setAnimatorToWalking()
+    {
         m_animator.SetBool("IdleToIdle", false);
         m_animator.SetBool("WalkToWalk", true);
         m_animator.SetBool("WalkToIdle", false);
         m_animator.SetBool("IdleToWalk", true);
     }
 
+    /// <summary>
+    /// Switches character to idle animation for all clients
+    /// </summary>
     public void SwitchCharacterToIdle()
     {
         IsWalking = false;
         IsIdle = true;
 
-        // Handle the animator bools for setting the character to walking
+        _setAnimatorToIdle();
+    }
+
+    // Handle the animator bools for setting the character to walking
+    private void _setAnimatorToIdle()
+    {
         m_animator.SetBool("IdleToIdle", true);
         m_animator.SetBool("WalkToWalk", false);
         m_animator.SetBool("IdleToWalk", false);

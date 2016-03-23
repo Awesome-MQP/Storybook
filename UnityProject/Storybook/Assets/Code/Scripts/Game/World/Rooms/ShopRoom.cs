@@ -63,6 +63,8 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
         photonView.RPC("NetworkedRoomEvent", PhotonTargets.All);
 
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnShopEntered();
+
         while (m_readyPlayers.Count < PhotonNetwork.countOfPlayers)
         {
             yield return null;

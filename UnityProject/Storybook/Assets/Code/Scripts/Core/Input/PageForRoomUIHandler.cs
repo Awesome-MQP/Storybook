@@ -41,6 +41,9 @@ public class PageForRoomUIHandler : PageUIHandler {
         GridLayoutGroup gridGroup = scrollView.GetComponentInChildren<GridLayoutGroup>();
         gridGroup.cellSize = new Vector2(m_buttonWidth, m_buttonHeight);
         gridGroup.spacing = new Vector2(m_gridXPadding, m_gridYPadding);
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnPageForRoomUIOpened();
     }
 
     /// <summary>

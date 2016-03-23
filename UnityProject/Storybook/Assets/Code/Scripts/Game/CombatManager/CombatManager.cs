@@ -77,6 +77,9 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
         Camera.main.transform.rotation = Quaternion.identity;
 
         m_combatStateMachine = GetComponent<Animator>();
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnCombatStarted();
     }
 
     // Use this for initialization

@@ -74,6 +74,9 @@ public class ExitRoom : RoomObject
             //m_musicManager.Fade(m_musicTracks[1], 5, true);
             CombatManager cm = GameManager.GetInstance<BaseStorybookGame>().StartCombat(new StandardCombatInstance(playerTeam, enemyTeam, RoomPageData.PageGenre, RoomPageData.PageLevel));
 
+            // Send out a tutorial event
+            EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnBossFightStarted();
+
             while (cm.IsRunning)
             {
                 yield return null;
@@ -82,6 +85,9 @@ public class ExitRoom : RoomObject
             photonView.RPC(nameof(_resetCameraAfterCombat), PhotonTargets.All);
 
             DestroyEnemyWorldPawns();
+
+            // Send out a tutorial event, notifying that the demo is completed
+            EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDemoCompleted();
         }
         else
         {

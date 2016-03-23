@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(MapManager))]
 [RequireComponent(typeof(DungeonMaster))]
 public class TutorialGame : BaseStorybookGame {
+
+    [SerializeField]
+    TutorialUIHandler m_tutorialUIPrefab;
 
     public override void OnStartOwner(bool wasSpawn)
     {
@@ -24,23 +28,28 @@ public class TutorialGame : BaseStorybookGame {
 
         m_hasStarted = true;
 
+        photonView.RPC(nameof(CreateTutorialMenu), PhotonTargets.All);
+
         base.OnStartOwner(wasSpawn);
     }
-
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     [PunRPC]
     public void InitializeCamera(Vector3 position, Quaternion rotation)
     {
         Camera.main.transform.position = position;
         Camera.main.transform.rotation = rotation;
+    }
+
+    [PunRPC]
+    public void CreateTutorialMenu()
+    {
+        GameObject tutorialUI = (GameObject)Instantiate(m_tutorialUIPrefab.gameObject, Vector3.zero, Quaternion.identity);
+        TutorialUIHandler tutorialUIHandler = tutorialUI.GetComponent<TutorialUIHandler>();
+
+        List<string> tutorialStrings = new List<string>();
+        tutorialStrings.Add("Welcome to Storybook!");
+        tutorialStrings.Add("Choose a direction");
+
+        tutorialUIHandler.PopulateMenu(tutorialStrings);
     }
 }

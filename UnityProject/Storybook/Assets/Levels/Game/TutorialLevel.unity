@@ -151,6 +151,7 @@ MonoBehaviour:
     m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
   m_deckSize: 20
   m_startingPages: 30
+  m_tutorialUIPrefab: {fileID: 11471216, guid: 300b34c8144e5a045bc3bb8672df0fbe, type: 2}
 --- !u!114 &133705630
 MonoBehaviour:
   m_ObjectHideFlags: 0

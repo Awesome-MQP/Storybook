@@ -14,21 +14,21 @@ public class TutorialUIHandler : UIHandler {
     [SerializeField]
     Text m_tutorialText;
 
+    [SerializeField]
+    Text m_titleText;
+
     List<string> m_tutorialStrings = new List<string>();
     int m_stringIndex = 0;
 
-    // Use this for initialization
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void PopulateMenu(List<string> tutorialStrings)
+    /// <summary>
+    /// Sets the title in the tutorial menu and displays the first string in the given list of tutorial strings
+    /// </summary>
+    /// <param name="tutorialTitle">The title of the current tutorial</param>
+    /// <param name="tutorialStrings">The list of tutorial messages</param>
+    public void PopulateMenu(string tutorialTitle, List<string> tutorialStrings)
     {
+        m_titleText.text = tutorialTitle;
+
         m_tutorialStrings = tutorialStrings;
         m_tutorialText.text = tutorialStrings[m_stringIndex];
 
@@ -43,24 +43,14 @@ public class TutorialUIHandler : UIHandler {
     {
         m_stringIndex++;
 
-        // If the last string is already displayed, destroy the menu
-        if (m_stringIndex == m_tutorialStrings.Count)
-        {
-            Destroy(gameObject);
-        }
-        // Otherwise display the next string in the list
-        else
-        {
-            m_tutorialText.text = m_tutorialStrings[m_stringIndex];
+        m_tutorialText.text = m_tutorialStrings[m_stringIndex];
 
-            m_previousButton.interactable = true;
-            m_nextButton.interactable = (m_tutorialStrings.Count > m_stringIndex);
+        m_previousButton.interactable = true;
 
-            // If we are at the last string in the menu, change the next button text
-            if (m_stringIndex == (m_tutorialStrings.Count - 1))
-            {
-                m_nextButton.GetComponentInChildren<Text>().text = "All Set!";
-            }
+        // If we are at the last string in the menu, change the next button text
+        if (m_stringIndex == (m_tutorialStrings.Count - 1))
+        {
+            m_nextButton.interactable = false;
         }
     }
 
@@ -75,5 +65,10 @@ public class TutorialUIHandler : UIHandler {
         m_previousButton.interactable = (m_stringIndex > 0);
         m_nextButton.interactable = true;
         m_nextButton.GetComponentInChildren<Text>().text = "Next";
+    }
+
+    public void FinishButtonPressed()
+    {
+        Destroy(gameObject);
     }
 }

@@ -50,6 +50,6 @@ public class TutorialGame : BaseStorybookGame {
         tutorialStrings.Add("Welcome to Storybook!");
         tutorialStrings.Add("Choose a direction");
 
-        tutorialUIHandler.PopulateMenu(tutorialStrings);
+        tutorialUIHandler.PopulateMenu("Welcome to Storybook!", tutorialStrings);
     }
 }

@@ -6,10 +6,10 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(DungeonMaster))]
 public class BaseStorybookGame : GameManager
 {
-    private DungeonMaster m_dungeonMaster;
+    protected DungeonMaster m_dungeonMaster;
 
     [SerializeField]
-    private StorybookPlayerMover m_playerMoverPrefab;
+    protected StorybookPlayerMover m_playerMoverPrefab;
 
     [SerializeField]
     private ResourceAsset m_defaultCombatManager = new ResourceAsset(typeof(CombatManager));
@@ -31,15 +31,17 @@ public class BaseStorybookGame : GameManager
 
     [SerializeField]
     [Tooltip("The number of pages that will be in the player decks")]
-    private int m_deckSize = 20;
+    protected int m_deckSize = 20;
 
     [SerializeField]
     [Tooltip("The number of pages that each player starts with")]
-    private int m_startingPages = 30;
+    protected int m_startingPages = 30;
 
-    private MapManager m_mapManager;
+    protected MapManager m_mapManager;
 
-    private BasePlayerMover m_mover;
+    protected BasePlayerMover m_mover;
+
+    protected bool m_hasStarted = false; 
 
     /// <summary>
     /// The games dungeon manager
@@ -78,20 +80,24 @@ public class BaseStorybookGame : GameManager
 
     public override void OnStartOwner(bool wasSpawn)
     {
-        //Startup the map manager
-        m_mapManager = GetComponent<MapManager>();
-        m_mapManager.GenerateMap();
-        RoomObject startRoom = m_mapManager.PlaceStartRoom();
+        if (!m_hasStarted)
+        {
+            //Startup the map manager
+            m_mapManager = GetComponent<MapManager>();
+            m_mapManager.GenerateMap();
+            RoomObject startRoom = m_mapManager.PlaceStartRoom();
 
-        //Spawn the player mover on the map
-        GameObject moverObject = PhotonNetwork.Instantiate("Rooms/RoomFeatures/" + m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
-        BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
-        m_mover = mover;
-        m_mover.Construct(startRoom);
-        PhotonNetwork.Spawn(mover.photonView);
+            //Spawn the player mover on the map
+            GameObject moverObject = PhotonNetwork.Instantiate("Rooms/RoomFeatures/" + m_playerMoverPrefab.name, Vector3.zero, Quaternion.identity, 0);
+            BasePlayerMover mover = moverObject.GetComponent<BasePlayerMover>();
+            m_mover = mover;
+            m_mover.Construct(startRoom);
+            PhotonNetwork.Spawn(mover.photonView);
 
-        InitializeCamera(startRoom.CameraNode.position, startRoom.CameraNode.rotation);
-        photonView.RPC(nameof(InitializeCamera), PhotonTargets.Others, startRoom.CameraNode.position, startRoom.CameraNode.rotation);
+            InitializeCamera(startRoom.CameraNode.position, startRoom.CameraNode.rotation);
+            photonView.RPC(nameof(InitializeCamera), PhotonTargets.Others, startRoom.CameraNode.position, startRoom.CameraNode.rotation);
+            m_hasStarted = true;
+        }
 
         base.OnStartOwner(wasSpawn);
     }

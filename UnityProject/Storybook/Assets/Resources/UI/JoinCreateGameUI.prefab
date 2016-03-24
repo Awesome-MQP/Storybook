@@ -215,8 +215,7 @@ GameObject:
   - 223: {fileID: 22328860}
   - 114: {fileID: 11435224}
   - 114: {fileID: 11443508}
-  - 114: {fileID: 11499368}
-  - 114: {fileID: 11451138}
+  - 114: {fileID: 11419764}
   m_Layer: 5
   m_Name: JoinCreateGameUI
   m_TagString: Untagged
@@ -549,6 +548,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Available Games
+--- !u!114 &11419764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27ca5222979b5994ca7400333db77992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gridXPadding: 15
+  m_gridYPadding: 15
+  m_buttonWidth: 620
+  m_buttonHeight: 40
+  m_gameInfoButton: {fileID: 11469768, guid: 648811680612f9f47a6dd0e4f3d78575, type: 2}
 --- !u!114 &11435224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -815,23 +830,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!114 &11451138
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27ca5222979b5994ca7400333db77992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_componentId: 202
-  m_gridXPadding: 15
-  m_gridYPadding: 15
-  m_buttonWidth: 620
-  m_buttonHeight: 40
-  m_gameInfoButton: {fileID: 11469768, guid: 648811680612f9f47a6dd0e4f3d78575, type: 2}
 --- !u!114 &11459602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -871,7 +869,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11451138}
+      - m_Target: {fileID: 11419764}
         m_MethodName: OnSearchButtonClick
         m_Mode: 1
         m_Arguments:
@@ -1077,33 +1075,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!114 &11499368
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  observed: {fileID: 0}
-  shouldSync: 0
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 11451138}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
-  isRuntimeInstantiated: 0
-  prefabName: 
-  allowFullCommunication: 0
 --- !u!222 &22202362
 CanvasRenderer:
   m_ObjectHideFlags: 1

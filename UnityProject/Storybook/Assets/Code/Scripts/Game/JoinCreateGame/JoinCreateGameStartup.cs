@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Photon;
 using System.Collections;
 
-public class JoinCreateGameStartup : MonoBehaviour {
+public class JoinCreateGameStartup : Photon.MonoBehaviour
+{
     [SerializeField]
     private JoinGameMenuUIHandler m_joinCreateGamePrefab;
 
@@ -15,4 +17,7 @@ public class JoinCreateGameStartup : MonoBehaviour {
     {
         
     }
+
+
+
 }

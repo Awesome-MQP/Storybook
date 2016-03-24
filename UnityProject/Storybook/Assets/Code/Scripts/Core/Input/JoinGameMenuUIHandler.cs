@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Photon;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
 
-public class JoinGameMenuUIHandler : Photon.PunBehaviour {
+public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
 
     private ScrollRect m_availGamesRect;
     [SerializeField]
@@ -32,11 +31,21 @@ public class JoinGameMenuUIHandler : Photon.PunBehaviour {
         // Populate the available games list
         //m_availGamesText.text = "";
         RectTransform gamesContent = m_availGamesRect.content;
+        // empty the content first
+        /*
+        foreach(Transform child in gamesContent)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        */
+
+        // Now load all 
         foreach(RoomInfo game in PhotonNetwork.GetRoomList())
         {
             String gameInfo = game.name + " | Players in lobby: " + game.playerCount + " / " + game.maxPlayers;
             GameInfoButton lobbyButton = Instantiate(m_gameInfoButton);
             lobbyButton.GetComponent<Text>().text = gameInfo;
+            // set position in content
             lobbyButton.transform.SetParent(gamesContent, false);
             //m_availGamesText.text += game.name + " " + game.playerCount + "/" + game.maxPlayers + "\n";
         }
@@ -121,7 +130,7 @@ public class JoinGameMenuUIHandler : Photon.PunBehaviour {
         }
     }
 
-    public override void OnJoinedRoom()
+    public void OnJoinedRoom()
     {
         if(PhotonNetwork.isMasterClient)
         {

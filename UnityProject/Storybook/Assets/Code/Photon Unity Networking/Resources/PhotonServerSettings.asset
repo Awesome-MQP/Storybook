@@ -86,4 +86,5 @@ MonoBehaviour:
   - _playerFinished
   - RPCSetMaxHealth
   - MoveToNextFloorMaster
+  - CreateTutorialMenu
   DisableAutoOpenWizard: 1

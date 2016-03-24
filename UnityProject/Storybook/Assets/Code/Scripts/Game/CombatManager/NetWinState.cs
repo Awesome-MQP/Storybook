@@ -91,6 +91,9 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
         m_combatSummaryUI = Instantiate(uiGameObject);
         CombatSummaryUIHandler uiHandler = m_combatSummaryUI.GetComponent<CombatSummaryUIHandler>();
         uiHandler.PopulateMenu(CManager.CombatLevel, CManager.CombatGenre);
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnCombatCleared();
     }
 
     public void CombatSummarySubmitted()

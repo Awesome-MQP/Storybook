@@ -30,7 +30,7 @@ public class MatchMaker : Photon.PunBehaviour {
         }
         if (isFirst && GUILayout.Button("Start Demo"))
         {
-            PhotonNetwork.LoadLevel("TestingLevel");
+            PhotonNetwork.LoadLevel("TutorialLevel");
             Destroy(this);
         }
     }

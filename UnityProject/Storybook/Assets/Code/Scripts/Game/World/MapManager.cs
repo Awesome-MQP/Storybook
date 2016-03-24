@@ -933,4 +933,15 @@ public class MapManager : Photon.PunBehaviour {
         }
         return roomPrefab;
     }
+
+    public void GenerateTutorialMap()
+    {
+        m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];
+        m_worldMapData = new RoomData[m_worldMaxXSize, m_worldMaxYSize];
+
+        m_worldMapData[0, 0] = new RoomData(0, 0, false, true, false, false, RoomType.Start);
+        m_worldMapData[0, 1] = new RoomData(0, 1, false, true, false, true, RoomType.Combat);
+        m_worldMapData[0, 2] = new RoomData(0, 2, false, true, false, true, RoomType.Shop);
+        m_worldMapData[0, 3] = new RoomData(0, 3, false, false, false, true, RoomType.Exit);
+    }
 }

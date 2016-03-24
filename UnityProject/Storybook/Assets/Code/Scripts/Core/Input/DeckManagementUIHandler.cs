@@ -42,6 +42,9 @@ public class DeckManagementUIHandler : PageUIHandler
                 m_inventoryScrollRect = scrollRect;
             }
         }
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDeckManagementOpened();
     }
 
     public override void PageButtonPressed(PageButton buttonPressed)

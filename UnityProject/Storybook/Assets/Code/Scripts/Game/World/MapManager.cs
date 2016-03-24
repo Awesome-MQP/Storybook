@@ -109,7 +109,6 @@ public class MapManager : Photon.PunBehaviour {
         // The player cannot overwrite rooms that have already been placed.
         if (m_worldGrid[placeX, placeY] != null)
         {
-            Debug.Log("Returning null");
             return null;
         }
         Vector3 roomGridLocation = _getWorldLocationFromGrid(placeX, placeY);
@@ -425,7 +424,6 @@ public class MapManager : Photon.PunBehaviour {
 
         RoomData exitRoom = new RoomData(exitX, exitY, false, false, false, false, RoomType.Exit);
         m_worldMapData[exitX, exitY] = exitRoom;
-        Debug.Log("Is actually exit = " + m_worldMapData[exitX, exitY].RoomType);
         m_exitPoint = new Location(exitX, exitY);
     }
 
@@ -452,11 +450,7 @@ public class MapManager : Photon.PunBehaviour {
             if (_positionCheck(depth, newPos))
             {
                 RoomData currentNewPosRoomData = m_worldMapData[newPos.X, newPos.Y];
-                bool isEmptyRoom = false;
-                if (currentNewPosRoomData.RoomType == RoomType.None)
-                {
-                    isEmptyRoom = true;
-                }
+                bool isEmptyRoom = currentNewPosRoomData.RoomType == RoomType.None;
                 
                 if (isEmptyRoom)
                 {
@@ -892,7 +886,7 @@ public class MapManager : Photon.PunBehaviour {
         return PlaceRoom(start, new PageData(-1, Genre.None));
     }
 
-    public bool isAllDataReceived()
+    public bool IsAllDataReceived()
     {
         if (m_roomDataReceived >= (m_worldMaxXSize * m_worldMaxYSize))
         {
@@ -934,6 +928,7 @@ public class MapManager : Photon.PunBehaviour {
         return roomPrefab;
     }
 
+    //TODO: put this into a new class
     public void GenerateTutorialMap()
     {
         m_worldGrid = new RoomObject[m_worldMaxXSize, m_worldMaxYSize];

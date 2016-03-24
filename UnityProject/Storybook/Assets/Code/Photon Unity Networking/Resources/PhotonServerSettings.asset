@@ -87,4 +87,12 @@ MonoBehaviour:
   - RPCSetMaxHealth
   - MoveToNextFloorMaster
   - CreateTutorialMenu
+  - BossFightTutorial
+  - CombatClearTutorial
+  - CreateCombatTutorial
+  - CreatePageForRoomTutorial
+  - CreateStartMenu
+  - DeckManagementTutorial
+  - DemoCompleteTutorial
+  - ShopTutorial
   DisableAutoOpenWizard: 1

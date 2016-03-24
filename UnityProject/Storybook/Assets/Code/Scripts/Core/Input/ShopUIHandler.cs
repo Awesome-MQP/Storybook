@@ -169,7 +169,7 @@ public class ShopUIHandler : PageUIHandler {
     public void ExitMenu()
     { 
         PlayClickSound();
-        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+        EventDispatcher.GetDispatcher<ShopEventDispatcher>().OnShopClosed();
         Destroy(gameObject);
     }
 

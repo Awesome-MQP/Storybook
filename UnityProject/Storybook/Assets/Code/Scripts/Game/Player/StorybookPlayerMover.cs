@@ -147,7 +147,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     public void OpenOverworldMenu()
     {
         Object loadedObject = Resources.Load("UI/OverworldCanvas");
-        GameObject canvas = (GameObject) Instantiate(loadedObject);
+        GameObject canvas = (GameObject)Instantiate(loadedObject);
         OverworldUIHandler uiHandler = canvas.GetComponent<OverworldUIHandler>();
         uiHandler.PopulateMenu(CurrentRoom);
     }

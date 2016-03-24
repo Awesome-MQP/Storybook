@@ -21,7 +21,7 @@
 sysinfo.txt
 /.vs/
 /Builds/
-/compilation log.txt
+/CSharp60Support/compilation log.txt
 
 # Ignore ProjectSettings, ProjectVersion, AnalyticsManager
 */ProjectSettings.asset

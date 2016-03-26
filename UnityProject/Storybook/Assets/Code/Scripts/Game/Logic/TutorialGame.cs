@@ -12,6 +12,7 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
 
     private bool m_pageForRoomIsComplete = false;
     private bool m_deckManagementIsComplete = false;
+    private bool m_hasShownStartTutorial = false;
 
     public EventDispatcher TutorialDispatcher { get { return EventDispatcher.GetDispatcher<TutorialEventDispatcher>(); } }
 
@@ -64,11 +65,16 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     [PunRPC]
     public void CreateStartMenu()
     {
-        List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Welcome to Storybook!");
-        tutorialStrings.Add("Choose a direction");
+        if (!m_hasShownStartTutorial)
+        {
+            List<string> tutorialStrings = new List<string>();
+            tutorialStrings.Add("Welcome to Storybook!");
+            tutorialStrings.Add("Welcome to your first dungeon in Storybook. Throughout the game, you will be using mystical pages as attacks and to build the rooms of the dungeons");
+            tutorialStrings.Add("To start, choose the door that you would like to move through.");
 
-        _instantiateTutorialUI("Welcome to Storybook!", tutorialStrings);
+            _instantiateTutorialUI("Welcome to Storybook!", tutorialStrings);
+            m_hasShownStartTutorial = true;
+        }
     }
 
     /// <summary>
@@ -78,8 +84,9 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void CreatePageForRoomTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Creating a room text 1");
-        tutorialStrings.Add("Creating a room text 2");
+        tutorialStrings.Add("When entering a new room, you must place down a page to create the room.");
+        tutorialStrings.Add("Which page to choose is important as its stats will affect the room. The higher the level, the more powerful the enemies will be, but there will also be higher rewards");
+        tutorialStrings.Add("The colors of the pages act as types called genres, and the genre of the page chosen will be the most likely enemy.");
 
         _instantiateTutorialUI("Creating a Room", tutorialStrings);
     }
@@ -91,8 +98,9 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void CreateCombatTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Combat text 1");
-        tutorialStrings.Add("Combat text 2");
+        tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Note, using pages in combat do not cause you to lose them.");
+        tutorialStrings.Add("The power of attack pages are more powerful the higher their level, and damage depends on the type of the user and the type of the character being attacked.");
+        tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players, yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
 
         _instantiateTutorialUI("Fighting Enemies", tutorialStrings);
     }
@@ -104,8 +112,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void CombatClearTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Combat clear text 1");
-        tutorialStrings.Add("Combat clear text 2");
+        tutorialStrings.Add("Upon clearing a combat, you can select one new page from the drops to add to your inventory.");
+        tutorialStrings.Add("The higher the level of the enemies, the better the rewards will be. Also, the dropped pages are more likely to match the genre of the enemies");
 
         _instantiateTutorialUI("Reaping Rewards of Combat", tutorialStrings);
     }
@@ -130,8 +138,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void ShopTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Shop text 1");
-        tutorialStrings.Add("Shop text 2");
+        tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up.");
+        tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of your pages put up for trade match or exceed the level of the shop trade, you can do the trade.");
 
         _instantiateTutorialUI("Trading Pages at the Shop", tutorialStrings);
     }

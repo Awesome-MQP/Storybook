@@ -87,11 +87,11 @@ MonoBehaviour:
   - RPCSetMaxHealth
   - MoveToNextFloorMaster
   - CreateTutorialMenu
-  - CreateStartMenu
   - BossFightTutorial
   - CombatClearTutorial
   - CreateCombatTutorial
   - CreatePageForRoomTutorial
+  - CreateStartMenu
   - DeckManagementTutorial
   - DemoCompleteTutorial
   - ShopTutorial

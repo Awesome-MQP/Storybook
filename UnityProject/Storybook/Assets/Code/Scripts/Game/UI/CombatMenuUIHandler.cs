@@ -92,6 +92,18 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
             GameManager gm = GameManager.GetInstance<GameManager>();
             PlayerEntity pe = gm.GetPlayerObject<PlayerEntity>(player);
 
+            // Set and enable the corresponding player panel
+            Image playerPanel = null;
+            string panelName = "Player" + player.ID + "Panel";
+            foreach(Image image in GetComponentsInChildren<Image>())
+            {
+                if (image.name == panelName)
+                {
+                    playerPanel = image;
+                }
+            }
+            playerPanel.enabled = true;
+
             // Set and enable the corresponding player icon
             Image playerImage = null;
             string iconName = "Player" + player.ID + "Icon";

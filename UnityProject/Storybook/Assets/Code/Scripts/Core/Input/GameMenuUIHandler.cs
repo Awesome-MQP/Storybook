@@ -15,6 +15,11 @@ public abstract class GameMenuUIHandler : UIHandler {
         SceneManager.LoadScene("JoinGameMenu");
     }
 
+    public void TutorialGame()
+    {
+        SceneManager.LoadScene("TutorialLevel");
+    }
+
     public void ExitGame()
     {
         Application.Quit();

@@ -19,7 +19,7 @@ public class MainMenuPhoton : Photon.PunBehaviour {
         else
         {
             SceneFading fader = SceneFading.Instance();
-            fader.LoadScene("TutorialLevel");
+            fader.LoadScene("TutorialCharacterSelect");
         }
     }
 

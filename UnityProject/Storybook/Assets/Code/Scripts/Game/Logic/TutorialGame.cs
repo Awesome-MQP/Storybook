@@ -235,4 +235,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     {
         photonView.RPC(nameof(DemoCompleteTutorial), PhotonTargets.All);
     }
+
+    public void OnCharacterSelect()
+    {
+    }
 }

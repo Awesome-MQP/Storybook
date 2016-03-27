@@ -70,13 +70,15 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
     [SerializeField]
     private Button m_submitButton;
 
-    protected  void Start()
+    private bool m_isTutorial = false;
+
+    protected void Start()
     {
         photonView.RPC(nameof(InitializeDictionary), PhotonTargets.All, PhotonNetwork.player);
         m_submitButton.interactable = false;
         MainMenuUIHandler mainMenu = FindObjectOfType<MainMenuUIHandler>();
         Destroy(mainMenu);
-        
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnCharacterSelect();
     }
 
     public void SelectComicBook()
@@ -111,7 +113,14 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
             GameManager.GetInstance<GameManager>().GetPlayerObject<CharacterSelectPlayerEntity>(player).PlayerGenre = playerGenre;
         }
 
-        SceneFading.Instance().LoadScene("TestingLevel");
+        if (!m_isTutorial)
+        {
+            SceneFading.Instance().LoadScene("TestingLevel");
+        }
+        else
+        {
+            SceneFading.Instance().LoadScene("TutorialLevel");
+        }
     }
 
     private Button _GenreToButton(Genre characterGenre)
@@ -225,5 +234,11 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
         m_fantasyModel.SetBool("IdleToIdle", true);
         m_fantasyModel.SetBool("IdleToAttack", false);
         m_fantasyModel.SetBool("AttackToIdle", true);
+    }
+
+    public bool IsTutorial
+    {
+        get { return m_isTutorial; }
+        set { m_isTutorial = value; }
     }
 }

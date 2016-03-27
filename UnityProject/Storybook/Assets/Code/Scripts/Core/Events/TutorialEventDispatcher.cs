@@ -67,6 +67,14 @@ public class TutorialEventDispatcher : EventDispatcher {
         }
     }
 
+    public void OnCharacterSelect()
+    {
+        foreach (ITutorialEventListener listener in IterateListeners<ITutorialEventListener>())
+        {
+            listener.OnCharacterSelect();
+        }
+    }
+
     public interface ITutorialEventListener: IEventListener 
     {
         void OnTutorialStart();
@@ -77,5 +85,6 @@ public class TutorialEventDispatcher : EventDispatcher {
         void OnShopEntered();
         void OnBossFightStarted();
         void OnDemoCompleted();
+        void OnCharacterSelect();
     }
 }

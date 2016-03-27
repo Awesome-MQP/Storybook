@@ -13,6 +13,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     private bool m_pageForRoomIsComplete = false;
     private bool m_deckManagementIsComplete = false;
     private bool m_hasShownStartTutorial = false;
+    private bool m_hasShownCombatTutorial = false;
+    private bool m_hasShownShopTutorial = false;
 
     public EventDispatcher TutorialDispatcher { get { return EventDispatcher.GetDispatcher<TutorialEventDispatcher>(); } }
 
@@ -97,12 +99,16 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     [PunRPC]
     public void CreateCombatTutorial()
     {
-        List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Note, using pages in combat do not cause you to lose them.");
-        tutorialStrings.Add("The power of attack pages are more powerful the higher their level, and damage depends on the type of the user and the type of the character being attacked.");
-        tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players, yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
+        if (!m_hasShownCombatTutorial)
+        {
+            List<string> tutorialStrings = new List<string>();
+            tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Note, using pages in combat do not cause you to lose them.");
+            tutorialStrings.Add("The power of attack pages are more powerful the higher their level, and damage depends on the type of the user and the type of the character being attacked.");
+            tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players, yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
 
-        _instantiateTutorialUI("Fighting Enemies", tutorialStrings);
+            _instantiateTutorialUI("Fighting Enemies", tutorialStrings);
+            m_hasShownCombatTutorial = true;
+        }
     }
 
     /// <summary>
@@ -137,11 +143,15 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     [PunRPC]
     public void ShopTutorial()
     {
-        List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up.");
-        tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of your pages put up for trade match or exceed the level of the shop trade, you can do the trade.");
+        if (!m_hasShownShopTutorial)
+        {
+            List<string> tutorialStrings = new List<string>();
+            tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up.");
+            tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of your pages put up for trade match or exceed the level of the shop trade, you can do the trade.");
 
-        _instantiateTutorialUI("Trading Pages at the Shop", tutorialStrings);
+            _instantiateTutorialUI("Trading Pages at the Shop", tutorialStrings);
+            m_hasShownShopTutorial = true;
+        }
     }
 
     /// <summary>

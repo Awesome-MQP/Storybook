@@ -4,10 +4,11 @@ using UnityEngine.SceneManagement;
 
 public abstract class GameMenuUIHandler : UIHandler {
 
+    private bool m_isTutorial = false;
+
     public void StartNewGame()
     {
-        SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("CharacterSelect");
+        PhotonNetwork.CreateRoom(null);
     }
 
     public void JoinGame()
@@ -17,7 +18,8 @@ public abstract class GameMenuUIHandler : UIHandler {
 
     public void TutorialGame()
     {
-        SceneManager.LoadScene("TutorialLevel");
+        m_isTutorial = true;
+        PhotonNetwork.CreateRoom(null);
     }
 
     public void ExitGame()
@@ -37,4 +39,8 @@ public abstract class GameMenuUIHandler : UIHandler {
         SceneManager.LoadScene("JoinGameMenu");
     }
 
+    public bool IsTutorial
+    {
+        get { return m_isTutorial; }
+    }
 }

@@ -37,6 +37,9 @@ public class BaseStorybookGame : GameManager
     [Tooltip("The number of pages that each player starts with")]
     protected int m_startingPages = 30;
 
+    [SerializeField]
+    private int m_numberOfFloors = 1;
+
     protected MapManager m_mapManager;
 
     protected BasePlayerMover m_mover;
@@ -182,6 +185,21 @@ public class BaseStorybookGame : GameManager
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Checks to see if the players are on the final floor
+    /// Called by ExitRoom after the boss is defeated and opens up the win scene if it is the last floor
+    /// </summary>
+    public void CheckIfGameIsWon()
+    {
+        Debug.Log("Floor number = " + GetPlayerObject(PhotonNetwork.player).FloorNumber);
+        Debug.Log("Number of floors = " + m_numberOfFloors);
+        if (GetPlayerObject(PhotonNetwork.player).FloorNumber >= m_numberOfFloors)
+        {
+            SceneFading fader = SceneFading.Instance();
+            fader.LoadScene("WinScreen");
+        }
     }
 
     public int DeckSize

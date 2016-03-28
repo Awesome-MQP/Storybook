@@ -30,7 +30,7 @@ public abstract class GameMenuUIHandler : UIHandler {
     public void ReturnToMainMenu()
     {
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("GameStartup");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void ReturnToLobby()

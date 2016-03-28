@@ -31,3 +31,5 @@ EditorBuildSettings:
     path: Assets/Levels/Game/TutorialLevel.unity
   - enabled: 1
     path: Assets/Levels/Game/TutorialCharacterSelect.unity
+  - enabled: 1
+    path: Assets/Levels/Game/WinScreen.unity

@@ -321,7 +321,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public void RPCSetMaxHealth(float newMaxHealth)
     {
         m_maxHealth = newMaxHealth;
-        m_health = newMaxHealth;
+        //m_health = newMaxHealth;
     }
 
 

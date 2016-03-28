@@ -15,6 +15,7 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     private bool m_hasShownStartTutorial = false;
     private bool m_hasShownCombatTutorial = false;
     private bool m_hasShownShopTutorial = false;
+    private bool m_hasShownCombatClear = false;
 
     public EventDispatcher TutorialDispatcher { get { return EventDispatcher.GetDispatcher<TutorialEventDispatcher>(); } }
 
@@ -48,8 +49,6 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         photonView.RPC(nameof(InitializeCamera), PhotonTargets.Others, startRoom.CameraNode.position, startRoom.CameraNode.rotation);
 
         m_hasStarted = true;
-
-        OnTutorialStart();
 
         base.OnStartOwner(wasSpawn);
     }
@@ -117,11 +116,15 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     [PunRPC]
     public void CombatClearTutorial()
     {
-        List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Upon clearing a combat, you can select one new page from the drops to add to your inventory.");
-        tutorialStrings.Add("The higher the level of the enemies, the better the rewards will be. Also, the dropped pages are more likely to match the genre of the enemies");
+        if (!m_hasShownCombatClear)
+        {
+            List<string> tutorialStrings = new List<string>();
+            tutorialStrings.Add("Upon clearing a combat, you can select one new page from the drops to add to your inventory.");
+            tutorialStrings.Add("The higher the level of the enemies, the better the rewards will be. Also, the dropped pages are more likely to match the genre of the enemies");
 
-        _instantiateTutorialUI("Reaping Rewards of Combat", tutorialStrings);
+            _instantiateTutorialUI("Reaping Rewards of Combat", tutorialStrings);
+            m_hasShownCombatClear = true;
+        }
     }
 
     /// <summary>
@@ -130,11 +133,15 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     [PunRPC]
     public void DeckManagementTutorial()
     {
-        List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Deck management text 1");
-        tutorialStrings.Add("Deck management text 2");
+        if (!m_deckManagementIsComplete)
+        {
+            List<string> tutorialStrings = new List<string>();
+            tutorialStrings.Add("Deck management text 1");
+            tutorialStrings.Add("Deck management text 2");
 
-        _instantiateTutorialUI("Managing your Inventory and Deck", tutorialStrings);
+            _instantiateTutorialUI("Managing your Inventory and Deck", tutorialStrings);
+            m_deckManagementIsComplete = true;
+        }
     }
 
     /// <summary>
@@ -177,15 +184,17 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         tutorialStrings.Add("Tutorial complete text 1");
         tutorialStrings.Add("Tutorial complete text 2");
 
-        _instantiateTutorialUI("Tutorial Complete!", tutorialStrings);
+        TutorialUIHandler uiHandler = _instantiateTutorialUI("Tutorial Complete!", tutorialStrings);
+        uiHandler.changeFinishButtonOnClick();
     }
 
-    private void _instantiateTutorialUI(string tutorialTitle, List<string> tutorialStrings)
+    private TutorialUIHandler _instantiateTutorialUI(string tutorialTitle, List<string> tutorialStrings)
     {
         GameObject tutorialUI = (GameObject)Instantiate(m_tutorialUIPrefab.gameObject, Vector3.zero, Quaternion.identity);
         TutorialUIHandler tutorialUIHandler = tutorialUI.GetComponent<TutorialUIHandler>();
 
         tutorialUIHandler.PopulateMenu(tutorialTitle, tutorialStrings);
+        return tutorialUIHandler;
     }
 
     public void OnTutorialStart()

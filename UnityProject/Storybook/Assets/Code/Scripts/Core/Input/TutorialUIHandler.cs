@@ -12,6 +12,9 @@ public class TutorialUIHandler : UIHandler {
     Button m_previousButton;
 
     [SerializeField]
+    Button m_finishButton;
+
+    [SerializeField]
     Text m_tutorialText;
 
     [SerializeField]
@@ -70,5 +73,20 @@ public class TutorialUIHandler : UIHandler {
     public void FinishButtonPressed()
     {
         Destroy(gameObject);
+    }
+
+    public void changeFinishButtonOnClick()
+    {
+        Debug.Log("Changing on click listener");
+        m_finishButton.onClick.RemoveAllListeners();
+        m_finishButton.onClick.AddListener(delegate () { returnToMainMenu(); });
+    }
+
+    protected void returnToMainMenu()
+    {
+        Debug.Log("Returing to main menu");
+        PhotonNetwork.LeaveRoom();
+        SceneFading fader = SceneFading.Instance();
+        fader.LoadScene("MainMenu");
     }
 }

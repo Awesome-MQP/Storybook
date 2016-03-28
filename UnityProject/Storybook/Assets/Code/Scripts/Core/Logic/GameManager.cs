@@ -266,5 +266,10 @@ public abstract class GameManager : Photon.PunBehaviour
             PhotonNetwork.Destroy(inv.photonView);
             Destroy(inv.gameObject);
         }
+
+        // Destroy the combat instance
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        PhotonNetwork.Destroy(cm.photonView);
+        Destroy(cm.gameObject);
     }
 }

@@ -22,6 +22,7 @@ public class TutorialUIHandler : UIHandler {
 
     List<string> m_tutorialStrings = new List<string>();
     int m_stringIndex = 0;
+    bool m_shouldDeleteObject = true;
 
     /// <summary>
     /// Sets the title in the tutorial menu and displays the first string in the given list of tutorial strings
@@ -72,21 +73,24 @@ public class TutorialUIHandler : UIHandler {
 
     public void FinishButtonPressed()
     {
-        Destroy(gameObject);
+        if (m_shouldDeleteObject)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void changeFinishButtonOnClick()
     {
-        Debug.Log("Changing on click listener");
+        m_shouldDeleteObject = false;
         m_finishButton.onClick.RemoveAllListeners();
         m_finishButton.onClick.AddListener(delegate () { returnToMainMenu(); });
     }
 
     protected void returnToMainMenu()
     {
-        Debug.Log("Returing to main menu");
-        PhotonNetwork.LeaveRoom();
+        GameManager.GetInstance<GameManager>().CleanupForNewGame();
         SceneFading fader = SceneFading.Instance();
         fader.LoadScene("MainMenu");
+        PhotonNetwork.LeaveRoom();
     }
 }

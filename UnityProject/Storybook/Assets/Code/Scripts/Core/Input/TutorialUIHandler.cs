@@ -12,6 +12,9 @@ public class TutorialUIHandler : UIHandler {
     Button m_previousButton;
 
     [SerializeField]
+    Button m_finishButton;
+
+    [SerializeField]
     Text m_tutorialText;
 
     [SerializeField]
@@ -19,6 +22,7 @@ public class TutorialUIHandler : UIHandler {
 
     List<string> m_tutorialStrings = new List<string>();
     int m_stringIndex = 0;
+    bool m_shouldDeleteObject = true;
 
     /// <summary>
     /// Sets the title in the tutorial menu and displays the first string in the given list of tutorial strings
@@ -69,6 +73,24 @@ public class TutorialUIHandler : UIHandler {
 
     public void FinishButtonPressed()
     {
-        Destroy(gameObject);
+        if (m_shouldDeleteObject)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void changeFinishButtonOnClick()
+    {
+        m_shouldDeleteObject = false;
+        m_finishButton.onClick.RemoveAllListeners();
+        m_finishButton.onClick.AddListener(delegate () { returnToMainMenu(); });
+    }
+
+    protected void returnToMainMenu()
+    {
+        GameManager.GetInstance<GameManager>().CleanupForNewGame();
+        SceneFading fader = SceneFading.Instance();
+        fader.LoadScene("MainMenu");
+        PhotonNetwork.LeaveRoom();
     }
 }

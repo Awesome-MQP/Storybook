@@ -189,13 +189,12 @@ public class ShopUIHandler : PageUIHandler {
             DungeonMaster dm = DungeonMaster.Instance;
             PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
 
-            /*
+            // Drop the pages that are being traded away
             foreach (PageButton pageButton in m_selectedPages)
             {
                 pi.Drop(pageButton.InventoryId);
                 pi.Add(dm.GetBasicPage(), pageButton.InventoryId);
             }
-            */
 
             PageData selectedPageData = m_selectedShopPageButton.PageData;
             Page newPlayerPage = dm.ConstructPageFromData(selectedPageData);

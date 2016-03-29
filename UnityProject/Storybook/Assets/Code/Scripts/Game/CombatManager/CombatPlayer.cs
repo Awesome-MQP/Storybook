@@ -371,6 +371,7 @@ public abstract class CombatPlayer : CombatPawn
         PlayerEntity playerData = playerEntityView.GetComponent<PlayerEntity>();
 
         SetMaxHealth(playerData.MaxHitPoints);
+        Debug.Log("PLAYER HP = " + playerData.HitPoints);
         Health = playerData.HitPoints;
         Defense = playerData.Defense;
         Speed = playerData.Speed;

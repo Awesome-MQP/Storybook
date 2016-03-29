@@ -239,4 +239,40 @@ public abstract class GameManager : Photon.PunBehaviour
     {
         OnStartGame();
     }
+
+    /// <summary>
+    /// Removes all objects that have DoNotDestroyOnLoad active in the game so that a new game can be started
+    /// </summary>
+    public void CleanupForNewGame()
+    {
+        Debug.Log("Destroying game objects for new game");
+        // Destroy all of the player objects
+        foreach(PlayerObject po in FindObjectsOfType<PlayerEntity>())
+        {
+            PhotonNetwork.Destroy(po.photonView);
+            Destroy(po.gameObject);
+        }
+
+        // Destroy all of the page objects
+        foreach(Page p in FindObjectsOfType<Page>())
+        {
+            PhotonNetwork.Destroy(p.photonView);
+            Destroy(p.gameObject);
+        }
+
+        // Destroy all the player inventories
+        foreach(PlayerInventory inv in FindObjectsOfType<PlayerInventory>())
+        {
+            PhotonNetwork.Destroy(inv.photonView);
+            Destroy(inv.gameObject);
+        }
+
+        // Destroy the combat instance
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        if (cm != null)
+        {
+            PhotonNetwork.Destroy(cm.photonView);
+            Destroy(cm.gameObject);
+        }
+    }
 }

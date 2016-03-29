@@ -90,6 +90,9 @@ public class ExitRoom : RoomObject
 
             // Send out a tutorial event, notifying that the demo is completed
             EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDemoCompleted();
+
+            // Check to see if this is the final floor
+            GameManager.GetInstance<BaseStorybookGame>().CheckIfGameIsWon();
         }
         else
         {

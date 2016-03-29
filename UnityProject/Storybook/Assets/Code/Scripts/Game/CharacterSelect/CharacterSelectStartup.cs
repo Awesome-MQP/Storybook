@@ -6,6 +6,9 @@ public class CharacterSelectStartup : GameManager
     [SerializeField]
     private ResourceAsset m_characterSelectPrefab = new ResourceAsset(typeof(CharacterSelectUIHandler));
 
+    [SerializeField]
+    private bool m_isTutorial = false;
+
 	// Use this for initialization
     protected override void Awake ()
     {
@@ -15,6 +18,7 @@ public class CharacterSelectStartup : GameManager
         if (IsMine)
         {
             CharacterSelectUIHandler ui = PhotonNetwork.Instantiate<CharacterSelectUIHandler>(m_characterSelectPrefab, Vector3.zero, Quaternion.identity, 1);
+            ui.IsTutorial = m_isTutorial;
             ui.FantasyModel = GameObject.Find("FantasyCharacter").GetComponent<Animator>();
             ui.HorrorModel = GameObject.Find("HorrorCharacter").GetComponent<Animator>();
             ui.SciFiModel = GameObject.Find("SciFiCharacter").GetComponent<Animator>();

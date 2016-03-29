@@ -22,6 +22,11 @@ public class OverworldUIHandler : UIHandler {
 
     private RoomObject m_currentRoom;
 
+    void Start()
+    {
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnTutorialStart();
+    }
+
     /// <summary>
     /// Called by direction buttons in the overworld menu
     /// Submits the direction to the player mover

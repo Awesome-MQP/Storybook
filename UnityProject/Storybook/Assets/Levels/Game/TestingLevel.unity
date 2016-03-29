@@ -328,6 +328,7 @@ MonoBehaviour:
     m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
   m_deckSize: 20
   m_startingPages: 30
+  m_numberOfFloors: 1
 --- !u!114 &794301187
 MonoBehaviour:
   m_ObjectHideFlags: 0

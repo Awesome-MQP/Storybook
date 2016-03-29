@@ -95,4 +95,5 @@ MonoBehaviour:
   - DeckManagementTutorial
   - DemoCompleteTutorial
   - ShopTutorial
+  - CreateCharacterSelectTutorial
   DisableAutoOpenWizard: 1

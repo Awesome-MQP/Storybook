@@ -1,0 +1,446 @@
+********************************************************************************
+*                     Thursday, March 24, 2016 6:50:38 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp-firstpass.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-a72a23c0fc50d4644b0bf21b78e750cf
+Exit code: 0
+Elapsed time: 10.14 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-firstpass.dll
+Elapsed time: 1.30 sec
+
+- pdb2mdb.exe output:
+
+********************************************************************************
+*                     Thursday, March 24, 2016 6:50:51 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-289a600971ff7af47b1dbc8109250c8b
+Exit code: 0
+Elapsed time: 8.22 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+0: Assets\Code\Scripts\Game\Player\Inventory\Inventory.cs(99,10): warning CS0114: 'Inventory.OnValidate()' hides inherited member 'PunBehaviour.OnValidate()'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.
+1: Assets\Code\Scripts\Game\Player\Inventory\Item.cs(37,10): warning CS0114: 'Item.OnValidate()' hides inherited member 'PunBehaviour.OnValidate()'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.
+2: Assets\Code\Scripts\Game\Logic\TutorialGame.cs(55,17): warning CS0108: 'TutorialGame.InitializeCamera(Vector3, Quaternion)' hides inherited member 'BaseStorybookGame.InitializeCamera(Vector3, Quaternion)'. Use the new keyword if hiding was intended.
+3: Assets\Code\Photon Unity Networking\UtilityScripts\ConnectAndJoinRandom.cs(32,62): warning CS0618: 'Application.loadedLevel' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+4: Assets\Code\Photon Unity Networking\UtilityScripts\OnClickLoadSomething.cs(24,17): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+5: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(1983,23): warning CS0219: The variable 'remoteLevelPrefix' is assigned but its value is never used
+6: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(2280,14): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+7: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(3263,29): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+8: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\PhotonNetwork.cs(2493,37): warning CS0618: 'SceneManager.GetAllScenes()' is obsolete: 'Use SceneManager.sceneCount and SceneManager.GetSceneAt(int index) to loop the all scenes instead.'
+9: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(112,18): warning CS0162: Unreachable code detected
+10: Assets\Code\Scripts\Game\Dungeon\RoomObject.cs(63,9): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+11: Assets\Code\Scripts\Game\MatchMaker.cs(80,9): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+12: Assets\Code\Scripts\Game\MatchMaker.cs(89,9): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+13: Assets\Code\Scripts\Core\Input\PageForRoomUIHandler.cs(8,19): warning CS0649: Field 'PageForRoomUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+14: Assets\Code\Scripts\Core\Input\CombatSummaryUIHandler.cs(16,20): warning CS0649: Field 'CombatSummaryUIHandler.m_submitButton' is never assigned to, and will always have its default value null
+15: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(41,20): warning CS0649: Field 'CombatMenuUIHandler.m_horrorSprite' is never assigned to, and will always have its default value null
+16: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(32,20): warning CS0649: Field 'CombatMenuUIHandler.m_comicSprite' is never assigned to, and will always have its default value null
+17: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(73,22): warning CS0649: Field 'DungeonMaster.m_pageDefenseBoost' is never assigned to, and will always have its default value null
+18: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(21,12): warning CS0649: Field 'OverworldUIHandler.m_nextFloorButton' is never assigned to, and will always have its default value null
+19: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageSpeedBoost.cs(8,17): warning CS0649: Field 'PageSpeedBoost.m_speedIncrease' is never assigned to, and will always have its default value 0
+20: Assets\Code\Scripts\Game\Player\PlayerEntity.cs(137,29): warning CS0649: Field 'PlayerEntity.m_inventoryPrefab' is never assigned to, and will always have its default value null
+21: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(40,18): warning CS0649: Field 'DungeonMaster.m_pagePrefab' is never assigned to, and will always have its default value null
+22: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(11,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+23: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(62,20): warning CS0649: Field 'CharacterSelectUIHandler.m_horrorButton' is never assigned to, and will always have its default value null
+24: Assets\Code\Scripts\Game\World\MusicManager.cs(27,23): warning CS0649: Field 'MusicManager.m_comicRoomMusic' is never assigned to, and will always have its default value null
+25: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(70,22): warning CS0649: Field 'DungeonMaster.m_pageAttackBoost' is never assigned to, and will always have its default value null
+26: Assets\Code\Scripts\Game\CombatManager\StandardCombatInstance.cs(11,23): warning CS0649: Field 'StandardCombatInstance.m_previousMusic' is never assigned to, and will always have its default value null
+27: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(18,12): warning CS0649: Field 'OverworldUIHandler.m_westButton' is never assigned to, and will always have its default value null
+28: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageHPBoost.cs(9,17): warning CS0649: Field 'PageHPBoost.m_HPIncrease' is never assigned to, and will always have its default value 0
+29: Assets\Code\Scripts\Game\Player\Inventory\TestInventoryCreator.cs(7,23): warning CS0649: Field 'TestInventoryCreator.m_inventoryPrefab' is never assigned to, and will always have its default value null
+30: Assets\Code\Scripts\Game\CombatManager\CombatManager.cs(11,23): warning CS0649: Field 'CombatManager.m_cameraPos' is never assigned to, and will always have its default value null
+31: Assets\Code\Scripts\Game\World\CameraManager.cs(7,20): warning CS0649: Field 'CameraManager.m_combatCamera' is never assigned to, and will always have its default value null
+32: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(59,20): warning CS0649: Field 'CharacterSelectUIHandler.m_comicBookButton' is never assigned to, and will always have its default value null
+33: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(76,22): warning CS0649: Field 'DungeonMaster.m_pageSpeedBoost' is never assigned to, and will always have its default value null
+34: Assets\Code\Scripts\Game\CombatManager\CombatManager.cs(14,24): warning CS0649: Field 'CombatManager.m_combatUIPrefab' is never assigned to, and will always have its default value null
+35: Assets\Code\Scripts\Game\World\MusicManager.cs(31,23): warning CS0649: Field 'MusicManager.m_scifiRoomMusic' is never assigned to, and will always have its default value null
+36: Assets\Code\Scripts\Game\World\CameraManager.cs(10,20): warning CS0649: Field 'CameraManager.m_overworldCamera' is never assigned to, and will always have its default value null
+37: Assets\Code\Scripts\Core\Input\CombatSummaryUIHandler.cs(13,24): warning CS0649: Field 'CombatSummaryUIHandler.m_pageScrollRect' is never assigned to, and will always have its default value null
+38: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(67,22): warning CS0649: Field 'DungeonMaster.m_pageHPBoost' is never assigned to, and will always have its default value null
+39: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(15,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_buttonWidth' is never assigned to, and will always have its default value 0
+40: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(16,24): warning CS0649: Field 'ShopUIHandler.m_playerTradePagesRect' is never assigned to, and will always have its default value null
+41: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(35,20): warning CS0649: Field 'CombatMenuUIHandler.m_scifiSprite' is never assigned to, and will always have its default value null
+42: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(13,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+43: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(47,26): warning CS0649: Field 'CharacterSelectUIHandler.m_comicBookEntity' is never assigned to, and will always have its default value null
+44: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(17,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_buttonHeight' is never assigned to, and will always have its default value 0
+45: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(68,20): warning CS0649: Field 'CharacterSelectUIHandler.m_fantasyButton' is never assigned to, and will always have its default value null
+46: Assets\Code\Scripts\Game\World\MusicManager.cs(33,23): warning CS0649: Field 'MusicManager.m_shopRoomMusic' is never assigned to, and will always have its default value null
+47: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(38,20): warning CS0649: Field 'CombatMenuUIHandler.m_fantasySprite' is never assigned to, and will always have its default value null
+48: Assets\Code\Scripts\Game\World\SoundEffectsManager.cs(15,25): warning CS0649: Field 'SoundEffectsManager.m_source' is never assigned to, and will always have its default value null
+49: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(15,12): warning CS0649: Field 'OverworldUIHandler.m_southButton' is never assigned to, and will always have its default value null
+50: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(55,24): warning CS0649: Field 'Page.m_singleTarget' is never assigned to, and will always have its default value null
+51: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageAttackBoost.cs(8,17): warning CS0649: Field 'PageAttackBoost.m_attackIncrease' is never assigned to, and will always have its default value 0
+52: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(9,12): warning CS0649: Field 'OverworldUIHandler.m_northButton' is never assigned to, and will always have its default value null
+53: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(21,19): warning CS0649: Field 'CombatMenuUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+54: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(13,24): warning CS0649: Field 'ShopUIHandler.m_shopPagesRect' is never assigned to, and will always have its default value null
+55: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(12,12): warning CS0649: Field 'TutorialUIHandler.m_previousButton' is never assigned to, and will always have its default value null
+56: Assets\Code\Scripts\Game\World\Rooms\ShopRoom.cs(14,23): warning CS0649: Field 'ShopRoom.m_shopUI' is never assigned to, and will always have its default value null
+57: Assets\Code\Scripts\Game\CombatManager\PlayerPositionNode.cs(7,17): warning CS0649: Field 'PlayerPositionNode.m_positionId' is never assigned to, and will always have its default value 0
+58: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(71,20): warning CS0649: Field 'CharacterSelectUIHandler.m_submitButton' is never assigned to, and will always have its default value null
+59: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(34,22): warning CS0649: Field 'Page.m_pageDefenseBoost' is never assigned to, and will always have its default value null
+60: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(53,26): warning CS0649: Field 'CharacterSelectUIHandler.m_scifiEntity' is never assigned to, and will always have its default value null
+61: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(56,26): warning CS0649: Field 'CharacterSelectUIHandler.m_fantasyEntity' is never assigned to, and will always have its default value null
+62: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(47,27): warning CS0649: Field 'CombatMenuUIHandler.m_enemyTargetButtons' is never assigned to, and will always have its default value null
+63: Assets\Code\Scripts\Core\Input\PageForRoomUIHandler.cs(11,19): warning CS0649: Field 'PageForRoomUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+64: Assets\Code\Scripts\Game\World\MusicManager.cs(35,23): warning CS0649: Field 'MusicManager.m_combatMusic' is never assigned to, and will always have its default value null
+65: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(20,27): warning CS0649: Field 'ShopUIHandler.m_selectedShopPageRect' is never assigned to, and will always have its default value null
+66: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(29,19): warning CS0649: Field 'CombatMenuUIHandler.m_buttonWidth' is never assigned to, and will always have its default value 0
+67: Assets\Code\Scripts\Game\World\MapManager.cs(37,24): warning CS0649: Field 'MapManager.m_startRoomPrefab' is never assigned to, and will always have its default value null
+68: Assets\Code\Scripts\Game\World\MapManager.cs(43,24): warning CS0649: Field 'MapManager.m_shopRoomPrefab' is never assigned to, and will always have its default value null
+69: Assets\Code\Scripts\Core\Input\DirectionButton.cs(8,28): warning CS0649: Field 'DirectionButton.m_buttonDirection' is never assigned to, and will always have its default value
+70: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(10,24): warning CS0649: Field 'ShopUIHandler.m_playerInventoryPagesRect' is never assigned to, and will always have its default value null
+71: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(19,28): warning CS0649: Field 'JoinGameMenuUIHandler.m_gameInfoButton' is never assigned to, and will always have its default value null
+72: Assets\Code\Scripts\Core\Input\DeckManagementUIHandler.cs(15,19): warning CS0649: Field 'DeckManagementUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+73: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(31,22): warning CS0649: Field 'Page.m_pageAttackBoost' is never assigned to, and will always have its default value null
+74: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(27,19): warning CS0649: Field 'CombatMenuUIHandler.m_buttonHeight' is never assigned to, and will always have its default value 0
+75: Assets\Code\Scripts\Game\World\SoundEffectsManager.cs(18,23): warning CS0649: Field 'SoundEffectsManager.m_clickSoundEffect' is never assigned to, and will always have its default value null
+76: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(28,22): warning CS0649: Field 'Page.m_pageHPBoost' is never assigned to, and will always have its default value null
+77: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(18,10): warning CS0649: Field 'TutorialUIHandler.m_titleText' is never assigned to, and will always have its default value null
+78: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(65,20): warning CS0649: Field 'CharacterSelectUIHandler.m_scifiButton' is never assigned to, and will always have its default value null
+79: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(9,12): warning CS0649: Field 'TutorialUIHandler.m_nextButton' is never assigned to, and will always have its default value null
+80: Assets\Code\Scripts\Game\World\MapManager.cs(40,24): warning CS0649: Field 'MapManager.m_exitRoomPrefab' is never assigned to, and will always have its default value null
+81: Assets\Code\Scripts\Game\World\MapManager.cs(34,24): warning CS0649: Field 'MapManager.m_combatRoomPrefab' is never assigned to, and will always have its default value null
+82: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageDefenseBoost.cs(8,17): warning CS0649: Field 'PageDefenseBoost.m_defenseIncrease' is never assigned to, and will always have its default value 0
+83: Assets\Code\Scripts\Game\World\MusicManager.cs(23,23): warning CS0649: Field 'MusicManager.m_startRoomMusic' is never assigned to, and will always have its default value null
+84: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(12,12): warning CS0649: Field 'OverworldUIHandler.m_eastButton' is never assigned to, and will always have its default value null
+85: Assets\Code\Scripts\Game\JoinCreateGame\JoinCreateGameStartup.cs(8,35): warning CS0649: Field 'JoinCreateGameStartup.m_joinCreateGamePrefab' is never assigned to, and will always have its default value null
+86: Assets\Code\Scripts\Game\CombatManager\StandardCombatInstance.cs(10,23): warning CS0649: Field 'StandardCombatInstance.m_combatMusic' is never assigned to, and will always have its default value null
+87: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(25,22): warning CS0649: Field 'Page.m_pageAttack' is never assigned to, and will always have its default value null
+88: Assets\Code\Scripts\Game\World\MusicManager.cs(29,23): warning CS0649: Field 'MusicManager.m_horrorRoomMusic' is never assigned to, and will always have its default value null
+89: Assets\Code\Scripts\Game\CombatManager\EnemyPositionNode.cs(7,17): warning CS0649: Field 'EnemyPositionNode.m_positionId' is never assigned to, and will always have its default value 0
+90: Assets\Code\Scripts\Game\World\MusicManager.cs(25,23): warning CS0649: Field 'MusicManager.m_fantasyRoomMusic' is never assigned to, and will always have its default value null
+91: Assets\Code\Scripts\Game\Logic\TutorialGame.cs(11,23): warning CS0649: Field 'TutorialGame.m_tutorialUIPrefab' is never assigned to, and will always have its default value null
+92: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(24,19): warning CS0649: Field 'CombatMenuUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+93: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(37,22): warning CS0649: Field 'Page.m_pageSpeedBoost' is never assigned to, and will always have its default value null
+94: Assets\Code\Scripts\TestSceneFading.cs(7,17): warning CS0649: Field 'TestSceneFading.sceneFader' is never assigned to, and will always have its default value null
+95: Assets\Code\Scripts\Game\World\MapManager.cs(46,24): warning CS0649: Field 'MapManager.m_emptyRoomPrefab' is never assigned to, and will always have its default value null
+96: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(64,22): warning CS0649: Field 'DungeonMaster.m_pageAttack' is never assigned to, and will always have its default value null
+97: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(44,27): warning CS0649: Field 'CombatMenuUIHandler.m_playerTargetButtons' is never assigned to, and will always have its default value null
+98: Assets\Code\Scripts\Core\Input\DeckManagementUIHandler.cs(12,19): warning CS0649: Field 'DeckManagementUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+99: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(15,10): warning CS0649: Field 'TutorialUIHandler.m_tutorialText' is never assigned to, and will always have its default value null
+100: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(50,26): warning CS0649: Field 'CharacterSelectUIHandler.m_horrorEntity' is never assigned to, and will always have its default value null
+101: Assets\Code\Scripts\Game\Player\PlayerEntity.cs(131,17): warning CS0414: The field 'PlayerEntity.m_luck' is assigned but its value is never used
+102: Assets\Code\Scripts\Game\CombatManager\StatsManager.cs(8,26): warning CS0414: The field 'StatsManager.m_negativeSTABBonus' is assigned but its value is never used
+103: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(46,19): warning CS0414: The field 'DungeonMaster.m_isPageSupportProbability' is assigned but its value is never used
+104: Assets\Code\Scripts\Game\CombatManager\EnemyMoves\HPDrain.cs(10,18): warning CS0414: The field 'HPDrain.m_isMoveStarted' is assigned but its value is never used
+105: Assets\Code\Scripts\Core\Movement\NetworkMover.cs(21,19): warning CS0414: The field 'NetworkMover.m_rotateSpeed' is assigned but its value is never used
+106: Assets\AnimatorTestScript.cs(9,18): warning CS0414: The field 'AnimatorTestScript.m_isCombatStarted' is assigned but its value is never used
+107: Assets\Code\Scripts\Game\World\PlayerWorldPawn.cs(18,17): warning CS0414: The field 'PlayerWorldPawn.m_playerNum' is assigned but its value is never used
+108: Assets\Code\Scripts\Game\CombatManager\ExecuteState.cs(10,17): warning CS0414: The field 'ExecuteState.m_trigger' is assigned but its value is never used
+109: Assets\Code\Scripts\Game\Player\StorybookPlayerMover.cs(24,18): warning CS0414: The field 'StorybookPlayerMover.m_isMenuOpen' is assigned but its value is never used
+110: Assets\Code\Scripts\Game\World\CharacterAnimator.cs(7,19): warning CS0414: The field 'CharacterAnimator.m_speed' is assigned but its value is never used
+111: Assets\Code\Scripts\Game\CombatManager\NetExecuteState.cs(13,18): warning CS0414: The field 'NetExecuteState.m_isClientReady' is assigned but its value is never used
+112: Assets\Code\Scripts\Game\World\PlayerWorldPawn.cs(19,19): warning CS0414: The field 'PlayerWorldPawn.m_playerSpeed' is assigned but its value is never used
+113: Assets\Code\Scripts\Game\Player\StorybookPlayerMover.cs(23,18): warning CS0414: The field 'StorybookPlayerMover.m_isInCombat' is assigned but its value is never used
+114: Assets\Code\Scripts\Game\CombatManager\NetWinState.cs(7,18): warning CS0414: The field 'NetWinState.m_isClientReady' is assigned but its value is never used
+115: Assets\Code\Scripts\Game\World\GameCamera.cs(9,18): warning CS0414: The field 'GameCamera.traveling' is assigned but its value is never used
+116: Assets\Code\Scripts\Game\CombatManager\NetThinkState.cs(9,18): warning CS0414: The field 'NetThinkState.m_hasCombatManager' is assigned but its value is never used
+117: Assets\Code\Scripts\Core\Assets\ResourceAsset.cs(20,37): warning CS0414: The field 'ResourceAsset.m_editorAsset' is assigned but its value is never used
+118: Assets\AnimatorTestScript.cs(8,17): warning CS0414: The field 'AnimatorTestScript.m_trigger' is assigned but its value is never used
+119: Assets\Code\Scripts\Game\CombatManager\ThinkState.cs(8,17): warning CS0414: The field 'ThinkState.m_trigger' is assigned but its value is never used
+120: Assets\Code\Scripts\Game\CombatManager\ExecuteState.cs(8,18): warning CS0414: The field 'ExecuteState.m_isTurnComplete' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Elapsed time: 0.22 sec
+
+- pdb2mdb.exe output:
+
+********************************************************************************
+*                     Thursday, March 24, 2016 6:51:00 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp-Editor.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-efc641afb6f6ae747bdf3412d0c89f37
+Exit code: 0
+Elapsed time: 1.23 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+0: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(44,9): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+1: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(93,13): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+2: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(103,45): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+3: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(103,17): warning CS0618: 'EditorApplication.SaveScene(string)' is obsolete: 'Use EditorSceneManager.SaveScene'
+4: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewInspector.cs(152,9): warning CS0618: 'EditorGUIUtility.LookLikeControls()' is obsolete: 'LookLikeControls and LookLikeInspector modes are deprecated. Use EditorGUIUtility.labelWidth and EditorGUIUtility.fieldWidth to control label and field widths.'
+5: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(48,28): warning CS0618: 'Application.loadedLevelName' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+6: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(50,64): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+7: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(180,13): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+8: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(184,13): warning CS0618: 'EditorApplication.SaveScene()' is obsolete: 'Use EditorSceneManager.SaveScene'
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-Editor.dll
+Elapsed time: 0.13 sec
+
+- pdb2mdb.exe output:
+
+********************************************************************************
+*                     Thursday, March 24, 2016 6:51:05 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp-firstpass.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-32cb11e8951727b4db97d9c7c0cc538f
+Exit code: 0
+Elapsed time: 0.88 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-firstpass.dll
+Elapsed time: 0.13 sec
+
+- pdb2mdb.exe output:
+
+********************************************************************************
+*                     Thursday, March 24, 2016 6:51:07 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-fa9bdd6c766ebfa499480368b1655a74
+Exit code: 0
+Elapsed time: 0.99 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+0: Assets\Code\Scripts\Game\Player\Inventory\Inventory.cs(99,10): warning CS0114: 'Inventory.OnValidate()' hides inherited member 'PunBehaviour.OnValidate()'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.
+1: Assets\Code\Scripts\Game\Player\Inventory\Item.cs(37,10): warning CS0114: 'Item.OnValidate()' hides inherited member 'PunBehaviour.OnValidate()'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.
+2: Assets\Code\Scripts\Game\Logic\TutorialGame.cs(55,17): warning CS0108: 'TutorialGame.InitializeCamera(Vector3, Quaternion)' hides inherited member 'BaseStorybookGame.InitializeCamera(Vector3, Quaternion)'. Use the new keyword if hiding was intended.
+3: Assets\Code\Photon Unity Networking\UtilityScripts\ConnectAndJoinRandom.cs(32,62): warning CS0618: 'Application.loadedLevel' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+4: Assets\Code\Photon Unity Networking\UtilityScripts\OnClickLoadSomething.cs(24,17): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+5: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\PhotonNetwork.cs(2493,37): warning CS0618: 'SceneManager.GetAllScenes()' is obsolete: 'Use SceneManager.sceneCount and SceneManager.GetSceneAt(int index) to loop the all scenes instead.'
+6: Assets\Code\Scripts\Game\Dungeon\RoomObject.cs(63,9): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+7: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(112,18): warning CS0162: Unreachable code detected
+8: Assets\Code\Scripts\Game\MatchMaker.cs(80,9): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+9: Assets\Code\Scripts\Game\MatchMaker.cs(89,9): warning CS0618: 'Application.LoadLevel(string)' is obsolete: 'Use SceneManager.LoadScene'
+10: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(1983,23): warning CS0219: The variable 'remoteLevelPrefix' is assigned but its value is never used
+11: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(2280,14): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+12: Assets\Code\Photon Unity Networking\Plugins\PhotonNetwork\NetworkingPeer.cs(3263,29): warning CS0612: 'PhotonView.AllowFullCommunication' is obsolete
+13: Assets\Code\Scripts\Game\CombatManager\CombatManager.cs(11,23): warning CS0649: Field 'CombatManager.m_cameraPos' is never assigned to, and will always have its default value null
+14: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(12,12): warning CS0649: Field 'TutorialUIHandler.m_previousButton' is never assigned to, and will always have its default value null
+15: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(25,22): warning CS0649: Field 'Page.m_pageAttack' is never assigned to, and will always have its default value null
+16: Assets\Code\Scripts\Game\World\MapManager.cs(40,24): warning CS0649: Field 'MapManager.m_exitRoomPrefab' is never assigned to, and will always have its default value null
+17: Assets\Code\Scripts\Game\CombatManager\CombatManager.cs(14,24): warning CS0649: Field 'CombatManager.m_combatUIPrefab' is never assigned to, and will always have its default value null
+18: Assets\Code\Scripts\TestSceneFading.cs(7,17): warning CS0649: Field 'TestSceneFading.sceneFader' is never assigned to, and will always have its default value null
+19: Assets\Code\Scripts\Game\World\MusicManager.cs(33,23): warning CS0649: Field 'MusicManager.m_shopRoomMusic' is never assigned to, and will always have its default value null
+20: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(11,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+21: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(17,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_buttonHeight' is never assigned to, and will always have its default value 0
+22: Assets\Code\Scripts\Core\Input\PageForRoomUIHandler.cs(11,19): warning CS0649: Field 'PageForRoomUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+23: Assets\Code\Scripts\Game\World\SoundEffectsManager.cs(18,23): warning CS0649: Field 'SoundEffectsManager.m_clickSoundEffect' is never assigned to, and will always have its default value null
+24: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageDefenseBoost.cs(8,17): warning CS0649: Field 'PageDefenseBoost.m_defenseIncrease' is never assigned to, and will always have its default value 0
+25: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(28,22): warning CS0649: Field 'Page.m_pageHPBoost' is never assigned to, and will always have its default value null
+26: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(38,20): warning CS0649: Field 'CombatMenuUIHandler.m_fantasySprite' is never assigned to, and will always have its default value null
+27: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(40,18): warning CS0649: Field 'DungeonMaster.m_pagePrefab' is never assigned to, and will always have its default value null
+28: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(31,22): warning CS0649: Field 'Page.m_pageAttackBoost' is never assigned to, and will always have its default value null
+29: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(68,20): warning CS0649: Field 'CharacterSelectUIHandler.m_fantasyButton' is never assigned to, and will always have its default value null
+30: Assets\Code\Scripts\Game\World\MapManager.cs(46,24): warning CS0649: Field 'MapManager.m_emptyRoomPrefab' is never assigned to, and will always have its default value null
+31: Assets\Code\Scripts\Core\Input\CombatSummaryUIHandler.cs(13,24): warning CS0649: Field 'CombatSummaryUIHandler.m_pageScrollRect' is never assigned to, and will always have its default value null
+32: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(50,26): warning CS0649: Field 'CharacterSelectUIHandler.m_horrorEntity' is never assigned to, and will always have its default value null
+33: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageHPBoost.cs(9,17): warning CS0649: Field 'PageHPBoost.m_HPIncrease' is never assigned to, and will always have its default value 0
+34: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(64,22): warning CS0649: Field 'DungeonMaster.m_pageAttack' is never assigned to, and will always have its default value null
+35: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(32,20): warning CS0649: Field 'CombatMenuUIHandler.m_comicSprite' is never assigned to, and will always have its default value null
+36: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(76,22): warning CS0649: Field 'DungeonMaster.m_pageSpeedBoost' is never assigned to, and will always have its default value null
+37: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(24,19): warning CS0649: Field 'CombatMenuUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+38: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(18,10): warning CS0649: Field 'TutorialUIHandler.m_titleText' is never assigned to, and will always have its default value null
+39: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(27,19): warning CS0649: Field 'CombatMenuUIHandler.m_buttonHeight' is never assigned to, and will always have its default value 0
+40: Assets\Code\Scripts\Game\Player\Inventory\TestInventoryCreator.cs(7,23): warning CS0649: Field 'TestInventoryCreator.m_inventoryPrefab' is never assigned to, and will always have its default value null
+41: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(55,24): warning CS0649: Field 'Page.m_singleTarget' is never assigned to, and will always have its default value null
+42: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(67,22): warning CS0649: Field 'DungeonMaster.m_pageHPBoost' is never assigned to, and will always have its default value null
+43: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(37,22): warning CS0649: Field 'Page.m_pageSpeedBoost' is never assigned to, and will always have its default value null
+44: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(13,24): warning CS0649: Field 'ShopUIHandler.m_shopPagesRect' is never assigned to, and will always have its default value null
+45: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(15,10): warning CS0649: Field 'TutorialUIHandler.m_tutorialText' is never assigned to, and will always have its default value null
+46: Assets\Code\Scripts\Game\World\SoundEffectsManager.cs(15,25): warning CS0649: Field 'SoundEffectsManager.m_source' is never assigned to, and will always have its default value null
+47: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageSpeedBoost.cs(8,17): warning CS0649: Field 'PageSpeedBoost.m_speedIncrease' is never assigned to, and will always have its default value 0
+48: Assets\Code\Scripts\Game\Player\PlayerEntity.cs(137,29): warning CS0649: Field 'PlayerEntity.m_inventoryPrefab' is never assigned to, and will always have its default value null
+49: Assets\Code\Scripts\Game\Logic\TutorialGame.cs(11,23): warning CS0649: Field 'TutorialGame.m_tutorialUIPrefab' is never assigned to, and will always have its default value null
+50: Assets\Code\Scripts\Game\World\CameraManager.cs(7,20): warning CS0649: Field 'CameraManager.m_combatCamera' is never assigned to, and will always have its default value null
+51: Assets\Code\Scripts\Core\Input\TutorialUIHandler.cs(9,12): warning CS0649: Field 'TutorialUIHandler.m_nextButton' is never assigned to, and will always have its default value null
+52: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(35,20): warning CS0649: Field 'CombatMenuUIHandler.m_scifiSprite' is never assigned to, and will always have its default value null
+53: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(29,19): warning CS0649: Field 'CombatMenuUIHandler.m_buttonWidth' is never assigned to, and will always have its default value 0
+54: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(65,20): warning CS0649: Field 'CharacterSelectUIHandler.m_scifiButton' is never assigned to, and will always have its default value null
+55: Assets\Code\Scripts\Game\World\MusicManager.cs(29,23): warning CS0649: Field 'MusicManager.m_horrorRoomMusic' is never assigned to, and will always have its default value null
+56: Assets\Code\Scripts\Game\CombatManager\StandardCombatInstance.cs(10,23): warning CS0649: Field 'StandardCombatInstance.m_combatMusic' is never assigned to, and will always have its default value null
+57: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(21,12): warning CS0649: Field 'OverworldUIHandler.m_nextFloorButton' is never assigned to, and will always have its default value null
+58: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(59,20): warning CS0649: Field 'CharacterSelectUIHandler.m_comicBookButton' is never assigned to, and will always have its default value null
+59: Assets\Code\Scripts\Game\World\MusicManager.cs(31,23): warning CS0649: Field 'MusicManager.m_scifiRoomMusic' is never assigned to, and will always have its default value null
+60: Assets\Code\Scripts\Game\World\CameraManager.cs(10,20): warning CS0649: Field 'CameraManager.m_overworldCamera' is never assigned to, and will always have its default value null
+61: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(62,20): warning CS0649: Field 'CharacterSelectUIHandler.m_horrorButton' is never assigned to, and will always have its default value null
+62: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(16,24): warning CS0649: Field 'ShopUIHandler.m_playerTradePagesRect' is never assigned to, and will always have its default value null
+63: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(73,22): warning CS0649: Field 'DungeonMaster.m_pageDefenseBoost' is never assigned to, and will always have its default value null
+64: Assets\Code\Scripts\Core\Input\CombatSummaryUIHandler.cs(16,20): warning CS0649: Field 'CombatSummaryUIHandler.m_submitButton' is never assigned to, and will always have its default value null
+65: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(10,24): warning CS0649: Field 'ShopUIHandler.m_playerInventoryPagesRect' is never assigned to, and will always have its default value null
+66: Assets\Code\Scripts\Core\Input\DirectionButton.cs(8,28): warning CS0649: Field 'DirectionButton.m_buttonDirection' is never assigned to, and will always have its default value
+67: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(56,26): warning CS0649: Field 'CharacterSelectUIHandler.m_fantasyEntity' is never assigned to, and will always have its default value null
+68: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(44,27): warning CS0649: Field 'CombatMenuUIHandler.m_playerTargetButtons' is never assigned to, and will always have its default value null
+69: Assets\Code\Scripts\Game\World\Rooms\ShopRoom.cs(14,23): warning CS0649: Field 'ShopRoom.m_shopUI' is never assigned to, and will always have its default value null
+70: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(15,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_buttonWidth' is never assigned to, and will always have its default value 0
+71: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(47,26): warning CS0649: Field 'CharacterSelectUIHandler.m_comicBookEntity' is never assigned to, and will always have its default value null
+72: Assets\Code\Scripts\Core\Input\ShopUIHandler.cs(20,27): warning CS0649: Field 'ShopUIHandler.m_selectedShopPageRect' is never assigned to, and will always have its default value null
+73: Assets\Code\Scripts\Game\CombatManager\PlayerMoves\PageAttackBoost.cs(8,17): warning CS0649: Field 'PageAttackBoost.m_attackIncrease' is never assigned to, and will always have its default value 0
+74: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(70,22): warning CS0649: Field 'DungeonMaster.m_pageAttackBoost' is never assigned to, and will always have its default value null
+75: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(18,12): warning CS0649: Field 'OverworldUIHandler.m_westButton' is never assigned to, and will always have its default value null
+76: Assets\Code\Scripts\Core\Input\PageForRoomUIHandler.cs(8,19): warning CS0649: Field 'PageForRoomUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+77: Assets\Code\Scripts\Game\World\MapManager.cs(43,24): warning CS0649: Field 'MapManager.m_shopRoomPrefab' is never assigned to, and will always have its default value null
+78: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(47,27): warning CS0649: Field 'CombatMenuUIHandler.m_enemyTargetButtons' is never assigned to, and will always have its default value null
+79: Assets\Code\Scripts\Game\World\MusicManager.cs(25,23): warning CS0649: Field 'MusicManager.m_fantasyRoomMusic' is never assigned to, and will always have its default value null
+80: Assets\Code\Scripts\Game\World\MusicManager.cs(23,23): warning CS0649: Field 'MusicManager.m_startRoomMusic' is never assigned to, and will always have its default value null
+81: Assets\Code\Scripts\Core\Input\DeckManagementUIHandler.cs(12,19): warning CS0649: Field 'DeckManagementUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+82: Assets\Code\Scripts\Game\JoinCreateGame\JoinCreateGameStartup.cs(8,35): warning CS0649: Field 'JoinCreateGameStartup.m_joinCreateGamePrefab' is never assigned to, and will always have its default value null
+83: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(15,12): warning CS0649: Field 'OverworldUIHandler.m_southButton' is never assigned to, and will always have its default value null
+84: Assets\Code\Scripts\Game\CombatManager\EnemyPositionNode.cs(7,17): warning CS0649: Field 'EnemyPositionNode.m_positionId' is never assigned to, and will always have its default value 0
+85: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(12,12): warning CS0649: Field 'OverworldUIHandler.m_eastButton' is never assigned to, and will always have its default value null
+86: Assets\Code\Scripts\Game\World\MusicManager.cs(27,23): warning CS0649: Field 'MusicManager.m_comicRoomMusic' is never assigned to, and will always have its default value null
+87: Assets\Code\Scripts\Game\Player\Inventory\Page.cs(34,22): warning CS0649: Field 'Page.m_pageDefenseBoost' is never assigned to, and will always have its default value null
+88: Assets\Code\Scripts\Game\CombatManager\StandardCombatInstance.cs(11,23): warning CS0649: Field 'StandardCombatInstance.m_previousMusic' is never assigned to, and will always have its default value null
+89: Assets\Code\Scripts\Game\CombatManager\PlayerPositionNode.cs(7,17): warning CS0649: Field 'PlayerPositionNode.m_positionId' is never assigned to, and will always have its default value 0
+90: Assets\Code\Scripts\Core\Input\DeckManagementUIHandler.cs(15,19): warning CS0649: Field 'DeckManagementUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+91: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(41,20): warning CS0649: Field 'CombatMenuUIHandler.m_horrorSprite' is never assigned to, and will always have its default value null
+92: Assets\Code\Scripts\Game\World\MusicManager.cs(35,23): warning CS0649: Field 'MusicManager.m_combatMusic' is never assigned to, and will always have its default value null
+93: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(13,19): warning CS0649: Field 'JoinGameMenuUIHandler.m_gridYPadding' is never assigned to, and will always have its default value 0
+94: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(53,26): warning CS0649: Field 'CharacterSelectUIHandler.m_scifiEntity' is never assigned to, and will always have its default value null
+95: Assets\Code\Scripts\Core\Input\OverworldUIHandler.cs(9,12): warning CS0649: Field 'OverworldUIHandler.m_northButton' is never assigned to, and will always have its default value null
+96: Assets\Code\Scripts\Game\World\MapManager.cs(34,24): warning CS0649: Field 'MapManager.m_combatRoomPrefab' is never assigned to, and will always have its default value null
+97: Assets\Code\Scripts\Core\Input\JoinGameMenuUIHandler.cs(19,28): warning CS0649: Field 'JoinGameMenuUIHandler.m_gameInfoButton' is never assigned to, and will always have its default value null
+98: Assets\Code\Scripts\Game\World\MapManager.cs(37,24): warning CS0649: Field 'MapManager.m_startRoomPrefab' is never assigned to, and will always have its default value null
+99: Assets\Code\Scripts\Core\Input\CharacterSelectUIHandler.cs(71,20): warning CS0649: Field 'CharacterSelectUIHandler.m_submitButton' is never assigned to, and will always have its default value null
+100: Assets\Code\Scripts\Game\UI\CombatMenuUIHandler.cs(21,19): warning CS0649: Field 'CombatMenuUIHandler.m_gridXPadding' is never assigned to, and will always have its default value 0
+101: Assets\Code\Scripts\Game\CombatManager\EnemyMoves\HPDrain.cs(10,18): warning CS0414: The field 'HPDrain.m_isMoveStarted' is assigned but its value is never used
+102: Assets\Code\Scripts\Core\Movement\NetworkMover.cs(21,19): warning CS0414: The field 'NetworkMover.m_rotateSpeed' is assigned but its value is never used
+103: Assets\AnimatorTestScript.cs(8,17): warning CS0414: The field 'AnimatorTestScript.m_trigger' is assigned but its value is never used
+104: Assets\Code\Scripts\Game\CombatManager\NetThinkState.cs(9,18): warning CS0414: The field 'NetThinkState.m_hasCombatManager' is assigned but its value is never used
+105: Assets\Code\Scripts\Game\Dungeon\DungeonMaster.cs(46,19): warning CS0414: The field 'DungeonMaster.m_isPageSupportProbability' is assigned but its value is never used
+106: Assets\AnimatorTestScript.cs(9,18): warning CS0414: The field 'AnimatorTestScript.m_isCombatStarted' is assigned but its value is never used
+107: Assets\Code\Scripts\Game\World\CharacterAnimator.cs(7,19): warning CS0414: The field 'CharacterAnimator.m_speed' is assigned but its value is never used
+108: Assets\Code\Scripts\Game\CombatManager\NetWinState.cs(7,18): warning CS0414: The field 'NetWinState.m_isClientReady' is assigned but its value is never used
+109: Assets\Code\Scripts\Game\CombatManager\StatsManager.cs(8,26): warning CS0414: The field 'StatsManager.m_negativeSTABBonus' is assigned but its value is never used
+110: Assets\Code\Scripts\Core\Assets\ResourceAsset.cs(20,37): warning CS0414: The field 'ResourceAsset.m_editorAsset' is assigned but its value is never used
+111: Assets\Code\Scripts\Game\World\PlayerWorldPawn.cs(18,17): warning CS0414: The field 'PlayerWorldPawn.m_playerNum' is assigned but its value is never used
+112: Assets\Code\Scripts\Game\CombatManager\ExecuteState.cs(8,18): warning CS0414: The field 'ExecuteState.m_isTurnComplete' is assigned but its value is never used
+113: Assets\Code\Scripts\Game\Player\StorybookPlayerMover.cs(23,18): warning CS0414: The field 'StorybookPlayerMover.m_isInCombat' is assigned but its value is never used
+114: Assets\Code\Scripts\Game\World\PlayerWorldPawn.cs(19,19): warning CS0414: The field 'PlayerWorldPawn.m_playerSpeed' is assigned but its value is never used
+115: Assets\Code\Scripts\Game\CombatManager\NetExecuteState.cs(13,18): warning CS0414: The field 'NetExecuteState.m_isClientReady' is assigned but its value is never used
+116: Assets\Code\Scripts\Game\CombatManager\ExecuteState.cs(10,17): warning CS0414: The field 'ExecuteState.m_trigger' is assigned but its value is never used
+117: Assets\Code\Scripts\Game\CombatManager\ThinkState.cs(8,17): warning CS0414: The field 'ThinkState.m_trigger' is assigned but its value is never used
+118: Assets\Code\Scripts\Game\World\GameCamera.cs(9,18): warning CS0414: The field 'GameCamera.traveling' is assigned but its value is never used
+119: Assets\Code\Scripts\Game\Player\StorybookPlayerMover.cs(24,18): warning CS0414: The field 'StorybookPlayerMover.m_isMenuOpen' is assigned but its value is never used
+120: Assets\Code\Scripts\Game\Player\PlayerEntity.cs(131,17): warning CS0414: The field 'PlayerEntity.m_luck' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Elapsed time: 0.19 sec
+
+- pdb2mdb.exe output:
+
+********************************************************************************
+*                     Thursday, March 24, 2016 6:51:09 PM                      *
+********************************************************************************
+smcs.exe version: 1.5.3.0
+Platform: Windows
+Target assembly: Assembly-CSharp-Editor.dll
+Project directory: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook
+Unity directory: C:/Program Files/Unity/Editor/Data
+Compiler: Version6Microsoft
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/csc.exe
+Arguments: -nostdlib+ -noconfig -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-fcd29b4957904c045834192b2de110c0
+Exit code: 0
+Elapsed time: 0.61 sec
+
+- Compiler output:
+0: Microsoft (R) Visual C# Compiler version 1.0.0.50618
+1: Copyright (C) Microsoft Corporation. All rights reserved.
+
+- Compiler errors:
+0: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(44,9): warning CS0618: 'EditorApplication.SaveCurrentSceneIfUserWantsTo()' is obsolete: 'Use EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo'
+1: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(93,13): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+2: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(103,45): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+3: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonConverter.cs(103,17): warning CS0618: 'EditorApplication.SaveScene(string)' is obsolete: 'Use EditorSceneManager.SaveScene'
+4: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewInspector.cs(152,9): warning CS0618: 'EditorGUIUtility.LookLikeControls()' is obsolete: 'LookLikeControls and LookLikeInspector modes are deprecated. Use EditorGUIUtility.labelWidth and EditorGUIUtility.fieldWidth to control label and field widths.'
+5: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(48,28): warning CS0618: 'Application.loadedLevelName' is obsolete: 'Use SceneManager to determine what scenes have been loaded'
+6: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(50,64): warning CS0618: 'EditorApplication.currentScene' is obsolete: 'Use EditorSceneManager to see which scenes are currently loaded'
+7: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(180,13): warning CS0618: 'EditorApplication.OpenScene(string)' is obsolete: 'Use EditorSceneManager.OpenScene'
+8: Assets\Code\Photon Unity Networking\Editor\PhotonNetwork\PhotonViewHandler.cs(184,13): warning CS0618: 'EditorApplication.SaveScene()' is obsolete: 'Use EditorSceneManager.SaveScene'
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\owner\Documents\StorybookGame\UnityProject\Storybook\Roslyn/pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-Editor.dll
+Elapsed time: 0.14 sec
+
+- pdb2mdb.exe output:
+

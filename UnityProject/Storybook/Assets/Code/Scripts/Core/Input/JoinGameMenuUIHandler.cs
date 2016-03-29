@@ -46,7 +46,8 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
             GameInfoButton lobbyButton = Instantiate(m_gameInfoButton);
             lobbyButton.GetComponent<Text>().text = gameInfo;
             // set position in content
-            lobbyButton.transform.SetParent(gamesContent, false);
+            
+            lobbyButton.transform.SetParent(gamesContent.transform, false);
             //m_availGamesText.text += game.name + " " + game.playerCount + "/" + game.maxPlayers + "\n";
         }
         /*

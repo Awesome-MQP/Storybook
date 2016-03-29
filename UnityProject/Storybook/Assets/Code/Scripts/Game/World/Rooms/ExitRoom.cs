@@ -33,7 +33,7 @@ public class ExitRoom : RoomObject
     {
         if (!(mover is BasePlayerMover))
             return;
-
+        /*
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();

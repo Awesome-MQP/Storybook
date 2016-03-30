@@ -86,8 +86,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
 
     public virtual void Construct(RoomObject room)
     {
-        m_currentState = StateEnterRoom;
-        m_netState = NetState.MovingBetweenRooms;
+        m_currentState = StateWaitingForInput;
 
         SpawnInRoom(room);
     }

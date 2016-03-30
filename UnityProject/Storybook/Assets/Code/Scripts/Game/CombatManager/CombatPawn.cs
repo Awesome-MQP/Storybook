@@ -321,7 +321,13 @@ public abstract class CombatPawn : Photon.PunBehaviour
     public void RPCSetMaxHealth(float newMaxHealth)
     {
         m_maxHealth = newMaxHealth;
-        //m_health = newMaxHealth;
+
+        // Only set health to max health if it is an enemy
+        // Players maintain their HP across rooms/floors
+        if (this is CombatAI)
+        {
+            m_health = newMaxHealth;
+        }
     }
 
 

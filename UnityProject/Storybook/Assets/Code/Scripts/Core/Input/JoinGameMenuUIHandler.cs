@@ -6,6 +6,7 @@ using System;
 
 public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
 
+    [SerializeField]
     private ScrollRect m_availGamesRect;
     [SerializeField]
     private float m_gridXPadding;
@@ -18,19 +19,20 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
     [SerializeField]
     private GameInfoButton m_gameInfoButton;
 
+    private ArrayList games = new ArrayList();
+
     private Text m_availGamesText;
 
     public void Start()
     {
         //_setAvailableGamesText();
-        _setAvailableGamesScrollRect();
+        //_setAvailableGamesScrollRect();
     }
 
     public void Update()
     {
         // Populate the available games list
         //m_availGamesText.text = "";
-        RectTransform gamesContent = m_availGamesRect.content;
         // empty the content first
         /*
         foreach(Transform child in gamesContent)
@@ -42,12 +44,26 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
         // Now load all 
         foreach(RoomInfo game in PhotonNetwork.GetRoomList())
         {
-            String gameInfo = game.name + " | Players in lobby: " + game.playerCount + " / " + game.maxPlayers;
-            GameInfoButton lobbyButton = Instantiate(m_gameInfoButton);
-            lobbyButton.GetComponent<Text>().text = gameInfo;
+            // If the game list already contains this lobby, merely update the number of players
+            if(games.Contains(game.name))
+            {
+                GameInfoButton existingGame = m_availGamesRect.content.Find(game.name).GetComponent<GameInfoButton>();
+                existingGame.GetComponentInChildren<Text>().text = game.name + " | Players in lobby: " + game.playerCount + " / " + game.maxPlayers;
+            }
+            else // make a new lobby button
+            {
+                games.Add(game.name);
+                String gameInfo = game.name + " | Players in lobby: " + game.playerCount + " / " + game.maxPlayers;
+                Debug.Log(gameInfo);
+                GameInfoButton lobbyButton = _instantiateGameInfoButton(gameInfo, game.name);
+                lobbyButton.gameObject.name = game.name;
+                lobbyButton.transform.SetParent(m_availGamesRect.content.transform, false);
+            }
+
+            //GameInfoButton lobbyButton = Instantiate(m_gameInfoButton);
+            //lobbyButton.GetComponent<Text>().text = gameInfo;
             // set position in content
             
-            lobbyButton.transform.SetParent(gamesContent.transform, false);
             //m_availGamesText.text += game.name + " " + game.playerCount + "/" + game.maxPlayers + "\n";
         }
         /*
@@ -56,6 +72,16 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
             m_availGamesText.text = "No games found!";
         }
         */
+    }
+
+    private GameInfoButton _instantiateGameInfoButton(String gameInfo, String gameName)
+    {
+        GameInfoButton button = Instantiate(m_gameInfoButton) as GameInfoButton;
+
+        button.LobbyName = gameName;
+        button.GetComponentInChildren<Text>().text = gameInfo;
+
+        return button;
     }
 
     public void OnLobbyButtonClick(String lobbyname)

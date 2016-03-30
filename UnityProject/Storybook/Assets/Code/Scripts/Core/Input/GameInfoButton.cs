@@ -13,7 +13,12 @@ public class GameInfoButton : MonoBehaviour {
 
     void Start()
     {
-        _setLobbyName();
+        //_setLobbyName();
+    }
+
+    void InitializeGameInfoButton(string gameInfo)
+    {
+
     }
 
     private void _setLobbyName()

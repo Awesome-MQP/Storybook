@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
+using Object = UnityEngine.Object;
 
 //[RequireComponent(typeof (Animator))]
 public class StorybookPlayerMover : BasePlayerMover,
@@ -115,7 +117,6 @@ public class StorybookPlayerMover : BasePlayerMover,
             pawn.gameObject.SetActive(true);
         }
         TransitionFromCombat();
-        OpenDeckManagementMenu();
     }
 
     /// <summary>
@@ -133,6 +134,7 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// <summary>
     /// Opens the menu for managing the player's deck
     /// </summary>
+    [Obsolete("Deck manager is opened in rooms now.", true)]
     public void OpenDeckManagementMenu()
     {
         UnityEngine.Object loadedObject = Resources.Load("UI/DeckManagementCanvas");

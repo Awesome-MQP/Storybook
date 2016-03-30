@@ -2277,21 +2277,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             return;
         }
 
-        if (!photonNetview.AllowFullCommunication)
-        {
-            //If we own the object and the sender is not the controller then ignore
-            if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
-            {
-                Debug.LogErrorFormat("Error: Sender from non controller object is illegal on {0} with command {1}.", photonNetview, inMethodName);
-                return;
-            }
+        bool shouldIgnoreIfNotFullCommunication = false;
 
-            //If we do not own the object and the sender was not the owner then ignore
-            if (!photonNetview.isMine && sender != photonNetview.owner)
-            {
-                Debug.LogError("Error: Sender from non owner object is illegal on {0}.", photonNetview);
-                return;
-            }
+
+        //If we own the object and the sender is not the controller then ignore
+        if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
+        {
+            shouldIgnoreIfNotFullCommunication = true;
+        }
+
+        //If we do not own the object and the sender was not the owner then ignore
+        if (!photonNetview.isMine && sender != photonNetview.owner)
+        {
+            shouldIgnoreIfNotFullCommunication = true;
         }
 
         // Get method name
@@ -2374,8 +2372,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             for (int index = 0; index < cachedRPCMethods.Count; index++)
             {
                 MethodInfo mInfo = cachedRPCMethods[index];
+
                 if (mInfo.Name.Equals(inMethodName))
                 {
+                    PunRPC methodNetInfo = (PunRPC)mInfo.GetCustomAttributes(typeof(PunRPC), true)[0];
+                    if (shouldIgnoreIfNotFullCommunication && methodNetInfo.AllowFullCommunication)
+                        continue;
+
                     foundMethods++;
                     ParameterInfo[] pArray = mInfo.GetParameters();
                     if (pArray.Length == argTypes.Length)
@@ -3260,7 +3263,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         bool isMine = view.isMine;
         bool isController = view.isController;
-        bool allowFullCom = view.AllowFullCommunication;
+        bool allowFullCom = true;
         PhotonPlayer owner = view.owner;
 
         List<int> playerIds = new List<int>(players.Length);

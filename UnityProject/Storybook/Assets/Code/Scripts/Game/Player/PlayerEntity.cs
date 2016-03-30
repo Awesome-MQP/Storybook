@@ -140,7 +140,7 @@ public class PlayerEntity : PlayerObject
 
     public void UpdateHitPoints(int newHitPoints)
     {
-        m_hitPoints = newHitPoints;
+        HitPoints = newHitPoints;
     }
 
     public void SetGenre(Genre playerGenre)

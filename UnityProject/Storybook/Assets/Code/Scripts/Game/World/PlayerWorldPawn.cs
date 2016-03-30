@@ -29,7 +29,10 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
         {
             Assert.IsTrue(ShouldBeChanging);
             m_isIdle = value;
-            _setAnimatorToIdle();
+            if (value)
+            {
+                _setAnimatorToIdle();
+            }
             PropertyChanged();
         }
     }
@@ -42,7 +45,10 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
         {
             Assert.IsTrue(ShouldBeChanging);
             m_isWalking = value;
-            _setAnimatorToWalking();
+            if (value)
+            {
+                _setAnimatorToWalking();
+            }
             PropertyChanged();
         }
     }
@@ -50,6 +56,9 @@ public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
     protected override void Awake()
     {
         m_animator = GetComponent<Animator>();
+
+        IsIdle = true;
+        IsWalking = false;
 
         base.Awake();
     }

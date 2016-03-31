@@ -12,7 +12,7 @@ public class MatchMaker : Photon.PunBehaviour {
     {
         // TODO
         //PhotonNetwork.offlineMode = true;
-        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
+        PhotonNetwork.ConnectUsingSettings("1.0");
         ScenePhotonView = this.GetComponent<PhotonView>();
     }
 

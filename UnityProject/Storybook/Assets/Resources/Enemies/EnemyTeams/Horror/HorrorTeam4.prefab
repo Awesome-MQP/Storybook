@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbd1d4e0f3684e46abf582374b6c096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 147
   m_pawnsToSpawn:
   - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
   - {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68, type: 2}

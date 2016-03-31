@@ -628,7 +628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fdf0767940590740a31f602dfa75cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
   m_greenPageButton: {fileID: 11400312, guid: e1162113fbf484f449e57c2dab3b6a95, type: 2}
   m_redPageButton: {fileID: 11461894, guid: 44276644552233546a8847c18ce3da39, type: 2}
   m_yellowPageButton: {fileID: 11479324, guid: fbcccb471e717284d9ed46a1fb5ffb05, type: 2}
@@ -760,7 +759,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Page you choose will determine what's in the next room...
+  m_Text: Choose the next room's story...
 --- !u!114 &11461376
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -812,7 +811,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11459772}
   m_HandleRect: {fileID: 22481942}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1041,6 +1040,7 @@ Canvas:
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1093,8 +1093,8 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: 223}
-  m_SizeDelta: {x: 787, y: 53}
+  m_AnchoredPosition: {x: -4, y: 223}
+  m_SizeDelta: {x: 434, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22435202
 RectTransform:

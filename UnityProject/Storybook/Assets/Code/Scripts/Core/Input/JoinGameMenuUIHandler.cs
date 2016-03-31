@@ -166,7 +166,7 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
             PhotonNetwork.room.name = searchText;
         }
 
-        SceneManager.LoadScene("PreGameLobby");
+        SceneFading.Instance().LoadScene("PreGameLobby");
     }
 
     private void _setAvailableGamesScrollRect()

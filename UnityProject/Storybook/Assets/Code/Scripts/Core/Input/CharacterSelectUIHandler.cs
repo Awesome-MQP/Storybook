@@ -83,25 +83,25 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
 
     public void SelectComicBook()
     {
-        StartCoroutine(_AnimateComicBook());
+        photonView.RPC(nameof(AnimateComicBookRPC), PhotonTargets.All);
         photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.GraphicNovel);
     }
 
     public void SelectHorror()
     {
-        StartCoroutine(_AnimateHorror());
+        photonView.RPC(nameof(AnimateHorrorRPC), PhotonTargets.All);
         photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.Horror);
     }
 
     public void SelectSciFi()
     {
-        StartCoroutine(_AnimateSciFi());
+        photonView.RPC(nameof(AnimateSciFiRPC), PhotonTargets.All);
         photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.SciFi);
     }
 
     public void SelectFantasy()
     {
-        StartCoroutine(_AnimateFantasy());
+        photonView.RPC(nameof(AnimateFantasyRPC), PhotonTargets.All);
         photonView.RPC(nameof(SelectCharacter), PhotonTargets.All, PhotonNetwork.player, Genre.Fantasy);
     }
 
@@ -184,12 +184,39 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
         m_playerToCharacter.Add(player, Genre.None);
     }
 
+    [PunRPC]
+    protected void AnimateComicBookRPC()
+    {
+        StartCoroutine(_AnimateComicBook());
+    }
+
+    [PunRPC]
+    protected void AnimateHorrorRPC()
+    {
+        StartCoroutine(_AnimateHorror());
+    }
+
+    [PunRPC]
+    protected void AnimateSciFiRPC()
+    {
+        StartCoroutine(_AnimateSciFi());
+    }
+
+    [PunRPC]
+    protected void AnimateFantasyRPC()
+    {
+        StartCoroutine(_AnimateFantasy());
+    }
+
     private IEnumerator _AnimateComicBook()
     {
+        m_comicBookModel = GameObject.Find("ComicCharacter").GetComponent<Animator>();
+
         m_comicBookModel.SetBool("IdleToIdle", false);
         m_comicBookModel.SetBool("AttackToIdle", false);
         m_comicBookModel.SetBool("IdleToAttack", true);
         yield return new WaitForSeconds(0.3f);
+        Debug.Log("Animator clip info = " + m_comicBookModel.GetCurrentAnimatorClipInfo(0));
         float animationLength = m_comicBookModel.GetCurrentAnimatorClipInfo(0)[0].clip.length;
         yield return new WaitForSeconds(animationLength);
         m_comicBookModel.SetBool("IdleToIdle", true);
@@ -199,6 +226,8 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
 
     private IEnumerator _AnimateHorror()
     {
+        m_horrorModel = GameObject.Find("HorrorCharacter").GetComponent<Animator>();
+
         m_horrorModel.SetBool("IdleToIdle", false);
         m_horrorModel.SetBool("AttackToIdle", false);
         m_horrorModel.SetBool("IdleToAttack", true);
@@ -212,6 +241,8 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
 
     private IEnumerator _AnimateSciFi()
     {
+        m_scifiModel = GameObject.Find("SciFiCharacter").GetComponent<Animator>();
+
         m_scifiModel.SetBool("IdleToIdle", false);
         m_scifiModel.SetBool("AttackToIdle", false);
         m_scifiModel.SetBool("IdleToAttack", true);
@@ -225,6 +256,8 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
 
     private IEnumerator _AnimateFantasy()
     {
+        m_fantasyModel = GameObject.Find("FantasyCharacter").GetComponent<Animator>();
+
         m_fantasyModel.SetBool("IdleToIdle", false);
         m_fantasyModel.SetBool("AttackToIdle", false);
         m_fantasyModel.SetBool("IdleToAttack", true);

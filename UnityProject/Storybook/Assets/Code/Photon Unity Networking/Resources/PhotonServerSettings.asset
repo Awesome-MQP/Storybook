@@ -96,4 +96,9 @@ MonoBehaviour:
   - DemoCompleteTutorial
   - ShopTutorial
   - CreateCharacterSelectTutorial
+  - AnimateComicBookRPC
+  - AnimateFantasyRPC
+  - AnimateHorrorRPC
+  - AnimateSciFiRPC
+  - InitializeAnimators
   DisableAutoOpenWizard: 1

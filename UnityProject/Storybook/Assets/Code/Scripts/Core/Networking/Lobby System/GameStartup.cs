@@ -5,7 +5,7 @@ public class GameStartup : Photon.PunBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        PhotonNetwork.ConnectUsingSettings(SystemInfo.deviceUniqueIdentifier);
+        PhotonNetwork.ConnectUsingSettings("1.0");
     }
 
     /// <summary>

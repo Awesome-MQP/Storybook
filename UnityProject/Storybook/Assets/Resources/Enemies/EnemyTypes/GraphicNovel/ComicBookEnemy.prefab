@@ -872,6 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3526893f3078b44d8d5925269489a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_componentId: 165
   m_maxHealth: 8
   m_health: 8
   m_speed: 4
@@ -882,7 +883,7 @@ MonoBehaviour:
   m_currentMana: 4
   m_manaPerTurn: 2
   m_enemyMoveList:
-  - {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e, type: 2}
+  - {fileID: 11490010, guid: 233d10fd90ff4a041aed83e6b50e2d54, type: 2}
   - {fileID: 11484758, guid: 2216a0f69be7de54294757b8a039c46d, type: 2}
 --- !u!114 &11449302
 MonoBehaviour:

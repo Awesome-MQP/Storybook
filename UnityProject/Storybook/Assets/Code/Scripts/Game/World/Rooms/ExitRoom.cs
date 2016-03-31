@@ -33,7 +33,7 @@ public class ExitRoom : RoomObject
     {
         if (!(mover is BasePlayerMover))
             return;
-        /*
+        
         if (!m_wonCombat)
         {
             _chooseEnemyTeam();
@@ -53,8 +53,8 @@ public class ExitRoom : RoomObject
         }
 
         m_musicManager.Fade(m_musicTracks[0], 5, true);
-        m_musicManager.MusicTracks = m_musicTracks;
-        */
+        //m_musicManager.MusicTracks = m_musicTracks;
+        
         EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnRoomMusicChange(RoomPageData.PageGenre);
     }
 
@@ -71,6 +71,7 @@ public class ExitRoom : RoomObject
         {
             //TODO: This code can be moved into the combat manager, seeing as it is the combats music.
             ResourceAsset playerTeam = GameManager.GetInstance<BaseStorybookGame>().DefaultPlayerTeam;
+            Debug.Log("Team = " + m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name);
             ResourceAsset enemyTeam = new ResourceAsset(m_roomEnemiesPrefabLoc + m_roomEnemies.gameObject.name, typeof(EnemyTeam));
 
             //m_musicManager.Fade(m_musicTracks[1], 5, true);

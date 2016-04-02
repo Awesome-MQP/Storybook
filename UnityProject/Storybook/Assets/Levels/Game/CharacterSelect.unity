@@ -209,6 +209,7 @@ MonoBehaviour:
     m_asset: UI/CharacterSelectUI
     m_baseTypeName: UnityEngine.Object
     m_editorAsset: Assets/Resources/UI/CharacterSelectUI.prefab
+  m_isTutorial: 0
 --- !u!4 &289824500
 Transform:
   m_ObjectHideFlags: 0
@@ -756,7 +757,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 464378, guid: 5b0f6f442b7e8e1438f7e90673ce5c72, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 11434938, guid: 5b0f6f442b7e8e1438f7e90673ce5c72, type: 2}
       propertyPath: viewIdField

@@ -23,29 +23,13 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
 
     private Text m_availGamesText;
 
-    public void Start()
-    {
-        //_setAvailableGamesText();
-        //_setAvailableGamesScrollRect();
-    }
-
     public void Update()
     {
-        // Populate the available games list
-        //m_availGamesText.text = "";
-        // empty the content first
-        /*
-        foreach(Transform child in gamesContent)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-        */
-
         // Now load all 
-        foreach(RoomInfo game in PhotonNetwork.GetRoomList())
+        foreach (RoomInfo game in PhotonNetwork.GetRoomList())
         {
             // If the game list already contains this lobby, merely update the number of players
-            if(games.Contains(game.name))
+            if (games.Contains(game.name))
             {
                 GameInfoButton existingGame = m_availGamesRect.content.Find(game.name).GetComponent<GameInfoButton>();
                 existingGame.GetComponentInChildren<Text>().text = game.name + " | Players in lobby: " + game.playerCount + " / " + game.maxPlayers;
@@ -59,19 +43,7 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
                 lobbyButton.gameObject.name = game.name;
                 lobbyButton.transform.SetParent(m_availGamesRect.content.transform, false);
             }
-
-            //GameInfoButton lobbyButton = Instantiate(m_gameInfoButton);
-            //lobbyButton.GetComponent<Text>().text = gameInfo;
-            // set position in content
-            
-            //m_availGamesText.text += game.name + " " + game.playerCount + "/" + game.maxPlayers + "\n";
         }
-        /*
-        if(PhotonNetwork.GetRoomList().Length == 0)
-        {
-            m_availGamesText.text = "No games found!";
-        }
-        */
     }
 
     private GameInfoButton _instantiateGameInfoButton(String gameInfo, String gameName)
@@ -167,6 +139,12 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
         }
 
         SceneFading.Instance().LoadScene("PreGameLobby");
+    }
+
+    public void ReturnToMainMenu()
+    {
+        //SceneFading.Instance().LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void _setAvailableGamesScrollRect()

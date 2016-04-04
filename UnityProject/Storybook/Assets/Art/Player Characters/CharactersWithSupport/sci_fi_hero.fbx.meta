@@ -76,7 +76,11 @@ ModelImporter:
     400066: Scifi:Mesh
     400068: Shoulders
     4300000: Scifi:Mesh
-    7400000: Take 001
+    7400000: Walk
+    7400002: Idle
+    7400004: Attack
+    7400006: Hurt
+    7400008: Support
     9500000: //RootNode
     13700000: Scifi:Mesh
   materials:
@@ -99,7 +103,497 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walk
+      takeName: Take 001
+      firstFrame: 6
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint13 1
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint9 1
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: nurbsCircle1
+        weight: 1
+      - path: nurbsCircle2
+        weight: 1
+      - path: nurbsCircle4
+        weight: 1
+      - path: nurbsCircle6
+        weight: 1
+      - path: nurbsCircle7
+        weight: 1
+      - path: nurbsCircle8
+        weight: 1
+      - path: nurbsCircle10
+        weight: 1
+      - path: nurbsCircle11
+        weight: 1
+      - path: Scifi:Mesh
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 36
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint13 1
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint9 1
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: nurbsCircle1
+        weight: 1
+      - path: nurbsCircle2
+        weight: 1
+      - path: nurbsCircle4
+        weight: 1
+      - path: nurbsCircle6
+        weight: 1
+      - path: nurbsCircle7
+        weight: 1
+      - path: nurbsCircle8
+        weight: 1
+      - path: nurbsCircle10
+        weight: 1
+      - path: nurbsCircle11
+        weight: 1
+      - path: Scifi:Mesh
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Attack
+      takeName: Take 001
+      firstFrame: 65
+      lastFrame: 110
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint13 1
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint9 1
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: nurbsCircle1
+        weight: 1
+      - path: nurbsCircle2
+        weight: 1
+      - path: nurbsCircle4
+        weight: 1
+      - path: nurbsCircle6
+        weight: 1
+      - path: nurbsCircle7
+        weight: 1
+      - path: nurbsCircle8
+        weight: 1
+      - path: nurbsCircle10
+        weight: 1
+      - path: nurbsCircle11
+        weight: 1
+      - path: Scifi:Mesh
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Hurt
+      takeName: Take 001
+      firstFrame: 111
+      lastFrame: 125
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint13 1
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint9 1
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: nurbsCircle1
+        weight: 1
+      - path: nurbsCircle2
+        weight: 1
+      - path: nurbsCircle4
+        weight: 1
+      - path: nurbsCircle6
+        weight: 1
+      - path: nurbsCircle7
+        weight: 1
+      - path: nurbsCircle8
+        weight: 1
+      - path: nurbsCircle10
+        weight: 1
+      - path: nurbsCircle11
+        weight: 1
+      - path: Scifi:Mesh
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Support
+      takeName: Take 001
+      firstFrame: 130
+      lastFrame: 170
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint13 1
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint9 1
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: nurbsCircle1
+        weight: 1
+      - path: nurbsCircle2
+        weight: 1
+      - path: nurbsCircle4
+        weight: 1
+      - path: nurbsCircle6
+        weight: 1
+      - path: nurbsCircle7
+        weight: 1
+      - path: nurbsCircle8
+        weight: 1
+      - path: nurbsCircle10
+        weight: 1
+      - path: nurbsCircle11
+        weight: 1
+      - path: Scifi:Mesh
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []

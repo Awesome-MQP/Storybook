@@ -22,15 +22,23 @@ public abstract class CombatMove : MonoBehaviour{
         float bufferTime = 0.5f;
         if (!m_isMoveStarted)
         {
-            playerAnimator.SetBool("IdleToIdle", false);
-            playerAnimator.SetBool("WalkToIdle", false);
-            playerAnimator.SetBool("AttackToIdle", false);
-            playerAnimator.SetBool("IdleToAttack", true);
+            // If the move is an attack, play the attack animation
+            if (IsMoveAttack)
+            {
+                _SetAnimatorToAttack(playerAnimator);   
+            }
+            // Otherwise play the support animation
+            else
+            {
+                _SetAnimatorToSupport(playerAnimator);
+            }
             m_isMoveStarted = true;
         }
+
         AnimatorClipInfo[] allClips = playerAnimator.GetCurrentAnimatorClipInfo(0);
         float clipLength = allClips[0].clip.length;
         float waitTime = clipLength;
+
         if (IsMoveEffectCompleted)
         {
             float longestHurtAnim = _longestHurtAnim();
@@ -39,7 +47,9 @@ public abstract class CombatMove : MonoBehaviour{
                 waitTime = longestHurtAnim;
             }
         }
+
         SetTimeSinceMoveStarted(TimeSinceMoveStarted + Time.deltaTime);
+
         if (TimeSinceMoveStarted >= 0.5f && !IsMoveEffectCompleted)
         {
             DoMoveEffect();
@@ -48,9 +58,7 @@ public abstract class CombatMove : MonoBehaviour{
         else if (TimeSinceMoveStarted >= waitTime + bufferTime)
         {
             Debug.Log("Page move is complete");
-            playerAnimator.SetBool("IdleToAttack", false);
-            playerAnimator.SetBool("AttackToIdle", true);
-            playerAnimator.SetBool("IdleToIdle", true);
+            _SetAnimatorToIdle(playerAnimator);
             SetIsMoveComplete(true);
             m_isMoveStarted = false;
             SetTimeSinceMoveStarted(0);
@@ -80,6 +88,42 @@ public abstract class CombatMove : MonoBehaviour{
         {
             pawn.SwitchToIdleAnim();
         }
+    }
+
+    /// <summary>
+    /// Sets the given player animator to play the attack animation
+    /// </summary>
+    /// <param name="playerAnimator">The animator to switch to the attack animation</param>
+    private void _SetAnimatorToAttack(Animator playerAnimator)
+    {
+        playerAnimator.SetBool("IdleToIdle", false);
+        playerAnimator.SetBool("WalkToIdle", false);
+        playerAnimator.SetBool("AttackToIdle", false);
+        playerAnimator.SetBool("IdleToAttack", true);
+    }
+
+    /// <summary>
+    /// Sets the given player animator to play the support animation
+    /// </summary>
+    /// <param name="playerAnimator">The animator to switch to the support animation</param>
+    private void _SetAnimatorToSupport(Animator playerAnimator)
+    {
+        playerAnimator.SetBool("IdleToIdle", false);
+        playerAnimator.SetBool("SupportToIdle", false);
+        playerAnimator.SetBool("IdleToSupport", true);
+    }
+
+    /// <summary>
+    /// Sets the given player animator to the idle animation
+    /// </summary>
+    /// <param name="playerAnimator">the animator to switch to the idle animation</param>
+    private void _SetAnimatorToIdle(Animator playerAnimator)
+    {
+        playerAnimator.SetBool("IdleToAttack", false);
+        playerAnimator.SetBool("IdleToSupport", false);
+        playerAnimator.SetBool("SupportToIdle", true);
+        playerAnimator.SetBool("AttackToIdle", true);
+        playerAnimator.SetBool("IdleToIdle", true);
     }
 
     /// <summary>

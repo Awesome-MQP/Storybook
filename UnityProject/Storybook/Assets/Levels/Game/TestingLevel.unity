@@ -175,7 +175,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_source: {fileID: 720761770}
-  m_clickSoundEffect: {fileID: 0}
+  m_clickSoundEffect: {fileID: 8300000, guid: 7a0fc14eb8b41d84d9212392640148af, type: 3}
+  m_damageSoundEffect: {fileID: 8300000, guid: ee319c0666f533e488c077a521280a36, type: 3}
+  m_noDamageHitSoundEffect: {fileID: 8300000, guid: 8fe72a7edc473884d906b284b5270bbf,
+    type: 3}
+  m_supportSoundEffect: {fileID: 8300000, guid: dd4965a48d1b61b46ae0544060f39256,
+    type: 3}
 --- !u!82 &720761770
 AudioSource:
   m_ObjectHideFlags: 0
@@ -346,7 +351,7 @@ MonoBehaviour:
   m_horrorRoomMusic: {fileID: 8300000, guid: 58b1888d8b86fda408dd3977630ddd44, type: 3}
   m_scifiRoomMusic: {fileID: 8300000, guid: 503079fc46fcc9745bc2ce3eb493af42, type: 3}
   m_shopRoomMusic: {fileID: 8300000, guid: af641ca2b175b534fb761fe89a573d67, type: 3}
-  m_combatMusic: {fileID: 8300000, guid: 592adf1700739fa4ba34cc3661c191fa, type: 3}
+  m_combatMusic: {fileID: 8300000, guid: b7693eb0640031546b6ec1cc3eb406e8, type: 3}
   m_fadeOutThreshold: 0.05
   m_fadeSpeed: 0.1
   m_musicVolume: 5

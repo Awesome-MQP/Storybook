@@ -104,6 +104,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         {
             dmgText.color = Color.red;
             dmgText.text = "-" + damageAmount.ToString() + "HP";
+            PlayDamageSound();
         }
         else if (damageAmount < 0)
         {
@@ -115,6 +116,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
             // no damage
             dmgText.color = new Color(255, 165, 0);
             dmgText.text = "No Dmg!";
+            PlayNoDamageSound();
         }
 
         // Deal damage to target
@@ -196,7 +198,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
-
+        PlaySupportSound();
     }
 
     /// <summary>
@@ -228,7 +230,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
                 break;
             }
         }
-
+        PlaySupportSound();
         EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
     }
 
@@ -247,7 +249,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
-
+        PlaySupportSound();
     }
 
     /// <summary>
@@ -265,7 +267,22 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
+        PlaySupportSound();
+    }
 
+    public void PlayDamageSound()
+    {
+        SoundEffectsManager.Instance.PlayDamageSound();
+    }
+
+    public void PlayNoDamageSound()
+    {
+        SoundEffectsManager.Instance.PlayHitNoDamageSound();
+    }
+
+    public void PlaySupportSound()
+    {
+        SoundEffectsManager.Instance.PlaySupportSound();
     }
 
     /// <summary>

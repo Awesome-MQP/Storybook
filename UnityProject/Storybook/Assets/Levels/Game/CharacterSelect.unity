@@ -324,6 +324,10 @@ Prefab:
       propertyPath: m_Name
       value: HorrorCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 13723086, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e5cd42d9cd36614183227d2f6dae1fd, type: 2}
     m_RemovedComponents:
     - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
@@ -712,6 +716,10 @@ Prefab:
       propertyPath: m_Name
       value: SciFiCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 13797668, guid: a8c0fe8ae61e9884ca0a425c53423bc0, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 61086f3f786a5e347a2fb8d43843ce6d, type: 2}
     m_RemovedComponents:
     - {fileID: 11492892, guid: a8c0fe8ae61e9884ca0a425c53423bc0, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a8c0fe8ae61e9884ca0a425c53423bc0, type: 2}

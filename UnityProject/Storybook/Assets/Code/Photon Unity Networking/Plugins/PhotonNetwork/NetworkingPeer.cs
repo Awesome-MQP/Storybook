@@ -2376,7 +2376,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 if (mInfo.Name.Equals(inMethodName))
                 {
                     PunRPC methodNetInfo = (PunRPC)mInfo.GetCustomAttributes(typeof(PunRPC), true)[0];
-                    if (shouldIgnoreIfNotFullCommunication && !methodNetInfo.AllowFullCommunication && false)
+                    if (shouldIgnoreIfNotFullCommunication && methodNetInfo.AllowFullCommunication)
                         continue;
 
                     foundMethods++;

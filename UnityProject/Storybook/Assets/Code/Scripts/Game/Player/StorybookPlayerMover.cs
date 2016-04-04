@@ -1,13 +1,12 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
-using Object = UnityEngine.Object;
 
 //[RequireComponent(typeof (Animator))]
 public class StorybookPlayerMover : BasePlayerMover,
     PageForRoomEventDispatcher.IPageForRoomEventListener,
+    DeckManagementEventDispatcher.IDeckManagementEventListener,
     OverworldEventDispatcher.IOverworldEventListener, 
     RoomEventEventDispatcher.IRoomEventListener,
     IPlayerRoomEventListener
@@ -82,6 +81,8 @@ public class StorybookPlayerMover : BasePlayerMover,
         EventDispatcher.GetDispatcher<OverworldEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().RemoveListener(this);
         EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>().RemoveListener(this);
+
+        Debug.Log("Mover destroyed");
     }
 
     /// <summary>
@@ -114,6 +115,7 @@ public class StorybookPlayerMover : BasePlayerMover,
             pawn.gameObject.SetActive(true);
         }
         TransitionFromCombat();
+        OpenDeckManagementMenu();
     }
 
     /// <summary>
@@ -131,7 +133,6 @@ public class StorybookPlayerMover : BasePlayerMover,
     /// <summary>
     /// Opens the menu for managing the player's deck
     /// </summary>
-    [Obsolete("Deck manager is opened in rooms now.", true)]
     public void OpenDeckManagementMenu()
     {
         UnityEngine.Object loadedObject = Resources.Load("UI/DeckManagementCanvas");
@@ -206,6 +207,15 @@ public class StorybookPlayerMover : BasePlayerMover,
         {
             pawn.SwitchCharacterToIdle();
         }
+    }
+
+    /// <summary>
+    /// Called by the DeckManagement menu when the finish button is pressed
+    /// Opens the OverworldMenu
+    /// </summary>
+    public void OnDeckManagementClosed()
+    {
+        OpenOverworldMenu();
     }
 
     public void OnRoomCleared()
@@ -285,6 +295,7 @@ public class StorybookPlayerMover : BasePlayerMover,
 
     public void OnPreRoomEvent(BasePlayerMover mover, RoomObject room)
     {
+        Debug.Log("On Pre-Room Event called");
         _playIdleAnimations();
     }
 

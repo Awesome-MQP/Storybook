@@ -231,7 +231,12 @@ public abstract class CombatPawn : Photon.PunBehaviour
             }
         }
         PlaySupportSound();
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
+
+        // Only send out the event if it is a player that is gaining health
+        if (this is CombatPlayer)
+        {
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
+        }
     }
 
     /// <summary>

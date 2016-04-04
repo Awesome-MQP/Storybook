@@ -44,7 +44,7 @@ public class ExitRoom : RoomObject
             {
                 Vector3 currentEnemyPos = m_enemyPosList[i].position;
                 Quaternion currentEnemyRot = m_enemyPosList[i].rotation;
-                GameObject pawnGameObject = PhotonNetwork.Instantiate("Enemies/EnemyTypes/" + pawn.PawnGenre + "/" + pawn.name, currentEnemyPos, currentEnemyRot, 0);
+                GameObject pawnGameObject = PhotonNetwork.Instantiate("Enemies/EnemyTypes/" + pawn.PawnGenre + "/Bosses/" + pawn.name, currentEnemyPos, currentEnemyRot, 0);
                 pawnGameObject.GetComponent<CombatPawn>().enabled = false;
                 PhotonNetwork.Spawn(pawnGameObject.GetComponent<PhotonView>());
                 m_enemyWorldPawns.Add(pawnGameObject);

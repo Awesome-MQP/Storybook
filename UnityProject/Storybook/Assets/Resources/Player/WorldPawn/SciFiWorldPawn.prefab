@@ -707,7 +707,9 @@ MonoBehaviour:
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
   m_maxSpeed: 10
+  m_rotateSpeed: 12
   m_atTargetThreashHold: 0.1
+  m_atTargetRotThreshold: 3
 --- !u!137 &13787988
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

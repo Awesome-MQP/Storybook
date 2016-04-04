@@ -351,8 +351,9 @@ MonoBehaviour:
   m_targetPosition: {x: 0, y: 0, z: 0}
   m_isAtTarget: 0
   m_maxSpeed: 10
-  m_rotateSpeed: 1
+  m_rotateSpeed: 8
   m_atTargetThreashHold: 0.1
+  m_atTargetRotThreshold: 3
   m_playerPositions:
   - {fileID: 11415434}
   - {fileID: 11463602}

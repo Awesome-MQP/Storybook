@@ -309,6 +309,7 @@ public class DungeonMaster : MonoBehaviour
 
     private bool _getIsPageRare(int pageLevel)
     {
+        /*
         float isPageRareValue = Random.Range(0.00f, 1.00f);
         float rareProbability = m_rarePageProbability + (m_rarePageLevelIncrease * pageLevel);
         bool isPageRare = false;
@@ -317,6 +318,8 @@ public class DungeonMaster : MonoBehaviour
             isPageRare = true;
         }
         return isPageRare;
+        */
+        return false;
     }
 
     private MoveType _getPageMoveType()

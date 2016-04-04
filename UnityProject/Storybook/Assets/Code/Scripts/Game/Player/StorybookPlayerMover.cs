@@ -244,6 +244,11 @@ public class StorybookPlayerMover : BasePlayerMover,
         }
     }
 
+    protected override void OnMovingBetweenRooms()
+    {
+        _playWalkAnimations();
+    }
+
     protected override bool OnRegisterPlayer(PlayerObject player)
     {
         PlayerEntity playerEntity = player as PlayerEntity;

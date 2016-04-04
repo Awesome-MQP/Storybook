@@ -18,7 +18,7 @@ public class NetworkMover : PunBehaviour
     private float m_maxSpeed = 1.0f;
 
     [SerializeField]
-    private float m_rotateSpeed = 1.0f;
+    private float m_rotateSpeed = 2.0f;
 
     [SerializeField]
     private float m_atTargetThreashHold = 0.1f;
@@ -27,7 +27,6 @@ public class NetworkMover : PunBehaviour
     private float m_atTargetRotThreshold = 3.0f;
 
     private Vector3 m_velocity;
-    private bool m_isAtTargetRot;
 
     [SyncProperty]
     public virtual Vector3 TargetPosition
@@ -40,7 +39,6 @@ public class NetworkMover : PunBehaviour
 
             m_targetPosition = value;
             m_isAtTarget = false;
-            m_isAtTargetRot = false;
 
             OnTargetChanged();
 
@@ -90,6 +88,7 @@ public class NetworkMover : PunBehaviour
 
         Vector3 direction = (m_targetPosition - currentPosition).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(direction);
+        Quaternion newRot = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * m_rotateSpeed);
 
         if (Vector3.Distance(newPosition, m_targetPosition) <= m_atTargetThreashHold)
         {
@@ -107,7 +106,7 @@ public class NetworkMover : PunBehaviour
         }
 
         transform.position = newPosition;
-        transform.rotation = lookRotation;
+        transform.rotation = newRot;
     }
 
     [PunRPC]

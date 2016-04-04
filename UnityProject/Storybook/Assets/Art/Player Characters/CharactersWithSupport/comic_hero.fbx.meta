@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: d5f0d5631aad5f84ea5d85232ea430c6
+timeCreated: 1459738066
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cape1
+    100002: Cape2
+    100004: Cape3
+    100006: Cape4
+    100008: Cape5
+    100010: Cape6
+    100012: Cape_Direction
+    100014: Cape_IK_Control
+    100016: Chest
+    100018: comic:Mesh
+    100020: //RootNode
+    100022: Head
+    100024: Hips
+    100026: ikHandle1
+    100028: ikHandle2
+    100030: ikHandle3
+    100032: ikHandle4
+    100034: ikHandle5
+    100036: joint13
+    100038: joint20
+    100040: joint21
+    100042: joint22
+    100044: joint5
+    100046: joint9
+    100048: L_Bicep
+    100050: L_Elbow
+    100052: L_Foot
+    100054: L_Foot_Controller
+    100056: L_Forearm
+    100058: L_Hand
+    100060: L_Hand_Controller
+    100062: L_Knee
+    100064: L_Shin
+    100066: L_Thigh
+    100068: R_Bicep
+    100070: R_Elbow
+    100072: R_Foot
+    100074: R_Foot_Controller
+    100076: R_Forearm
+    100078: R_Hand
+    100080: R_Hand_Controller
+    100082: R_Knee1
+    100084: R_Shin
+    100086: R_Thigh
+    100088: Shoulders
+    400000: Cape1
+    400002: Cape2
+    400004: Cape3
+    400006: Cape4
+    400008: Cape5
+    400010: Cape6
+    400012: Cape_Direction
+    400014: Cape_IK_Control
+    400016: Chest
+    400018: comic:Mesh
+    400020: //RootNode
+    400022: Head
+    400024: Hips
+    400026: ikHandle1
+    400028: ikHandle2
+    400030: ikHandle3
+    400032: ikHandle4
+    400034: ikHandle5
+    400036: joint13
+    400038: joint20
+    400040: joint21
+    400042: joint22
+    400044: joint5
+    400046: joint9
+    400048: L_Bicep
+    400050: L_Elbow
+    400052: L_Foot
+    400054: L_Foot_Controller
+    400056: L_Forearm
+    400058: L_Hand
+    400060: L_Hand_Controller
+    400062: L_Knee
+    400064: L_Shin
+    400066: L_Thigh
+    400068: R_Bicep
+    400070: R_Elbow
+    400072: R_Foot
+    400074: R_Foot_Controller
+    400076: R_Forearm
+    400078: R_Hand
+    400080: R_Hand_Controller
+    400082: R_Knee1
+    400084: R_Shin
+    400086: R_Thigh
+    400088: Shoulders
+    4300000: comic:Mesh
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: comic:Mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

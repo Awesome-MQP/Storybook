@@ -36,7 +36,7 @@ public class PreGameLobbyUIHandler : Photon.PunBehaviour {
         {
             if (t.name == "GameName")
             {
-                t.text = PhotonNetwork.room.name;
+                t.text = "Lobby for game: " + PhotonNetwork.room.name;
                 return;
             }
         }
@@ -72,7 +72,7 @@ public class PreGameLobbyUIHandler : Photon.PunBehaviour {
         m_currentPlayersInRoomText.text = "";
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
-            m_currentPlayersInRoomText.text += player.ID + " " + player.name + "\n";
+            m_currentPlayersInRoomText.text += player.ID + ":  " + player.name + "\n";
         }
     }
 

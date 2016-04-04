@@ -63,8 +63,17 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
 
     public void OnSearchButtonClick()
     {
-        InputField search = GetComponentInChildren<InputField>();
-        String searchText = search.text;
+        String searchText = "";
+        InputField[] search = GetComponentsInChildren<InputField>();
+        foreach(InputField i in search)
+        {
+            switch(i.name)
+            {
+                case "GameNameSearch":
+                    searchText = i.text;
+                    break;
+            }
+        }
         _joinLobby(searchText);
         
         // Only search for a game if 
@@ -133,11 +142,32 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
     {
         if(PhotonNetwork.isMasterClient)
         {
+            InputField[] search = GetComponentsInChildren<InputField>();
+            foreach (InputField i in search)
+            {
+                switch (i.name)
+                {
+                    case "GameNameSearch":
+                        PhotonNetwork.room.name = i.text;
+                        break;
+                }
+            }
+            /*
             InputField search = GetComponentInChildren<InputField>();
             String searchText = search.text;
             PhotonNetwork.room.name = searchText;
+            */
         }
-
+        InputField[] inputs = GetComponentsInChildren<InputField>();
+        foreach (InputField i in inputs)
+        {
+            switch (i.name)
+            {
+                case "EnterNickname":
+                    PhotonNetwork.player.name = i.text;
+                    break;
+            }
+        }
         SceneFading.Instance().LoadScene("PreGameLobby");
     }
 

@@ -21,6 +21,18 @@ public class CombatRoom : RoomObject
     [SerializeField]
     private List<Transform> m_enemyPosList = new List<Transform>();
 
+    [SerializeField]
+    private string m_comicTeamLoc = "Enemies/EnemyTeams/Comic/";
+
+    [SerializeField]
+    private string m_fantasyTeamLoc = "Enemies/EnemyTeams/Fantasy/";
+
+    [SerializeField]
+    private string m_horrorTeamLoc = "Enemies/EnemyTeams/Horror/";
+
+    [SerializeField]
+    private string m_scifiTeamLoc = "Enemies/EnemyTeams/Scifi/";
+
     private List<GameObject> m_enemyWorldPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
@@ -154,20 +166,20 @@ public class CombatRoom : RoomObject
         switch (RoomPageData.PageGenre)
         {
             case Genre.Fantasy:
-                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Fantasy/";
-                teams = Resources.LoadAll("Enemies/EnemyTeams/Fantasy");
+                m_roomEnemiesPrefabLoc = m_fantasyTeamLoc;
+                teams = Resources.LoadAll(m_roomEnemiesPrefabLoc);
                 break;
             case Genre.GraphicNovel:
-                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Comic/";
-                teams = Resources.LoadAll("Enemies/EnemyTeams/Comic");
+                m_roomEnemiesPrefabLoc = m_comicTeamLoc;
+                teams = Resources.LoadAll(m_roomEnemiesPrefabLoc);
                 break;
             case Genre.Horror:
-                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/Horror/";
-                teams = Resources.LoadAll("Enemies/EnemyTeams/Horror");
+                m_roomEnemiesPrefabLoc = m_horrorTeamLoc;
+                teams = Resources.LoadAll(m_roomEnemiesPrefabLoc);
                 break;
             case Genre.SciFi:
-                m_roomEnemiesPrefabLoc = "Enemies/EnemyTeams/SciFi/";
-                teams = Resources.LoadAll("Enemies/EnemyTeams/SciFi");
+                m_roomEnemiesPrefabLoc = m_scifiTeamLoc;
+                teams = Resources.LoadAll(m_roomEnemiesPrefabLoc);
                 break;
         }
 

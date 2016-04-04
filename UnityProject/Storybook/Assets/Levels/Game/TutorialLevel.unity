@@ -151,6 +151,7 @@ MonoBehaviour:
     m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
   m_deckSize: 20
   m_startingPages: 30
+  m_numberOfFloors: 1
   m_tutorialUIPrefab: {fileID: 11471216, guid: 300b34c8144e5a045bc3bb8672df0fbe, type: 2}
 --- !u!114 &133705630
 MonoBehaviour:
@@ -163,11 +164,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3cded2205cdf04da8ec55316bdcb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentMusicTrack: {fileID: 0}
+  m_startRoomMusic: {fileID: 0}
+  m_fantasyRoomMusic: {fileID: 0}
+  m_comicRoomMusic: {fileID: 0}
+  m_horrorRoomMusic: {fileID: 0}
+  m_scifiRoomMusic: {fileID: 0}
+  m_shopRoomMusic: {fileID: 0}
+  m_combatMusic: {fileID: 0}
   m_fadeOutThreshold: 0.05
   m_fadeSpeed: 0.05
   m_musicVolume: 5
-  testAudio: {fileID: 0}
 --- !u!82 &133705631
 AudioSource:
   m_ObjectHideFlags: 0
@@ -256,7 +262,7 @@ MonoBehaviour:
   m_componentId: 184
   m_worldMaxXSize: 1
   m_worldMaxYSize: 4
-  m_combatRoomPrefab: {fileID: 11415158, guid: 161d5de8108f55f4caecd3945c4ab885, type: 2}
+  m_combatRoomPrefab: {fileID: 11491794, guid: 2c7171d9506af9d43ac5dccb802fb995, type: 2}
   m_startRoomPrefab: {fileID: 11428004, guid: d4ceebab9eabfb2438e01fdf4c39c69f, type: 2}
   m_exitRoomPrefab: {fileID: 11409198, guid: 6bafd727926567d4194c1fea36f5c2cb, type: 2}
   m_shopRoomPrefab: {fileID: 11481726, guid: 41b604e7c8d099e4290e620b176b1f09, type: 2}
@@ -664,6 +670,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 2132418683}
   m_clickSoundEffect: {fileID: 0}
+  m_damageSoundEffect: {fileID: 0}
+  m_noDamageHitSoundEffect: {fileID: 0}
+  m_supportSoundEffect: {fileID: 0}
 --- !u!4 &2132418685
 Transform:
   m_ObjectHideFlags: 0

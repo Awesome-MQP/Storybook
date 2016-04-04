@@ -151,6 +151,7 @@ MonoBehaviour:
     m_editorAsset: Assets/Resources/Player/PlayerEntity/FantasyPlayerEntity.prefab
   m_deckSize: 20
   m_startingPages: 30
+  m_numberOfFloors: 1
   m_tutorialUIPrefab: {fileID: 11471216, guid: 300b34c8144e5a045bc3bb8672df0fbe, type: 2}
 --- !u!114 &133705630
 MonoBehaviour:
@@ -163,11 +164,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3cded2205cdf04da8ec55316bdcb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentMusicTrack: {fileID: 0}
+  m_startRoomMusic: {fileID: 8300000, guid: 5e5ae6cfa0632dc49b34d57c151ab983, type: 3}
+  m_fantasyRoomMusic: {fileID: 8300000, guid: 463447fa7c1620e4fa532e877f43664d, type: 3}
+  m_comicRoomMusic: {fileID: 8300000, guid: 0802e0108be12a9419ebfedc8638d4f8, type: 3}
+  m_horrorRoomMusic: {fileID: 8300000, guid: 58b1888d8b86fda408dd3977630ddd44, type: 3}
+  m_scifiRoomMusic: {fileID: 8300000, guid: 503079fc46fcc9745bc2ce3eb493af42, type: 3}
+  m_shopRoomMusic: {fileID: 8300000, guid: af641ca2b175b534fb761fe89a573d67, type: 3}
+  m_combatMusic: {fileID: 8300000, guid: 9c543446df5b5d047a6fa4ab02b7fbb8, type: 3}
   m_fadeOutThreshold: 0.05
   m_fadeSpeed: 0.05
   m_musicVolume: 5
-  testAudio: {fileID: 0}
 --- !u!82 &133705631
 AudioSource:
   m_ObjectHideFlags: 0
@@ -664,6 +670,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 2132418683}
   m_clickSoundEffect: {fileID: 0}
+  m_damageSoundEffect: {fileID: 0}
+  m_noDamageHitSoundEffect: {fileID: 0}
+  m_supportSoundEffect: {fileID: 0}
 --- !u!4 &2132418685
 Transform:
   m_ObjectHideFlags: 0

@@ -23,7 +23,11 @@ public class NetworkMover : PunBehaviour
     [SerializeField]
     private float m_atTargetThreashHold = 0.1f;
 
+    [SerializeField]
+    private float m_atTargetRotThreshold = 3.0f;
+
     private Vector3 m_velocity;
+    private bool m_isAtTargetRot;
 
     [SyncProperty]
     public virtual Vector3 TargetPosition
@@ -36,6 +40,7 @@ public class NetworkMover : PunBehaviour
 
             m_targetPosition = value;
             m_isAtTarget = false;
+            m_isAtTargetRot = false;
 
             OnTargetChanged();
 
@@ -80,7 +85,7 @@ public class NetworkMover : PunBehaviour
             return;
         }
 
-        Vector3 currentPosition = Position;    
+        Vector3 currentPosition = Position;
         Vector3 newPosition = Vector3.MoveTowards(currentPosition, m_targetPosition, m_maxSpeed * Time.deltaTime);
 
         Vector3 direction = (m_targetPosition - currentPosition).normalized;

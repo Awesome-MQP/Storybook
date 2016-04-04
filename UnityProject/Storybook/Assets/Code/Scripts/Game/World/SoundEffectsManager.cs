@@ -16,6 +16,12 @@ public class SoundEffectsManager : MonoBehaviour
 
     [SerializeField]
     private AudioClip m_clickSoundEffect;
+    [SerializeField]
+    private AudioClip m_damageSoundEffect;
+    [SerializeField]
+    private AudioClip m_noDamageHitSoundEffect;
+    [SerializeField]
+    private AudioClip m_supportSoundEffect;
 
 	// Use this for initialization
 	protected void Awake ()
@@ -29,4 +35,21 @@ public class SoundEffectsManager : MonoBehaviour
         m_source.Play();
     }
 	
+    public void PlayDamageSound()
+    {
+        m_source.clip = m_damageSoundEffect;
+        m_source.Play();
+    }
+
+    public void PlayHitNoDamageSound()
+    {
+        m_source.clip = m_noDamageHitSoundEffect;
+        m_source.Play();
+    }
+
+    public void PlaySupportSound()
+    {
+        m_source.clip = m_supportSoundEffect;
+        m_source.Play();
+    }
 }

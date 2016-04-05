@@ -48,7 +48,6 @@ public class CombatDeck {
     {
         m_deckContents = new List<Page>(m_graveyardContents);
         m_graveyardContents = new List<Page>();
-        ShuffleDeck();
     }
 
     public void AddPageToGraveyard(Page pageToAdd)

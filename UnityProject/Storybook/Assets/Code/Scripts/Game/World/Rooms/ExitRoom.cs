@@ -91,9 +91,6 @@ public class ExitRoom : RoomObject
 
             // Send out a tutorial event, notifying that the demo is completed
             EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDemoCompleted();
-
-            // Check to see if this is the final floor
-            GameManager.GetInstance<BaseStorybookGame>().CheckIfGameIsWon();
         }
         else
         {
@@ -160,7 +157,13 @@ public class ExitRoom : RoomObject
 
     public void MoveToNextFloor()
     {
-        photonView.RPC(nameof(MoveToNextFloorMaster), PhotonTargets.MasterClient);
+        // Check to see if this is the final floor
+        bool isGameWon = GameManager.GetInstance<BaseStorybookGame>().CheckIfGameIsWon();
+
+        if (!isGameWon)
+        {
+            photonView.RPC(nameof(MoveToNextFloorMaster), PhotonTargets.MasterClient);
+        }
     }
 
     [PunRPC]

@@ -191,7 +191,8 @@ public class BaseStorybookGame : GameManager
     /// Checks to see if the players are on the final floor
     /// Called by ExitRoom after the boss is defeated and opens up the win scene if it is the last floor
     /// </summary>
-    public void CheckIfGameIsWon()
+    /// <returns>True if the game has been won, false otherwise</returns>
+    public bool CheckIfGameIsWon()
     {
         Debug.Log("Floor number = " + GetPlayerObject(PhotonNetwork.player).FloorNumber);
         Debug.Log("Number of floors = " + m_numberOfFloors);
@@ -199,7 +200,9 @@ public class BaseStorybookGame : GameManager
         {
             SceneFading fader = SceneFading.Instance();
             fader.LoadScene("WinScreen");
+            return true;
         }
+        return false;
     }
 
     public int DeckSize

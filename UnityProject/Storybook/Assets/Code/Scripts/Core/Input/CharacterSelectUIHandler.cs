@@ -155,7 +155,7 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
         return null;
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     public void SelectCharacter(PhotonPlayer player, int selectedGenre)
     {
         Genre playerGenre = m_playerToCharacter[player];
@@ -178,31 +178,31 @@ public class CharacterSelectUIHandler : Photon.PunBehaviour
         }
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     public void InitializeDictionary(PhotonPlayer player)
     {
         m_playerToCharacter.Add(player, Genre.None);
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     protected void AnimateComicBookRPC()
     {
         StartCoroutine(_AnimateComicBook());
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     protected void AnimateHorrorRPC()
     {
         StartCoroutine(_AnimateHorror());
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     protected void AnimateSciFiRPC()
     {
         StartCoroutine(_AnimateSciFi());
     }
 
-    [PunRPC]
+    [PunRPC(AllowFullCommunication = true)]
     protected void AnimateFantasyRPC()
     {
         StartCoroutine(_AnimateFantasy());

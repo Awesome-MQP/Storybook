@@ -133,9 +133,16 @@ public class PageForRoomUIHandler : PageUIHandler {
     private void _dropAndReplaceSelectedPage()
     {
         DungeonMaster dm = DungeonMaster.Instance;
+        BaseStorybookGame baseGameManager = GameManager.GetInstance<BaseStorybookGame>();
         PlayerInventory currentPlayerInventory =
             GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
+
+        // Drop the pages that was use, and replace it with a new basic page
         currentPlayerInventory.Drop(m_selectedPageButton.PageData.InventoryId);
         currentPlayerInventory.Add(dm.GetBasicPage(), m_selectedPageButton.PageData.InventoryId);
+
+        // Sort the inventory
+        currentPlayerInventory.SortInventory(0, baseGameManager.DeckSize);
+        currentPlayerInventory.SortInventory(baseGameManager.DeckSize, currentPlayerInventory.DynamicSize);
     }
 }

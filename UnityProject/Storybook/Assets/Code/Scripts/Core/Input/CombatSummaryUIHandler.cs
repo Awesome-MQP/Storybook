@@ -62,12 +62,22 @@ public class CombatSummaryUIHandler : PageUIHandler {
         }  
     }
 
+    /// <summary>
+    /// Submits the selected page from the drops and adds it to the player's inventory
+    /// </summary>
     public void SubmitPressed()
     {
+        BaseStorybookGame baseGameManager = GameManager.GetInstance<BaseStorybookGame>();
         GameManager gm = GameManager.GetInstance<GameManager>();
         PlayerInventory playerInv = gm.GetLocalPlayer<PlayerEntity>().OurInventory;
+
+        // Find the first open slot in the player's inventory
         int openSlot = playerInv.FirstOpenSlot();
+
+        // Figure out which page drop was selected
         Page selectedPage = m_pageDrops[m_selectedPage.InventoryId];
+
+        // Destroy the page objects that aren't the selected one
         for (int i = 0; i < m_pageDrops.Count; i++)
         {
             if (i != m_selectedPage.InventoryId)
@@ -77,7 +87,11 @@ public class CombatSummaryUIHandler : PageUIHandler {
                 Destroy(currentPage);
             }
         }
+
+        // Add the page and sort the inventory
         playerInv.Add(selectedPage, openSlot);
+        playerInv.SortInventory(baseGameManager.DeckSize, playerInv.DynamicSize);
+
         EventDispatcher.GetDispatcher<CombatSummaryEventDispatcher>().CombatSummarySubmitted();
     }
 }

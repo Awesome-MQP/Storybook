@@ -15,11 +15,7 @@ public class PlayerInventory : Inventory {
     {
         DungeonMaster dm = DungeonMaster.Instance;
         BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
-        for (int i = 0; i < gameManager.StartingPages; i++)
-        {
-            Page basicPage = dm.GetBasicPage();
-            Add(basicPage, i);
-        }
+        dm.InitializeInventory(this);
     }
 
     protected override bool CanAddItem(Item item, int index)

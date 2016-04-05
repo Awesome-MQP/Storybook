@@ -73,7 +73,7 @@ public class StartRoom :
 
         IsInRoomEvent = true;
 
-        while (m_readyPlayers.Count < PhotonNetwork.countOfPlayers)
+        while (m_readyPlayers.Count < PhotonNetwork.countOfPlayersInRooms)
         {
             yield return null;
         }

@@ -90,7 +90,6 @@ public class TutorialUIHandler : UIHandler {
     {
         GameManager.GetInstance<GameManager>().CleanupForNewGame();
         SceneFading fader = SceneFading.Instance();
-        fader.LoadScene("MainMenu");
-        PhotonNetwork.LeaveRoom();
+        fader.LoadScene("WinScreen");
     }
 }

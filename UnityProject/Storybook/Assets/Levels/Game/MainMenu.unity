@@ -96,7 +96,7 @@ GameObject:
   - 114: {fileID: 100896695}
   - 82: {fileID: 100896697}
   m_Layer: 0
-  m_Name: Scripts
+  m_Name: PersistentMusicPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

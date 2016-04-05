@@ -24,24 +24,4 @@ public class PersistentMusicPlayer : MonoBehaviour {
         m_source.Play();
 	}
 
-    void OnLevelWasLoaded(int level)
-    {
-        switch(level)
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                Destroy(this.gameObject);
-                break;
-        }
-    }
 }

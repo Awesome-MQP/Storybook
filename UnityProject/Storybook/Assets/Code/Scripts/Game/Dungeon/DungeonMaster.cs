@@ -344,13 +344,10 @@ public class DungeonMaster : MonoBehaviour
 
     public void InitializeInventory(Inventory inventoryToInitialize)
     {
-        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
-
-        for (int i = 0; i < gameManager.StartingPages; i++)
+        for (int i = 0; i < m_startingPageCount; i++)
         {
             Page basicPage;
-
-            if (gameManager.StartingPages - i > 3)
+            if (m_startingPageCount - i > 3)
             {
                 basicPage = GetBasicPage();
             }
@@ -363,8 +360,8 @@ public class DungeonMaster : MonoBehaviour
         if (inventoryToInitialize is PlayerInventory)
         {
             PlayerInventory playerInv = (PlayerInventory)inventoryToInitialize;
-            playerInv.SortInventory(0, gameManager.DeckSize);
-            playerInv.SortInventory(gameManager.DeckSize, playerInv.DynamicSize);
+            playerInv.SortInventory(0, 20);
+            playerInv.SortInventory(20, playerInv.DynamicSize);
         }
     }
 

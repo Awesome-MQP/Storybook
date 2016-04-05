@@ -61,13 +61,25 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
         Page pageDrop = dm.GetPageDropFromCombat(CManager.CombatGenre, CManager.CombatLevel);
 
         GameManager gm = FindObjectOfType<GameManager>();
-        BaseStorybookGame baseGameManager = GameManager.GetInstance<BaseStorybookGame>();
         PlayerInventory localPlayerInventory = null;//gm.GetLocalPlayerInventory();
 
         // TODO: Use the number of items in the inventory to figure out the position to add to
         if (!localPlayerInventory.IsInventoryFull()) {
             localPlayerInventory.Add(pageDrop, localPlayerInventory.FirstOpenSlot());
-            localPlayerInventory.SortInventory(baseGameManager.DeckSize, localPlayerInventory.DynamicSize);
+            localPlayerInventory.SortInventory(20, localPlayerInventory.DynamicSize);
+        }
+
+        if (pageDrop != null)
+        {
+            Debug.Log("Got a page drop!");
+            Debug.Log("Page genre = " + pageDrop.PageGenre);
+            Debug.Log("Page level = " + pageDrop.PageLevel);
+            Debug.Log("Page type = " + pageDrop.PageType);
+            Debug.Log("Is the page rare = " + pageDrop.Rarity);
+        }
+        else
+        {
+            Debug.Log("No page was dropped");
         }
     }
 

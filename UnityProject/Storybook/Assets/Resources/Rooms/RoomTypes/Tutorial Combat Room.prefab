@@ -1768,6 +1768,7 @@ MonoBehaviour:
   m_fantasyTeamLoc: Enemies/EnemyTeams/Fantasy/Tutorial/
   m_horrorTeamLoc: Enemies/EnemyTeams/Horror/Tutorial/
   m_scifiTeamLoc: Enemies/EnemyTeams/Scifi/Tutorial/
+  m_isTutorial: 1
 --- !u!114 &11494640
 MonoBehaviour:
   m_ObjectHideFlags: 1

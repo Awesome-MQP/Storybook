@@ -827,11 +827,10 @@ MonoBehaviour:
   prefixBackup: -1
   observed: {fileID: 0}
   shouldSync: 1
-  onSerializeTransformOption: 3
+  onSerializeTransformOption: 0
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 425950}
   - {fileID: 11481554}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0

@@ -33,6 +33,9 @@ public class CombatRoom : RoomObject
     [SerializeField]
     private string m_scifiTeamLoc = "Enemies/EnemyTeams/Scifi/";
 
+    [SerializeField]
+    private bool m_isTutorial = false;
+
     private List<GameObject> m_enemyWorldPawns = new List<GameObject>();
 
     private CombatManager m_combatManager;
@@ -185,7 +188,29 @@ public class CombatRoom : RoomObject
 
         if (teams != null)
         {
-            GameObject enemyTeam = (GameObject) teams[Random.Range(0, teams.Length)];
+            Object[] teamChoices = new Object[teams.Length];
+            int teamCount = 0;
+
+            // If it is not the tutorial, remove all teams that have tutorial in the name
+            if (!m_isTutorial)
+            {
+                foreach (Object t in teams)
+                {
+                    if (!(t.name.Contains("Tutorial")))
+                    {
+                        teamChoices[teamCount] = t;
+                        teamCount++;
+                    }
+                }
+            }
+            // Otherwise just use all the teams since it will only contain the tutorial teams
+            else
+            {
+                teamChoices = teams;
+                teamCount = teams.Length;
+            }
+
+            GameObject enemyTeam = (GameObject) teamChoices[Random.Range(0, teamCount)];
             m_roomEnemies = enemyTeam.GetComponent<EnemyTeam>();
         }
     }

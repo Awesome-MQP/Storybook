@@ -69,8 +69,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_hasShownStartTutorial)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("Welcome to Storybook!");
-            tutorialStrings.Add("Welcome to your first dungeon in Storybook. Throughout the game, you will be using mystical pages as attacks and to build the rooms of the dungeons");
+            tutorialStrings.Add("Welcome to your first dungeon in Storybook. Throughout the game, you will be using mystical pages as attacks and to build the rooms of the dungeons.");
+            tutorialStrings.Add("Explore the dungeon looking for the exit which evil bosses will be guarding");
             tutorialStrings.Add("To start, choose the door that you would like to move through.");
 
             _instantiateTutorialUI("Welcome to Storybook!", tutorialStrings);
@@ -103,7 +103,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
             List<string> tutorialStrings = new List<string>();
             tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Note, using pages in combat do not cause you to lose them.");
             tutorialStrings.Add("The power of attack pages are more powerful the higher their level, and damage depends on the type of the user and the type of the character being attacked.");
-            tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players, yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
+            tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players...");
+            tutorialStrings.Add("...yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
 
             _instantiateTutorialUI("Fighting Enemies", tutorialStrings);
             m_hasShownCombatTutorial = true;
@@ -136,8 +137,9 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_deckManagementIsComplete)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("Deck management text 1");
-            tutorialStrings.Add("Deck management text 2");
+            tutorialStrings.Add("To fight monsters in Storybook, you must construct a deck of the mythical pages.");
+            tutorialStrings.Add("Using the deck management screen, you can move pages around between your deck, the left side, and the rest of your inventory.");
+            tutorialStrings.Add("Deck building is an important aspect of the game, so build it how you would like your character to play.");
 
             _instantiateTutorialUI("Managing your Inventory and Deck", tutorialStrings);
             m_deckManagementIsComplete = true;
@@ -168,8 +170,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void BossFightTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Boss fight text 1");
-        tutorialStrings.Add("Boss fight text 2");
+        tutorialStrings.Add("Before being able to use the stairs to move to the next floor, you must defeat the boss guarding it.");
+        tutorialStrings.Add("Boss characters are more powerful than regular enemies and often have a few tricks up their sleeves that the regular enemies do not have.");
 
         _instantiateTutorialUI("Boss Fights", tutorialStrings);
     }
@@ -181,8 +183,7 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     public void DemoCompleteTutorial()
     {
         List<string> tutorialStrings = new List<string>();
-        tutorialStrings.Add("Tutorial complete text 1");
-        tutorialStrings.Add("Tutorial complete text 2");
+        tutorialStrings.Add("Good job, you have finished the tutorial! Now that you have learned the basics, tackle the full solo game or join a game with some friends!");
 
         TutorialUIHandler uiHandler = _instantiateTutorialUI("Tutorial Complete!", tutorialStrings);
         uiHandler.changeFinishButtonOnClick();

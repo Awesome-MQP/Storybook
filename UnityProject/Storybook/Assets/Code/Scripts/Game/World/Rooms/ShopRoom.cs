@@ -21,6 +21,17 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     private bool m_isCurrentRoom;
 
+    [SyncProperty]
+    public bool IsCurrentRoom
+    {
+        get { return m_isCurrentRoom; }
+        set
+        {
+            m_isCurrentRoom = value;
+            PropertyChanged();
+        }
+    }
+
     private HashSet<PhotonPlayer> m_readyPlayers = new HashSet<PhotonPlayer>(); 
 
     // Use this for initialization
@@ -47,7 +58,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
             return;
 
         Debug.Log("Welcome to the shop!");
-        m_isCurrentRoom = true;
+        IsCurrentRoom = true;
         /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
@@ -94,7 +105,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
     // Hint: Nothing.
     protected override void OnRoomExit(RoomMover mover)
     {
-        m_isCurrentRoom = false;
+        IsCurrentRoom = false;
         return;
     }
 
@@ -105,6 +116,7 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     public void PagesGenerated(PageData[] pagesGenerated)
     {
+        Debug.Log("PAGES GENERATED");
         if (m_isCurrentRoom)
         {
             Debug.Log("Shop - PagesGenerated");

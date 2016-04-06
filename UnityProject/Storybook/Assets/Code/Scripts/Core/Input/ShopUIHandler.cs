@@ -51,6 +51,7 @@ public class ShopUIHandler : PageUIHandler {
 
     public override void PageButtonPressed(PageButton pageButton)
     {
+        Debug.Log("Page button pressed");
         switch (pageButton.MenuId)
         {
             case m_playerInventoryMenuId:
@@ -81,7 +82,7 @@ public class ShopUIHandler : PageUIHandler {
     private void _handleSelectedPlayerPagePressed(PageButton buttonPressed)
     {
         buttonPressed.transform.SetParent(m_playerInventoryPagesRect.content, false);
-        buttonPressed.MenuId = m_selectedPlayerPageId;
+        buttonPressed.MenuId = m_playerInventoryMenuId;
         m_selectedPages.Remove(buttonPressed);
     }
 
@@ -204,6 +205,7 @@ public class ShopUIHandler : PageUIHandler {
             // Send out a page traded event
             EventDispatcher.GetDispatcher<ShopEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
             _clearSelected();
+            m_selectedShopPageButton.MenuId = m_playerInventoryMenuId;
 
             // Exit the menu if all the pages have been traded for
             if (m_shopPages.Count <= 0)

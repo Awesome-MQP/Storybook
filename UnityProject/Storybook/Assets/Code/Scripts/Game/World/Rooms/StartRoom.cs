@@ -71,9 +71,11 @@ public class StartRoom :
         if (!(mover is BasePlayerMover))
             yield break;
 
+        m_readyPlayers.Clear();
+
         IsInRoomEvent = true;
 
-        while (m_readyPlayers.Count < PhotonNetwork.countOfPlayersInRooms)
+        while (m_readyPlayers.Count < PhotonNetwork.playerList.Length)
         {
             yield return null;
         }

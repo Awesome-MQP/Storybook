@@ -32,14 +32,15 @@ public class CharacterSelectTutorial : Photon.PunBehaviour, TutorialEventDispatc
         List<string> tutorialStrings = new List<string>();
         tutorialStrings.Add("Welcome to Storybook!");
         tutorialStrings.Add("Before starting a game, every player must choose their character, and only one of each is allowed per game.");
-        tutorialStrings.Add("Each character is a different genre, which represents a type in this game.");
-        tutorialStrings.Add("Each genre also has another genre that it is strong against, and one that it is weak against.");
+        tutorialStrings.Add("Each character represents a different genre, which represents a type in this game.");
+        tutorialStrings.Add("Each genre is strong against a particular genre and weak to another.");
 
-        tutorialStrings.Add("The comic book character is a strong attacker, good against horror characters, but is weak to sci-fi characters.");
-        tutorialStrings.Add("The sci-fi character has heavy defense, good against comic book characters, but is weak to fantasy characters.");
-        tutorialStrings.Add("The fantasy character is speedy and great for support, good against the sci-fi characters, but is weak to horror characters.");
-        tutorialStrings.Add("The horror character is a tank with higher HP, good against fantasy characters, but is weak to comic book characters.");
-        
+        tutorialStrings.Add("The comic book character is a strong attacker, is good against horror characters, but is weak to sci-fi characters.");
+        tutorialStrings.Add("The sci-fi character has heavy defense, is good against comic book characters, but is weak to fantasy characters.");
+        tutorialStrings.Add("The fantasy character is speedy and great for support, is good against sci-fi characters, but is weak to horror characters.");
+        tutorialStrings.Add("The horror character is a tank with higher HP, is good against fantasy characters, but is weak to comic book characters.");
+
+        tutorialStrings.Add("You may now choose the character you wish to play as.");
 
         _instantiateTutorialUI("Character Select", tutorialStrings);
     }

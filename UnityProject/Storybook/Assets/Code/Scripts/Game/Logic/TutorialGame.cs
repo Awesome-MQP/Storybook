@@ -69,8 +69,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_hasShownStartTutorial)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("Welcome to your first dungeon in Storybook. Throughout the game, you will be using mystical pages as attacks and to build the rooms of the dungeons.");
-            tutorialStrings.Add("Explore the dungeon looking for the exit which evil bosses will be guarding");
+            tutorialStrings.Add("Welcome to your first dungeon in Storybook. Throughout the game, you will be using mystical pages to build the rooms of the dungeons as well as to fight foes.");
+            tutorialStrings.Add("Explore the dungeon and search for the exit, which evil bosses will be guarding.");
             tutorialStrings.Add("To start, choose the door that you would like to move through.");
 
             _instantiateTutorialUI("Welcome to Storybook!", tutorialStrings);
@@ -86,8 +86,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
     {
         List<string> tutorialStrings = new List<string>();
         tutorialStrings.Add("When entering a new room, you must place down a page to create the room.");
-        tutorialStrings.Add("Which page to choose is important as its stats will affect the room. The higher the level, the more powerful the enemies will be, but there will also be higher rewards");
-        tutorialStrings.Add("The colors of the pages act as types called genres, and the genre of the page chosen will be the most likely enemy.");
+        tutorialStrings.Add("Which page to choose is important as its stats will affect the room. The higher the level, the more powerful the enemies will be, but there will also be higher rewards.");
+        tutorialStrings.Add("The colors of the pages act as types called genres, and the genre of the page chosen will be the most likely type of enemy.");
 
         _instantiateTutorialUI("Creating a Room", tutorialStrings);
     }
@@ -101,9 +101,9 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_hasShownCombatTutorial)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Note, using pages in combat do not cause you to lose them.");
-            tutorialStrings.Add("The power of attack pages are more powerful the higher their level, and damage depends on the type of the user and the type of the character being attacked.");
-            tutorialStrings.Add("Boosts pages temporarily increase stats. Red horror pages heal players, green fantasy pages speed up players...");
+            tutorialStrings.Add("In combat, you will draw pages from your deck and use them as attacks or boosts. Using pages in combat does *not* cause you to lose them.");
+            tutorialStrings.Add("Attack pages have more power depending on their level, and total damage depends on the type of the user and the type of the character being attacked.");
+            tutorialStrings.Add("Boosts pages temporarily increase the stats of your allies. Red horror pages heal players, green fantasy pages speed up players...");
             tutorialStrings.Add("...yellow comic book pages increase attack, and blue sci-fi pages increase defense.");
 
             _instantiateTutorialUI("Fighting Enemies", tutorialStrings);
@@ -155,8 +155,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_hasShownShopTutorial)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up.");
-            tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of your pages put up for trade match or exceed the level of the shop trade, you can do the trade.");
+            tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up for exchange.");
+            tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of the pages put up for trade match or exceed the level of the 'for sale' page, you can make the trade.");
 
             _instantiateTutorialUI("Trading Pages at the Shop", tutorialStrings);
             m_hasShownShopTutorial = true;

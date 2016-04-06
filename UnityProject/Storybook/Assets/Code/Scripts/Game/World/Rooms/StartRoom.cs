@@ -85,6 +85,7 @@ public class StartRoom :
     {
     }
 
+    // protected, rename as more generic
     public void OnDeckManagementClosed()
     {
         photonView.RPC(nameof(_playerFinished), Owner, PhotonNetwork.player);
@@ -96,6 +97,7 @@ public class StartRoom :
         m_readyPlayers.Add(player);
     }
 
+    // protected abstract
     private void OnNetworkEvent()
     {
         UnityEngine.Object loadedObject = Resources.Load("UI/DeckManagementCanvas");

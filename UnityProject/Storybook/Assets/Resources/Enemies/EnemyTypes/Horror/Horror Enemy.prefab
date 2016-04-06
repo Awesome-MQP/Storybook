@@ -687,6 +687,7 @@ MonoBehaviour:
   m_manaPerTurn: 2
   m_enemyMoveList:
   - {fileID: 11491974, guid: 114cc39c67863d847a7ea57a88f7a8de, type: 2}
+  - {fileID: 11406532, guid: ef1066ee08c04674c97f59c79fb8967a, type: 2}
 --- !u!114 &11480480
 MonoBehaviour:
   m_ObjectHideFlags: 1

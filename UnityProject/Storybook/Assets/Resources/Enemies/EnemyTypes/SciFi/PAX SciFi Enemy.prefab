@@ -715,6 +715,7 @@ MonoBehaviour:
   m_enemyMoveList:
   - {fileID: 11494850, guid: e7813790edc146d4c8fa0e69b9d75ec7, type: 2}
   - {fileID: 11471700, guid: 9729ea988ec12a6469d227ffaa7bfe14, type: 2}
+  - {fileID: 11435160, guid: b59249dbcdd2cdf4598ce9cc5001924e, type: 2}
 --- !u!137 &13797668
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

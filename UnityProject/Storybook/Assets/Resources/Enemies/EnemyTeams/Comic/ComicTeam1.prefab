@@ -43,6 +43,7 @@ MonoBehaviour:
   m_componentId: 203
   m_pawnsToSpawn:
   - {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68, type: 2}
+  - {fileID: 11443126, guid: e9a9f119030025547ae881b7fd83fb68, type: 2}
   m_isBossTeam: 0
 --- !u!114 &11435440
 MonoBehaviour:

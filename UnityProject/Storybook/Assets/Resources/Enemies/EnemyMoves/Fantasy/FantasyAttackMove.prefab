@@ -45,7 +45,7 @@ MonoBehaviour:
   m_moveLevel: 1
   m_moveRarity: 0
   m_isMoveAttack: 1
-  m_moveCost: 2
+  m_moveCost: 1
   m_moveFrequency: 0.5
 --- !u!1001 &100100000
 Prefab:

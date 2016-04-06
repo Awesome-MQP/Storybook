@@ -885,6 +885,7 @@ MonoBehaviour:
   m_enemyMoveList:
   - {fileID: 11474406, guid: c3527d93d3f088c4ea46acbf99ed2276, type: 2}
   - {fileID: 11418040, guid: 389714a121361f84f8ae4e202c05cf2e, type: 2}
+  - {fileID: 11490010, guid: 233d10fd90ff4a041aed83e6b50e2d54, type: 2}
 --- !u!114 &11459570
 MonoBehaviour:
   m_ObjectHideFlags: 1

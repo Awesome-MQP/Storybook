@@ -121,7 +121,7 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         {
             List<string> tutorialStrings = new List<string>();
             tutorialStrings.Add("Upon clearing a combat, you can select one new page from the drops to add to your inventory.");
-            tutorialStrings.Add("The higher the level of the enemies, the better the rewards will be. Also, the dropped pages are more likely to match the genre of the enemies");
+            tutorialStrings.Add("The higher the level of the enemies, the better the rewards will be. Also, the dropped pages are more likely to match the genre of the enemies.");
 
             _instantiateTutorialUI("Reaping Rewards of Combat", tutorialStrings);
             m_hasShownCombatClear = true;
@@ -156,7 +156,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         {
             List<string> tutorialStrings = new List<string>();
             tutorialStrings.Add("At the shop, you can trade up your pages for more powerful pages. To trade, select pages from your inventory to put them up for exchange.");
-            tutorialStrings.Add("Then select the page from you shop that you would like to trade for. If the level of the pages put up for trade match or exceed the level of the 'for sale' page, you can make the trade.");
+            tutorialStrings.Add("Then select the page from you shop that you would like to trade for.");
+            tutorialStrings.Add("If the total level of your pages matches or exceeds the level of the shop's page, you can make the trade.");
 
             _instantiateTutorialUI("Trading Pages at the Shop", tutorialStrings);
             m_hasShownShopTutorial = true;

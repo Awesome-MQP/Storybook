@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 // This is an empty room. There is nothing special about it.
 // No events will occur upon entering this room.
-public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
+public class ShopRoom : 
+    PlayerEventRoom, 
+    ShopEventDispatcher.IShopEventListener
+{
     [SerializeField]
     private AudioClip m_roomMusic;
 
@@ -17,22 +20,10 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
 
     private List<PageData> m_shopPages = new List<PageData>();
 
-    public EventDispatcher Dispatcher { get { return EventDispatcher.GetDispatcher<ShopEventDispatcher>(); } }
-
-    private bool m_isCurrentRoom;
-
-    [SyncProperty]
-    public bool IsCurrentRoom
+    public EventDispatcher Dispatcher
     {
-        get { return m_isCurrentRoom; }
-        set
-        {
-            m_isCurrentRoom = value;
-            PropertyChanged();
-        }
+        get { return EventDispatcher.GetDispatcher<ShopEventDispatcher>(); }
     }
-
-    private HashSet<PhotonPlayer> m_readyPlayers = new HashSet<PhotonPlayer>(); 
 
     // Use this for initialization
     protected override void Awake ()
@@ -58,7 +49,6 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
             return;
 
         Debug.Log("Welcome to the shop!");
-        IsCurrentRoom = true;
         /*
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
@@ -66,29 +56,8 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
         EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnShopEntered();
     }
 
-    // What do we do when all players reach the center of the room?
-    // Most likely nothing, but that may change.
-    protected override IEnumerable OnRoomEvent(RoomMover mover)
+    protected override void OnNetworkEvent()
     {
-        if (!(mover is BasePlayerMover))
-            yield break;
-
-        m_readyPlayers.Clear();
-
-        photonView.RPC(nameof(NetworkedRoomEvent), PhotonTargets.All);
-
-        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnShopEntered();
-
-        while (m_readyPlayers.Count < PhotonNetwork.countOfPlayers)
-        {
-            yield return null;
-        }
-    }
-
-    [PunRPC]
-    protected void NetworkedRoomEvent()
-    {
-        Debug.Log("Whaddya buyin'?");
         if (!(m_hasGeneratedPages && m_shopPages.Count <= 0))
         {
             ShopUIHandler shopUI = Instantiate(m_shopUI).GetComponent<ShopUIHandler>();
@@ -105,38 +74,21 @@ public class ShopRoom : RoomObject, ShopEventDispatcher.IShopEventListener {
     // Hint: Nothing.
     protected override void OnRoomExit(RoomMover mover)
     {
-        IsCurrentRoom = false;
-        return;
     }
 
     public void OnShopClosed()
     {
-        photonView.RPC(nameof(_playerFinished), Owner, PhotonNetwork.player);
+        LocalPlayerFinished();
     }
 
     public void PagesGenerated(PageData[] pagesGenerated)
     {
-        Debug.Log("PAGES GENERATED");
-        if (m_isCurrentRoom)
-        {
-            Debug.Log("Shop - PagesGenerated");
-            m_shopPages = new List<PageData>(pagesGenerated);
-            m_hasGeneratedPages = true;
-        }
+        m_shopPages = new List<PageData>(pagesGenerated);
+        m_hasGeneratedPages = true;
     }
 
     public void PageTraded(PageData pageTraded)
     {
-        if (m_isCurrentRoom)
-        {
-            Debug.Log("Shop - PageTraded");
-            m_shopPages.Remove(pageTraded);
-        }
-    }
-
-    [PunRPC(AllowFullCommunication = true)]
-    protected void _playerFinished(PhotonPlayer player)
-    {
-        m_readyPlayers.Add(player);
+        m_shopPages.Remove(pageTraded);
     }
 }

@@ -5,33 +5,13 @@ using System.Collections.Generic;
 using UnityEngine.Assertions;
 
 public class StartRoom : 
-    RoomObject, 
+    PlayerEventRoom, 
     DeckManagementEventDispatcher.IDeckManagementEventListener
 {
     [SerializeField]
     private AudioClip m_roomMusic;
     
     private MusicManager m_musicManager;
-
-    private HashSet<PhotonPlayer> m_readyPlayers = new HashSet<PhotonPlayer>();
-
-    private bool m_inRoomEvent;
-
-    [SyncProperty]
-    protected bool IsInRoomEvent
-    {
-        get { return m_inRoomEvent; }
-        set
-        {
-            Assert.IsTrue(ShouldBeChanging);
-            m_inRoomEvent = value;
-
-            if(value)
-                OnNetworkEvent();
-
-            PropertyChanged();
-        }
-    }
 
     protected override void Awake()
     {
@@ -47,6 +27,7 @@ public class StartRoom :
         m_musicManager.MusicTracks = m_musicTracks;
         m_musicManager.Fade(m_musicTracks[0], 5, true);
         */
+        //TODO: Remove this
         EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnStartRoomEntered();
     }
 
@@ -66,41 +47,16 @@ public class StartRoom :
         EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnStartRoomEntered();
     }
 
-    protected override IEnumerable OnRoomEvent(RoomMover mover)
-    {
-        if (!(mover is BasePlayerMover))
-            yield break;
-
-        m_readyPlayers.Clear();
-
-        IsInRoomEvent = true;
-
-        while (m_readyPlayers.Count < PhotonNetwork.playerList.Length)
-        {
-            yield return null;
-        }
-
-        IsInRoomEvent = false;
-    }
-
     protected override void OnRoomExit(RoomMover mover)
     {
     }
-
-    // protected, rename as more generic
+    
     public void OnDeckManagementClosed()
     {
-        photonView.RPC(nameof(_playerFinished), Owner, PhotonNetwork.player);
+        LocalPlayerFinished();
     }
 
-    [PunRPC(AllowFullCommunication = true)]
-    protected void _playerFinished(PhotonPlayer player)
-    {
-        m_readyPlayers.Add(player);
-    }
-
-    // protected abstract
-    private void OnNetworkEvent()
+    protected override void OnNetworkEvent()
     {
         UnityEngine.Object loadedObject = Resources.Load("UI/DeckManagementCanvas");
         GameObject canvas = (GameObject)Instantiate(loadedObject);

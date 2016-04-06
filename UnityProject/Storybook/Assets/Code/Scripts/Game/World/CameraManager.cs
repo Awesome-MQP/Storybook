@@ -9,20 +9,6 @@ public class CameraManager : MonoBehaviour {
     [SerializeField]
     private Camera m_overworldCamera;
 
-    // Update is called once per frame
-    // TEST METHOD: Based on keyboard input, swap the camera
-    void Update () {
-        if(Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            SwitchToCombatCamera();
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            SwitchToOverworldCamera();
-        }
-    }
-
-
     // Move the combatCamera to the top of the camera stack, effectively rendering it "above" the other cameras
     public void SwitchToCombatCamera()
     {

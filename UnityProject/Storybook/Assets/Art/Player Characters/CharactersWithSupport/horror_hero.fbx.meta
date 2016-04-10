@@ -1,0 +1,651 @@
+fileFormatVersion: 2
+guid: 4d19d071fde7a9c4f9f0a1331cc029c0
+timeCreated: 1459806309
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Chest
+    100002: Head
+    100004: Hip
+    100006: Horror:Mesh
+    100008: //RootNode
+    100010: ikHandle1
+    100012: ikHandle2
+    100014: ikHandle3
+    100016: ikHandle4
+    100018: joint13
+    100020: joint17
+    100022: joint21
+    100024: joint5
+    100026: joint9
+    100028: L_Bicep
+    100030: L_Elbow
+    100032: L_foot
+    100034: L_Foot_Controller
+    100036: L_Forearm
+    100038: L_Hand
+    100040: L_Hand_Controller
+    100042: L_Knee
+    100044: L_Shin
+    100046: L_Thigh
+    100048: locator1
+    100050: R_Bicep
+    100052: R_Elbow
+    100054: R_Foot
+    100056: R_Foot_Controller
+    100058: R_Forearm
+    100060: R_Hand
+    100062: R_Hand_Controller
+    100064: R_Knee
+    100066: R_Shin
+    100068: R_Thigh
+    100070: Shoulders
+    400000: Chest
+    400002: Head
+    400004: Hip
+    400006: Horror:Mesh
+    400008: //RootNode
+    400010: ikHandle1
+    400012: ikHandle2
+    400014: ikHandle3
+    400016: ikHandle4
+    400018: joint13
+    400020: joint17
+    400022: joint21
+    400024: joint5
+    400026: joint9
+    400028: L_Bicep
+    400030: L_Elbow
+    400032: L_foot
+    400034: L_Foot_Controller
+    400036: L_Forearm
+    400038: L_Hand
+    400040: L_Hand_Controller
+    400042: L_Knee
+    400044: L_Shin
+    400046: L_Thigh
+    400048: locator1
+    400050: R_Bicep
+    400052: R_Elbow
+    400054: R_Foot
+    400056: R_Foot_Controller
+    400058: R_Forearm
+    400060: R_Hand
+    400062: R_Hand_Controller
+    400064: R_Knee
+    400066: R_Shin
+    400068: R_Thigh
+    400070: Shoulders
+    4300000: Horror:Mesh
+    7400000: Walk
+    7400002: Idle
+    7400004: Attack
+    7400006: Hurt
+    7400008: Support
+    9500000: //RootNode
+    13700000: Horror:Mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walk
+      takeName: Take 001
+      firstFrame: 6
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hip
+        weight: 1
+      - path: Hip/Chest
+        weight: 1
+      - path: Hip/Chest/Shoulders
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hip/L_Thigh
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot/joint9
+        weight: 1
+      - path: Hip/R_Thigh
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot/joint17
+        weight: 1
+      - path: Horror:Mesh
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: locator1
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 36
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hip
+        weight: 1
+      - path: Hip/Chest
+        weight: 1
+      - path: Hip/Chest/Shoulders
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hip/L_Thigh
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot/joint9
+        weight: 1
+      - path: Hip/R_Thigh
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot/joint17
+        weight: 1
+      - path: Horror:Mesh
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: locator1
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Attack
+      takeName: Take 001
+      firstFrame: 65
+      lastFrame: 110
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hip
+        weight: 1
+      - path: Hip/Chest
+        weight: 1
+      - path: Hip/Chest/Shoulders
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hip/L_Thigh
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot/joint9
+        weight: 1
+      - path: Hip/R_Thigh
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot/joint17
+        weight: 1
+      - path: Horror:Mesh
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: locator1
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Hurt
+      takeName: Take 001
+      firstFrame: 130
+      lastFrame: 147
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hip
+        weight: 1
+      - path: Hip/Chest
+        weight: 1
+      - path: Hip/Chest/Shoulders
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hip/L_Thigh
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot/joint9
+        weight: 1
+      - path: Hip/R_Thigh
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot/joint17
+        weight: 1
+      - path: Horror:Mesh
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: locator1
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Support
+      takeName: Take 001
+      firstFrame: 150
+      lastFrame: 175
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Hip
+        weight: 1
+      - path: Hip/Chest
+        weight: 1
+      - path: Hip/Chest/Shoulders
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head
+        weight: 1
+      - path: Hip/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hip/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hip/L_Thigh
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot
+        weight: 1
+      - path: Hip/L_Thigh/L_Shin/L_foot/joint9
+        weight: 1
+      - path: Hip/R_Thigh
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hip/R_Thigh/R_Shin/R_Foot/joint17
+        weight: 1
+      - path: Horror:Mesh
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: locator1
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

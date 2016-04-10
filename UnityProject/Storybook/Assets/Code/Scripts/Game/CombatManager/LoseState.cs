@@ -15,7 +15,7 @@ public class LoseState : CombatState {
         // If it is the master client, instantiate the NetLoseState to all players
         if (PhotonNetwork.isMasterClient)
         {
-            m_netLoseStateObject = PhotonNetwork.Instantiate("NetLoseState", Vector3.zero, Quaternion.identity, 0);
+            m_netLoseStateObject = PhotonNetwork.Instantiate("CombatStateMachine/NetLoseState", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_netLoseStateObject.GetComponent<PhotonView>());
             m_netLoseState = m_netLoseStateObject.GetComponent<NetLoseState>();
         }

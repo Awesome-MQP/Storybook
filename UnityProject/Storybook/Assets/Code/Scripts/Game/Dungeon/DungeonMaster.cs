@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Random = UnityEngine.Random;
 
 // Dungeon Master class is the handler for all statistics, as well as handling
 // the location of all room prefabs.
-public class DungeonMaster : MonoBehaviour {
-
+[Serializable]
+public class DungeonMaster : MonoBehaviour
+{
     // List of room prefabs in the Dungeon/Rooms folder
     // These are all the rooms that can be spawned
     [SerializeField]
@@ -75,31 +78,34 @@ public class DungeonMaster : MonoBehaviour {
     [SerializeField]
     private int m_startingPageCount = 21;
 
-    // When the DungeonMaster is spawned in the world, have it immediately get all the room prefabs.
-    void Awake() {
+    private static DungeonMaster s_instance;
+
+    public static DungeonMaster Instance
+    {
+        get { return s_instance; }
+    }
+
+    public void Awake()
+    {
         m_rooms = Resources.LoadAll<RoomObject>("RoomPrefabs");
+        s_instance = this;
     }
 
     /// <summary>
     /// Gets a room prefab to place in the world based on certain input criteria.
     /// </summary>
-    /// <param name="size">The specified size of the room to search for.</param>
     /// <param name="genre">The specified Genre of the room to search for.</param>
     /// <param name="features">The specified features of the room to search for.</param>
     /// <returns>The room if a match is found, or null if no match is found.</returns>
-    RoomObject GetRoomPrefab(int size, Genre genre, params string[] features)
+    RoomObject GetRoomPrefab(Genre genre, params string[] features)
     {
         // List of "good" rooms - ones that match the criteria passed in.
-        List<RoomObject> goodRooms = new List<RoomObject>();
+        List<RoomObject> goodRooms = new List<RoomObject>(m_rooms.Length);
 
         // Check each room to see if there is a match
         foreach (RoomObject r in m_rooms)
         {
-            if (r.RoomSize != size)
-            {
-                continue;
-            }
-            else if (r.RoomPageData.PageGenre != genre)
+            if (true/*r.RoomGenre != genre*/)
             {
                 continue;
             }
@@ -123,18 +129,7 @@ public class DungeonMaster : MonoBehaviour {
         int roomChooser = Random.Range(0, goodRooms.Count);
         RoomObject roomToBuild = goodRooms[roomChooser];
 
-        // TODO: Send to WorldManager.placeRoom()?
         return roomToBuild;
-    }
-
-    /// <summary>
-    /// Tests the GetRoomPrefab function.
-    /// </summary>
-    void TestGetRoomPrefab()
-    {
-        GetRoomPrefab(1, Genre.SciFi, "Curse");
-        GetRoomPrefab(4, Genre.Horror, "Shop");
-        GetRoomPrefab(2, Genre.Fantasy, "Treasure");
     }
 
     /// <summary>
@@ -150,88 +145,44 @@ public class DungeonMaster : MonoBehaviour {
 
     public Page ConstructPageFromData(PageData data)
     {
-        Page page = _spawnPageOnNetwork(data.PageGenre, data.PageLevel);
-        page.Rarity = data.IsRare;
-        page.PageType = data.PageMoveType;
-        PageMove move = _getMovePrefab(page.PageType, page.PageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = page.PageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = data.PageGenre;
-        move.PageGenre = data.PageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(data.PageGenre, data.PageLevel, data.PageMoveType, data.IsRare);
+
         return page;
     }
 
     public Page ConstructBoostPage(int pageLevel, Genre pageGenre, bool isBasicPage)
     {
-        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
-
+        bool isRare;
         if (!isBasicPage)
         {
-            page.Rarity = _getIsPageRare(pageLevel);
+            isRare = _getIsPageRare(pageLevel);
         }
         else
         {
-            page.Rarity = false;
+            isRare = false;
         }
 
-        page.PageType = MoveType.Boost;
-        PageMove move = _getMovePrefab(page.PageType, pageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = pageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = pageGenre;
-        move.PageGenre = pageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel, MoveType.Boost, isRare);
+
         return page;
     }
 
     public Page ConstructPage(int pageLevel, Genre pageGenre, bool isBasicPage)
     {
-        Page page = _spawnPageOnNetwork(pageGenre, pageLevel);
+        MoveType move = _getPageMoveType();
 
+        bool isRare;
         if (!isBasicPage)
         {
-            page.Rarity = _getIsPageRare(pageLevel);
+            isRare = _getIsPageRare(pageLevel);
         }
         else
         {
-            page.Rarity = false;
+            isRare = false;
         }
 
-        page.PageType = _getPageMoveType();
-        PageMove move = _getMovePrefab(page.PageType, pageGenre);
-        page.PlayerCombatMove = move;
-        move.transform.SetParent(page.transform, false);
-        move.MoveLevel = pageLevel;
-        move.MoveRarity = page.Rarity;
-        move.MoveGenre = pageGenre;
-        move.PageGenre = pageGenre;
-        if (page.Rarity)
-        {
-            move.SetNumberOfTargets(4);
-        }
-        else
-        {
-            move.SetNumberOfTargets(1);
-        }
+        Page page = _spawnPageOnNetwork(pageGenre, pageLevel, move, isRare);
+
         return page;
     }
 
@@ -241,6 +192,7 @@ public class DungeonMaster : MonoBehaviour {
         if (pageType == MoveType.Attack)
         {
             prefabName += m_pageAttack.name;
+            Debug.Log("Prefab name = " + prefabName);
         }
         else if (pageType == MoveType.Boost)
         {
@@ -343,18 +295,21 @@ public class DungeonMaster : MonoBehaviour {
         return allGenresArray[genreIndex];
     }
 
-    private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel)
+    private Page _spawnPageOnNetwork(Genre pageGenre, int pageLevel, MoveType pageMoveType, bool isRare)
     {
-        GameObject pageObject = PhotonNetwork.Instantiate(m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
-        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
+        GameObject pageObject = PhotonNetwork.Instantiate("Pages/" + m_pagePrefab.name, Vector3.zero, Quaternion.identity, 0);
         Page page = pageObject.GetComponent<Page>();
         page.PageLevel = pageLevel;
         page.PageGenre = pageGenre;
+        page.PageType = pageMoveType;
+        page.Rarity = isRare;
+        PhotonNetwork.Spawn(pageObject.GetComponent<PhotonView>());
         return page;
     }
 
     private bool _getIsPageRare(int pageLevel)
     {
+        /*
         float isPageRareValue = Random.Range(0.00f, 1.00f);
         float rareProbability = m_rarePageProbability + (m_rarePageLevelIncrease * pageLevel);
         bool isPageRare = false;
@@ -363,6 +318,8 @@ public class DungeonMaster : MonoBehaviour {
             isPageRare = true;
         }
         return isPageRare;
+        */
+        return false;
     }
 
     private MoveType _getPageMoveType()

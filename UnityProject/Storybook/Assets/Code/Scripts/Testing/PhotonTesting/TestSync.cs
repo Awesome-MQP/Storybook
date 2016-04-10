@@ -1,56 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using Photon;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(PhotonView))]
 public class TestSync : PunBehaviour
 {
-    void Start()
-    {
-        targetPosition = transform.position;
-    }
+    [SerializeField]
+    private TestSync m_other;
 
     [SyncProperty]
-    public Vector3 SyncPosition
+    public TestSync Other
     {
-        get { return transform.position; }
+        get { return m_other; }
         set
         {
-            if (photonView.isMine)
-            {
-                PropertyChanged();
-            }
-            else
-            {
-                targetPosition = value;
-            }
+            Assert.IsTrue(ShouldBeChanging);
+            m_other = value;
+            PropertyChanged();
         }
     }
 
-    void Update()
+    public override void OnStartOwner(bool wasSpawn)
     {
-        if (photonView.isMine)
-        {
-            SyncPosition = transform.position;
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, 0.3f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            relevanceToggle = !relevanceToggle;
-            photonView.RebuildNetworkRelavance();
-        }
+        StartCoroutine(WaitToSet());
     }
 
-    public override bool IsRelevantTo(PhotonPlayer player)
+    private IEnumerator WaitToSet()
     {
-        return relevanceToggle;
+        yield return new WaitForSeconds(10.0f);
+
+        TestSync[] syncObjects = FindObjectsOfType<TestSync>();
+        Other = syncObjects.First(sync => sync != this);
     }
-
-    private Vector3 targetPosition;
-
-    private bool relevanceToggle = true;
 }

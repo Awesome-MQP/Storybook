@@ -13,79 +13,106 @@ using UnityEngine.Assertions;
 // X 4 X
 
 // Construct the PlayerWorldPawn using a Transform - this transform is the node that the pawn will adhere to!
-public class PlayerWorldPawn : WorldPawn, IConstructable<Transform>{
-
+public class PlayerWorldPawn : WorldPawn, IConstructable<PlayerEntity>
+{
     private int m_playerNum = 0;
     private float m_playerSpeed = 1.0f;
-    private Transform m_targetNode;
+    private Animator m_animator;
+    private bool m_isIdle;
+    private bool m_isWalking;
 
-    // Use this for initialization
-    void Start ()
+    [SyncProperty]
+    public bool IsIdle
     {
-        m_playerNum = PhotonNetwork.player.ID;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	    // if the player is moving, set the animation to moving
-        if(!IsAtTarget)
+        get { return m_isIdle; }
+        protected set
         {
-            //SwitchCharacterToWalking();
+            Assert.IsTrue(ShouldBeChanging);
+            m_isIdle = value;
+            if (value)
+            {
+                _setAnimatorToIdle();
+            }
+            PropertyChanged();
         }
-
-        // if the player has stopped moving, move to their position in the diamond.
-        if(IsAtTarget)
-        {
-            //GetIntoPosition(m_playerNum);
-            //SwitchCharacterToIdle();
-        }
-	}
-
-    private void GetIntoPosition(int id)
-    {
-        Vector3 newTargetPosition = Vector3.zero;
-
-        Assert.IsTrue(IsMine);
-
-        TargetPosition = newTargetPosition;
     }
 
-    // Constructor granted by the IConstructable
-    public void Construct(Transform parameter)
+    [SyncProperty]
+    public bool IsWalking
     {
-        TargetPosition = parameter.position;
-        m_targetNode = parameter;
+        get { return m_isWalking; }
+        protected set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_isWalking = value;
+            if (value)
+            {
+                _setAnimatorToWalking();
+            }
+            PropertyChanged();
+        }
+    }
+
+    protected override void Awake()
+    {
+        m_animator = GetComponent<Animator>();
+
+        IsIdle = true;
+        IsWalking = false;
+
+        base.Awake();
+    }
+
+    public void Construct(PlayerEntity playerEntity)
+    {
+
+    }
+
+    //Set the node that we want to go towards.
+    public void SetHomeNode(MovementNode node)
+    {
+        TargetNode = node;
     }
 
     // Animation transitions
+
+    /// <summary>
+    /// Switches the character to walking animation for all clients
+    /// </summary>
     public void SwitchCharacterToWalking()
     {
-        photonView.RPC("RPCSwitchCharacterToWalking", PhotonTargets.All);
+        IsWalking = true;
+        IsIdle = false;
+
+        _setAnimatorToWalking();
     }
 
+    // Handle the animator bools for setting character to walking
+    private void _setAnimatorToWalking()
+    {
+        m_animator.SetBool("IdleToIdle", false);
+        m_animator.SetBool("WalkToWalk", true);
+        m_animator.SetBool("WalkToIdle", false);
+        m_animator.SetBool("IdleToWalk", true);
+    }
+
+    /// <summary>
+    /// Switches character to idle animation for all clients
+    /// </summary>
     public void SwitchCharacterToIdle()
     {
-        photonView.RPC("RPCSwitchCharacterToIdle", PhotonTargets.All);
+        IsWalking = false;
+        IsIdle = true;
+
+        _setAnimatorToIdle();
     }
 
-    [PunRPC]
-    public void RPCSwitchCharacterToWalking()
+    // Handle the animator bools for setting the character to walking
+    private void _setAnimatorToIdle()
     {
-        Animator animator = GetComponent<Animator>();
-        animator.SetBool("IdleToIdle", false);
-        animator.SetBool("WalkToIdle", false);
-        animator.SetBool("WalkToWalk", true);
-        animator.SetBool("IdleToWalk", true);
-    }
-
-    [PunRPC]
-    public void RPCSwitchCharacterToIdle()
-    {
-        Animator animator = GetComponent<Animator>();
-        animator.SetBool("WalkToWalk", false);
-        animator.SetBool("IdleToWalk", false);
-        animator.SetBool("WalkToIdle", true);
-        animator.SetBool("IdleToIdle", true);
+        m_animator.SetBool("IdleToIdle", true);
+        m_animator.SetBool("WalkToWalk", false);
+        m_animator.SetBool("IdleToWalk", false);
+        m_animator.SetBool("WalkToIdle", true);
     }
 }

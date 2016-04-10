@@ -2012,6 +2012,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
 
             case PunEvent.DestroyPlayer:
+            {
                 Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
                 int targetPlayerId = (int)evData[(byte)0];
                 if (targetPlayerId >= 0)
@@ -2023,17 +2024,23 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     if (this.DebugOut >= DebugLevel.INFO) Debug.Log("Ev DestroyAll! By PlayerId: " + actorNr);
                     this.DestroyAll(true);
                 }
+            }
                 break;
 
             case PunEvent.Destroy:
-                PhotonNetwork.HandleDestroy((int[]) photonEvent[ParameterCode.Data]);
-
+            {
+                Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
+                PhotonNetwork.HandleDestroy((short) evData[(byte) 0], (int[]) evData[(byte) 1]);
+                
+            }
                 break;
 
             case PunEvent.AssignMaster:
-                evData = (Hashtable)photonEvent[ParameterCode.Data];
+            {
+                Hashtable evData = (Hashtable)photonEvent[ParameterCode.Data];
                 int newMaster = (int)evData[(byte)1];
                 this.SetMasterClient(newMaster, false);
+            }
                 break;
 
             case EventCode.LobbyStats:
@@ -2270,21 +2277,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             return;
         }
 
-        if (!photonNetview.AllowFullCommunication)
-        {
-            //If we own the object and the sender is not the controller then ignore
-            if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
-            {
-                Debug.LogError("Error: Sender from non controller object is illegal on {0}.", photonNetview);
-                return;
-            }
+        bool shouldIgnoreIfNotFullCommunication = false;
 
-            //If we do not own the object and the sender was not the owner then ignore
-            if (!photonNetview.isMine && sender != photonNetview.owner)
-            {
-                Debug.LogError("Error: Sender from non owner object is illegal on {0}.", photonNetview);
-                return;
-            }
+
+        //If we own the object and the sender is not the controller then ignore
+        if (photonNetview.isMine && sender != photonNetview.Controller && sender != PhotonNetwork.player)
+        {
+            shouldIgnoreIfNotFullCommunication = true;
+        }
+
+        //If we do not own the object and the sender was not the owner then ignore
+        if (!photonNetview.isMine && sender != photonNetview.owner)
+        {
+            shouldIgnoreIfNotFullCommunication = true;
         }
 
         // Get method name
@@ -2367,8 +2372,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             for (int index = 0; index < cachedRPCMethods.Count; index++)
             {
                 MethodInfo mInfo = cachedRPCMethods[index];
+
                 if (mInfo.Name.Equals(inMethodName))
                 {
+                    PunRPC methodNetInfo = (PunRPC)mInfo.GetCustomAttributes(typeof(PunRPC), true)[0];
+                    if (shouldIgnoreIfNotFullCommunication && !methodNetInfo.AllowFullCommunication && false)
+                        continue;
+
                     foundMethods++;
                     ParameterInfo[] pArray = mInfo.GetParameters();
                     if (pArray.Length == argTypes.Length)
@@ -2910,6 +2920,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     /// </summary>
     private void ServerCleanInstantiateAndDestroy(int instantiateId, int creatorId, bool isRuntimeInstantiated)
     {
+        PhotonView view = GetPhotonView(instantiateId);
+
         Hashtable removeFilter = new Hashtable();
         removeFilter[(byte)7] = instantiateId;
 
@@ -2918,7 +2930,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         //this.OpRaiseEvent(PunEvent.Instantiation, removeFilter, true, 0, new int[] { actorNr }, EventCaching.RemoveFromRoomCache);
 
         Hashtable evData = new Hashtable();
-        evData[(byte)0] = instantiateId;
+        evData[(byte) 0] = (short)view.prefix;
+        evData[(byte)1] = new [] {instantiateId};
         options = null;
         if (!isRuntimeInstantiated)
         {
@@ -3250,7 +3263,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         bool isMine = view.isMine;
         bool isController = view.isController;
-        bool allowFullCom = view.AllowFullCommunication;
+        bool allowFullCom = true;
         PhotonPlayer owner = view.owner;
 
         List<int> playerIds = new List<int>(players.Length);
@@ -3411,6 +3424,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         if (this.loadingLevelAndPausedNetwork)
         {
+            SetLevelPrefix((short) SceneManager.GetActiveScene().buildIndex);
             this.loadingLevelAndPausedNetwork = false;
             PhotonNetwork.isMessageQueueRunning = true;
         }
@@ -3440,10 +3454,29 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
         PhotonView[] views = photonViewList.Values.ToArray();
 
-        foreach (PhotonView view in views)
+        if (!PhotonNetwork.inRoom)
         {
-            if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated && view.isMine)
-                PhotonNetwork.Spawn(view);
+            foreach (PhotonView view in views)
+            {
+                view.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            foreach (PhotonView view in views)
+            {
+                if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated)
+                    view.gameObject.SetActive(false);
+            }
+
+            foreach (PhotonView view in views)
+            {
+                if (photonViewList.ContainsKey(view.viewID) && !view.HasSpawned && !view.isRuntimeInstantiated &&
+                    view.isMine)
+                {
+                    PhotonNetwork.Spawn(view);
+                }
+            }
         }
     }
 

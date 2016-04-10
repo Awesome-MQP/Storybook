@@ -4,6 +4,9 @@ using System;
 
 public class EnemyTeam : CombatTeam {
 
+    [SerializeField]
+    private bool m_isBossTeam = false;
+
     public override void SpawnTeam()
     {
         DungeonMaster dm = FindObjectOfType<DungeonMaster>();
@@ -13,11 +16,22 @@ public class EnemyTeam : CombatTeam {
         foreach (CombatPawn pawn in PawnsToSpawn)
         {
             EnemyPositionNode nodeToUse = _getPositionNodeById(positionNodes, i + 1);
-            GameObject enemyObject = PhotonNetwork.Instantiate("Enemies/" + PawnsToSpawn[i].PawnGenre + "/" + PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
-            PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
+
+            GameObject enemyObject = null;
+
+            if (!m_isBossTeam)
+            {
+                enemyObject = PhotonNetwork.Instantiate("Enemies/EnemyTypes/" + PawnsToSpawn[i].PawnGenre + "/" + PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
+            }
+            else
+            {
+                enemyObject = PhotonNetwork.Instantiate("Enemies/EnemyTypes/" + PawnsToSpawn[i].PawnGenre + "/Bosses/" + PawnsToSpawn[i].name, nodeToUse.transform.position, nodeToUse.transform.rotation, 0);
+            }
+
             CombatPawn enemyPawn = enemyObject.GetComponent<CombatPawn>();
-            dm.ScalePawnByLevel(enemyPawn, TeamLevel);
             enemyPawn.transform.SetParent(nodeToUse.transform);
+            PhotonNetwork.Spawn(enemyObject.GetComponent<PhotonView>());
+            dm.ScalePawnByLevel(enemyPawn, TeamLevel);
             enemyPawn.PawnId = i + 1;
             enemyPawn.TeamId = TeamId;
             enemyPawn.RegisterTeam(this);

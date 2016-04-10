@@ -72,4 +72,33 @@ MonoBehaviour:
   - _rpcMoveInDirection
   - BeginFadeOverNetwork
   - _rpcOnStartGame
+  - InitializeDictionary
+  - SelectCharacter
+  - InitializeCamera
+  - _rpcOnRegistered
+  - NetworkedRoomEvent
+  - SendPageData
+  - NetworkedSetFloorMaterial
+  - _moveCameraTo
+  - _resetCameraAfterCombat
+  - InitializePlayerPawn
+  - _rpcSubmitPageForCreation
+  - _playerFinished
+  - RPCSetMaxHealth
+  - MoveToNextFloorMaster
+  - CreateTutorialMenu
+  - BossFightTutorial
+  - CombatClearTutorial
+  - CreateCombatTutorial
+  - CreatePageForRoomTutorial
+  - CreateStartMenu
+  - DeckManagementTutorial
+  - DemoCompleteTutorial
+  - ShopTutorial
+  - CreateCharacterSelectTutorial
+  - AnimateComicBookRPC
+  - AnimateFantasyRPC
+  - AnimateHorrorRPC
+  - AnimateSciFiRPC
+  - InitializeAnimators
   DisableAutoOpenWizard: 1

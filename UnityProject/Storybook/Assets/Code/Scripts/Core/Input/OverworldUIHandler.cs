@@ -17,6 +17,16 @@ public class OverworldUIHandler : UIHandler {
     [SerializeField]
     Button m_westButton;
 
+    [SerializeField]
+    Button m_nextFloorButton;
+
+    private RoomObject m_currentRoom;
+
+    void Start()
+    {
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnTutorialStart();
+    }
+
     /// <summary>
     /// Called by direction buttons in the overworld menu
     /// Submits the direction to the player mover
@@ -35,9 +45,29 @@ public class OverworldUIHandler : UIHandler {
     /// <param name="currentRoom">The current room that the players are in</param>
     public void PopulateMenu(RoomObject currentRoom)
     {
+        m_currentRoom = currentRoom;
+
         m_northButton.gameObject.SetActive(currentRoom.NorthDoor.IsDoorEnabled);
         m_eastButton.gameObject.SetActive(currentRoom.EastDoor.IsDoorEnabled);
         m_southButton.gameObject.SetActive(currentRoom.SouthDoor.IsDoorEnabled);
         m_westButton.gameObject.SetActive(currentRoom.WestDoor.IsDoorEnabled);
+        
+        if (currentRoom is ExitRoom)
+        {
+            m_nextFloorButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            m_nextFloorButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void MoveToNextFloorButtonPressed()
+    {
+        if (m_currentRoom is ExitRoom)
+        {
+            ExitRoom exit = (ExitRoom)m_currentRoom;
+            exit.MoveToNextFloor();
+        }
     }
 }

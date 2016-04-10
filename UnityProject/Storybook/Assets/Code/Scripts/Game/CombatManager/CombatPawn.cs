@@ -104,6 +104,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         {
             dmgText.color = Color.red;
             dmgText.text = "-" + damageAmount.ToString() + "HP";
+            PlayDamageSound();
         }
         else if (damageAmount < 0)
         {
@@ -115,6 +116,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
             // no damage
             dmgText.color = new Color(255, 165, 0);
             dmgText.text = "No Dmg!";
+            PlayNoDamageSound();
         }
 
         // Deal damage to target
@@ -196,7 +198,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
-
+        PlaySupportSound();
     }
 
     /// <summary>
@@ -218,7 +220,23 @@ public abstract class CombatPawn : Photon.PunBehaviour
             m_health = m_maxHealth;
         }
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)m_health, (int)m_maxHealth);
+        PhotonPlayer photonPlayer = null;
+
+        foreach (PhotonPlayer p in PhotonNetwork.playerList)
+        {
+            if (p.ID == PawnId)
+            {
+                photonPlayer = p;
+                break;
+            }
+        }
+        PlaySupportSound();
+
+        // Only send out the event if it is a player that is gaining health
+        if (this is CombatPlayer)
+        {
+            EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)m_health, (int)m_maxHealth);
+        }
     }
 
     /// <summary>
@@ -236,7 +254,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
-
+        PlaySupportSound();
     }
 
     /// <summary>
@@ -254,7 +272,22 @@ public abstract class CombatPawn : Photon.PunBehaviour
         transform.parent.Find("DamageText").gameObject.SetActive(true);
         m_textTick += m_textTickStartingCount;
         m_textIsActive = true;
+        PlaySupportSound();
+    }
 
+    public void PlayDamageSound()
+    {
+        SoundEffectsManager.Instance.PlayDamageSound();
+    }
+
+    public void PlayNoDamageSound()
+    {
+        SoundEffectsManager.Instance.PlayHitNoDamageSound();
+    }
+
+    public void PlaySupportSound()
+    {
+        SoundEffectsManager.Instance.PlaySupportSound();
     }
 
     /// <summary>
@@ -281,10 +314,15 @@ public abstract class CombatPawn : Photon.PunBehaviour
     /// <summary>
     /// The speed value (stat) for the combat pawn, used to determine turn order
     /// </summary>
+    [SyncProperty]
     public float Speed
     {
         get { return m_speed + m_speedBoost + m_speedMod; }
-        set { m_speed = value; }
+        set
+        {
+            m_speed = value;
+            PropertyChanged();
+        }
     }
 
     /// <summary>
@@ -298,7 +336,20 @@ public abstract class CombatPawn : Photon.PunBehaviour
 
     public void SetMaxHealth(float newMaxHealth)
     {
+        photonView.RPC(nameof(RPCSetMaxHealth), PhotonTargets.All, newMaxHealth);
+    }
+
+    [PunRPC]
+    public void RPCSetMaxHealth(float newMaxHealth)
+    {
         m_maxHealth = newMaxHealth;
+
+        // Only set health to max health if it is an enemy
+        // Players maintain their HP across rooms/floors
+        if (this is CombatAI)
+        {
+            m_health = newMaxHealth;
+        }
     }
 
 
@@ -414,16 +465,26 @@ public abstract class CombatPawn : Photon.PunBehaviour
         }
     }
 
+    [SyncProperty]
     public float Attack
     {
         get { return m_attack + m_attackBoost + m_attackMod; }
-        set { m_attack = value; }
+        set
+        {
+            m_attack = value;
+            PropertyChanged();
+        }
     }
 
+    [SyncProperty]
     public float Defense
     {
         get { return m_defense + m_defenseBoost + m_defenseMod; }
-        set { m_defense = value; }
+        set
+        {
+            m_defense = value;
+            PropertyChanged();
+        }
     }
 
     [SyncProperty]

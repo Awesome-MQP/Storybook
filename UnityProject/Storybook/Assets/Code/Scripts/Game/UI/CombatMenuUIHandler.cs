@@ -89,18 +89,26 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
         for (int i = 1; i <= PhotonNetwork.playerList.Length; i++)
         {
             PhotonPlayer player = PhotonNetwork.playerList[i - 1]; // the current player
-            int playerID = PhotonNetwork.playerList[i - 1].ID; // player ID
-            GameManager gm = FindObjectOfType<GameManager>();
-            PlayerEntity pe = gm.FindPlayerEntity(playerID);
+            GameManager gm = GameManager.GetInstance<GameManager>();
+            PlayerEntity pe = gm.GetPlayerObject<PlayerEntity>(player);
 
-            Debug.Log("Children count = " + gameObject.GetComponentsInChildren<Image>().Length);
+            // Set and enable the corresponding player panel
+            Image playerPanel = null;
+            string panelName = "Player" + player.ID + "Panel";
+            foreach(Image image in GetComponentsInChildren<Image>())
+            {
+                if (image.name == panelName)
+                {
+                    playerPanel = image;
+                }
+            }
+            playerPanel.enabled = true;
 
             // Set and enable the corresponding player icon
             Image playerImage = null;
-            string iconName = "Player" + i + "Icon";
+            string iconName = "Player" + player.ID + "Icon";
             foreach(Image image in GetComponentsInChildren<Image>())
             {
-                Debug.Log("Image name = " + image.name);
                 if (image.name == iconName)
                 {
                     playerImage = image;
@@ -111,7 +119,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
 
             // Set and enable the corresponding player ID text
             Text playerIdText = null;
-            string idName = "Player" + i + "ID";
+            string idName = "Player" + player.ID + "ID";
             foreach (Text text in GetComponentsInChildren<Text>())
             {
                 if (text.name == idName)
@@ -120,11 +128,11 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
                 }
             }
             playerIdText.enabled = true;
-            playerIdText.text = "ID: " + playerID.ToString();
+            playerIdText.text = "ID: " + player.ID;
 
             // Set and enable the corresponding player HP text
             Text playerHP = null;
-            string hpName = "Player" + i + "HP";
+            string hpName = "Player" + player.ID + "HP";
             foreach (Text text in GetComponentsInChildren<Text>())
             {
                 if (text.name == hpName)
@@ -134,7 +142,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
             }
             playerHP.enabled = true;
             playerHP.text = "HP: " + pe.HitPoints + "/" + pe.MaxHitPoints;
-            m_mapIDtoUI.Add(playerID, playerHP);
+            m_mapIDtoUI.Add(player.ID, playerHP);
          }          
      }
 

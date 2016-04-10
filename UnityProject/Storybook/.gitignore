@@ -21,7 +21,7 @@
 sysinfo.txt
 /.vs/
 /Builds/
-/compilation log.txt
+/CSharp60Support/compilation log.txt
 
 # Ignore ProjectSettings, ProjectVersion, AnalyticsManager
 */ProjectSettings.asset
@@ -36,3 +36,7 @@ sysinfo.txt
 *[Dd]emo_[Dd]ata
 *[Dd]emo.exe
 *.pdb
+*[Tt]est*_[Dd]ata
+*[Tt]est*.exe
+*_[Dd]ata
+*.zip

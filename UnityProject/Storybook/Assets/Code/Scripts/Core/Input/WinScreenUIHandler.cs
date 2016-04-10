@@ -5,12 +5,8 @@ public class WinScreenUIHandler : GameMenuUIHandler {
 
     void Start()
     {
-        PlayerObject[] allPlayerObjects = FindObjectsOfType<PlayerObject>();
-        foreach (PlayerObject po in allPlayerObjects)
-        {
-            Destroy(po.photonView);
-            Destroy(po.gameObject);
-        }
+        Camera gameCamera = Camera.main;
+        gameCamera.transform.SetParent(null);
+        GameManager.GetInstance<GameManager>().CleanupForNewGame();
     }
-
 }

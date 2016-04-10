@@ -41,12 +41,27 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     protected Transform m_floorObject;
 
     [SerializeField]
+    protected AudioClip[] m_musicTracks; // This array holds all music tracks for a room, in an effort to make it more general. 
+                                       // To make accessing tracks from this more easy to follow, use this standard for putting tracks into the array
+                                       // INDEX | TRACK
+                                       // 0.......RoomMusic
+                                       // 1.......FightMusic
+                                       // 2+......Miscellaneous
+
+    public AudioClip[] RoomMusic
+    {
+        get { return m_musicTracks; }
+    }
+    
+    [SerializeField]
     protected List<Transform> m_sceneryNodes = new List<Transform>();
 
     private PageData m_roomPageData;
 
     protected override void Awake()
     {
+        photonView.AllowFullCommunication = true;
+
         base.Awake();
 
         m_featureSet = new HashSet<string>();
@@ -79,25 +94,33 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         m_westDoor.DoorDirection = Door.Direction.West;
     }
 
-    // What do we do immediately upon entering the room?
-    public virtual void OnRoomEnter()
+    public void RoomEntered(RoomMover mover)
     {
-        return;
+        photonView.RPC(nameof(_moveCameraTo), PhotonTargets.All);
+
+        OnRoomEnter(mover);
     }
 
-    // What do we do as soon as all players reach the center of the room?
-    public virtual void OnRoomEvent()
+    public IEnumerable RoomEvent(RoomMover mover)
     {
-        return;
+        BasePlayerMover playerMover = mover as BasePlayerMover;
+        if(playerMover != null)
+            EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>().OnPreRoomEvent(playerMover, this);
+
+        foreach (var v in OnRoomEvent(mover))
+        {
+            yield return v;
+        }
+
+        if (playerMover != null)
+            EventDispatcher.GetDispatcher<PlayerControlEventDispatcher>().OnPostRoomEvent(playerMover, this);
     }
 
-    // What do we do immediately upon leaving the room?
-    public virtual void OnRoomExit()
+    public void RoomExit(RoomMover mover)
     {
-        return;
+        OnRoomExit(mover);
     }
 
-    // Property for a Room's Location
     [SyncProperty]
     public Location RoomLocation
     {
@@ -105,12 +128,14 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         protected set
         {
             m_roomLocation = value;
-            MapManager.Instance.RegisterRoom(this);
+            if(IsMine)
+                MapManager.Instance.RegisterRoom(this);
             PropertyChanged();
         }
     }
 
     //TODO: Array allocation every time this is used, might be better to just have getters.
+
     public Door[] AllDoors
     {
         get
@@ -146,6 +171,7 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     }
 
     // Property for the size of a room
+
     [Obsolete]
     public int RoomSize
     {
@@ -162,10 +188,16 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         get { return m_cameraNode; }
     }
 
+    [SyncProperty]
     public PageData RoomPageData
     {
         get { return m_roomPageData; }
-        set { m_roomPageData = value; }
+        set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+            m_roomPageData = value;
+            PropertyChanged();
+        }
     }
 
     /// <summary>
@@ -195,7 +227,7 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException("direction", direction, null);
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
 
         return doorToReturn.IsDoorEnabled ? doorToReturn : null;
@@ -227,6 +259,16 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         return true;
     }
 
+    protected abstract void OnRoomEnter(RoomMover mover);
+
+    protected abstract IEnumerable OnRoomEvent(RoomMover mover);
+
+    protected abstract void OnRoomExit(RoomMover mover);
+
+    protected void ClearRoom()
+    {
+        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+    }
     /// <summary>
     /// Iterates through all of the scenery nodes and randomly chooses whether or not it will place a scenery object there
     /// If it does choose to place a scenery object there, it randomly selects one based on the genre
@@ -246,9 +288,10 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
             return;
         }
 
+        System.Random random = new System.Random();
+
         foreach (Transform t in m_sceneryNodes)
         {
-            System.Random random = new System.Random();
             double randomDouble = random.NextDouble();
             if (randomDouble >= 0.25)
             {
@@ -264,12 +307,6 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
     /// <returns>The scenery object that was placed</returns>
     private GameObject _PlaceRandomSceneryObject(Transform sceneryNode)
     {
-        // TODO: Currently no scifi objects, so just return
-        if (m_roomPageData.PageGenre == Genre.SciFi)
-        {
-            return null;
-        }
-
         string sceneryLoc = "Scenery/";
         sceneryLoc += m_roomPageData.PageGenre + "/";
         UnityEngine.Object[] allSceneryForGenre = Resources.LoadAll(sceneryLoc);
@@ -281,5 +318,13 @@ public abstract class RoomObject : PunBehaviour, IConstructable<RoomData>
         PhotonNetwork.Spawn(sceneryObject.GetPhotonView());
         sceneryObject.SetActive(true);
         return sceneryObject;
+    }
+
+    [PunRPC]
+    protected void _moveCameraTo()
+    {
+        // Moves the camera to the new room
+        Camera.main.GetComponent<GameCamera>().trackObject(Camera.main, CameraNode);
+        Camera.main.transform.rotation = CameraNode.rotation;
     }
 }

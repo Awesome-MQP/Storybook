@@ -15,7 +15,7 @@ public class WinState : CombatState {
         // If it is the master client, instantiate a NetWinState for the other clients to receive
         if (PhotonNetwork.isMasterClient)
         {
-            m_netWinStateObject = PhotonNetwork.Instantiate("NetWinState", Vector3.zero, Quaternion.identity, 0);
+            m_netWinStateObject = PhotonNetwork.Instantiate("CombatStateMachine/NetWinState", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_netWinStateObject.GetComponent<PhotonView>());
             m_netWinState = m_netWinStateObject.GetComponent<NetWinState>();
         }

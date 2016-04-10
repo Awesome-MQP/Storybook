@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShopUIEventDispatcher : EventDispatcher {
+public class ShopEventDispatcher : EventDispatcher {
 
     public interface IShopEventListener : IEventListener
     {

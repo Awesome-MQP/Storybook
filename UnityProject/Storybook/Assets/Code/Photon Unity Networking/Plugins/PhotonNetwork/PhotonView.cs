@@ -283,9 +283,11 @@ public class PhotonView : Photon.MonoBehaviour
         get { return parentView; }
     }
 
+    [Obsolete]
     public bool AllowFullCommunication
     {
         get { return allowFullCommunication; }
+        set { allowFullCommunication = value; }
     }
 
     protected internal bool didAwake;
@@ -336,7 +338,7 @@ public class PhotonView : Photon.MonoBehaviour
     }
 
     /// <summary>Called by Unity on start of the application and does a setup the PhotonView.</summary>
-    protected internal void Awake()
+    protected void Awake()
     {
         BuildParent();
 
@@ -346,8 +348,6 @@ public class PhotonView : Photon.MonoBehaviour
             PhotonNetwork.networkingPeer.RegisterPhotonView(this);
             this.instantiationDataField = PhotonNetwork.networkingPeer.FetchInstantiationData(this.instantiationId);
         }
-
-        gameObject.SetActive(false);
 
         if (!isSceneView)
         {
@@ -494,7 +494,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     protected internal void OnDestroy()
     {
-        if (isMine)
+        if (isMine && !PhotonNetwork.isInLevelLoad)
         {
             PhotonNetwork.Destroy(this);
         }
@@ -1059,8 +1059,12 @@ public class PhotonView : Photon.MonoBehaviour
         if (isMine)
         {
             BuildParent();
-            RebuildNetworkRelavance();
-            PhotonNetwork.UpdateViewParent(this);
+
+            if (HasSpawned)
+            {
+                RebuildNetworkRelavance();
+                PhotonNetwork.UpdateViewParent(this);
+            }
         }
     }
 

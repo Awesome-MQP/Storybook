@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public class BasePlayerMover : RoomMover
+/// <summary>
+/// Base class for player movers.
+/// </summary>
+public abstract class BasePlayerMover : RoomMover
 {
     private HashSet<PlayerObject> m_registeredPlayers = new HashSet<PlayerObject>();
 
@@ -54,7 +57,13 @@ public class BasePlayerMover : RoomMover
     public void RegisterPlayer(PlayerObject player)
     {
         if(OnRegisterPlayer(player))
+        {
             m_registeredPlayers.Add(player);
+            if (player.Player.isLocal)
+                OnRegistered();
+            else
+                photonView.RPC(nameof(_rpcOnRegistered), player.Player);
+        }
     }
 
     /// <summary>
@@ -67,10 +76,21 @@ public class BasePlayerMover : RoomMover
         return true;
     }
 
-    protected override IEnumerable<StateDelegate> OnEnterRoom()
+    protected virtual void OnRegistered()
+    {
+        
+    }
+
+    protected override IEnumerable<StateDelegate> StateEnterRoom()
     {
         ChangeLeader();
 
-        return base.OnEnterRoom();
+        return base.StateEnterRoom();
+    }
+
+    [PunRPC]
+    protected void _rpcOnRegistered()
+    {
+        OnRegistered();
     }
 }

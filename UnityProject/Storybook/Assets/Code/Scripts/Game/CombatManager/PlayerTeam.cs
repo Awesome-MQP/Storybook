@@ -2,41 +2,59 @@
 using System.Collections.Generic;
 using System;
 
-public class PlayerTeam : CombatTeam {
+public class PlayerTeam : CombatTeam
+{
 
     [SerializeField]
     Page m_pageToUse;
+
+    [SerializeField]
+    private ResourceAsset m_comicCombatPawn = new ResourceAsset(typeof(CombatPlayer));
+
+    [SerializeField]
+    private ResourceAsset m_horrorCombatPawn = new ResourceAsset(typeof(CombatPlayer));
+
+    [SerializeField]
+    private ResourceAsset m_fantasyCombatPawn = new ResourceAsset(typeof(CombatPlayer));
+
+    [SerializeField]
+    private ResourceAsset m_scifiCombatPawn = new ResourceAsset(typeof(CombatPlayer));
 
     public override void SpawnTeam()
     {
         GetComponent<PhotonView>().RPC("RegisterTeamLocal", PhotonTargets.Others, TeamId);
         int i = 0;
         List<PlayerPositionNode> positionNodes = new List<PlayerPositionNode>(FindObjectsOfType<PlayerPositionNode>());
-        foreach (CombatPawn pawn in PawnsToSpawn)
+
+        foreach (PlayerEntity pe in GameManager.GetInstance<GameManager>().IteratePlayers<PlayerEntity>())
         {
+            ResourceAsset prefab = _getCombatPawnResourceForGenre(pe.Genre);
+
+            //TODO: change to use node rotation
             PlayerPositionNode playerNode = _getPositionNodeById(positionNodes, i + 1);
             Quaternion rotation = Quaternion.identity;
             rotation.y = 120;
             rotation.w = 120;
-            GameObject playerObject = PhotonNetwork.Instantiate(PawnsToSpawn[i].name, playerNode.transform.position, rotation, 0);
-            if ((i + 1) != PhotonNetwork.player.ID)
+            GameObject playerObject = PhotonNetwork.Instantiate(prefab, playerNode.transform.position, rotation, 0);
+            if (!pe.Player.isLocal)
             {
-                playerObject.GetComponent<PhotonView>().TransferController(i + 1);
+                playerObject.GetComponent<PhotonView>().TransferController(pe.Player);
             }
-            PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
             CombatPawn playerPawn = playerObject.GetComponent<CombatPawn>();
             playerPawn.transform.SetParent(playerNode.transform);
             playerPawn.PawnId = i + 1;
 
             playerPawn.TeamId = TeamId;
 
+            PhotonNetwork.Spawn(playerObject.GetComponent<PhotonView>());
+
             if (playerPawn is CombatPlayer)
             {
                 CombatPlayer player = (CombatPlayer)playerPawn;
-                GameManager gameManager = FindObjectOfType<GameManager>();
+                GameManager gameManager = GameManager.GetInstance<GameManager>();
                 PlayerEntity currentPlayerEntity = _findPlayerEntity(playerPawn.PawnId);
-                player.InitializePlayerPawn(currentPlayerEntity);
-                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayerInventory();
+                player.photonView.RPC("InitializePlayerPawn", PhotonTargets.All, currentPlayerEntity.photonView);
+                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
                 player.CreateDeck(currentPlayerInventory);
             }
 
@@ -48,9 +66,9 @@ public class PlayerTeam : CombatTeam {
         }
     }
 
-    private PlayerPositionNode _getPositionNodeById(List<PlayerPositionNode> enemyPositions, int positionId)
+    private PlayerPositionNode _getPositionNodeById(List<PlayerPositionNode> playerPositions, int positionId)
     {
-        foreach (PlayerPositionNode playerNode in enemyPositions)
+        foreach (PlayerPositionNode playerNode in playerPositions)
         {
             Debug.Log("Node Id = " + playerNode.PositionId);
             if (playerNode.PositionId == positionId)
@@ -133,5 +151,22 @@ public class PlayerTeam : CombatTeam {
             }
         }
         return null;
+    }
+
+    private ResourceAsset _getCombatPawnResourceForGenre(Genre genre)
+    {
+        switch (genre)
+        {
+            case Genre.Horror:
+                return m_horrorCombatPawn;
+            case Genre.SciFi:
+                return m_scifiCombatPawn;
+            case Genre.Fantasy:
+                return m_fantasyCombatPawn;
+            case Genre.GraphicNovel:
+                return m_comicCombatPawn;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(genre), genre, null);
+        }
     }
 }

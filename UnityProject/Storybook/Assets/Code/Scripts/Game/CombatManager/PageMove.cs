@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class PageMove : PlayerMove {
+public abstract class PageMove : PlayerMove, IConstructable<Page> {
 
     /// <summary>
     /// The enum int value for the genre of the page
@@ -25,7 +25,7 @@ public abstract class PageMove : PlayerMove {
     }
 
     // Constructor for PageMove, used for wrapper.
-    public void construct(Page page)
+    public void Construct(Page page)
     {
         this.PageGenre = page.PageGenre;
         this.PageType = page.PageType;
@@ -34,7 +34,8 @@ public abstract class PageMove : PlayerMove {
         // If page is rare, set targets to all pawns on the enemy team
         if (page.Rarity)
         {
-            this.SetNumberOfTargets(FindObjectOfType<GameManager>().EnemyTeamForCombat.ActivePawnsOnTeam.Count);
+            //TODO: Fix this?
+            //this.SetNumberOfTargets(FindObjectOfType<GameManager>().EnemyTeamForCombat.ActivePawnsOnTeam.Count);
         }
         else // else it's common, only 1 target
         {

@@ -22,7 +22,7 @@ public class ExecuteState : CombatState
         // If is the master client, instantiate a NetExecuteState to all clients upon entering
         if (PhotonNetwork.isMasterClient)
         {
-            m_netExecuteStateObject = PhotonNetwork.Instantiate("NetExecuteState", Vector3.zero, Quaternion.identity, 0);
+            m_netExecuteStateObject = PhotonNetwork.Instantiate("CombatStateMachine/NetExecuteState", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(m_netExecuteStateObject.GetComponent<PhotonView>());
             m_netExecuteState = m_netExecuteStateObject.GetComponent<NetExecuteState>();
         }

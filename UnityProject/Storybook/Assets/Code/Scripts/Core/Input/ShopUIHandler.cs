@@ -51,6 +51,7 @@ public class ShopUIHandler : PageUIHandler {
 
     public override void PageButtonPressed(PageButton pageButton)
     {
+        Debug.Log("Page button pressed");
         switch (pageButton.MenuId)
         {
             case m_playerInventoryMenuId:
@@ -81,7 +82,7 @@ public class ShopUIHandler : PageUIHandler {
     private void _handleSelectedPlayerPagePressed(PageButton buttonPressed)
     {
         buttonPressed.transform.SetParent(m_playerInventoryPagesRect.content, false);
-        buttonPressed.MenuId = m_selectedPlayerPageId;
+        buttonPressed.MenuId = m_playerInventoryMenuId;
         m_selectedPages.Remove(buttonPressed);
     }
 
@@ -106,8 +107,7 @@ public class ShopUIHandler : PageUIHandler {
 
     public void PopulateMenu(List<PageData> shopPages)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+        PlayerInventory pi = GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
 
         // Populate the player inventory scroll rect
         for (int i = 0; i < pi.DynamicSize; i++)
@@ -129,7 +129,7 @@ public class ShopUIHandler : PageUIHandler {
         if (shopPages.Count <= 0)
         {
             // Populate the shop pages scroll rect, number of pages is determined by the level of the room
-            DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+            DungeonMaster dm = DungeonMaster.Instance;
             for (int i = 0; i < m_shopRoom.RoomPageData.PageLevel + 1; i++)
             {
                 PageData shopPageData = dm.GetShopPage(m_shopRoom.RoomPageData);
@@ -138,7 +138,7 @@ public class ShopUIHandler : PageUIHandler {
                 button.GetComponent<PageButton>().MenuId = m_shopInventoryMenuId;
                 m_shopPages.Add(shopPageData);
             }
-            EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
+            EventDispatcher.GetDispatcher<ShopEventDispatcher>().PagesGenerated(m_shopPages.ToArray());
         }
 
         // If the pages have already been generated for the shop, use the list passed in
@@ -168,9 +168,9 @@ public class ShopUIHandler : PageUIHandler {
     }
 
     public void ExitMenu()
-    {
+    { 
         PlayClickSound();
-        EventDispatcher.GetDispatcher<RoomEventEventDispatcher>().OnRoomCleared();
+        EventDispatcher.GetDispatcher<ShopEventDispatcher>().OnShopClosed();
         Destroy(gameObject);
     }
 
@@ -185,18 +185,17 @@ public class ShopUIHandler : PageUIHandler {
         // Only allow the trade if the total level of all the player pages is equal to or greater than the selected shop page
         if (_getTotalSelectedLevel() >= m_selectedShopPageButton.PageLevel)
         {
-            PlayClickSound();
-            GameManager gameManager = FindObjectOfType<GameManager>();
-            DungeonMaster dm = FindObjectOfType<DungeonMaster>();
-            PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+			PlayClickSound();
+            GameManager gameManager = GameManager.GetInstance<GameManager>();
+            DungeonMaster dm = DungeonMaster.Instance;
+            PlayerInventory pi = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
 
-            /*
+            // Drop the pages that are being traded away
             foreach (PageButton pageButton in m_selectedPages)
             {
                 pi.Drop(pageButton.InventoryId);
                 pi.Add(dm.GetBasicPage(), pageButton.InventoryId);
             }
-            */
 
             PageData selectedPageData = m_selectedShopPageButton.PageData;
             Page newPlayerPage = dm.ConstructPageFromData(selectedPageData);
@@ -204,8 +203,9 @@ public class ShopUIHandler : PageUIHandler {
             m_shopPages.Remove(m_selectedShopPageButton.PageData);
 
             // Send out a page traded event
-            EventDispatcher.GetDispatcher<ShopUIEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
+            EventDispatcher.GetDispatcher<ShopEventDispatcher>().PageTraded(m_selectedShopPageButton.PageData);
             _clearSelected();
+            m_selectedShopPageButton.MenuId = m_playerInventoryMenuId;
 
             // Exit the menu if all the pages have been traded for
             if (m_shopPages.Count <= 0)

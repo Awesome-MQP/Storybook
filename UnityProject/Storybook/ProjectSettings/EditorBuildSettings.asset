@@ -8,22 +8,28 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Levels/Game/GameStartup.unity
   - enabled: 1
-    path: Assets/Levels/Game/GameLobby.unity
+    path: Assets/Levels/Game/MainMenu.unity
   - enabled: 1
-    path: Assets/Levels/Demo/DemoCombatScene.unity
+    path: Assets/Levels/Game/JoinGameMenu.unity
   - enabled: 1
-    path: Assets/Levels/Demo/TestInventory.unity
+    path: Assets/Levels/Game/PreGameLobby.unity
   - enabled: 1
-    path: Assets/Levels/Game/WorldMovementTest.unity
+    path: Assets/Levels/Game/CharacterSelect.unity
   - enabled: 1
-    path: Assets/Levels/Demo/LoadLevelBugScene.unity
+    path: Assets/Levels/Game/TutorialCharacterSelect.unity
   - enabled: 1
-    path: Assets/Levels/Demo/TestMapGeneration.unity
+    path: Assets/Levels/Game/TestingLevel.unity
+  - enabled: 1
+    path: Assets/Levels/Game/TutorialLevel.unity
+  - enabled: 1
+    path: Assets/Levels/Game/WinScreen.unity
   - enabled: 1
     path: Assets/Levels/Game/GameOverScene.unity
   - enabled: 1
-    path: Assets/Levels/Game/MainMenu.unity
-  - enabled: 1
     path: Assets/Levels/Game/DemoCompleteScene.unity
-  - enabled: 1
-    path: Assets/Levels/Game/CharacterSelect.unity
+  - enabled: 0
+    path: Assets/Levels/Game/GameLobby.unity
+  - enabled: 0
+    path: Assets/Levels/Game/WorldMovementTest.unity
+  - enabled: 0
+    path: Assets/Levels/Demo/PhotonTest.unity

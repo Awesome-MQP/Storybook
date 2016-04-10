@@ -376,7 +376,10 @@ public abstract class Inventory : PunBehaviour
             {
                 InventoryCommit commit = node.Value;
                 if (!commit.IsDataRelevantTo(Data))
+                {
+                    node = node.Previous;
                     continue;
+                }
 
                 //Rewind the head if we are removing the head
                 if (node == target.m_head)

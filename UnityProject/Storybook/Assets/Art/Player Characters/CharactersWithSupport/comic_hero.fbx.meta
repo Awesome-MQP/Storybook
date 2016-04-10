@@ -1,0 +1,759 @@
+fileFormatVersion: 2
+guid: d5f0d5631aad5f84ea5d85232ea430c6
+timeCreated: 1459738066
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cape1
+    100002: Cape2
+    100004: Cape3
+    100006: Cape4
+    100008: Cape5
+    100010: Cape6
+    100012: Cape_Direction
+    100014: Cape_IK_Control
+    100016: Chest
+    100018: comic:Mesh
+    100020: //RootNode
+    100022: Head
+    100024: Hips
+    100026: ikHandle1
+    100028: ikHandle2
+    100030: ikHandle3
+    100032: ikHandle4
+    100034: ikHandle5
+    100036: joint13
+    100038: joint20
+    100040: joint21
+    100042: joint22
+    100044: joint5
+    100046: joint9
+    100048: L_Bicep
+    100050: L_Elbow
+    100052: L_Foot
+    100054: L_Foot_Controller
+    100056: L_Forearm
+    100058: L_Hand
+    100060: L_Hand_Controller
+    100062: L_Knee
+    100064: L_Shin
+    100066: L_Thigh
+    100068: R_Bicep
+    100070: R_Elbow
+    100072: R_Foot
+    100074: R_Foot_Controller
+    100076: R_Forearm
+    100078: R_Hand
+    100080: R_Hand_Controller
+    100082: R_Knee1
+    100084: R_Shin
+    100086: R_Thigh
+    100088: Shoulders
+    400000: Cape1
+    400002: Cape2
+    400004: Cape3
+    400006: Cape4
+    400008: Cape5
+    400010: Cape6
+    400012: Cape_Direction
+    400014: Cape_IK_Control
+    400016: Chest
+    400018: comic:Mesh
+    400020: //RootNode
+    400022: Head
+    400024: Hips
+    400026: ikHandle1
+    400028: ikHandle2
+    400030: ikHandle3
+    400032: ikHandle4
+    400034: ikHandle5
+    400036: joint13
+    400038: joint20
+    400040: joint21
+    400042: joint22
+    400044: joint5
+    400046: joint9
+    400048: L_Bicep
+    400050: L_Elbow
+    400052: L_Foot
+    400054: L_Foot_Controller
+    400056: L_Forearm
+    400058: L_Hand
+    400060: L_Hand_Controller
+    400062: L_Knee
+    400064: L_Shin
+    400066: L_Thigh
+    400068: R_Bicep
+    400070: R_Elbow
+    400072: R_Foot
+    400074: R_Foot_Controller
+    400076: R_Forearm
+    400078: R_Hand
+    400080: R_Hand_Controller
+    400082: R_Knee1
+    400084: R_Shin
+    400086: R_Thigh
+    400088: Shoulders
+    4300000: comic:Mesh
+    7400000: Walk
+    7400002: Idle
+    7400004: Attack
+    7400006: Hurt
+    7400008: Support
+    9500000: //RootNode
+    13700000: comic:Mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walk
+      takeName: Take 001
+      firstFrame: 6
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cape_Direction
+        weight: 1
+      - path: Cape_IK_Control
+        weight: 1
+      - path: comic:Mesh
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6/joint20
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint22
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: ikHandle5
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 36
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cape_Direction
+        weight: 1
+      - path: Cape_IK_Control
+        weight: 1
+      - path: comic:Mesh
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6/joint20
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint22
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: ikHandle5
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Attack
+      takeName: Take 001
+      firstFrame: 65
+      lastFrame: 87
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cape_Direction
+        weight: 1
+      - path: Cape_IK_Control
+        weight: 1
+      - path: comic:Mesh
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6/joint20
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint22
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: ikHandle5
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Hurt
+      takeName: Take 001
+      firstFrame: 90
+      lastFrame: 110
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cape_Direction
+        weight: 1
+      - path: Cape_IK_Control
+        weight: 1
+      - path: comic:Mesh
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6/joint20
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint22
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: ikHandle5
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Support
+      takeName: Take 001
+      firstFrame: 110
+      lastFrame: 130
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cape_Direction
+        weight: 1
+      - path: Cape_IK_Control
+        weight: 1
+      - path: comic:Mesh
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/Chest
+        weight: 1
+      - path: Hips/Chest/Shoulders
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6
+        weight: 1
+      - path: Hips/Chest/Shoulders/Cape1/Cape2/Cape3/Cape4/Cape5/Cape6/joint20
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head
+        weight: 1
+      - path: Hips/Chest/Shoulders/Head/joint5
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/L_Bicep/L_Forearm/L_Hand/joint13
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand
+        weight: 1
+      - path: Hips/Chest/Shoulders/R_Bicep/R_Forearm/R_Hand/joint21
+        weight: 1
+      - path: Hips/L_Thigh
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot
+        weight: 1
+      - path: Hips/L_Thigh/L_Shin/L_Foot/joint9
+        weight: 1
+      - path: Hips/R_Thigh
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot
+        weight: 1
+      - path: Hips/R_Thigh/R_Shin/R_Foot/joint22
+        weight: 1
+      - path: ikHandle1
+        weight: 1
+      - path: ikHandle2
+        weight: 1
+      - path: ikHandle3
+        weight: 1
+      - path: ikHandle4
+        weight: 1
+      - path: ikHandle5
+        weight: 1
+      - path: L_Elbow
+        weight: 1
+      - path: L_Foot_Controller
+        weight: 1
+      - path: L_Hand_Controller
+        weight: 1
+      - path: L_Knee
+        weight: 1
+      - path: R_Elbow
+        weight: 1
+      - path: R_Foot_Controller
+        weight: 1
+      - path: R_Hand_Controller
+        weight: 1
+      - path: R_Knee1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

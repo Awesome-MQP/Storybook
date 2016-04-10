@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundEffectsManager : Photon.PunBehaviour {
+public class SoundEffectsManager : MonoBehaviour
+{
 
     private static SoundEffectsManager s_instance;
 
@@ -15,10 +16,16 @@ public class SoundEffectsManager : Photon.PunBehaviour {
 
     [SerializeField]
     private AudioClip m_clickSoundEffect;
+    [SerializeField]
+    private AudioClip m_damageSoundEffect;
+    [SerializeField]
+    private AudioClip m_noDamageHitSoundEffect;
+    [SerializeField]
+    private AudioClip m_supportSoundEffect;
 
 	// Use this for initialization
-	protected override void Awake () {
-        base.Awake();
+	protected void Awake ()
+    {
         s_instance = this;
 	}
 	
@@ -28,4 +35,21 @@ public class SoundEffectsManager : Photon.PunBehaviour {
         m_source.Play();
     }
 	
+    public void PlayDamageSound()
+    {
+        m_source.clip = m_damageSoundEffect;
+        m_source.Play();
+    }
+
+    public void PlayHitNoDamageSound()
+    {
+        m_source.clip = m_noDamageHitSoundEffect;
+        m_source.Play();
+    }
+
+    public void PlaySupportSound()
+    {
+        m_source.clip = m_supportSoundEffect;
+        m_source.Play();
+    }
 }

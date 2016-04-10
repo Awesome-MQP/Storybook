@@ -42,21 +42,17 @@ public class DeckManagementUIHandler : PageUIHandler
                 m_inventoryScrollRect = scrollRect;
             }
         }
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDeckManagementOpened();
     }
 
-    /// <summary>
-    /// When a page button is pressed, check to see if it is in the deck or outside of the deck
-    /// If the page is in the deck, save it as the selected deck page
-    /// If it is outside of the deck, save it as the out of deck page
-    /// </summary>
-    /// <param name="buttonPressed"></param>
     public override void PageButtonPressed(PageButton buttonPressed)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        int deckSize = gameManager.DeckSize;
+        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
         PageData pageData = buttonPressed.PageData;
 
-        if (pageData.InventoryId < deckSize)
+        if (pageData.InventoryId < gameManager.DeckSize)
         {
             if (m_selectedDeckPage != null)
             {
@@ -95,16 +91,12 @@ public class DeckManagementUIHandler : PageUIHandler
         _checkForSwap();
     }
 
-    /// <summary>
-    /// Checks to see if both a deck page and an out of deck page has been selected
-    /// If both have been selected, swap their position's in the player's inventory and swap them in the menu
-    /// </summary>
     private void _checkForSwap()
     {
         if (m_selectedDeckPage != null && m_selectedInventoryPage != null)
         {
             GameManager gameManager = FindObjectOfType<GameManager>();
-            PlayerInventory localInventory = gameManager.GetLocalPlayerInventory();
+            PlayerInventory localInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
             localInventory.Move(m_selectedDeckPage.PageData.InventoryId, m_selectedInventoryPage.PageData.InventoryId);
             _swapPagesInMenu();
             m_selectedInventoryPage = null;
@@ -112,9 +104,6 @@ public class DeckManagementUIHandler : PageUIHandler
         }
     }
 
-    /// <summary>
-    /// Swaps the two selected pages' positions in the menu
-    /// </summary>
     private void _swapPagesInMenu()
     {
         int previousDeckPageId = m_selectedDeckPage.InventoryId;
@@ -146,26 +135,45 @@ public class DeckManagementUIHandler : PageUIHandler
         }
     }
 
-    /// <summary>
-    /// Populates the menu with page buttons representing the pages in the player's inventory
-    /// Puts all the pages that are in the player's deck in the left scroll rect and the rest of the pages in the right scroll rect
-    /// </summary>
     public void PopulateMenu()
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        PlayerInventory pi = gameManager.GetLocalPlayerInventory();
+        StartCoroutine(_waitForInventory());
+    }
+
+
+    /// <summary>
+    /// Called when the finish button is clicked, this function destroys the deck management UI
+    /// </summary>
+    public void FinishedClicked()
+    {
+        PlayClickSound();
+        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().OnDeckManagementClosed();
+        Debug.Log("Destroying deck management menu");
+        Destroy(gameObject);
+    }
+
+    private IEnumerator _waitForInventory()
+    {
+        BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
+        PlayerEntity localPlayer = gameManager.GetLocalPlayer<PlayerEntity>();
+
+        while (!localPlayer)
+        {
+            yield return null;
+            localPlayer = gameManager.GetLocalPlayer<PlayerEntity>();
+        }
+
+        PlayerInventory pi = localPlayer.OurInventory;
 
         ScrollRect[] allScrollRects = GetComponentsInChildren<ScrollRect>();
 
         RectTransform deckContent = m_deckScrollRect.content;
         RectTransform outOfDeckContent = m_inventoryScrollRect.content;
 
-        // Check all the positions in the inventory that are a part of the player's deck
+        //TODO: Store the deck size in inventory
         for (int i = 0; i < gameManager.DeckSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
-
-            // If the slot is not empty, generate a page button and place it in the deck side of the UI
             if (!currentSlot.IsEmpty)
             {
                 Item currentItem = currentSlot.SlotItem;
@@ -177,12 +185,9 @@ public class DeckManagementUIHandler : PageUIHandler
             }
         }
 
-        // Check all of the positions in the inventory that are not a part of the player's deck
         for (int i = gameManager.DeckSize; i < pi.DynamicSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
-
-            // If the slot is not empty, generate a page button and place it in the inventory side of the UI
             if (!currentSlot.IsEmpty)
             {
                 Item currentItem = currentSlot.SlotItem;
@@ -193,16 +198,5 @@ public class DeckManagementUIHandler : PageUIHandler
                 pageButton.transform.SetParent(outOfDeckContent, false);
             }
         }
-    }
-
-    /// <summary>
-    /// Called when the finish button is clicked, this function destroys the deck management UI
-    /// </summary>
-    public void FinishedClicked()
-    {
-        PlayClickSound();
-        EventDispatcher.GetDispatcher<DeckManagementEventDispatcher>().OnDeckManagementClosed();
-        Debug.Log("Destroying deck management menu");
-        Destroy(gameObject);
     }
 }

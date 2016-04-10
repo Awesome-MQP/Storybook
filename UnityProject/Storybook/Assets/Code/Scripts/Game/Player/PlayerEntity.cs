@@ -83,12 +83,33 @@ public class PlayerEntity : PlayerObject
         }
     }
 
+    [SyncProperty]
+    public PlayerInventory OurInventory
+    {
+        get { return m_inventory;}
+        protected set
+        {
+            Assert.IsTrue(ShouldBeChanging);
+
+            m_inventory = value;
+            PropertyChanged();
+        }
+    }
+
     public override void OnStartOwner(bool wasSpawn)
     {
-        m_inventory = GetComponentInChildren<Inventory>();
-        Assert.IsNotNull(m_inventory);
+        // Create the inventory only on the first floor of the game
+        if (m_floorNumber <= 1)
+        {
+            GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
+                Quaternion.identity, 0);
+            PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
+            m_inventory = newInventory;
+            //TODO: Inventory spawn code
+            PhotonNetwork.Spawn(newInventory.photonView);
+        }
 
-        m_inventory.photonView.TransferController(Player);
+        GameManager.GetInstance<BaseStorybookGame>().Mover.RegisterPlayer(this);
     }
 
     [SerializeField]
@@ -112,15 +133,24 @@ public class PlayerEntity : PlayerObject
     [SerializeField]
     private Genre m_genre = Genre.None;
 
-    private Inventory m_inventory;
+    [SerializeField]
+    private PlayerInventory m_inventoryPrefab;
+
+    private PlayerInventory m_inventory;
 
     public void UpdateHitPoints(int newHitPoints)
     {
-        m_hitPoints = newHitPoints;
+        HitPoints = newHitPoints;
     }
 
     public void SetGenre(Genre playerGenre)
     {
         m_genre = playerGenre;
+    }
+
+    public void TransitionFloors(PlayerEntity oldPlayer)
+    {
+        HitPoints = oldPlayer.HitPoints;
+        OurInventory = oldPlayer.OurInventory;
     }
 }

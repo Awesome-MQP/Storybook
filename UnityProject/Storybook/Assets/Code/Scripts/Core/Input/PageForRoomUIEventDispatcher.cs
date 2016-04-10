@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PageForRoomUIEventDispatcher : EventDispatcher {
+public class PageForRoomEventDispatcher : EventDispatcher {
 
     public interface IPageForRoomEventListener : IEventListener
     {

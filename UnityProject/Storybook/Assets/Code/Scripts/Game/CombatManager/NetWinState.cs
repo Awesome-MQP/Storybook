@@ -57,11 +57,11 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
 
     private void _getPageDrop()
     {
-        DungeonMaster dm = FindObjectOfType<DungeonMaster>();
+        DungeonMaster dm = GameManager.GetInstance<BaseStorybookGame>().DM;
         Page pageDrop = dm.GetPageDropFromCombat(CManager.CombatGenre, CManager.CombatLevel);
 
         GameManager gm = FindObjectOfType<GameManager>();
-        PlayerInventory localPlayerInventory = gm.GetLocalPlayerInventory();
+        PlayerInventory localPlayerInventory = null;//gm.GetLocalPlayerInventory();
 
         // TODO: Use the number of items in the inventory to figure out the position to add to
         if (!localPlayerInventory.IsInventoryFull()) {
@@ -87,10 +87,13 @@ public class NetWinState : NetworkState, CombatSummaryEventDispatcher.ICombatSum
     {
         CombatMenuUIHandler combatMenu = FindObjectOfType<CombatMenuUIHandler>();
         Destroy(combatMenu.gameObject);
-        GameObject uiGameObject = Resources.Load("UIPrefabs/CombatSummaryUI") as GameObject;
+        GameObject uiGameObject = Resources.Load("UI/CombatSummaryUI") as GameObject;
         m_combatSummaryUI = Instantiate(uiGameObject);
         CombatSummaryUIHandler uiHandler = m_combatSummaryUI.GetComponent<CombatSummaryUIHandler>();
         uiHandler.PopulateMenu(CManager.CombatLevel, CManager.CombatGenre);
+
+        // Send out a tutorial event
+        EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnCombatCleared();
     }
 
     public void CombatSummarySubmitted()

@@ -5,8 +5,6 @@ using System;
 
 public abstract class CombatPlayer : CombatPawn
 {
-
-    [SerializeField]
     private static int m_handSize = 4;
 
     [SerializeField]
@@ -62,10 +60,12 @@ public abstract class CombatPlayer : CombatPawn
             Page currentPage = m_playerDeck.GetNextPage();
             m_playerHand.Add(currentPage);
 
+            /*
             if (PhotonNetwork.isMasterClient)
             {
                 AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
             }
+            */
 
             if (PhotonNetwork.player.ID == PawnId)
             {
@@ -112,10 +112,12 @@ public abstract class CombatPlayer : CombatPawn
 
         m_playerHand.Remove(pageToRemove);
 
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             AddOrRemoveMod(pageToRemove.PageGenre, pageToRemove.PageLevel, false);
         }
+        */
 
         if (PhotonNetwork.player.ID == PawnId)
         {
@@ -175,10 +177,14 @@ public abstract class CombatPlayer : CombatPawn
 
         Page currentPage = m_playerDeck.GetNextPage();
         m_playerHand.Add(currentPage);
+
+        /*
         if (PhotonNetwork.isMasterClient)
         {
             AddOrRemoveMod(currentPage.PageGenre, currentPage.PageLevel, true);
         }
+        */
+
         if (PhotonNetwork.player.ID == PawnId)
         {
             EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnSendingPageInfo(currentPage, 4);
@@ -226,12 +232,11 @@ public abstract class CombatPlayer : CombatPawn
         DrawStartingHand();
     }
 
-    //TODO: Get the player inventory from the given PlayerEntity
     private CombatDeck _initializePlayerDeck(PlayerInventory playerInventory)
     {
-        GameManager gm = FindObjectOfType<GameManager>();
+        BaseStorybookGame game = GameManager.GetInstance<BaseStorybookGame>();
         List<Page> deckPages = new List<Page>();
-        for (int i = 0; i < gm.DeckSize; i++)
+        for (int i = 0; i < game.DeckSize; i++)
         {
             Page page = (Page)playerInventory[i].SlotItem;
             deckPages.Add(page);
@@ -359,9 +364,13 @@ public abstract class CombatPlayer : CombatPawn
         }
     }
 
-    public void InitializePlayerPawn(PlayerEntity playerData)
+    [PunRPC]
+    public void InitializePlayerPawn(PhotonView playerEntityView)
     {
+        PlayerEntity playerData = playerEntityView.GetComponent<PlayerEntity>();
+
         SetMaxHealth(playerData.MaxHitPoints);
+        Debug.Log("PLAYER HP = " + playerData.HitPoints);
         Health = playerData.HitPoints;
         Defense = playerData.Defense;
         Speed = playerData.Speed;
@@ -370,10 +379,20 @@ public abstract class CombatPlayer : CombatPawn
 
     public override void DealDamageToPawn(int damageAmount)
     {
-
         base.DealDamageToPawn(damageAmount);
 
-        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(PhotonNetwork.player, (int)Health, (int)m_maxHealth);
+        PhotonPlayer photonPlayer = null;
+
+        foreach(PhotonPlayer p in PhotonNetwork.playerList)
+        {
+            if (p.ID == PawnId)
+            {
+                photonPlayer = p;
+                break;
+            }
+        }
+
+        EventDispatcher.GetDispatcher<CombatEventDispatcher>().OnPawnTakesDamage(photonPlayer, (int)Health, (int)m_maxHealth);
         // Adds support to UI
     }
 

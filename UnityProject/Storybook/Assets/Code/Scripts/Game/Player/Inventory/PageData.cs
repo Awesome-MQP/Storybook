@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Net.Security;
 
-public struct PageData {
-
+public struct PageData : INetworkSerializeable
+{
     private int m_pageLevel;
     private int m_inventoryId;
     private Genre m_pageGenre;
@@ -90,4 +91,21 @@ public struct PageData {
         set { m_isRare = value; }
     }
 
+    public void OnSerialize(PhotonStream stream)
+    {
+        stream.SendNext(m_pageLevel);
+        stream.SendNext(m_inventoryId);
+        stream.SendNext(m_isRare);
+        stream.SendNext((int)m_pageGenre);
+        stream.SendNext((int)m_pageType);
+    }
+
+    public void OnDeserialize(PhotonStream stream)
+    {
+        m_pageLevel = (int) stream.ReceiveNext();
+        m_inventoryId = (int) stream.ReceiveNext();
+        m_isRare = (bool) stream.ReceiveNext();
+        m_pageGenre = (Genre) stream.ReceiveNext();
+        m_pageType = (MoveType) stream.ReceiveNext();
+    }
 }

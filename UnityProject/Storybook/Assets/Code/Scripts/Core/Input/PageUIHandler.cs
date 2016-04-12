@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public abstract class PageUIHandler : UIHandler {
 
@@ -49,5 +50,31 @@ public abstract class PageUIHandler : UIHandler {
         PageButton pageButton = button.GetComponent<PageButton>();
         pageButton.PageData = pageData;
         return button;
+    }
+
+    protected List<PageButton> _SortByGenre(List<PageButton> listToSort)
+    {
+        List<PageButton> sortedList = new List<PageButton>();
+
+        sortedList.AddRange(_GetPagesOfGenre(listToSort, Genre.Fantasy));
+        sortedList.AddRange(_GetPagesOfGenre(listToSort, Genre.GraphicNovel));
+        sortedList.AddRange(_GetPagesOfGenre(listToSort, Genre.Horror));
+        sortedList.AddRange(_GetPagesOfGenre(listToSort, Genre.SciFi));
+
+        return sortedList;
+    }
+
+    protected List<PageButton> _GetPagesOfGenre(List<PageButton> buttonList, Genre genreToGet)
+    {
+        List<PageButton> buttonsOfGenre = new List<PageButton>();
+        foreach(PageButton pb in buttonList)
+        {
+            if (pb.PageGenre == genreToGet)
+            {
+                buttonsOfGenre.Add(pb);
+            }
+        }
+
+        return buttonsOfGenre;
     }
 }

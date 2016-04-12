@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PageForRoomUIHandler : PageUIHandler {
 
@@ -57,6 +58,8 @@ public class PageForRoomUIHandler : PageUIHandler {
         ScrollRect scrollView = GetComponentInChildren<ScrollRect>();
         RectTransform scrollContent = scrollView.content;
 
+        List<PageButton> invPageButtons = new List<PageButton>();
+
         for(int i = 0; i < pi.DynamicSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
@@ -67,8 +70,15 @@ public class PageForRoomUIHandler : PageUIHandler {
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
-                pageButton.transform.SetParent(scrollContent, false);
+                invPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
+        }
+
+        List<PageButton> sortedInvButtons = _SortByGenre(invPageButtons);
+
+        foreach(PageButton pb in sortedInvButtons)
+        {
+            pb.transform.SetParent(scrollContent, false);
         }
     }
 	

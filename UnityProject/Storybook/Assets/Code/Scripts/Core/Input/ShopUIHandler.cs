@@ -109,6 +109,8 @@ public class ShopUIHandler : PageUIHandler {
     {
         PlayerInventory pi = GameManager.GetInstance<GameManager>().GetLocalPlayer<PlayerEntity>().OurInventory;
 
+        List<PageButton> invPageButtons = new List<PageButton>();
+
         // Populate the player inventory scroll rect
         for (int i = 0; i < pi.DynamicSize; i++)
         {
@@ -120,9 +122,15 @@ public class ShopUIHandler : PageUIHandler {
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button button = _initializePageButton(currentPageData);
-                button.transform.SetParent(m_playerInventoryPagesRect.content, false);
+                invPageButtons.Add(button.GetComponent<PageButton>());
                 button.GetComponent<PageButton>().MenuId = m_playerInventoryMenuId;
             }
+        }
+
+        List<PageButton> sortedInvButtons = _SortByGenre(invPageButtons);
+        foreach(PageButton pb in sortedInvButtons)
+        {
+            pb.transform.SetParent(m_playerInventoryPagesRect.content, false);
         }
 
         // If pages have not been generated for this shop, generate pages using the DungeonMaster

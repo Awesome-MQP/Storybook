@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class DeckManagementUIHandler : PageUIHandler
@@ -160,6 +161,7 @@ public class DeckManagementUIHandler : PageUIHandler
         BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
         PlayerEntity localPlayer = gameManager.GetLocalPlayer<PlayerEntity>();
 
+        // Wait until the local player has been created
         while (!localPlayer)
         {
             yield return null;
@@ -173,9 +175,14 @@ public class DeckManagementUIHandler : PageUIHandler
         RectTransform deckContent = m_deckScrollRect.content;
         RectTransform outOfDeckContent = m_inventoryScrollRect.content;
 
+        List<PageButton> deckPageButtons = new List<PageButton>();
+
+        // Iterate through all of the pages that are in the deck
         for (int i = 0; i < gameManager.DeckSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
+
+            // If the current slot is not empty, create the page button for that page
             if (!currentSlot.IsEmpty)
             {
                 Item currentItem = currentSlot.SlotItem;
@@ -183,10 +190,22 @@ public class DeckManagementUIHandler : PageUIHandler
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
-                pageButton.transform.SetParent(deckContent, false);
+                deckPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
         }
 
+        // Sort the list of deck buttons
+        List<PageButton> sortedDeckButtons = _SortByGenre(deckPageButtons);
+        
+        // Put the sorted pages into the scrollview
+        foreach(PageButton pb in sortedDeckButtons)
+        {
+            pb.transform.SetParent(deckContent, false);
+        }
+
+        List<PageButton> invPageButtons = new List<PageButton>();
+
+        // Iterate through all of the pages that are outside of the deck
         for (int i = gameManager.DeckSize; i < pi.DynamicSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];
@@ -197,8 +216,17 @@ public class DeckManagementUIHandler : PageUIHandler
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
-                pageButton.transform.SetParent(outOfDeckContent, false);
+                invPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
+        }
+
+        // Sort the list of inventory buttons
+        List<PageButton> sortedInvButtons = _SortByGenre(invPageButtons);
+
+        // Put the sorted pages into the scrollview
+        foreach(PageButton pb in sortedInvButtons)
+        {
+            pb.transform.SetParent(outOfDeckContent, false);
         }
     }
 }

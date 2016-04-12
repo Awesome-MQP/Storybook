@@ -42,7 +42,10 @@ public class DeckManagementUIHandler : PageUIHandler
                 m_inventoryScrollRect = scrollRect;
             }
         }
+    }
 
+    public void Start()
+    {
         // Send out a tutorial event
         EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDeckManagementOpened();
     }
@@ -170,7 +173,6 @@ public class DeckManagementUIHandler : PageUIHandler
         RectTransform deckContent = m_deckScrollRect.content;
         RectTransform outOfDeckContent = m_inventoryScrollRect.content;
 
-        //TODO: Store the deck size in inventory
         for (int i = 0; i < gameManager.DeckSize; i++)
         {
             Inventory.Slot currentSlot = pi[i];

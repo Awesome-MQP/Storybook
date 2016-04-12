@@ -225,9 +225,10 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
 
     public void OnDeckManagementOpened()
     {
+        Debug.Log("Deck management event received");
         if (!m_deckManagementIsComplete)
         {
-            photonView.RPC(nameof(DeckManagementTutorial), PhotonTargets.All);
+            DeckManagementTutorial();
             m_deckManagementIsComplete = true;
         }
     }

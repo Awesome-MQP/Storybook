@@ -15,7 +15,16 @@ public class PlayerInventory : Inventory {
     {
         DungeonMaster dm = DungeonMaster.Instance;
         BaseStorybookGame gameManager = GameManager.GetInstance<BaseStorybookGame>();
-        for (int i = 0; i < gameManager.StartingPages; i++)
+
+        // Make all of the pages in the starting deck of the same genre as the player
+        for (int i = 0; i < gameManager.DeckSize; i++)
+        {
+            Page basicPage = dm.GetBasicPageOfGenre(gameManager.GetLocalPlayer<PlayerEntity>().Genre);
+            Add(basicPage, i);
+        }
+
+        // Randomly choose a genre for the starting pages outside of the player's deck
+        for (int i = gameManager.DeckSize; i < gameManager.StartingPages; i++)
         {
             Page basicPage = dm.GetBasicPage();
             Add(basicPage, i);

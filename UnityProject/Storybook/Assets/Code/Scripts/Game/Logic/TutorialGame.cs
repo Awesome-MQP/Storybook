@@ -24,6 +24,9 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         EventDispatcher.GetDispatcher<TutorialEventDispatcher>().RegisterEventListener(this);
 
         base.Awake();
+
+        //EventDispatcher.GetDispatcher<TutorialEventDispatcher>().OnDeckManagementOpened();
+        
     }
 
     void OnDestroy()

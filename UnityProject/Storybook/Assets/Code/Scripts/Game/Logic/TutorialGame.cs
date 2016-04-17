@@ -140,8 +140,8 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
         if (!m_deckManagementIsComplete)
         {
             List<string> tutorialStrings = new List<string>();
-            tutorialStrings.Add("To fight monsters in Storybook, you must construct a deck of the mythical pages.");
-            tutorialStrings.Add("Using the deck management screen, you can move pages around between your deck, the left side, and the rest of your inventory.");
+            tutorialStrings.Add("To fight monsters in Storybook, you must construct a deck of mystical pages.");
+            tutorialStrings.Add("Using the deck management screen, you can move pages around between your deck (on the left), and the rest of your inventory (right).");
             tutorialStrings.Add("Deck building is an important aspect of the game, so build it how you would like your character to play.");
 
             _instantiateTutorialUI("Managing your Inventory and Deck", tutorialStrings);
@@ -234,6 +234,7 @@ public class TutorialGame : BaseStorybookGame, TutorialEventDispatcher.ITutorial
             DeckManagementTutorial();
             m_deckManagementIsComplete = true;
         }
+        
     }
 
     public void OnShopEntered()

@@ -54,7 +54,7 @@ public class PlayerTeam : CombatTeam
                 GameManager gameManager = GameManager.GetInstance<GameManager>();
                 PlayerEntity currentPlayerEntity = _findPlayerEntity(playerPawn.PawnId);
                 player.photonView.RPC("InitializePlayerPawn", PhotonTargets.All, currentPlayerEntity.photonView);
-                PlayerInventory currentPlayerInventory = gameManager.GetLocalPlayer<PlayerEntity>().OurInventory;
+                PlayerInventory currentPlayerInventory = currentPlayerEntity.OurInventory;
                 player.CreateDeck(currentPlayerInventory);
             }
 

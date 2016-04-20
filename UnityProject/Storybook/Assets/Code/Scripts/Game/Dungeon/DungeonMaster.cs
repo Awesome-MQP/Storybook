@@ -143,6 +143,17 @@ public class DungeonMaster : MonoBehaviour
         return constructedPage;
     }
 
+    /// <summary>
+    /// Generates a basic page with the given genre
+    /// </summary>
+    /// <param name="pageGenre">The genre of the page to generate</param>
+    /// <returns>The page object generated</returns>
+    public Page GetBasicPageOfGenre(Genre pageGenre)
+    {
+        Page constructedPage = ConstructPage(1, pageGenre, true);
+        return constructedPage;
+    }
+
     public Page ConstructPageFromData(PageData data)
     {
         Page page = _spawnPageOnNetwork(data.PageGenre, data.PageLevel, data.PageMoveType, data.IsRare);

@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public abstract class GameMenuUIHandler : UIHandler {
+public abstract class GameMenuUIHandler : Photon.PunBehaviour {
 
     private bool m_isTutorial = false;
+
+    private bool m_isLoadingJoinScreen = false;
 
     public void StartNewGame()
     {
@@ -30,17 +32,30 @@ public abstract class GameMenuUIHandler : UIHandler {
     public void ReturnToMainMenu()
     {
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("MainMenu");
     }
 
     public void ReturnToLobby()
     {
+        m_isLoadingJoinScreen = true;
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("JoinGameMenu");
     }
 
     public bool IsTutorial
     {
         get { return m_isTutorial; }
+    }
+
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        SceneFading.DestroyInstance();
+        if (!m_isLoadingJoinScreen)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        else
+        {
+            SceneManager.LoadScene("JoinGameMenu");
+        }
     }
 }

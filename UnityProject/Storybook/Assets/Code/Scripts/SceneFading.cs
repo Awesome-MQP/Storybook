@@ -33,6 +33,12 @@ public class SceneFading : Photon.PunBehaviour {
         }
     }
 
+    public static void DestroyInstance()
+    {
+        PhotonNetwork.Destroy(m_instance.photonView);
+        Destroy(m_instance.gameObject);
+    }
+
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(this);

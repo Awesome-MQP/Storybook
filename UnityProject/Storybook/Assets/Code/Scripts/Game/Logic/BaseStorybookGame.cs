@@ -31,7 +31,7 @@ public class BaseStorybookGame : GameManager
 
     [SerializeField]
     [Tooltip("The number of pages that will be in the player decks")]
-    protected int m_deckSize = 20;
+    protected int m_deckSize = 15;
 
     [SerializeField]
     [Tooltip("The number of pages that each player starts with")]

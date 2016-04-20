@@ -41,8 +41,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
     private int m_turnsUnderStatus = 0;
 
     [SerializeField]
-    private const int m_textTickStartingCount = 90;
-    private int m_textTick = 0; // When a pawn takes damage, display the text on-screen for about 1.5 seconds.
+    private const float m_textTickStartingFloat = 1.5f;
+
+    private float m_textTickFloat = 0;
+
     private bool m_textIsActive = false;
 
     private CombatManager m_combatManager;
@@ -73,10 +75,10 @@ public abstract class CombatPawn : Photon.PunBehaviour
     {
        if(m_textIsActive)
         {
-            m_textTick--;
-            if(m_textTick <= 0)
+            m_textTickFloat -= Time.deltaTime;
+            if(m_textTickFloat <= 0)
             {
-                m_textTick = 0;
+                m_textTickFloat = 0;
                 transform.parent.Find("DamageText").gameObject.SetActive(false); // yay dot trains!
             }
         }
@@ -130,7 +132,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         }
 
         transform.parent.Find("DamageText").gameObject.SetActive(true);
-        m_textTick += m_textTickStartingCount;
+        m_textTickFloat += m_textTickStartingFloat;
         m_textIsActive = true;
     }
 
@@ -196,7 +198,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         dmgText.color = Color.green;
         dmgText.text = "+" + speedIncrease.ToString() + " SPD";
         transform.parent.Find("DamageText").gameObject.SetActive(true);
-        m_textTick += m_textTickStartingCount;
+        m_textTickFloat += m_textTickStartingFloat;
         m_textIsActive = true;
         PlaySupportSound();
     }
@@ -211,7 +213,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         dmgText.color = Color.green;
         dmgText.text = "+" + hpIncrease.ToString() + " HP";
         transform.parent.Find("DamageText").gameObject.SetActive(true);
-        m_textTick += m_textTickStartingCount;
+        m_textTickFloat += m_textTickStartingFloat;
         m_textIsActive = true;
 
         m_health += hpIncrease;
@@ -252,7 +254,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         dmgText.color = Color.green;
         dmgText.text = "+" + attackIncrease.ToString() + " ATK";
         transform.parent.Find("DamageText").gameObject.SetActive(true);
-        m_textTick += m_textTickStartingCount;
+        m_textTickFloat += m_textTickStartingFloat;
         m_textIsActive = true;
         PlaySupportSound();
     }
@@ -270,7 +272,7 @@ public abstract class CombatPawn : Photon.PunBehaviour
         dmgText.color = Color.green;
         dmgText.text = "+" + defenseIncrease.ToString() + " DEF";
         transform.parent.Find("DamageText").gameObject.SetActive(true);
-        m_textTick += m_textTickStartingCount;
+        m_textTickFloat += m_textTickStartingFloat;
         m_textIsActive = true;
         PlaySupportSound();
     }

@@ -6,6 +6,8 @@ public class PlayerInventory : Inventory {
 
     private int m_playerId;
 
+    private Genre m_inventoryGenre;
+
     public void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -19,7 +21,7 @@ public class PlayerInventory : Inventory {
         // Make all of the pages in the starting deck of the same genre as the player
         for (int i = 0; i < gameManager.DeckSize; i++)
         {
-            Page basicPage = dm.GetBasicPageOfGenre(gameManager.GetLocalPlayer<PlayerEntity>().Genre);
+            Page basicPage = dm.GetBasicPageOfGenre(m_inventoryGenre);
             Add(basicPage, i);
         }
 
@@ -96,5 +98,11 @@ public class PlayerInventory : Inventory {
     {
         get { return m_playerId; }
         set { m_playerId = value; }
+    }
+
+    public Genre InventoryGenre
+    {
+        get { return m_inventoryGenre; }
+        set { m_inventoryGenre = value; }
     }
 }

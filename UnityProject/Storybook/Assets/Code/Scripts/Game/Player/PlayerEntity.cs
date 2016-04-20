@@ -104,6 +104,7 @@ public class PlayerEntity : PlayerObject
             GameObject newInventoryObject = PhotonNetwork.Instantiate("Player/" + m_inventoryPrefab.name, Vector3.zero,
                 Quaternion.identity, 0);
             PlayerInventory newInventory = newInventoryObject.GetComponent<PlayerInventory>();
+            newInventory.InventoryGenre = Genre;
             m_inventory = newInventory;
             //TODO: Inventory spawn code
             PhotonNetwork.Spawn(newInventory.photonView);

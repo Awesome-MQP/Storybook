@@ -148,6 +148,7 @@ public class ShopUIHandler : PageUIHandler {
                 PageData shopPageData = dm.GetShopPage(m_shopRoom.RoomPageData);
                 Button button = _initializePageButton(shopPageData);
                 button.transform.SetParent(m_shopPagesRect.content, false);
+                button.GetComponent<PageButton>().DisplayPageInDeckImage(false);
                 button.GetComponent<PageButton>().MenuId = m_shopInventoryMenuId;
                 m_shopPages.Add(shopPageData);
             }
@@ -161,6 +162,7 @@ public class ShopUIHandler : PageUIHandler {
             foreach (PageData data in m_shopPages)
             {
                 Button button = _initializePageButton(data);
+                button.GetComponent<PageButton>().DisplayPageInDeckImage(true);
                 button.transform.SetParent(m_shopPagesRect.content, false);
                 button.GetComponent<PageButton>().MenuId = m_shopInventoryMenuId;
             }

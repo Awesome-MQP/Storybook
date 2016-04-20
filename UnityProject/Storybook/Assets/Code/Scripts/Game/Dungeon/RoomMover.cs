@@ -50,7 +50,7 @@ public abstract class RoomMover : NetworkNodeMover, IConstructable<RoomObject>
     /// </summary>
     public bool CanMove
     {
-        get { return m_isAtRoomCenter && !m_lockMovement;}
+        get { return !m_lockMovement;}
     }
 
     /// <summary>

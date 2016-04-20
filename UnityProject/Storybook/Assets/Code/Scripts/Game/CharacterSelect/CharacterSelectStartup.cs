@@ -31,7 +31,6 @@ public class CharacterSelectStartup : GameManager
     [PunRPC]
     protected void InitializeAnimators(PhotonView photonView)
     {
-        Debug.Log("Initializing the models");
         CharacterSelectUIHandler ui = photonView.GetComponent<CharacterSelectUIHandler>();
         ui.FantasyModel = GameObject.Find("FantasyCharacter").GetComponent<Animator>();
         ui.HorrorModel = GameObject.Find("HorrorCharacter").GetComponent<Animator>();

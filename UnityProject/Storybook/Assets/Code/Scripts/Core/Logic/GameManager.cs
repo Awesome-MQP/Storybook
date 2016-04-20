@@ -131,7 +131,6 @@ public abstract class GameManager : Photon.PunBehaviour
     /// <returns>The player object for a player.</returns>
     protected virtual PlayerObject CreatePlayerObject(PhotonPlayer player)
     {
-        Debug.Log(m_defaultPlayerObject.AssetName);
         PlayerObject playerObj = PhotonNetwork.Instantiate(m_defaultPlayerObject, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerObject>();
         return playerObj;
     }
@@ -192,7 +191,6 @@ public abstract class GameManager : Photon.PunBehaviour
         PlayerObject playerObject = CreatePlayerObject(oldPlayer);
         m_playerObjects.Add(player, playerObject);
         playerObject.Construct(oldPlayer);
-        Debug.Log("Old player floor number = " + oldPlayer.FloorNumber);
         if (oldPlayer.FloorNumber != 0)
         {
             playerObject.GetComponent<PlayerEntity>().TransitionFloors((PlayerEntity)oldPlayer);
@@ -217,7 +215,6 @@ public abstract class GameManager : Photon.PunBehaviour
                 m_playerObjects.Add(existingPlayer.Player, existingPlayer);
             else
             {
-                Debug.Log("Setting up player");
                 _setupPlayer(existingPlayer);
                 Destroy(existingPlayer.gameObject);
             }
@@ -245,7 +242,6 @@ public abstract class GameManager : Photon.PunBehaviour
     /// </summary>
     public void CleanupForNewGame()
     {
-        Debug.Log("Destroying game objects for new game");
         // Destroy all of the player objects
         foreach(PlayerObject po in FindObjectsOfType<PlayerEntity>())
         {

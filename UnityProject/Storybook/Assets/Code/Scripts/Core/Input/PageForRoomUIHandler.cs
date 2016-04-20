@@ -70,6 +70,14 @@ public class PageForRoomUIHandler : PageUIHandler {
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
+                if(i < GameManager.GetInstance<BaseStorybookGame>().DeckSize)
+                {
+                    pageButton.GetComponent<PageButton>().DisplayPageInDeckImage(true);
+                }
+                else
+                {
+                    pageButton.GetComponent<PageButton>().DisplayPageInDeckImage(false);
+                }
                 invPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
         }
@@ -96,6 +104,7 @@ public class PageForRoomUIHandler : PageUIHandler {
         m_pageButtonInScroll = buttonPressed;
         buttonPressed.DisplaySelectedImage(true);
         Button selectedButton = _initializePageButton(buttonPressed.PageData);
+        selectedButton.GetComponent<PageButton>().DisplayPageInDeckImage(false);
         selectedButton.enabled = false;
         RectTransform[] AllRects = GetComponentsInChildren<RectTransform>();
         RectTransform selectedPageRect = null;

@@ -37,6 +37,7 @@ public class CombatSummaryUIHandler : PageUIHandler {
             PageData currentPageData = currentPage.GetPageData();
             m_pageDrops.Add(currentPage);
             Button button = _initializePageButton(currentPage.GetPageData());
+            button.GetComponent<PageButton>().DisplayPageInDeckImage(false);
             button.transform.SetParent(m_pageScrollRect.content, false);
             button.GetComponent<PageButton>().InventoryId = i;
         }

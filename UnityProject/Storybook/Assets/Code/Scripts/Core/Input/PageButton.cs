@@ -9,7 +9,7 @@ public class PageButton : MonoBehaviour {
     private int m_menuId;
 
     [SerializeField]
-    private Sprite m_targetIcon;
+    private Image genreIcon;
     
     /// <summary>
     /// Called when the page button is pressed
@@ -112,30 +112,43 @@ public class PageButton : MonoBehaviour {
         {
             if (t.name == "Level")
             {
-                t.text = "Level " + PageLevel.ToString();
+                t.text = "Lv. " + PageLevel.ToString();
             }
             if (t.name == "Page Type")
             {
                 t.text = PageMoveType.ToString();
             }
         }
-        Image[] allTargetIcons = GetComponentsInChildren<Image>();
-        foreach(Image i in allTargetIcons)
+        PageButton button = GetComponentInChildren<PageButton>();
+        Image rareIcon = button.GetComponentInChildren<Image>();
+        if(rareIcon.name.Contains("Rare") && Rarity)
         {
-            if(i.name.Contains("Target"))
+            rareIcon.enabled = true;
+        }
+
+        if(PageMoveType == MoveType.Boost)
+        {
+            Image[] icons = GetComponentsInChildren<Image>();
+            foreach(Image i in icons)
             {
-                if (Rarity == true)
+                if(i.name == "GenreIcon")
                 {
-                    i.enabled = true;
+                    i.enabled = false;
+                    break;
                 }
-                else
-                {
-                    if(i.name == "Target1")
-                    {
-                        i.enabled = true;
-                        // TODO: If number of targets = 1, center target
-                    }
-                }
+            }
+        }
+    }
+
+    public void DisplayPageInDeckImage(bool toDisplay)
+    {
+        Image[] images = GetComponentsInChildren<Image>();
+        foreach(Image i in images)
+        {
+            if(i.name == "InDeck")
+            {
+                i.enabled = toDisplay;
+                break;
             }
         }
     }

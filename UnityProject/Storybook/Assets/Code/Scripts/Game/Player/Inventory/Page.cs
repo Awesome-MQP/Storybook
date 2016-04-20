@@ -364,7 +364,6 @@ public void InitializePage()
         if (pageType == MoveType.Attack)
         {
             prefabName += m_pageAttack.name;
-            Debug.Log("Prefab name = " + prefabName);
         }
         else if (pageType == MoveType.Boost)
         {

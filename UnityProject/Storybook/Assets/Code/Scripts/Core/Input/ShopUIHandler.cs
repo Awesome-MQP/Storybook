@@ -122,6 +122,11 @@ public class ShopUIHandler : PageUIHandler {
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button button = _initializePageButton(currentPageData);
+
+                if (i < GameManager.GetInstance<BaseStorybookGame>().DeckSize)
+                {
+                    button.GetComponent<PageButton>().DisplayPageInDeckImage(true);
+                }
                 invPageButtons.Add(button.GetComponent<PageButton>());
                 button.GetComponent<PageButton>().MenuId = m_playerInventoryMenuId;
             }

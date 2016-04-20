@@ -8,7 +8,6 @@ public class TestPageAttackMove : PageMove {
 
     void Awake()
     {
-        Debug.Log("Setting is move attack");
         SetIsMoveAttack(IS_MOVE_ATTACK);
     }
 

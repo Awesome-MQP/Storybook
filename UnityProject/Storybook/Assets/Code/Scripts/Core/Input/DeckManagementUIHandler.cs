@@ -190,6 +190,7 @@ public class DeckManagementUIHandler : PageUIHandler
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
+                pageButton.GetComponent<PageButton>().DisplayPageInDeckImage(false);
                 deckPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
         }
@@ -216,6 +217,8 @@ public class DeckManagementUIHandler : PageUIHandler
                 PageData currentPageData = currentPage.GetPageData();
                 currentPageData.InventoryId = i;
                 Button pageButton = _initializePageButton(currentPageData);
+
+                pageButton.GetComponent<PageButton>().DisplayPageInDeckImage(false);
                 invPageButtons.Add(pageButton.GetComponent<PageButton>());
             }
         }

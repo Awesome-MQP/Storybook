@@ -223,6 +223,7 @@ public class CombatMenuUIHandler : PageUIHandler, ICombatEventListener {
         PageData currentPageData = page.GetPageData();
         currentPageData.InventoryId = counter;
         Button pageButton = _initializePageButton(currentPageData);
+        pageButton.GetComponent<PageButton>().DisplayPageInDeckImage(false);
         pageButton.transform.SetParent(content, false);
         m_pageButtonList.Add(pageButton.GetComponent<PageButton>());
     }

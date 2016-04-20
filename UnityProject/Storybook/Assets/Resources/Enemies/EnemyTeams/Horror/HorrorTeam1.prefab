@@ -42,8 +42,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_componentId: 133
   m_pawnsToSpawn:
-  - {fileID: 11462702, guid: 60b3f38c6ebd35442ae4e934df1af186, type: 2}
   - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
+  - {fileID: 11494728, guid: ec31da8522915b64386a37a7e929e5dc, type: 2}
+  m_isBossTeam: 0
 --- !u!114 &11469974
 MonoBehaviour:
   m_ObjectHideFlags: 1

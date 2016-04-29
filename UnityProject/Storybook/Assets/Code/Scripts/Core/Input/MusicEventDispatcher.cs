@@ -8,7 +8,7 @@ public class MusicEventDispatcher : EventDispatcher {
         void OnStartRoomEntered();
         void OnRoomMusicChange(Genre roomGenre);
         void OnCombatStart();
-        void OnCombatEnd();
+        void OnCombatEnd(Genre roomGenre);
         void OnShopEntered();
     }
 
@@ -36,11 +36,11 @@ public class MusicEventDispatcher : EventDispatcher {
         }
     }
 
-    public void OnCombatEnd()
+    public void OnCombatEnd(Genre roomGenre)
     {
         foreach (IMusicEventListener listener in IterateListeners<IMusicEventListener>())
         {
-            listener.OnCombatStart();
+            listener.OnCombatEnd(roomGenre);
         }
     }
 

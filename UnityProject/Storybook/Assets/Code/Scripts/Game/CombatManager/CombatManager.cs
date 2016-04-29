@@ -175,7 +175,7 @@ public class CombatManager : Photon.PunBehaviour, IConstructable<CombatInstance>
 
         m_isRunning = false;
 
-        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnCombatEnd();
+        EventDispatcher.GetDispatcher<MusicEventDispatcher>().OnCombatEnd(m_combatGenre);
         //FindObjectOfType<GameManager>().GetComponent<MusicManager>().Fade(m_previousMusic, 5, true);
     }
 

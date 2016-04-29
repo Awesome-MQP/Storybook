@@ -35,7 +35,9 @@ public class MusicManager : MonoBehaviour, MusicEventDispatcher.IMusicEventListe
     private AudioClip m_combatMusic;
 
     // THe last audio clip played, used for switching back after combat.
+    [SerializeField]
     private AudioClip m_lastMusicPlayed = null;
+    [SerializeField]
     // The current audio clip being played.
     private AudioClip m_currentMusic = null;
 
@@ -95,7 +97,7 @@ public class MusicManager : MonoBehaviour, MusicEventDispatcher.IMusicEventListe
             return;
         }
 
-        m_nextMusicToPlay = clip;
+        m_currentMusic = clip;
         m_nextMusicVolume = volume;
         m_nextMusicLoop = loop;
 
@@ -133,7 +135,7 @@ public class MusicManager : MonoBehaviour, MusicEventDispatcher.IMusicEventListe
     // Fade out of a music track
     private void FadeToNextClip()
     {
-        m_musicSource.clip = m_nextMusicToPlay;
+        m_musicSource.clip = m_currentMusic;
         m_musicSource.loop = m_nextMusicLoop;
 
         m_currentFadeState = FadeState.fadeIn;
@@ -239,9 +241,10 @@ public class MusicManager : MonoBehaviour, MusicEventDispatcher.IMusicEventListe
     /// <summary>
     /// Signals the MusicMgr when combat is over, so we know to go back to the overworld music.
     /// </summary>
-    public void OnCombatEnd()
+    public void OnCombatEnd(Genre roomGenre)
     {
-        Fade(m_lastMusicPlayed, m_musicVolume, true);
+        //Fade(m_lastMusicPlayed, m_musicVolume, true);
+        OnRoomMusicChange(roomGenre);
     }
 
     public void OnShopEntered()

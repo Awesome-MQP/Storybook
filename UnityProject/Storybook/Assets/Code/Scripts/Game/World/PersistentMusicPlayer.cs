@@ -18,6 +18,23 @@ public class PersistentMusicPlayer : MonoBehaviour {
 
     // Use this for initialization
     protected void Awake () {
+        PersistentMusicPlayer[] musicPlayers = FindObjectsOfType<PersistentMusicPlayer>();
+        PersistentMusicPlayer previousPlayer = null;
+
+        foreach(PersistentMusicPlayer player in musicPlayers)
+        {
+            if (player.gameObject != this.gameObject)
+            {
+                previousPlayer = player;
+                break; 
+            }
+        }
+
+        if (previousPlayer != null)
+        {
+            Destroy(previousPlayer.gameObject);
+        }
+
         s_instance = this;
         DontDestroyOnLoad(this);
         m_source.clip = m_titleTheme;

@@ -168,6 +168,7 @@ public class JoinGameMenuUIHandler : UnityEngine.MonoBehaviour {
                     break;
             }
         }
+
         SceneFading.Instance().LoadScene("PreGameLobby");
     }
 

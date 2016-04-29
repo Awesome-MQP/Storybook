@@ -20,12 +20,13 @@ public class SceneFading : Photon.PunBehaviour {
 
     public static SceneFading Instance()
     {
-        if (m_instance != null)
+        if (m_instance != null && m_instance.gameObject.activeInHierarchy)
         {
             return m_instance;
         }
         else
         {
+            DestroyInstance();
             GameObject faderObject = PhotonNetwork.Instantiate("UI/Fader", Vector3.zero, Quaternion.identity, 0);
             PhotonNetwork.Spawn(faderObject.GetPhotonView());
             m_instance = faderObject.GetComponent<SceneFading>();
@@ -35,8 +36,11 @@ public class SceneFading : Photon.PunBehaviour {
 
     public static void DestroyInstance()
     {
-        PhotonNetwork.Destroy(m_instance.photonView);
-        Destroy(m_instance.gameObject);
+        if (m_instance != null)
+        {
+            PhotonNetwork.Destroy(m_instance.photonView);
+            Destroy(m_instance.gameObject);
+        }
     }
 
 	// Use this for initialization

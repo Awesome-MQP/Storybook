@@ -31,7 +31,7 @@ public abstract class GameMenuUIHandler : Photon.PunBehaviour {
 
     public void ReturnToMainMenu()
     {
-        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
     }
 
     public void ReturnToLobby()
@@ -48,7 +48,12 @@ public abstract class GameMenuUIHandler : Photon.PunBehaviour {
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
-        SceneFading.DestroyInstance();
+
+        if (IsMasterClient)
+        {
+            SceneFading.DestroyInstance();
+        }
+
         if (!m_isLoadingJoinScreen)
         {
             SceneManager.LoadScene("MainMenu");
@@ -57,5 +62,10 @@ public abstract class GameMenuUIHandler : Photon.PunBehaviour {
         {
             SceneManager.LoadScene("JoinGameMenu");
         }
+    }
+
+    public override void OnDisconnectedFromPhoton()
+    {
+        SceneManager.LoadScene("GameStartup");
     }
 }
